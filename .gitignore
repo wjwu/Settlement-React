@@ -1,0 +1,12 @@
+/packages
+/.vs
+bin/
+obj/
+node_modules/
+dist/
+TT.Image.WebApi/Images/
+Thumbs/
+/TTWeb_log.ldf
+/TTWeb.mdf
+.DS_Store
+*.log
