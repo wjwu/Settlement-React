@@ -1,5 +1,5 @@
 var webpack = require('webpack');
-var publicPath = 'http://localhost:8002/';
+var publicPath = 'http://localhost:9002/';
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 var devtool;
@@ -23,10 +23,10 @@ if (process.env.NODE_ENV === "prd") {
 	compress = false;
 	mangle = false;
 	entry = {
-		'app/app': [
-			'webpack-hot-middleware/client?reload=true',
-			'./src/app/index.js',
-		],
+		// 'app/app': [
+		// 	'webpack-hot-middleware/client?reload=true',
+		// 	'./src/app/index.js',
+		// ],
 		'login/login': [
 			'webpack-hot-middleware/client?reload=true',
 			'./src/login/index.js'
@@ -46,6 +46,7 @@ module.exports = {
 		extensions: ['', '.js'],
 	},
 	module: {
+		//noParse: [/moment.js/],
 		loaders: [{
 			test: /\.js$/,
 			exclude: /node_modules/,
@@ -53,6 +54,9 @@ module.exports = {
 		}, {
 			test: /\.scss$/,
 			loader: ExtractTextPlugin.extract('style!postcss', 'css?modules&localIdentName=[name]__[local]-[hash:base64:5]!sass')
+		}, {
+			test: /\.less$/,
+			loader: ExtractTextPlugin.extract('style!postcss', 'css!less')
 		}, {
 			test: /\.(jpg|gif)$/,
 			loader: "url?limit=8192"
@@ -78,6 +82,7 @@ module.exports = {
 		new ExtractTextPlugin('app.css', {
 			allChunks: true
 		}),
+		//new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
 		// new webpack.ProvidePlugin({
 		// 	$: "jquery",
 		// 	jQuery: "jquery",
