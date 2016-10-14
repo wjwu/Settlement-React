@@ -1,20 +1,29 @@
-export default reducer = (state, action) => {
+import {
+	BEGIN_CHECK_CAPTCHA,
+	CHECK_CAPTCHA_SUCCESS,
+	CHECK_CAPTCHA_FAIL
+} from './constants'
+
+const loginReducer = (state = {}, action) => {
 	switch (action.type) {
-		case 'SAY_SOMETHING':
+		case BEGIN_CHECK_CAPTCHA:
 			return {
 				...state,
-				message: action.value
+				'checkStatus': action.type
 			}
-		case 'DO_SOMETHING':
-			// ...
-		case 'LEARN_SOMETHING':
-			// ...
-		case 'HEAR_SOMETHING':
-			// ...
-		case 'GO_SOMEWHERE':
-			// ...
-			// etc.
+		case CHECK_CAPTCHA_SUCCESS:
+			return {
+				...state,
+				'checkStatus': action.type
+			}
+		case CHECK_CAPTCHA_FAIL:
+			return {
+				...state,
+				'checkStatus': action.type
+			}
 		default:
 			return state
 	}
 }
+
+export default loginReducer

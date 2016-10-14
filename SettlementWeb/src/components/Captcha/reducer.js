@@ -1,9 +1,13 @@
+import {
+	REFRESH_CAPTCHA
+} from './action'
+
 const captchaReducer = (state = {}, action) => {
 	switch (action.type) {
-		case 'RefreshCaptcha':
+		case REFRESH_CAPTCHA:
 			return {
 				...state,
-				captchaId: action.captchaId
+				timeSpan: action.timeSpan
 			}
 		default:
 			return state

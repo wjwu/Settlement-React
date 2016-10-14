@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TT.Admin.WebApi.Dtos.Sign
+namespace SettlementApi.Api.Dtos.Sign
 {
     public class SignInResponse
     {

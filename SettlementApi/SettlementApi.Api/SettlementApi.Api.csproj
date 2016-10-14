@@ -121,6 +121,7 @@
     <Compile Include="Apis\BaseApiController.cs" />
     <Compile Include="Apis\CaptchaController.cs" />
     <Compile Include="Bootstrap.cs" />
+    <Compile Include="Dtos\CheckCaptchaRequest.cs" />
     <Compile Include="Dtos\ResponseMessage.cs" />
     <Compile Include="Dtos\Sign\SignInRequest.cs" />
     <Compile Include="Dtos\Sign\SignInResponse.cs" />

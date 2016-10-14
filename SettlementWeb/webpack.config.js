@@ -1,5 +1,5 @@
 var webpack = require('webpack');
-var publicPath = 'http://localhost:9002/';
+var publicPath = 'http://localhost:10010/';
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 var devtool;
@@ -13,9 +13,11 @@ if (process.env.NODE_ENV === "prd") {
 	entry = {
 		'app/app': [
 			'./src/app/index.js',
+			'whatwg-fetch'
 		],
 		'login/login': [
-			'./src/login/index.js'
+			'./src/login/index.js',
+			'whatwg-fetch'
 		]
 	}
 } else {
@@ -29,7 +31,8 @@ if (process.env.NODE_ENV === "prd") {
 		// ],
 		'login/login': [
 			'webpack-hot-middleware/client?reload=true',
-			'./src/login/index.js'
+			'./src/login/index.js',
+			'whatwg-fetch'
 		]
 	}
 }

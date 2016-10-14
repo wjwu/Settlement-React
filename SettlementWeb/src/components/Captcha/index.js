@@ -2,9 +2,11 @@ import React from 'react'
 import {
 	connect
 } from 'react-redux'
-import refreshCaptcha from './action'
+import {
+	refreshCaptcha
+} from './action'
 
-const createCaptchaId = () => {
+const createTimeSpan = () => {
 	let strRand = Math.random() + ''
 	return strRand.substr(2, strRand.length - 2)
 }
@@ -13,18 +15,18 @@ class Captcha extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			t: createCaptchaId()
+			t: createTimeSpan()
 		}
 	}
 
 	componentDidMount() {
-		this.props.onRefresh(this.state.t)
+		this.props.refreshCaptcha(this.state.t)
 	}
 
 	handleClick(e) {
 		e.preventDefault()
-		let t = createCaptchaId()
-		this.props.onRefresh(t)
+		let t = createTimeSpan()
+		this.props.refreshCaptcha(t)
 		this.setState({
 			t: t
 		})
@@ -47,12 +49,6 @@ const mapStateToProps = state => {
 	return state
 }
 
-const mapDispatchToProps = dispatch => {
-	return {
-		onRefresh: captchaId => {
-			dispatch(refreshCaptcha(captchaId))
-		}
-	}
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Captcha)
+export default connect(mapStateToProps, {
+	refreshCaptcha
+})(Captcha)

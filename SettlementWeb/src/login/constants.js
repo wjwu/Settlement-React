@@ -1,0 +1,4 @@
+export const API_URL = 'http://localhost:10011/api/'
+export const BEGIN_CHECK_CAPTCHA = 'BEGIN_CHECK_CAPTCHA'
+export const CHECK_CAPTCHA_SUCCESS = 'CHECK_CAPTCHA_SUCCESS'
+export const CHECK_CAPTCHA_FAIL = 'CHECK_CAPTCHA_FAIL'

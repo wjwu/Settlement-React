@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {
 	createStore,
+	combineReducers,
 	applyMiddleware
 } from 'redux'
 import {
@@ -18,12 +19,23 @@ import {
 } from 'antd'
 
 import Captcha from '../components/Captcha'
+import {
+	API_URL,
+	BEGIN_CHECK_CAPTCHA,
+	CHECK_CAPTCHA_SUCCESS,
+	CHECK_CAPTCHA_FAIL
+} from './constants'
+import captchActionCreator from './actions/captcha'
 import captchaReducer from '../components/Captcha/reducer'
+import loginReducer from './reducer'
 
 const FormItem = Form.Item
 const InputGroup = Input.Group
-const CAPTCHA_URL = 'http://localhost:10011/api/captcha'
-const store = createStore(captchaReducer, applyMiddleware(thunk))
+const reducer = combineReducers({
+	captchaReducer,
+	loginReducer
+})
+const store = createStore(reducer, applyMiddleware(thunk))
 
 class LoginForm extends React.Component {
 	handleSubmit(e) {
@@ -35,11 +47,28 @@ class LoginForm extends React.Component {
 		})
 	}
 
+	checkCaptcha(rule, value, callback) {
+		if (value) {
+			this.props.checkCaptcha(value, this.props.captchaReducer.timeSpan)
+		}
+		callback()
+	}
+
 	render() {
 		const {
 			getFieldDecorator
 		} = this.props.form
-
+		const checkStatus = this.props.loginReducer.checkStatus
+		let validateStatus
+		let help = '请输入验证码！'
+		if (checkStatus === BEGIN_CHECK_CAPTCHA) {
+			validateStatus = 'validating'
+		} else if (checkStatus === CHECK_CAPTCHA_SUCCESS) {
+			validateStatus = 'success'
+		} else if (checkStatus === CHECK_CAPTCHA_FAIL) {
+			validateStatus = 'error'
+			help = '验证码错误！'
+		}
 		return (
 			<Form>
 				<FormItem>
@@ -73,13 +102,16 @@ class LoginForm extends React.Component {
 				</FormItem>
 				<Row>
 					<Col span='15'>
-						<FormItem>
+						<FormItem hasFeedback validateStatus={validateStatus}>
 						{
 							getFieldDecorator('captcha',{
 								rules:[{
 									required:true,
 									whitespace:true,
 									message:'请输入验证码！'
+								},{
+									validator:this.checkCaptcha.bind(this),
+									message:'请输入验ssss证码！'
 								}]
 							})(
 								<Input placeholder='验证码'/>
@@ -88,7 +120,7 @@ class LoginForm extends React.Component {
 						</FormItem>
 					</Col>
 					<Col span='9'>
-						<Captcha url={CAPTCHA_URL}/>
+						<Captcha url={`${API_URL}captcha`}/>
 					</Col>
 				</Row>
 				<Button type='primary' htmlType='button' onClick={this.handleSubmit.bind(this)}>登录</Button>
@@ -97,15 +129,21 @@ class LoginForm extends React.Component {
 	}
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return state
 }
 
-const mapDispatchToProps = (dispatch, props) => {
-	return props
-}
+// const mapDispatchToProps = dispatch => {
+// 	return {
+// 		checkCaptcha: (captcha, timespan) => {
+// 			return captchActionCreator.check(captcha, timespan)
+// 		}
+// 	}
+// }
 
-const EleLoginForm = connect(mapStateToProps, mapDispatchToProps)(Form.create()(LoginForm))
+const EleLoginForm = connect(mapStateToProps, {
+	checkCaptcha: captchActionCreator.check
+})(Form.create()(LoginForm))
 
 ReactDOM.render(
 	<Provider store={store}>
