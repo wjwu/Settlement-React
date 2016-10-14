@@ -22,14 +22,16 @@ import captchaReducer from '../components/Captcha/reducer'
 
 const FormItem = Form.Item
 const InputGroup = Input.Group
-const CAPTCHA_URL = 'http://www.tigertree.cn:8003/api/captcha'
+const CAPTCHA_URL = 'http://localhost:10011/api/captcha'
 const store = createStore(captchaReducer, applyMiddleware(thunk))
 
 class LoginForm extends React.Component {
 	handleSubmit(e) {
 		e.preventDefault()
 		this.props.form.validateFields((errors, values) => {
-			if (!errors) {}
+			if (!errors) {
+				console.log('success')
+			}
 		})
 	}
 
@@ -37,7 +39,7 @@ class LoginForm extends React.Component {
 		const {
 			getFieldDecorator
 		} = this.props.form
-		console.log(this.props)
+
 		return (
 			<Form>
 				<FormItem>
@@ -48,6 +50,7 @@ class LoginForm extends React.Component {
 					getFieldDecorator('account',{
 						rules:[{
 							required:true,
+							whitespace:true,
 							message:'请输入用户名！'
 						}]
 					})(
@@ -60,6 +63,7 @@ class LoginForm extends React.Component {
 					getFieldDecorator('password',{
 						rules:[{
 							required:true,
+							whitespace:true,
 							message:'请输入密码！'
 						}]
 					})(
@@ -69,11 +73,12 @@ class LoginForm extends React.Component {
 				</FormItem>
 				<Row>
 					<Col span='15'>
-						<FormItem hasFeedback>
+						<FormItem>
 						{
 							getFieldDecorator('captcha',{
 								rules:[{
 									required:true,
+									whitespace:true,
 									message:'请输入验证码！'
 								}]
 							})(

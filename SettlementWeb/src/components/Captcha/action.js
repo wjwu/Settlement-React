@@ -1,9 +1,7 @@
 const refreshCaptcha = (captchaId) => {
-	return dispatch => {
-		dispatch({
-			type: 'RefreshCaptcha',
-			captchaId: captchaId
-		})
+	return {
+		type: 'RefreshCaptcha',
+		captchaId: captchaId
 	}
 }
 
