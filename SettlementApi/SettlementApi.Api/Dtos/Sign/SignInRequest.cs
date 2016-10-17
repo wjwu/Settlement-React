@@ -19,7 +19,7 @@ namespace SettlementApi.Api.Dtos.Sign
 
         [Required]
         [RegularExpression(RegexUtility.Number)]
-        public string CaptchaID { get; set; }
+        public string TimeSpan { get; set; }
 
     }
 }

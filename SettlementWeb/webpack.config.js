@@ -25,10 +25,11 @@ if (process.env.NODE_ENV === "prd") {
 	compress = false;
 	mangle = false;
 	entry = {
-		// 'app/app': [
-		// 	'webpack-hot-middleware/client?reload=true',
-		// 	'./src/app/index.js',
-		// ],
+		'app/app': [
+			'webpack-hot-middleware/client?reload=true',
+			'./src/app/index.js',
+			'whatwg-fetch'
+		],
 		'login/login': [
 			'webpack-hot-middleware/client?reload=true',
 			'./src/login/index.js',

@@ -17,7 +17,7 @@ namespace SettlementApi.Api
             //    new UnityHttpControllerActivator(container));
 
             //todo 删除
-//            Write.BusinessLogic.Bootstrap.Start();
+            Write.BusinessLogic.Bootstrap.Start();
 //            Read.Respository.Bootstrap.Start();
 
             ApiContextPool.Start();

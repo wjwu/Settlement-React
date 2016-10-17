@@ -19,13 +19,11 @@ import {
 } from 'antd'
 
 import Captcha from '../components/Captcha'
-import {
-	API_URL,
-	BEGIN_CHECK_CAPTCHA,
-	CHECK_CAPTCHA_SUCCESS,
-	CHECK_CAPTCHA_FAIL
-} from './constants'
-import captchActionCreator from './actions/captcha'
+import refresh from '../components/Captcha/action'
+
+import * as constants from './constants'
+import * as actions from './action'
+
 import captchaReducer from '../components/Captcha/reducer'
 import loginReducer from './reducer'
 
@@ -38,23 +36,59 @@ const reducer = combineReducers({
 const store = createStore(reducer, applyMiddleware(thunk))
 
 class LoginForm extends React.Component {
+
 	handleSubmit(e) {
 		e.preventDefault()
-		this.props.form.validateFields((errors, values) => {
+		const {
+			validateFields,
+			getFieldValue,
+			setFields
+		} = this.props.form
+		validateFields((errors, values) => {
 			if (!errors) {
-				console.log('success')
+				let account = getFieldValue('account')
+				let password = getFieldValue('password')
+				let captcha = getFieldValue('captcha')
+				let timeSpan = this.props.captchaReducer.timeSpan
+				let promise = this.props.login(account, password, captcha, timeSpan)
+				promise.then(response => {
+					let result = response.json()
+					if (response.ok) {
+						window.location.href = '/app'
+					} else {
+						this.props.refresh()
+						setFields({
+							account: {
+								value: account,
+								errors: [{
+									message: constants.ACCOUNT_ERROR
+								}]
+							},
+							captcha: {
+								errors: [{
+									message: constants.CAPTCHA_REREQUIRED
+								}]
+							}
+						})
+					}
+				})
 			}
 		})
 	}
 
 	checkCaptcha(rule, value, callback) {
 		if (value) {
-			let promise = this.props.checkCaptcha(value, this.props.captchaReducer.timeSpan)
+			const {
+				checkCaptcha,
+				captchaReducer
+			} = this.props
+
+			let promise = checkCaptcha(value, captchaReducer.timeSpan)
 			promise.then(response => {
 				if (response.ok) {
 					callback()
 				} else {
-					callback([new Error('验证码错误！')])
+					callback([new Error(constants.CAPTCHA_ERROR)])
 				}
 			})
 		} else {
@@ -67,6 +101,13 @@ class LoginForm extends React.Component {
 			getFieldDecorator
 		} = this.props.form
 
+		const {
+			doRefresh,
+			timeSpan
+		} = this.props.captchaReducer
+
+		const url = `${constants.API_URL}captcha?t=${timeSpan}`
+
 		return (
 			<Form>
 				<FormItem>
@@ -78,7 +119,7 @@ class LoginForm extends React.Component {
 						rules:[{
 							required:true,
 							whitespace:true,
-							message:'请输入用户名！'
+							message:constants.ACCOUNT_REQUIRED
 						}]
 					})(
 						<Input placeholder='用户名'/>
@@ -91,7 +132,7 @@ class LoginForm extends React.Component {
 						rules:[{
 							required:true,
 							whitespace:true,
-							message:'请输入密码！'
+							message:constants.PASSWORD_REQUIRED
 						}]
 					})(
 						<Input type='password' placeholder='密码' />
@@ -106,7 +147,7 @@ class LoginForm extends React.Component {
 								rules:[{
 									required:true,
 									whitespace:true,
-									message:'请输入验证码！'
+									message:constants.CAPTCHA_REQUIRED
 								},{
 									validator:this.checkCaptcha.bind(this)
 								}]
@@ -117,7 +158,7 @@ class LoginForm extends React.Component {
 						</FormItem>
 					</Col>
 					<Col span='9'>
-						<Captcha url={`${API_URL}captcha`}/>
+						<Captcha url={url}/>
 					</Col>
 				</Row>
 				<Button type='primary' htmlType='button' onClick={this.handleSubmit.bind(this)}>登录</Button>
@@ -130,16 +171,9 @@ const mapStateToProps = state => {
 	return state
 }
 
-// const mapDispatchToProps = dispatch => {
-// 	return {
-// 		checkCaptcha: (captcha, timespan) => {
-// 			return captchActionCreator.check(captcha, timespan)
-// 		}
-// 	}
-// }
-
 const EleLoginForm = connect(mapStateToProps, {
-	checkCaptcha: captchActionCreator.check
+	...actions,
+	refresh
 })(Form.create()(LoginForm))
 
 ReactDOM.render(

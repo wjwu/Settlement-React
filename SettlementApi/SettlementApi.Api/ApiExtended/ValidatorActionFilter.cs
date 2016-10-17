@@ -20,6 +20,7 @@ namespace SettlementApi.Api.ApiExtended
             base.OnActionExecuting(actionContext);
             //auth 验证码
             if (actionContext.ControllerContext.Request.Method != HttpMethod.Get &&
+                actionContext.ControllerContext.Controller.GetType() != typeof(SignController)&&
                 actionContext.ControllerContext.Controller.GetType() != typeof(CaptchaController))
             {
                 var response = new HttpResponseMessage

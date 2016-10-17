@@ -1,10 +1,11 @@
-export const REFRESH_CAPTCHA = 'REFRESH_CAPTCHA'
+export const REFRESH = 'REFRESH'
 
-export const refreshCaptcha = (timeSpan) => {
+const refresh = () => {
 	return dispatch => {
 		dispatch({
-			type: REFRESH_CAPTCHA,
-			timeSpan: timeSpan
+			type: REFRESH
 		})
 	}
 }
+
+export default refresh

@@ -1,16 +1,24 @@
 import {
-	REFRESH_CAPTCHA
+	REFRESH
 } from './action'
 
-const captchaReducer = (state = {}, action) => {
+const createTimeSpan = () => {
+	let strRand = Math.random() + ''
+	return strRand.substr(2, strRand.length - 2)
+}
+
+const captchaReducer = (state, action) => {
 	switch (action.type) {
-		case REFRESH_CAPTCHA:
+		case REFRESH:
 			return {
 				...state,
-				timeSpan: action.timeSpan
+				timeSpan: createTimeSpan()
 			}
 		default:
-			return state
+			return {
+				...state,
+				timeSpan: createTimeSpan()
+			}
 	}
 }
 

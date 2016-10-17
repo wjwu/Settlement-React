@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<commands>
+  <command name="User.Login" type="text" connection="local">
+    <![CDATA[
+  SELECT TOP(1) ID,LoginID,Enabled FROM dbo.[User] WHERE LoginID=@LoginID AND Password=@Password AND Deleted=0
+  ]]>
+  </command>
+  <command name="User.ChangePassword" type="text" connection="local">
+    <![CDATA[
+      UPDATE TOP(1) dbo.[User] SET Password=@Password,LastModifyTime=@LastModifyTime,LastModifyUser=@LastModifyUser WHERE ID=@ID
+      ]]>
+  </command>
+</commands>
