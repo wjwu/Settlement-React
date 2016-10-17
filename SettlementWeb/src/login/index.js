@@ -49,26 +49,24 @@ class LoginForm extends React.Component {
 
 	checkCaptcha(rule, value, callback) {
 		if (value) {
-			this.props.checkCaptcha(value, this.props.captchaReducer.timeSpan)
+			let promise = this.props.checkCaptcha(value, this.props.captchaReducer.timeSpan)
+			promise.then(response => {
+				if (response.ok) {
+					callback()
+				} else {
+					callback([new Error('验证码错误！')])
+				}
+			})
+		} else {
+			callback()
 		}
-		callback()
 	}
 
 	render() {
 		const {
 			getFieldDecorator
 		} = this.props.form
-		const checkStatus = this.props.loginReducer.checkStatus
-		let validateStatus
-		let help = '请输入验证码！'
-		if (checkStatus === BEGIN_CHECK_CAPTCHA) {
-			validateStatus = 'validating'
-		} else if (checkStatus === CHECK_CAPTCHA_SUCCESS) {
-			validateStatus = 'success'
-		} else if (checkStatus === CHECK_CAPTCHA_FAIL) {
-			validateStatus = 'error'
-			help = '验证码错误！'
-		}
+
 		return (
 			<Form>
 				<FormItem>
@@ -102,7 +100,7 @@ class LoginForm extends React.Component {
 				</FormItem>
 				<Row>
 					<Col span='15'>
-						<FormItem hasFeedback validateStatus={validateStatus}>
+						<FormItem hasFeedback>
 						{
 							getFieldDecorator('captcha',{
 								rules:[{
@@ -110,8 +108,7 @@ class LoginForm extends React.Component {
 									whitespace:true,
 									message:'请输入验证码！'
 								},{
-									validator:this.checkCaptcha.bind(this),
-									message:'请输入验ssss证码！'
+									validator:this.checkCaptcha.bind(this)
 								}]
 							})(
 								<Input placeholder='验证码'/>

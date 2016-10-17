@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<connections>
+  <connection name="local">
+    <![CDATA[
+    data source=.;pooling=true;max pool size=7500; min pool size=5;packet size=32768;initial catalog=Settlement;user id=dever;password=dev123!@#;connection timeout=150
+    ]]>
+  </connection>
+</connections>

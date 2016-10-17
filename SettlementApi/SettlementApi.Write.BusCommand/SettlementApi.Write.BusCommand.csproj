@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{343D4D15-9973-4219-B0E5-829CA24F0FC0}</ProjectGuid>
+    <ProjectGuid>{E6162CF8-B0EC-42AD-B5AE-BC6A917BA48E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SettlementApi.Model</RootNamespace>
-    <AssemblyName>SettlementApi.Model</AssemblyName>
+    <RootNamespace>SettlementApi.Write.BusCommand</RootNamespace>
+    <AssemblyName>SettlementApi.Write.BusCommand</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -34,8 +34,16 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="ChangePasswordCommand.cs" />
+    <Compile Include="LoginCommand.cs" />
+    <Compile Include="LoginCommandResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SettlementApi.CommandBus\SettlementApi.CommandBus.csproj">
+      <Project>{a72e3634-1108-4528-8c7d-fe77cbdaa558}</Project>
+      <Name>SettlementApi.CommandBus</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

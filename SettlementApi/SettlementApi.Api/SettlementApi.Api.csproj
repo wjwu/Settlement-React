@@ -103,6 +103,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Configuration\Connection.xml" />
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -120,6 +121,7 @@
     <Compile Include="ApiExtended\ValidatorActionFilter.cs" />
     <Compile Include="Apis\BaseApiController.cs" />
     <Compile Include="Apis\CaptchaController.cs" />
+    <Compile Include="Apis\UserController.cs" />
     <Compile Include="Bootstrap.cs" />
     <Compile Include="Dtos\CheckCaptchaRequest.cs" />
     <Compile Include="Dtos\ResponseMessage.cs" />
@@ -144,6 +146,10 @@
     <Compile Include="Utility\RegexUtility.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SettlementApi.CommandBus\SettlementApi.CommandBus.csproj">
+      <Project>{A72E3634-1108-4528-8C7D-FE77CBDAA558}</Project>
+      <Name>SettlementApi.CommandBus</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SettlementApi.Common\SettlementApi.Common.csproj">
       <Project>{18ECF9B2-B05E-4B16-BA91-E63A0D31DBBF}</Project>
       <Name>SettlementApi.Common</Name>
@@ -151,6 +157,10 @@
     <ProjectReference Include="..\SettlementApi.Context\SettlementApi.Context.csproj">
       <Project>{A1392550-9420-4DAD-9635-20FA2DCE1897}</Project>
       <Name>SettlementApi.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SettlementApi.Write.BusCommand\SettlementApi.Write.BusCommand.csproj">
+      <Project>{E6162CF8-B0EC-42AD-B5AE-BC6A917BA48E}</Project>
+      <Name>SettlementApi.Write.BusCommand</Name>
     </ProjectReference>
     <ProjectReference Include="..\SettlementApi.Write.BusinessLogic\SettlementApi.Write.BusinessLogic.csproj">
       <Project>{03A04462-E75B-4531-A545-3FEB8A70AC61}</Project>

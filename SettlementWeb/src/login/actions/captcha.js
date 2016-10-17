@@ -8,25 +8,36 @@ import {
 	CHECK_CAPTCHA_FAIL
 } from '../constants'
 
+// const captchActionCreator = {
+// 	check: (captcha, timeSpan) => {
+// 		return dispatch => {
+// 			dispatch({
+// 				type: BEGIN_CHECK_CAPTCHA
+// 			})
+// 			post(`${API_URL}captcha/check`, {
+// 				captcha: captcha,
+// 				timeSpan: timeSpan
+// 			}).then(response => {
+// 				if (response.ok) {
+// 					dispatch({
+// 						type: CHECK_CAPTCHA_SUCCESS
+// 					})
+// 				} else {
+// 					dispatch({
+// 						type: CHECK_CAPTCHA_FAIL
+// 					})
+// 				}
+// 			})
+// 		}
+// 	}
+// }
+
 const captchActionCreator = {
 	check: (captcha, timeSpan) => {
 		return dispatch => {
-			dispatch({
-				type: BEGIN_CHECK_CAPTCHA
-			})
-			post(`${API_URL}captcha/check`, {
+			return post(`${API_URL}captcha/check`, {
 				captcha: captcha,
 				timeSpan: timeSpan
-			}).then(response => {
-				if (response.ok) {
-					dispatch({
-						type: CHECK_CAPTCHA_SUCCESS
-					})
-				} else {
-					dispatch({
-						type: CHECK_CAPTCHA_FAIL
-					})
-				}
 			})
 		}
 	}

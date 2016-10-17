@@ -8,18 +8,15 @@ const loginReducer = (state = {}, action) => {
 	switch (action.type) {
 		case BEGIN_CHECK_CAPTCHA:
 			return {
-				...state,
-				'checkStatus': action.type
+				...state
 			}
 		case CHECK_CAPTCHA_SUCCESS:
 			return {
-				...state,
-				'checkStatus': action.type
+				...state
 			}
 		case CHECK_CAPTCHA_FAIL:
 			return {
-				...state,
-				'checkStatus': action.type
+				...state
 			}
 		default:
 			return state
