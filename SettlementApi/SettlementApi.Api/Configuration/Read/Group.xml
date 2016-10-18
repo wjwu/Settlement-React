@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<commands>
+  <command name="Group.Query" type="text" connection="local">
+    <![CDATA[
+SELECT [ID]
+      ,[Name]
+      ,[ParentID]
+  FROM [dbo].[Group] WHERE [Deleted]=0
+      ]]>
+  </command>
+</commands>

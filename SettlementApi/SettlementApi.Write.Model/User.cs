@@ -20,11 +20,6 @@ namespace SettlementApi.Write.Model
         public string Password { get; set; }
 
         /// <summary>
-        ///     是否启用
-        /// </summary>
-        public bool Enabled { get; set; }
-
-        /// <summary>
         ///     手机
         /// </summary>
         public string Phone { get; set; }
@@ -33,6 +28,16 @@ namespace SettlementApi.Write.Model
         ///     姓名
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// 部门
+        /// </summary>
+        public Guid Group { get; set; }
+
+        /// <summary>
+        ///     是否启用
+        /// </summary>
+        public bool Enabled { get; set; }
 
         /// <summary>
         ///     最后登录时间

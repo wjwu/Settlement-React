@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<commands>
+  <command name="Group.Create" type="text" connection="local">
+    <![CDATA[
+INSERT INTO dbo.[Group]
+        ( ID ,
+          Name ,
+          ParentID ,
+          CreateTime ,
+          LastModifyTime ,
+          LastModifyUser 
+        )
+VALUES  ( @ID , 
+          @Name, 
+          @ParentID ,
+          GETDATE() ,
+          NULL ,
+          NULL 
+        )
+      ]]>
+  </command>
+</commands>

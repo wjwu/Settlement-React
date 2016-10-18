@@ -1,12 +1,12 @@
 var webpack = require('webpack');
 var publicPath = 'http://localhost:10010/';
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var devtool;
 var compress;
 var mangle;
 var entry;
-if (process.env.NODE_ENV === "prd") {
+if (process.env.NODE_ENV === 'prd') {
 	devtool = false;
 	compress = false;
 	mangle = false;
@@ -63,7 +63,7 @@ module.exports = {
 			loader: ExtractTextPlugin.extract('style!postcss', 'css!less')
 		}, {
 			test: /\.(jpg|gif)$/,
-			loader: "url?limit=8192"
+			loader: 'url?limit=8192'
 		}, {
 			test: /\.css$/,
 			loader: 'file?name=[path][name].[ext]'
@@ -83,14 +83,14 @@ module.exports = {
 		new webpack.optimize.OccurenceOrderPlugin(),
 		new webpack.HotModuleReplacementPlugin(),
 		new webpack.NoErrorsPlugin(),
-		new ExtractTextPlugin('app.css', {
+		new ExtractTextPlugin('[name].css', {
 			allChunks: true
 		}),
 		//new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
 		// new webpack.ProvidePlugin({
-		// 	$: "jquery",
-		// 	jQuery: "jquery",
-		// 	"window.jQuery": "jquery"
+		// 	$: 'jquery',
+		// 	jQuery: 'jquery',
+		// 	'window.jQuery': 'jquery'
 		// }),
 	]
 };

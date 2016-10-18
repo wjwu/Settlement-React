@@ -11,6 +11,7 @@ using SettlementApi.Api.Resource;
 using SettlementApi.CommandBus;
 using SettlementApi.Common.Mapper;
 using SettlementApi.Write.BusCommand;
+using SettlementApi.Write.BusCommand.UserModule;
 
 namespace SettlementApi.Api.Apis
 {

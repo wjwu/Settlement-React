@@ -1,6 +1,7 @@
 ﻿using System.Web.Http;
 using SettlementApi.CommandBus;
 using SettlementApi.Write.BusCommand;
+using SettlementApi.Write.BusCommand.UserModule;
 
 namespace SettlementApi.Api.Apis
 {

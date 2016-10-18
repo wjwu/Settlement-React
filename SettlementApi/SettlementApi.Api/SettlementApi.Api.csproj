@@ -108,6 +108,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Configuration\Connection.xml" />
+    <Content Include="Configuration\Read\Group.xml" />
+    <Content Include="Configuration\Write\Group.xml" />
     <Content Include="Configuration\Write\User.xml" />
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">
@@ -126,6 +128,7 @@
     <Compile Include="ApiExtended\ValidatorActionFilter.cs" />
     <Compile Include="Apis\BaseApiController.cs" />
     <Compile Include="Apis\CaptchaController.cs" />
+    <Compile Include="Apis\GroupController.cs" />
     <Compile Include="Apis\SignController.cs" />
     <Compile Include="Apis\UserController.cs" />
     <Compile Include="Bootstrap.cs" />
@@ -164,6 +167,14 @@
       <Project>{A1392550-9420-4DAD-9635-20FA2DCE1897}</Project>
       <Name>SettlementApi.Context</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SettlementApi.Read.QueryCommand\SettlementApi.Read.QueryCommand.csproj">
+      <Project>{eec30a96-f19c-41e2-958a-c37d7c19cc40}</Project>
+      <Name>SettlementApi.Read.QueryCommand</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SettlementApi.Read.Respository\SettlementApi.Read.Respository.csproj">
+      <Project>{603914af-ba82-4b17-883c-9271a5baaf3a}</Project>
+      <Name>SettlementApi.Read.Respository</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SettlementApi.Write.BusCommand\SettlementApi.Write.BusCommand.csproj">
       <Project>{E6162CF8-B0EC-42AD-B5AE-BC6A917BA48E}</Project>
       <Name>SettlementApi.Write.BusCommand</Name>
@@ -179,9 +190,7 @@
       <LastGenOutput>CommonRes.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Configuration\Read\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

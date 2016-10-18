@@ -2,7 +2,7 @@
 using SettlementApi.CommandBus;
 using SettlementApi.Common.Mapper;
 using SettlementApi.EventBus;
-using SettlementApi.Write.BusCommand;
+using SettlementApi.Write.BusCommand.UserModule;
 using SettlementApi.Write.BusinessLogic.Resource;
 using SettlementApi.Write.BusinessLogic.Utility;
 using SettlementApi.Write.Model;
@@ -28,17 +28,13 @@ namespace SettlementApi.Write.BusinessLogic
         public void Receive(ICommand command)
         {
             if (command.GetType() == typeof(ChangePasswordCommand))
-            {
                 Execute((ChangePasswordCommand) command);
-            }
         }
 
         public ICommandResult ReceiveEx(ICommand command)
         {
-            if (command.GetType()==typeof(LoginCommand))
-            {
-                return Execute((LoginCommand)command);
-            }
+            if (command.GetType() == typeof(LoginCommand))
+                return Execute((LoginCommand) command);
             return null;
         }
 
@@ -47,13 +43,9 @@ namespace SettlementApi.Write.BusinessLogic
             command.Password = Security.Md5Encrypt(Security.Encrypt(command.Password));
             var loginUser = GetEntity("User.Login", command);
             if (loginUser == null)
-            {
                 throw new BussinessException(UserRes.LoginFail);
-            }
             if (!loginUser.Enabled)
-            {
                 throw new BussinessException(UserRes.LoginFailDisabled);
-            }
             var result = MapperHelper.Map<User, LoginCommandResult>(loginUser);
             return result;
         }

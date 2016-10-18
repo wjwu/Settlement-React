@@ -18,7 +18,7 @@ namespace SettlementApi.Api
 
             //todo 删除
             Write.BusinessLogic.Bootstrap.Start();
-//            Read.Respository.Bootstrap.Start();
+            Read.Respository.Bootstrap.Start();
 
             ApiContextPool.Start();
             CaptchaPool.Start();
