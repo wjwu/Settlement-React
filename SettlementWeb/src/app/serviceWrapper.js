@@ -12,6 +12,12 @@ const get = (url, request) => {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json'
 		}
+	}).then(response => {
+		if (response.ok) {
+			return response.json()
+		} else {
+			//todo
+		}
 	})
 }
 

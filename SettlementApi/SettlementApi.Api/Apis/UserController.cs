@@ -1,6 +1,6 @@
 ﻿using System.Web.Http;
 using SettlementApi.CommandBus;
-using SettlementApi.Write.BusCommand;
+using SettlementApi.Read.QueryCommand.UserModule;
 using SettlementApi.Write.BusCommand.UserModule;
 
 namespace SettlementApi.Api.Apis
@@ -8,6 +8,14 @@ namespace SettlementApi.Api.Apis
     public class UserController : BaseApiController
     {
         private const string BusName = "UserBusinessLogic";
+        private const string ReadName = "QueryUser";
+
+        [HttpGet]
+        [Route("api/user")]
+        public ICommandResult Query([FromUri] QueryUserCommand request)
+        {
+            return CommandService.SendEx(request, ReadName);
+        }
 
         [HttpPatch]
         [Route("api/user/password")]

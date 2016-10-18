@@ -10,6 +10,7 @@ namespace SettlementApi.Read.Respository
         {
             UnityContainer container = AppUnity.Container;
             container.RegisterType<ICommandBus, QueryGroup>("QueryGroup");
+            container.RegisterType<ICommandBus, QueryUser>("QueryUser");
         }
     }
 }

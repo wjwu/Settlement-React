@@ -58,6 +58,7 @@
     <Compile Include="Bootstrap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryGroup.cs" />
+    <Compile Include="QueryUser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

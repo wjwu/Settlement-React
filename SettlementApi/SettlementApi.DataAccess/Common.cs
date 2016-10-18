@@ -651,7 +651,7 @@ namespace SettlementApi.DataAccess
                 var rangeFieldAttribute = property.GetCustomAttribute<RangeFieldAttribute>();
                 var notFieldAttribute = property.GetCustomAttribute<NotFieldAttribute>();
 
-                string propertyName = property.Name;
+                string propertyName = "[" + property.Name + "]";
                 var aliasFieldAttribute = property.GetCustomAttribute<AliasFieldAttribute>();
                 if (aliasFieldAttribute != null)
                 {

@@ -41,6 +41,8 @@
     <Compile Include="GroupModule\QueryGroupCommand.cs" />
     <Compile Include="GroupModule\RQueryGroup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserModule\QueryUserCommand.cs" />
+    <Compile Include="UserModule\RQueryUser.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
