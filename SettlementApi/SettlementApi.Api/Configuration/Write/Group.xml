@@ -11,11 +11,11 @@ INSERT INTO dbo.[Group]
           LastModifyTime ,
           LastModifyUser 
         )
-VALUES  ( @ID , 
+VALUES  ( NEWID() , 
           @Name, 
           @ParentID ,
           GETDATE() ,
-          NULL ,
+          GETDATE() ,
           NULL 
         )
       ]]>

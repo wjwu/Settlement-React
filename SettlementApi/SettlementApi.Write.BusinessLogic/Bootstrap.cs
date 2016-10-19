@@ -10,6 +10,7 @@ namespace SettlementApi.Write.BusinessLogic
         {
             var container = AppUnity.Container;
             container.RegisterType<ICommandBus, UserBusinessLogic>("UserBusinessLogic");
+            container.RegisterType<ICommandBus, GroupBusinessLogic>("GroupBusinessLogic");
         }
     }
 }

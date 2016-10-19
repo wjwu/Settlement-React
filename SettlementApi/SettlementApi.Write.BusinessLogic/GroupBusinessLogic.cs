@@ -17,7 +17,8 @@ namespace SettlementApi.Write.BusinessLogic
 
         public void Receive(ICommand command)
         {
-            throw new NotImplementedException();
+            if (command.GetType() == typeof(CreateGroupCommand))
+                Execute((CreateGroupCommand) command);
         }
 
         public ICommandResult ReceiveEx(ICommand command)

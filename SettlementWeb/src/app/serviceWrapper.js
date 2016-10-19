@@ -22,13 +22,23 @@ const get = (url, request) => {
 }
 
 const post = (url, request) => {
-	return fetch(url, {
+	return fetch(`${API_URL}${url}`, {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify(request)
+	}).then(response => {
+		if (response.ok) {
+			if (response.status === 204) {
+				return null
+			} else {
+				return response.json()
+			}
+		} else {
+			//todo
+		}
 	})
 }
 

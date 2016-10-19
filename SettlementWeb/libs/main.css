@@ -1,7 +1,10 @@
 .main-container{
 	padding: 30px 15px;
 }
-.test{
+.col{
 	padding: 0 15px;
 	margin-bottom:30px;
+}
+.button{
+	margin-right:8px;
 }

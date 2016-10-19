@@ -18,29 +18,28 @@ namespace SettlementApi.Api.ApiExtended
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
             base.OnActionExecuting(actionContext);
-            //auth 验证码
-            if (actionContext.ControllerContext.Request.Method != HttpMethod.Get &&
-                actionContext.ControllerContext.Controller.GetType() != typeof(SignController)&&
-                actionContext.ControllerContext.Controller.GetType() != typeof(CaptchaController))
-            {
-                var response = new HttpResponseMessage
-                {
-                    Content = new StringContent(new ResponseMessage(CommonRes.NotAuthorized).ToJson()),
-                    StatusCode = HttpStatusCode.Unauthorized
-                };
-                try
-                {
-                    ApiContext context = ApiContextPool.GetCurrentContext();
-                    if (context == null)
-                    {
-                        throw new HttpResponseException(response);
-                    }
-                }
-                catch (Exception)
-                {
-                    throw new HttpResponseException(response);
-                }
-            }
+//            if (actionContext.ControllerContext.Request.Method != HttpMethod.Get &&
+//                actionContext.ControllerContext.Controller.GetType() != typeof(SignController)&&
+//                actionContext.ControllerContext.Controller.GetType() != typeof(CaptchaController))
+//            {
+//                var response = new HttpResponseMessage
+//                {
+//                    Content = new StringContent(new ResponseMessage(CommonRes.NotAuthorized).ToJson()),
+//                    StatusCode = HttpStatusCode.Unauthorized
+//                };
+//                try
+//                {
+//                    ApiContext context = ApiContextPool.GetCurrentContext();
+//                    if (context == null)
+//                    {
+//                        throw new HttpResponseException(response);
+//                    }
+//                }
+//                catch (Exception)
+//                {
+//                    throw new HttpResponseException(response);
+//                }
+//            }
 
             //model valid
             if (!actionContext.ModelState.IsValid)

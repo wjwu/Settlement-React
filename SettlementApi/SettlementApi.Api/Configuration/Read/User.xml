@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<commands>
+  <command name="User.Query" type="text" connection="local">
+    <![CDATA[
+SELECT [ID]
+      ,[LoginID]
+      ,[Phone]
+      ,[Name]
+      ,[Group]
+      ,[Enabled]
+      ,[CreateTime]
+      ,[LastLoginIP]
+      ,[LastLoginTime]
+  FROM [dbo].[User] WHERE [Deleted]=0 
+      ]]>
+  </command>
+</commands>

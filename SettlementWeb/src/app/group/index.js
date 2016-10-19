@@ -5,20 +5,26 @@ import {
 import {
 	Row,
 	Col,
-	Card,
-	Tree,
-	Spin,
-	Table,
-	Icon
+	Icon,
+	Button,
+	Modal,
+	Form,
+	TreeSelect
 } from 'antd'
 import {
 	getGroups,
-	getUsers
+	getUsers,
+	createGroup
 } from './action'
 
 import moment from 'moment'
 
-const TreeNode = Tree.TreeNode
+import TTree from '../../components/TTree'
+import TTable from '../../components/TTable'
+import TCard from '../../components/TCard'
+import CreateGroup from './busComponents/CreateGroup'
+
+const FormItem = Form.Item
 
 const columns = [{
 	title: '账号',
@@ -61,73 +67,84 @@ const columns = [{
 	key: 'operation',
 	width: '10%',
 	render: text => {
-		return <a href='#'><Icon type="edit" /></a>
+		return <a href='#'><Icon type='edit' /></a>
 	}
 }]
 
-let pagination = {
-	showSizeChanger: true,
-	onShowSizeChange(current, pageSize) {
-		console.log('Current: ', current, '; PageSize: ', pageSize)
-	},
-	onChange(current) {
-		console.log(this)
-		console.log('Current: ', current)
-	}
-}
-
 class Group extends React.Component {
+	constructor(props) {
+		super(props)
+		this.onTTreeSelect = this.onTTreeSelect.bind(this)
+		this.onTTableLoad = this.onTTableLoad.bind(this)
+		this.showModal = this.showModal.bind(this)
+		this.hideModal = this.hideModal.bind(this)
+		this.submitGroup = this.submitGroup.bind(this)
+		this.state = {
+			groupModalVisible: false,
+			userModalVisible: false
+		}
+	}
+
 	componentDidMount() {
 		this.props.getGroups()
 	}
 
-	onSelect(nodeIds) {
-		if (nodeIds.length > 0) {
-			this.props.getUsers(nodeIds[0])
-		}
+	onTTreeSelect(nodeId) {
+		this.selectedNodeId = nodeId
+		this.props.getUsers(nodeId)
+	}
+
+	onTTableLoad(pageIndex) {
+		this.props.getUsers(this.selectedNodeId, pageIndex)
+	}
+
+	showModal() {
+		this.setState({
+			groupModalVisible: true
+		})
+	}
+
+	hideModal() {
+		this.setState({
+			groupModalVisible: false
+		})
+	}
+
+	submitGroup(parentId, name) {
+		this.props.createGroup(parentId, name)
 	}
 
 	render() {
 		const {
-			loading,
-			data,
+			groupsLoading,
+			groups,
+			submittingGroup,
+			usersLoading,
 			users
 		} = this.props.groupReducer
 
-		let child = <Spin tip='Loading...'/>
-		if (!loading && data) {
-			const leaf = false
-			const loop = data => data.map((item) => {
-				if (item.children.length > 0) {
-					return <TreeNode title={item.Name} key={item.ID}>{loop(item.children)}</TreeNode>
-				}
-				return <TreeNode title={item.Name} key={item.ID}/>
-			})
-			const treeNodes = loop(data)
-			child = (
-				<Tree onSelect={this.onSelect.bind(this)} defaultExpandAll>
-					{treeNodes}
-				</Tree>
-			)
-		}
+		const {
+			groupModalVisible,
+			userModalVisible
+		} = this.state
 
-		let usersData
-		if (users && users.TotalCount > 0) {
-			usersData = users.List
-			pagination.total = users.TotalCount
-		}
 		return (
 			<div className='main-container'>
 				<Row>
-					<Col xs={24} sm={7} md={7} lg={6} className='test'>
-						<Card title='部门结构' bodyStyle={{ padding: 15 }}>
-							{child}
-						</Card>
+					<Col className='col'>
+						<TCard>
+							<Button type='primary' className='button' onClick={this.showModal}>新增部门</Button>
+							<Button type='primary' onClick={this.showModal}>新增用户</Button>
+							<CreateGroup visible={groupModalVisible} data={groups} onSubmit={this.submitGroup} submitting={submittingGroup}/>
+						</TCard>
 					</Col>
-					<Col xs={24} sm={17} md={17} lg={18} className='test'>
-						<Card title='用户数据' bodyStyle={{ padding: 15 }}>
-							<Table columns={columns} dataSource={usersData} pagination={pagination}/>
-						</Card>
+				</Row>
+				<Row>
+					<Col xs={24} sm={7} md={7} lg={6} className='col'>
+						<TTree title='部门结构' loading={groupsLoading} data={groups} onSelect={this.onTTreeSelect}/>
+					</Col>
+					<Col xs={24} sm={17} md={17} lg={18} className='col'>
+						<TTable title='用户数据' columns={columns} total={users?users.TotalCount:0} data={users?users.List:[]} loading={usersLoading} onLoad={this.onTTableLoad}/>
 					</Col>
 				</Row>
 			</div>
@@ -139,8 +156,8 @@ const mapStateToProps = state => {
 	return state
 }
 
-
 export default connect(mapStateToProps, {
 	getGroups,
-	getUsers
+	getUsers,
+	createGroup
 })(Group)

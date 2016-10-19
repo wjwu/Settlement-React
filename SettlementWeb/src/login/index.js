@@ -28,7 +28,6 @@ import captchaReducer from '../components/Captcha/reducer'
 import loginReducer from './reducer'
 
 const FormItem = Form.Item
-const InputGroup = Input.Group
 const reducer = combineReducers({
 	captchaReducer,
 	loginReducer
