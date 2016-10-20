@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Threading;
+using System.Web.Http;
 using SettlementApi.CommandBus;
 using SettlementApi.Read.QueryCommand.GroupModule;
 using SettlementApi.Write.BusCommand.GroupModule;
@@ -14,6 +15,7 @@ namespace SettlementApi.Api.Apis
         [Route("api/group")]
         public ICommandResult Query([FromUri] QueryGroupCommand request)
         {
+            Thread.Sleep(2000);
             return CommandService.SendEx(request, ReadName);
         }
 
@@ -21,6 +23,7 @@ namespace SettlementApi.Api.Apis
         [Route("api/group")]
         public void Create([FromBody] CreateGroupCommand request)
         {
+            Thread.Sleep(2000);
             CommandService.Send(request, BusName);
         }
     }

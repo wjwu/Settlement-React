@@ -11,7 +11,8 @@ namespace SettlementApi.Write.BusinessLogic
 {
     public class UserBusinessLogic : BusinessLogicBase<User>, IEventPublishObject,
         ICommandBus<ChangePasswordCommand>,
-        ICommandBus<LoginCommand, LoginCommandResult>
+        ICommandBus<LoginCommand, LoginCommandResult>,
+        ICommandBus<CreateUserCommand>
     {
         public void Execute(ChangePasswordCommand command)
         {
@@ -29,6 +30,8 @@ namespace SettlementApi.Write.BusinessLogic
         {
             if (command.GetType() == typeof(ChangePasswordCommand))
                 Execute((ChangePasswordCommand) command);
+            else if (command.GetType() == typeof(CreateUserCommand))
+                Execute((CreateUserCommand) command);
         }
 
         public ICommandResult ReceiveEx(ICommand command)
@@ -36,6 +39,13 @@ namespace SettlementApi.Write.BusinessLogic
             if (command.GetType() == typeof(LoginCommand))
                 return Execute((LoginCommand) command);
             return null;
+        }
+
+        public void Execute(CreateUserCommand command)
+        {
+            var user = MapperHelper.Map<CreateUserCommand, User>(command);
+            user.Password = Security.Md5Encrypt(Security.Encrypt(user.Password));
+            Create("User.Create", user);
         }
 
         public LoginCommandResult Execute(LoginCommand command)

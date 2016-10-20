@@ -11,4 +11,35 @@
       UPDATE TOP(1) dbo.[User] SET Password=@Password,LastModifyTime=@LastModifyTime,LastModifyUser=@LastModifyUser WHERE ID=@ID
       ]]>
   </command>
+  <command name="User.Create" type="text" connection="local">
+    <![CDATA[
+INSERT INTO dbo.[User]
+        ( ID ,
+          LoginID ,
+          Password ,
+          Phone ,
+          Name ,
+          [Group] ,
+          Enabled ,
+          CreateTime ,
+          LastLoginIP ,
+          LastLoginTime ,
+          LastModifyTime ,
+          LastModifyUser
+        )
+VALUES  ( NEWID() , 
+          @LoginID , 
+          @Password, 
+          @Phone,
+          @Name, 
+          @Group , 
+          @Enabled ,
+          GETDATE() ,
+          NULL ,
+          NULL,
+          GETDATE() ,
+          NULL
+        )
+  ]]>
+  </command>
 </commands>

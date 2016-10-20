@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="GroupModule\CreateGroupCommand.cs" />
     <Compile Include="UserModule\ChangePasswordCommand.cs" />
+    <Compile Include="UserModule\CreateUserCommand.cs" />
     <Compile Include="UserModule\LoginCommand.cs" />
     <Compile Include="UserModule\LoginCommandResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

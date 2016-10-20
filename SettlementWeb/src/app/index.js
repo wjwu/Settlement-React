@@ -1,30 +1,28 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {
+	createStore,
+	applyMiddleware
+} from 'redux'
+import {
+	Provider
+} from 'react-redux'
+import {
 	browserHistory,
 	Router,
 	Route
 } from 'react-router'
-import {
-	createStore,
-	combineReducers,
-	applyMiddleware
-} from 'redux'
-import {
-	Provider,
-	connect
-} from 'react-redux'
 import thunk from 'redux-thunk'
+import reducer from './reducers'
 
-import Home from './home'
-import Group from './group'
+import Home from './pages/home'
+import Group from './pages/group'
 
-import groupReducer from './group/reducer'
-
-const reducer = combineReducers({
-	groupReducer
-})
 const store = createStore(reducer, applyMiddleware(thunk))
+
+const success = function() {
+	message.success('This is a prompt message for success, and it will disappear in 10 seconds', 10)
+}
 
 ReactDOM.render(
 	<Provider store={store}>

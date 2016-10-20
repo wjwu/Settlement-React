@@ -17,15 +17,15 @@ const TreeNode = Tree.TreeNode
 class CreateGroup extends Component {
 	constructor(prop) {
 		super(prop)
-		this.onChange = this.onChange.bind(this)
-		this.handleSubmit = this.handleSubmit.bind(this)
+		this.submit = this.submit.bind(this)
+		this.cancel = this.cancel.bind(this)
+		this.treeSelectChange = this.treeSelectChange.bind(this)
 	}
 
-	handleSubmit() {
+	submit() {
 		const {
 			validateFields,
-			getFieldValue,
-			setFields
+			getFieldValue
 		} = this.props.form
 		const {
 			onSubmit
@@ -41,7 +41,12 @@ class CreateGroup extends Component {
 		})
 	}
 
-	onChange(value) {
+	cancel() {
+		this.props.form.resetFields(['name'])
+		this.props.onCancel()
+	}
+
+	treeSelectChange(value) {
 		this.selectedNodeValue = value
 	}
 
@@ -64,18 +69,27 @@ class CreateGroup extends Component {
 		})
 		const treeNodes = loop(data)
 
-		let cancel = <Button key='back' type='ghost' size='large'>取消</Button>
-		let ok = <Button key='submit' type='primary' size='large' loading={submitting} onClick={this.handleSubmit}>提交</Button>
+		let cancel = <Button key='cancel' type='ghost' size='large' onClick={this.cancel}>取消</Button>
+		let ok = <Button key='ok' type='primary' size='large' loading={submitting} onClick={this.submit}>提交</Button>
+
+		const formItemLayout = {
+			labelCol: {
+				span: 6
+			},
+			wrapperCol: {
+				span: 15
+			},
+		}
 
 		return (
-			<Modal title='新增部门' visible={visible} width={400} footer={[cancel,ok]}>
+			<Modal key='createGroup' title='新增部门' visible={visible} width={500} footer={[cancel,ok]} onCancel={this.cancel}>
 				<Form>
-					<FormItem>
-						<TreeSelect dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择上级部门' treeDefaultExpandAll onChange={this.onChange}>
+					<FormItem {...formItemLayout} label='上级部门'>
+						<TreeSelect dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择上级部门' treeDefaultExpandAll onChange={this.treeSelectChange}>
 							{treeNodes}
 						</TreeSelect>
 					</FormItem>
-					<FormItem hasFeedback>
+					<FormItem hasFeedback {...formItemLayout} label='部门名称'>
 					{
 						getFieldDecorator('name',{
 							rules:[{
@@ -84,7 +98,7 @@ class CreateGroup extends Component {
 								message:'请输入部门名称！'
 							}]
 						})(
-							<Input placeholder='部门名称'/>
+							<Input placeholder='请输入部门名称'/>
 						)
 					}
 					</FormItem>
@@ -103,9 +117,10 @@ CreateGroup.propTypes = {
 	visible: PropTypes.bool,
 	data: PropTypes.array,
 	submitting: PropTypes.bool,
-	onSubmit: PropTypes.func
+	onSubmit: PropTypes.func,
+	onCancel: PropTypes.func
 }
 
 export default Form.create()(CreateGroup)
 
-//							{...getFieldDecorator('treeSelect',{rules:[{required:true,type:'string',message:'请选择部门！'}]})}
+//{...getFieldDecorator('treeSelect',{rules:[{required:true,type:'string',message:'请选择部门！'}]})}

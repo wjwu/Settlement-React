@@ -30,7 +30,11 @@ class TTree extends Component {
 		} = this.props
 
 		if (loading) {
-			return (<Spin tip='Loading...'/>)
+			return (
+				<TCard title={title}>
+					<Spin tip='Loading...'/>
+				</TCard>
+			)
 		}
 		const loop = data => data.map(item => {
 			if (item.children && item.children.length > 0) {
