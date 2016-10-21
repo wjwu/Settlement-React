@@ -69,3 +69,33 @@ export const create = (user) => {
 		})
 	}
 }
+
+export const update = (user) => {
+	return dispatch => {
+		dispatch({
+			type: actions.BEGIN_UPDATE_USER
+		})
+
+		client.put(API_PATH, user).then(result => {
+			if (result.Message) {
+				dispatch({
+					type: actions.ERROR_UPDATE_USER
+				})
+				dispatch({
+					type: SHOW_MESSAGE,
+					msgType: 'error',
+					msg: result.Message
+				})
+			} else {
+				dispatch({
+					type: actions.END_UPDATE_USER
+				})
+				dispatch({
+					type: SHOW_MESSAGE,
+					msgType: 'success',
+					msg: '修改成功！'
+				})
+			}
+		})
+	}
+}

@@ -45,7 +45,7 @@ const columns = [{
 	key: 'operation',
 	width: '10%',
 	render: text => {
-		return <a href='#'><Icon type='edit' /></a>
+		return <a href='javascript:;' onClick={()=>{console.log('test')}}><Icon type='edit' /></a>
 	}
 }]
 

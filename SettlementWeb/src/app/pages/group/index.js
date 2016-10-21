@@ -162,7 +162,7 @@ class Group extends React.Component {
 							<CreateGroup visible={createGroupVisible} onSubmit={this.submit.bind(this,createGroup)} submitting={groupProps.creating} onCancel={this.hideModal.bind(this,createGroup)} groups={groups}/>
 							<CreateUser visible={createUserVisible} onSubmit={this.submit.bind(this,createUser)} submitting={userProps.creating} onCancel={this.hideModal.bind(this,createUser)} groups={groups} />
 							<UpdateGroup visible={updateGroupVisible} onSubmit={this.submit.bind(this,updateGroup)} submitting={groupProps.updating} onCancel={this.hideModal.bind(this,updateGroup)} group={this.selectedNode||{}} />
-							<UpdateUser visible={updateUserVisible} onSubmit={this.submit.bind(this,updateUser)} submitting={userProps.updating} onCancel={this.hideModal.bind(this,updateUser)} groups={groups} />
+							<UpdateUser visible={updateUserVisible} onSubmit={this.submit.bind(this,updateUser)} submitting={userProps.updating} onCancel={this.hideModal.bind(this,updateUser)} groups={groups} user={{}}/>
 						</TCard>
 					</Col>
 				</Row>

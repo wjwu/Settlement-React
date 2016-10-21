@@ -5,7 +5,10 @@ import React, {
 import {
 	Modal,
 	Form,
-	Input
+	Input,
+	Button,
+	Tree,
+	Radio
 } from 'antd'
 
 import TTreeSelect from '../../../../../components/TTreeSelect'
@@ -162,4 +165,4 @@ UpdateUser.propTypes = {
 }
 
 
-export default UpdateUser
+export default Form.create()(UpdateUser)
