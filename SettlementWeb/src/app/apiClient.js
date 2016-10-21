@@ -34,7 +34,33 @@ const post = (url, request) => {
 	})
 }
 
+const del = (url) => {
+	return fetch(`${API_URL}${url}`, {
+		method: 'DELETE'
+	}).then(response => {
+		if (response.status === 204) {
+			return {}
+		}
+		return response.json()
+	})
+}
+
+const put = (url, request) => {
+	return fetch(`${API_URL}${url}`, {
+		method: 'PUT',
+		headers: headers,
+		body: JSON.stringify(request)
+	}).then(response => {
+		if (response.status === 204) {
+			return {}
+		}
+		return response.json()
+	})
+}
+
 export {
 	get,
-	post
+	post,
+	del,
+	put
 }

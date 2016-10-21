@@ -24,6 +24,13 @@ namespace SettlementApi.Api.Apis
             CommandService.Send(request, BusName);
         }
 
+        [HttpPut]
+        [Route("api/user")]
+        public void Update([FromBody]UpdateUserCommand request)
+        {
+            CommandService.Send(request, BusName);
+        }
+
         [HttpPatch]
         [Route("api/user/password")]
         public void ChangePassword(ChangePasswordCommand request)

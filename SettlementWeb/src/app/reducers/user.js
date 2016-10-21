@@ -1,6 +1,9 @@
 import * as actions from '../constants/user'
 
 const user = (state = {}, action) => {
+	if (state.hasOwnProperty('created')) {
+		delete state.created
+	}
 	switch (action.type) {
 		case actions.BEGIN_GET_USERS:
 			return {
@@ -26,7 +29,8 @@ const user = (state = {}, action) => {
 		case actions.END_CREATE_USER:
 			delete state.creating
 			return {
-				...state
+				...state,
+				created: true
 			}
 		case actions.ERROR_CREATE_USER:
 			delete state.creating

@@ -36,18 +36,13 @@ export const query = () => {
 	}
 }
 
-export const create = (parentId, name) => {
+export const create = (group) => {
 	return dispatch => {
 		dispatch({
 			type: actions.BEGIN_CREATE_GROUP
 		})
 
-		let request = {
-			parentId,
-			name
-		}
-
-		client.post(API_PATH, request).then(result => {
+		client.post(API_PATH, group).then(result => {
 			if (result.Message) {
 				dispatch({
 					type: actions.ERROR_CREATE_GROUP
@@ -65,6 +60,57 @@ export const create = (parentId, name) => {
 					type: SHOW_MESSAGE,
 					msgType: 'success',
 					msg: '添加成功！'
+				})
+			}
+		})
+	}
+}
+
+export const del = (id) => {
+	return dispatch => {
+		return client.del(`${API_PATH}/${id}`)
+			// return client.del(`${API_PATH}/${id}`).then(result => {
+			// 	if (result.Message) {
+			// 		dispatch({
+			// 			type: actions.ERROR_DELETE_GROUP
+			// 		})
+			// 		dispatch({
+			// 			type: SHOW_MESSAGE,
+			// 			msgType: 'error',
+			// 			msg: result.Message
+			// 		})
+			// 	} else {
+			// 		dispatch({
+			// 			type: actions.END_DELETE_GROUP
+			// 		})
+			// 	}
+			// })
+	}
+}
+
+export const update = (group) => {
+	return dispatch => {
+		dispatch({
+			type: actions.BEGIN_UPDATE_GROUP
+		})
+		client.put(API_PATH, group).then(result => {
+			if (result.Message) {
+				dispatch({
+					type: actions.ERROR_UPDATE_GROUP
+				})
+				dispatch({
+					type: SHOW_MESSAGE,
+					msgType: 'error',
+					msg: result.Message
+				})
+			} else {
+				dispatch({
+					type: actions.END_UPDATE_GROUP
+				})
+				dispatch({
+					type: SHOW_MESSAGE,
+					msgType: 'success',
+					msg: '修改成功！'
 				})
 			}
 		})

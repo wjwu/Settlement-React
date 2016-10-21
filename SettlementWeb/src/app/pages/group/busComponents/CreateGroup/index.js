@@ -36,7 +36,11 @@ class CreateGroup extends Component {
 			if (!errors) {
 				let name = getFieldValue('name')
 				if (onSubmit) {
-					onSubmit(this.selectedNodeValue, name)
+					let parentId = this.selectedNodeValue
+					onSubmit({
+						parentId,
+						name
+					})
 				}
 			}
 		})
@@ -58,12 +62,9 @@ class CreateGroup extends Component {
 
 		const {
 			visible,
-			data,
+			groups,
 			submitting
 		} = this.props
-
-		let cancel = <Button key='cancel' type='ghost' size='large' onClick={this.cancel}>取消</Button>
-		let ok = <Button key='ok' type='primary' size='large' loading={submitting} onClick={this.submit}>提交</Button>
 
 		const formItemLayout = {
 			labelCol: {
@@ -75,10 +76,10 @@ class CreateGroup extends Component {
 		}
 
 		return (
-			<Modal key='createGroup' title='新增部门' visible={visible} width={500} footer={[cancel,ok]} onCancel={this.cancel}>
+			<Modal title='新增部门' visible={visible} width={500} confirmLoading={submitting} onOk={this.submit} onCancel={this.cancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='上级部门'>
-						<TTreeSelect data={data} dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择上级部门' treeDefaultExpandAll onChange={this.treeSelectChange}/>
+						<TTreeSelect data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择上级部门' treeDefaultExpandAll onChange={this.treeSelectChange}/>
 					</FormItem>
 					<FormItem hasFeedback {...formItemLayout} label='部门名称'>
 					{
@@ -100,13 +101,13 @@ class CreateGroup extends Component {
 }
 
 CreateGroup.defaultProps = {
-	data: [],
+	groups: [],
 	submitting: false
 }
 
 CreateGroup.propTypes = {
 	visible: PropTypes.bool,
-	data: PropTypes.array,
+	groups: PropTypes.array,
 	submitting: PropTypes.bool,
 	onSubmit: PropTypes.func,
 	onCancel: PropTypes.func

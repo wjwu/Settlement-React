@@ -20,4 +20,22 @@ VALUES  ( NEWID() ,
         )
       ]]>
   </command>
+  <command name="Group.Delete" type="text" connection="local">
+    <![CDATA[
+    UPDATE TOP(1) dbo.[Group] SET Deleted=1 WHERE ID=@ID
+      ]]>
+  </command>
+  <command name="Group.GetByID" type="text" connection="local">
+    <![CDATA[
+SELECT [ID]
+      ,[Name]
+      ,[ParentID]
+  FROM [dbo].[Group] WHERE ID=@ID
+      ]]>
+  </command>
+  <command name="Group.Update" type="text" connection="local">
+    <![CDATA[
+    UPDATE TOP(1) dbo.[Group] SET [Name]=@Name WHERE ID=@ID
+      ]]>
+  </command>
 </commands>

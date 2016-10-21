@@ -16,9 +16,12 @@ class TTree extends Component {
 		this.onSelect = this.onSelect.bind(this)
 	}
 
-	onSelect(nodeIds) {
-		if (nodeIds.length > 0 && this.props.onSelect) {
-			this.props.onSelect(nodeIds[0])
+	onSelect(selectedKeys, e) {
+		if (e.selected) {
+			this.props.onSelect({
+				title: e.node.props.title,
+				key: e.node.props.eventKey
+			})
 		}
 	}
 

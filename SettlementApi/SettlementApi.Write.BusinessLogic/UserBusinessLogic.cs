@@ -3,16 +3,18 @@ using SettlementApi.CommandBus;
 using SettlementApi.Common.Mapper;
 using SettlementApi.EventBus;
 using SettlementApi.Write.BusCommand.UserModule;
+using SettlementApi.Write.BusinessLogic.Event;
 using SettlementApi.Write.BusinessLogic.Resource;
 using SettlementApi.Write.BusinessLogic.Utility;
 using SettlementApi.Write.Model;
 
 namespace SettlementApi.Write.BusinessLogic
 {
-    public class UserBusinessLogic : BusinessLogicBase<User>, IEventPublishObject,
+    public class UserBusinessLogic : BusinessLogicBase<User>, IEventSubscribeObject,
         ICommandBus<ChangePasswordCommand>,
         ICommandBus<LoginCommand, LoginCommandResult>,
-        ICommandBus<CreateUserCommand>
+        ICommandBus<CreateUserCommand>,
+        ICommandBus<UpdateUserCommand>
     {
         public void Execute(ChangePasswordCommand command)
         {
@@ -32,6 +34,8 @@ namespace SettlementApi.Write.BusinessLogic
                 Execute((ChangePasswordCommand) command);
             else if (command.GetType() == typeof(CreateUserCommand))
                 Execute((CreateUserCommand) command);
+            else if (command.GetType() == typeof(UpdateUserCommand))
+                Execute((UpdateUserCommand)command);
         }
 
         public ICommandResult ReceiveEx(ICommand command)
@@ -48,6 +52,11 @@ namespace SettlementApi.Write.BusinessLogic
             Create("User.Create", user);
         }
 
+        public void Execute(UpdateUserCommand command)
+        {
+            Update("User.Update",command);
+        }
+
         public LoginCommandResult Execute(LoginCommand command)
         {
             command.Password = Security.Md5Encrypt(Security.Encrypt(command.Password));
@@ -58,6 +67,15 @@ namespace SettlementApi.Write.BusinessLogic
                 throw new BussinessException(UserRes.LoginFailDisabled);
             var result = MapperHelper.Map<User, LoginCommandResult>(loginUser);
             return result;
+        }
+
+        public void SubscribeEvents()
+        {
+            this.Subscribe<DeleteGroupEvent>(e =>
+            {
+                var evt = e as DeleteGroupEvent;
+                Update("User.BatchUpdateGroup", evt);
+            });
         }
 
         public override User GetEntity(Guid id)

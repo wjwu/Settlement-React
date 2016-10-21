@@ -1,6 +1,7 @@
 ﻿using Microsoft.Practices.Unity;
 using SettlementApi.CommandBus;
 using SettlementApi.Common;
+using SettlementApi.EventBus;
 
 namespace SettlementApi.Write.BusinessLogic
 {
@@ -11,6 +12,7 @@ namespace SettlementApi.Write.BusinessLogic
             var container = AppUnity.Container;
             container.RegisterType<ICommandBus, UserBusinessLogic>("UserBusinessLogic");
             container.RegisterType<ICommandBus, GroupBusinessLogic>("GroupBusinessLogic");
+            container.RegisterType<IEventSubscribeObject, UserBusinessLogic>("UserBusinessLogic");
         }
     }
 }

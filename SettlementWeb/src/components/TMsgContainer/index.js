@@ -5,29 +5,33 @@ import {
 	message
 } from 'antd'
 
+const showGlobleMsg = (type, msg) => {
+	if (type === 'success') {
+		message.success(msg, 5)
+	} else if (type === 'error') {
+		message.error(msg, 5)
+	} else if (type === 'info') {
+		message.info(msg, 5)
+	} else if (type === 'warning') {
+		message.warning(msg, 5)
+	} else if (type === 'warn') {
+		message.warn(msg, 5)
+	}
+}
+
 const TMsgContainer = () => {
 	return Comp => {
 		return class extends Component {
 			componentDidUpdate() {
 				const {
-					msgType,
+					type,
 					msg
 				} = this.props.message
 
-				if (msgType === 'success') {
-					message.success(msg, 5)
-				} else if (msgType === 'error') {
-					message.error(msg, 10)
-				} else if (msgType === 'info') {
-					message.info(msg, 10)
-				} else if (msgType === 'warning') {
-					message.warning(msg, 10)
-				} else if (msgType === 'warn') {
-					message.warn(msg, 10)
-				}
+				showGlobleMsg(type, msg)
 			}
 			render() {
-				return (<Comp {...this.props}/>)
+				return (<Comp {...this.props} showGlobleMsg={showGlobleMsg}/>)
 			}
 		}
 	}

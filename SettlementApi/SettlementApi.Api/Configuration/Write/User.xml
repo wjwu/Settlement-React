@@ -3,12 +3,22 @@
 <commands>
   <command name="User.Login" type="text" connection="local">
     <![CDATA[
-  SELECT TOP(1) ID,LoginID,Enabled FROM dbo.[User] WHERE LoginID=@LoginID AND Password=@Password AND Deleted=0
+  SELECT TOP(1) ID,LoginID,Enabled FROM dbo.[User] WHERE LoginID=@LoginID AND Password=@Password AND [Deleted]=0
   ]]>
   </command>
   <command name="User.ChangePassword" type="text" connection="local">
     <![CDATA[
       UPDATE TOP(1) dbo.[User] SET Password=@Password,LastModifyTime=@LastModifyTime,LastModifyUser=@LastModifyUser WHERE ID=@ID
+      ]]>
+  </command>
+  <command name="User.BatchUpdateGroup" type="text" connection="local">
+    <![CDATA[
+      UPDATE dbo.[User] SET [Group]=@NewGroup WHERE [Group]=@OldGroup AND [Deleted]=0
+      ]]>
+  </command>
+  <command name="User.Update" type="text" connection="local">
+    <![CDATA[
+      UPDATE TOP(1) dbo.[User] SET [Phone]=@Phone,[Name]=@Name,[Enabled]=@Enabled WHERE ID=@ID AND [Deleted]=0
       ]]>
   </command>
   <command name="User.Create" type="text" connection="local">

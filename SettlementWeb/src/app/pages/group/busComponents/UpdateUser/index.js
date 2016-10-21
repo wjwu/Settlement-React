@@ -5,21 +5,16 @@ import React, {
 import {
 	Modal,
 	Form,
-	Tree,
-	TreeSelect,
-	Input,
-	Button,
-	Radio,
-	Row,
-	Col
+	Input
 } from 'antd'
+
 import TTreeSelect from '../../../../../components/TTreeSelect'
 
 const FormItem = Form.Item
 const TreeNode = Tree.TreeNode
 const RadioGroup = Radio.Group
 
-class CreateUser extends Component {
+class UpdateUser extends Component {
 	constructor(prop) {
 		super(prop)
 		this.treeSelectChange = this.treeSelectChange.bind(this)
@@ -80,7 +75,8 @@ class CreateUser extends Component {
 		const {
 			visible,
 			groups,
-			submitting
+			submitting,
+			user
 		} = this.props
 
 		let reset = <Button key='reset' type='ghost' size='large' onClick={this.reset}>重置</Button>
@@ -95,41 +91,20 @@ class CreateUser extends Component {
 				span: 15
 			},
 		}
+
 		return (
-			<Modal title='新增用户' visible={visible} width={500} footer={[cancel,reset,ok]} onCancel={this.cancel}>
+			<Modal title='修改用户' visible={visible} width={500} footer={[cancel,reset,ok]} onCancel={this.cancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='所属部门'>
 						<TTreeSelect data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择所属部门' treeDefaultExpandAll onChange={this.treeSelectChange}/>
 					</FormItem>
-					<FormItem hasFeedback {...formItemLayout} label='账号'>
-					{
-						getFieldDecorator('loginId',{
-							rules:[{
-								required:true,
-								whitespace:true,
-								message:'请输入账号！'
-							}]
-						})(
-							<Input placeholder='请输入账号'/>
-						)
-					}
-					</FormItem>
-					<FormItem hasFeedback {...formItemLayout} label='初始密码'>
-					{
-						getFieldDecorator('password',{
-							rules:[{
-								required:true,
-								whitespace:true,
-								message:'请输入初始密码！'
-							}]
-						})(
-							<Input type='password' placeholder='请输入初始密码'/>
-						)
-					}
+					<FormItem {...formItemLayout} label='账号'>
+						<Input value={user.LoginID} disabled/>
 					</FormItem>
 					<FormItem hasFeedback {...formItemLayout} label='手机号码'>
 					{
 						getFieldDecorator('phone',{
+							initialValue:user.Phone,
 							rules:[{
 								required:true,
 								whitespace:true,
@@ -143,6 +118,7 @@ class CreateUser extends Component {
 					<FormItem hasFeedback {...formItemLayout} label='姓名'>
 					{
 						getFieldDecorator('name',{
+							initialValue:user.Name,
 							rules:[{
 								required:true,
 								whitespace:true,
@@ -156,7 +132,7 @@ class CreateUser extends Component {
 					<FormItem {...formItemLayout} label='状态'>
 					{
 						getFieldDecorator('enabled',{
-							initialValue: 'true'
+							initialValue: user.Enabled
 						})(
 				            <RadioGroup>
 				              <Radio value='true'>启用</Radio>
@@ -171,17 +147,19 @@ class CreateUser extends Component {
 	}
 }
 
-CreateUser.defaultProps = {
+UpdateUser.defaultProps = {
 	groups: [],
 	submitting: false
 }
 
-CreateUser.propTypes = {
+UpdateUser.propTypes = {
 	visible: PropTypes.bool,
+	user: PropTypes.object.isRequired,
 	groups: PropTypes.array,
 	submitting: PropTypes.bool,
-	onSubmit: PropTypes.func,
-	onCancel: PropTypes.func
+	onSubmit: PropTypes.func.isRequired,
+	onCancel: PropTypes.func.isRequired
 }
 
-export default Form.create()(CreateUser)
+
+export default UpdateUser

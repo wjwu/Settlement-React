@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Web.Http;
 using SettlementApi.CommandBus;
 using SettlementApi.Read.QueryCommand.GroupModule;
@@ -23,6 +24,20 @@ namespace SettlementApi.Api.Apis
         public void Create([FromBody] CreateGroupCommand request)
         {
             CommandService.Send(request, BusName);
+        }
+
+        [HttpPut]
+        [Route("api/group")]
+        public void Update([FromBody] UpdateGroupCommand request)
+        {
+            CommandService.Send(request, BusName);
+        }
+
+        [HttpDelete]
+        [Route("api/group/{id:guid}")]
+        public void Delete(Guid id)
+        {
+            CommandService.Send(new DeleteGroupCommand {ID = id}, BusName);
         }
     }
 }
