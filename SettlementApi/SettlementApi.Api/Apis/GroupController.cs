@@ -15,7 +15,6 @@ namespace SettlementApi.Api.Apis
         [Route("api/group")]
         public ICommandResult Query([FromUri] QueryGroupCommand request)
         {
-            Thread.Sleep(2000);
             return CommandService.SendEx(request, ReadName);
         }
 
@@ -23,7 +22,6 @@ namespace SettlementApi.Api.Apis
         [Route("api/group")]
         public void Create([FromBody] CreateGroupCommand request)
         {
-            Thread.Sleep(2000);
             CommandService.Send(request, BusName);
         }
     }

@@ -1,5 +1,8 @@
 import * as client from '../apiClient'
 import * as actions from '../constants/user'
+import {
+	SHOW_MESSAGE
+} from '../constants/message'
 const md5 = require('md5')
 
 const API_PATH = 'user'
@@ -14,21 +17,23 @@ export const query = (groupId, pageIndex = 1, pageSize = 10) => {
 			pageSize,
 			group: groupId
 		}
-		let promise = client.get('user', request)
 
-		promise.then(response => {
-			if (response.ok) {
-				return response.json()
-			} else {
+		client.get(API_PATH, request).then(result => {
+			if (result.Message) {
 				dispatch({
 					type: actions.ERROR_GET_USERS
 				})
+				dispatch({
+					type: SHOW_MESSAGE,
+					msgType: 'error',
+					msg: result.Message
+				})
+			} else {
+				dispatch({
+					type: actions.END_GET_USERS,
+					result: result
+				})
 			}
-		}).then(result => {
-			dispatch({
-				type: actions.END_GET_USERS,
-				result: result
-			})
 		})
 	}
 }
@@ -41,16 +46,24 @@ export const create = (user) => {
 
 		user.password = md5(user.password)
 
-		let promise = client.post(API_PATH, user)
-
-		promise.then(response => {
-			if (response.ok) {
+		client.post(API_PATH, user).then(result => {
+			if (result.Message) {
 				dispatch({
-					type: actions.END_CREATE_USER
+					type: actions.ERROR_CREATE_USER
+				})
+				dispatch({
+					type: SHOW_MESSAGE,
+					msgType: 'error',
+					msg: result.Message
 				})
 			} else {
 				dispatch({
-					type: actions.ERROR_CREATE_USER
+					type: actions.END_CREATE_USER
+				})
+				dispatch({
+					type: SHOW_MESSAGE,
+					msgType: 'success',
+					msg: '添加成功！'
 				})
 			}
 		})

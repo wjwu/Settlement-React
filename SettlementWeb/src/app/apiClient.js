@@ -13,6 +13,11 @@ const get = (url, request) => {
 	return fetch(`${API_URL}${url}?${query}`, {
 		method: 'GET',
 		headers: headers
+	}).then(response => {
+		if (response.status === 204) {
+			return {}
+		}
+		return response.json()
 	})
 }
 
@@ -21,6 +26,11 @@ const post = (url, request) => {
 		method: 'POST',
 		headers: headers,
 		body: JSON.stringify(request)
+	}).then(response => {
+		if (response.status === 204) {
+			return {}
+		}
+		return response.json()
 	})
 }
 

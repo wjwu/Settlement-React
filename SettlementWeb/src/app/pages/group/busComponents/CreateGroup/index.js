@@ -10,6 +10,7 @@ import {
 	Input,
 	Button
 } from 'antd'
+import TTreeSelect from '../../../../../components/TTreeSelect'
 
 const FormItem = Form.Item
 const TreeNode = Tree.TreeNode
@@ -61,14 +62,6 @@ class CreateGroup extends Component {
 			submitting
 		} = this.props
 
-		const loop = data => data.map(item => {
-			if (item.children.length > 0) {
-				return <TreeNode value={item.ID} title={item.Name} key={item.ID}>{loop(item.children)}</TreeNode>
-			}
-			return <TreeNode value={item.ID} title={item.Name} key={item.ID}/>
-		})
-		const treeNodes = loop(data)
-
 		let cancel = <Button key='cancel' type='ghost' size='large' onClick={this.cancel}>取消</Button>
 		let ok = <Button key='ok' type='primary' size='large' loading={submitting} onClick={this.submit}>提交</Button>
 
@@ -85,9 +78,7 @@ class CreateGroup extends Component {
 			<Modal key='createGroup' title='新增部门' visible={visible} width={500} footer={[cancel,ok]} onCancel={this.cancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='上级部门'>
-						<TreeSelect dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择上级部门' treeDefaultExpandAll onChange={this.treeSelectChange}>
-							{treeNodes}
-						</TreeSelect>
+						<TTreeSelect data={data} dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择上级部门' treeDefaultExpandAll onChange={this.treeSelectChange}/>
 					</FormItem>
 					<FormItem hasFeedback {...formItemLayout} label='部门名称'>
 					{

@@ -44,6 +44,12 @@ class Group extends React.Component {
 		this.props.groupQuery()
 	}
 
+	componentDidUpdate() {
+		if (this.props.group.created) {
+			this.props.groupQuery()
+		}
+	}
+
 	onTTreeSelect(nodeId) {
 		this.selectedNodeId = nodeId
 		this.props.userQuery(nodeId)
@@ -148,3 +154,5 @@ export default connect(state => state, {
 	'userQuery': user.query,
 	'userCreate': user.create
 })(TMsgContainer()(Group))
+
+// todo添加group后 刷新

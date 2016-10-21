@@ -13,6 +13,7 @@ import {
 	Row,
 	Col
 } from 'antd'
+import TTreeSelect from '../../../../../components/TTreeSelect'
 
 const FormItem = Form.Item
 const TreeNode = Tree.TreeNode
@@ -23,6 +24,8 @@ class CreateUser extends Component {
 		super(prop)
 		this.treeSelectChange = this.treeSelectChange.bind(this)
 		this.submit = this.submit.bind(this)
+		this.cancel = this.cancel.bind(this)
+		this.reset = this.reset.bind(this)
 	}
 
 	submit() {
@@ -56,6 +59,15 @@ class CreateUser extends Component {
 		})
 	}
 
+	cancel() {
+		this.props.form.resetFields()
+		this.props.onCancel()
+	}
+
+	reset() {
+		this.props.form.resetFields()
+	}
+
 	treeSelectChange(value) {
 		this.selectedNodeValue = value
 	}
@@ -68,25 +80,12 @@ class CreateUser extends Component {
 		const {
 			visible,
 			data,
-			submitting,
-			onCancel
+			submitting
 		} = this.props
 
-		const loop = data => data.map(item => {
-			if (item.children.length > 0) {
-				return <TreeNode value={item.ID} title={item.Name} key={item.ID}>{loop(item.children)}</TreeNode>
-			}
-			return <TreeNode value={item.ID} title={item.Name} key={item.ID}/>
-		})
-		const treeNodes = loop(data)
-
-		let cancel
-		if (submitting) {
-			cancel = <Button key='back' type='ghost' size='large' disabled onClick={onCancel}>取消</Button>
-		} else {
-			cancel = <Button key='back' type='ghost' size='large' onClick={onCancel}>取消</Button>
-		}
-		let ok = <Button key='submit' type='primary' size='large' loading={submitting} onClick={this.Submit}>提交</Button>
+		let reset = <Button key='reset' type='ghost' size='large' onClick={this.reset}>重置</Button>
+		let cancel = <Button key='cancel' type='ghost' size='large' onClick={this.cancel}>取消</Button>
+		let ok = <Button key='submit' type='primary' size='large' loading={submitting} onClick={this.submit}>提交</Button>
 
 		const formItemLayout = {
 			labelCol: {
@@ -97,12 +96,10 @@ class CreateUser extends Component {
 			},
 		}
 		return (
-			<Modal key='createUser' title='新增用户' visible={visible} width={500} footer={[cancel,ok]} onCancel={onCancel}>
+			<Modal key='createUser' title='新增用户' visible={visible} width={500} footer={[cancel,reset,ok]} onCancel={this.cancel}>
 				<Form horizontal>
 					<FormItem {...formItemLayout} label='所属部门'>
-						<TreeSelect dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择所属部门' treeDefaultExpandAll onChange={this.treeSelectChange}>
-							{treeNodes}
-						</TreeSelect>
+						<TTreeSelect data={data} dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择所属部门' treeDefaultExpandAll onChange={this.treeSelectChange}/>
 					</FormItem>
 					<FormItem hasFeedback {...formItemLayout} label='账号'>
 					{

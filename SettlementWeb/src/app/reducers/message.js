@@ -2,9 +2,7 @@ import {
 	SHOW_MESSAGE
 } from '../constants/message'
 
-const message = (state = {
-	msgType: null
-}, action) => {
+const message = (state, action) => {
 	switch (action.type) {
 		case SHOW_MESSAGE:
 			return Object.assign({}, state, {
@@ -12,7 +10,9 @@ const message = (state = {
 				msg: action.msg
 			})
 		default:
-			return state
+			return {
+				msgType: null
+			}
 	}
 }
 
