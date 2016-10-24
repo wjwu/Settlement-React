@@ -8,6 +8,7 @@ namespace SettlementApi.Write.BusCommand.UserModule
         public Guid ID { get; set; }
         public string Phone { get; set; }
         public string Name { get; set; }
+        public Guid Group { get; set; }
         public bool Enabled { get; set; }
     }
 }

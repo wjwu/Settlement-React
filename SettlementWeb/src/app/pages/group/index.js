@@ -4,16 +4,18 @@ import {
 } from 'react-redux'
 import {
 	Row,
-	Col,
 	Button,
 	Modal
 } from 'antd'
-const confirm = Modal.confirm
 
+const confirm = Modal.confirm
+import TMainContainer from '../../../components/TMainContainer'
+import TMsgContainer from '../../../components/TMsgContainer'
+import TCol from '../../../components/TCol'
 import TTree from '../../../components/TTree'
 import TTable from '../../../components/TTable'
 import TCard from '../../../components/TCard'
-import TMsgContainer from '../../../components/TMsgContainer'
+
 import CreateGroup from './busComponents/CreateGroup'
 import UpdateGroup from './busComponents/UpdateGroup'
 import CreateUser from './busComponents/CreateUser'
@@ -22,7 +24,7 @@ import UpdateUser from './busComponents/UpdateUser'
 import * as group from '../../actions/group'
 import * as user from '../../actions/user'
 
-import columns from './columns'
+import genColumns from './columns'
 
 const EMPTY_GUID = '00000000-0000-0000-0000-000000000000'
 const createGroup = 'createGroup'
@@ -51,14 +53,14 @@ class Group extends React.Component {
 		if (this.props.group.created || this.props.group.updated) {
 			this.props.queryGroup()
 		}
-		if (this.props.user.created && this.selectedNode) {
+		if ((this.props.user.created || this.props.user.updated) && this.selectedNode) {
 			this.props.queryUser(this.selectedNode.key)
 		}
 	}
 
 	onTTreeSelect(node) {
 		this.selectedNode = node
-		this.props.queryUser(node.key)
+		this.props.queryUser(node.key, 1)
 	}
 
 	onTTableLoad(pageIndex) {
@@ -135,12 +137,11 @@ class Group extends React.Component {
 
 		let groups = []
 		if (groupProps.result && groupProps.result.List) {
-			const loop = (parentId) => {
-				return groupProps.result.List.filter(item => item.ParentID === parentId).map(item => {
-					item.children = loop(item.ID)
-					return item
-				})
-			}
+			const loop = (parentId) => groupProps.result.List.filter(item => item.ParentID === parentId).map(item => {
+				item.children = loop(item.ID)
+				return item
+			})
+
 			groups = loop(EMPTY_GUID)
 		}
 
@@ -150,10 +151,15 @@ class Group extends React.Component {
 		}
 		let users = totalCount > 0 ? userProps.result.List : []
 
+		const columns = genColumns(raw => {
+			this.selectedUser = raw
+			this.showModal(updateUser)
+		})
+		const selectedUser = this.selectedUser || {}
 		return (
-			<div className='main-container'>
-				<Row gutter={24}>
-					<Col className='col'>
+			<TMainContainer>
+				<Row>
+					<TCol>
 						<TCard>
 							<Button type='primary' className='button' onClick={this.showModal.bind(this,createGroup)}>新增部门</Button>
 							<Button type='primary' className='button' onClick={this.showModal.bind(this,createUser)}>新增用户</Button>
@@ -162,19 +168,19 @@ class Group extends React.Component {
 							<CreateGroup visible={createGroupVisible} onSubmit={this.submit.bind(this,createGroup)} submitting={groupProps.creating} onCancel={this.hideModal.bind(this,createGroup)} groups={groups}/>
 							<CreateUser visible={createUserVisible} onSubmit={this.submit.bind(this,createUser)} submitting={userProps.creating} onCancel={this.hideModal.bind(this,createUser)} groups={groups} />
 							<UpdateGroup visible={updateGroupVisible} onSubmit={this.submit.bind(this,updateGroup)} submitting={groupProps.updating} onCancel={this.hideModal.bind(this,updateGroup)} group={this.selectedNode||{}} />
-							<UpdateUser visible={updateUserVisible} onSubmit={this.submit.bind(this,updateUser)} submitting={userProps.updating} onCancel={this.hideModal.bind(this,updateUser)} groups={groups} user={{}}/>
+							<UpdateUser visible={updateUserVisible} onSubmit={this.submit.bind(this,updateUser)} submitting={userProps.updating} onCancel={this.hideModal.bind(this,updateUser)} groups={groups} user={selectedUser}/>
 						</TCard>
-					</Col>
+					</TCol>
 				</Row>
 				<Row gutter={24}>
-					<Col xs={24} sm={7} md={7} lg={6} className='col'>
+					<TCol xs={24} sm={7} md={7} lg={6}>
 						<TTree title='部门结构' loading={groupProps.getting} data={groups} onSelect={this.onTTreeSelect}/>
-					</Col>
-					<Col xs={24} sm={17} md={17} lg={18} className='col'>
+					</TCol>
+					<TCol xs={24} sm={17} md={17} lg={18}>
 						<TTable title='用户数据' columns={columns} total={totalCount} data={users} loading={userProps.getting} onLoad={this.onTTableLoad}/>
-					</Col>
+					</TCol>
 				</Row>
-			</div>
+			</TMainContainer>
 		)
 	}
 }

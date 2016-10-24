@@ -33,20 +33,18 @@ class UpdateUser extends Component {
 			setFields
 		} = this.props.form
 		const {
-			onSubmit
+			onSubmit,
+			user
 		} = this.props
 
 		validateFields((errors, values) => {
 			if (!errors) {
-				let loginId = getFieldValue('loginId')
-				let password = getFieldValue('password')
 				let phone = getFieldValue('phone')
 				let name = getFieldValue('name')
 				let enabled = getFieldValue('enabled')
 				if (onSubmit) {
 					onSubmit({
-						loginId,
-						password,
+						id: user.ID,
 						phone,
 						name,
 						enabled,
@@ -81,6 +79,7 @@ class UpdateUser extends Component {
 			submitting,
 			user
 		} = this.props
+		this.selectedNodeValue = user.Group
 
 		let reset = <Button key='reset' type='ghost' size='large' onClick={this.reset}>重置</Button>
 		let cancel = <Button key='cancel' type='ghost' size='large' onClick={this.cancel}>取消</Button>
@@ -94,12 +93,11 @@ class UpdateUser extends Component {
 				span: 15
 			},
 		}
-
 		return (
 			<Modal title='修改用户' visible={visible} width={500} footer={[cancel,reset,ok]} onCancel={this.cancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='所属部门'>
-						<TTreeSelect data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择所属部门' treeDefaultExpandAll onChange={this.treeSelectChange}/>
+						<TTreeSelect defaultValue={user.Group} data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择所属部门' treeDefaultExpandAll onChange={this.treeSelectChange}/>
 					</FormItem>
 					<FormItem {...formItemLayout} label='账号'>
 						<Input value={user.LoginID} disabled/>
@@ -135,7 +133,7 @@ class UpdateUser extends Component {
 					<FormItem {...formItemLayout} label='状态'>
 					{
 						getFieldDecorator('enabled',{
-							initialValue: user.Enabled
+							initialValue: user.hasOwnProperty('Enabled')?user.Enabled.toString():user.Enabled
 						})(
 				            <RadioGroup>
 				              <Radio value='true'>启用</Radio>

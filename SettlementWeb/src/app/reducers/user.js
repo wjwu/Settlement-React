@@ -4,6 +4,9 @@ const user = (state = {}, action) => {
 	if (state.hasOwnProperty('created')) {
 		delete state.created
 	}
+	if (state.hasOwnProperty('updated')) {
+		delete state.updated
+	}
 	switch (action.type) {
 		case actions.BEGIN_GET_USERS:
 			return {
@@ -34,6 +37,22 @@ const user = (state = {}, action) => {
 			}
 		case actions.ERROR_CREATE_USER:
 			delete state.creating
+			return {
+				...state
+			}
+		case actions.BEGIN_UPDATE_USER:
+			return {
+				...state,
+				updating: true
+			}
+		case actions.END_UPDATE_USER:
+			delete state.updating
+			return {
+				...state,
+				updated: true
+			}
+		case actions.ERROR_UPDATE_USER:
+			delete state.updating
 			return {
 				...state
 			}
