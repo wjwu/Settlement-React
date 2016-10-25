@@ -1,72 +1,25 @@
-import * as client from '../apiClient'
-import * as actions from '../constants/dictionary'
-import {
-	SHOW_MESSAGE
-} from '../constants/message'
+import ActionBase from './ActionBase'
+import * as actionTypes from '../constants/dictionary'
 
 const API_PATH = 'dictionary'
+const MODULE_NAME = 'DICTIONARY'
 
-const query = (type, pageIndex = 1) => {
-	return dispatch => {
-		dispatch({
-			type: actions.BEGIN_GET_DICTIONARIES
-		})
+class DictionaryAction extends ActionBase {
+	constructor() {
+		super(API_PATH, MODULE_NAME, actionTypes)
+	}
 
-		let request = {
-			pageIndex,
-			type
+	query(request) {
+		return dispatch => {
+			super.query(dispatch, request)
 		}
+	}
 
-		client.get(API_PATH, request).then(result => {
-			if (result.Message) {
-				dispatch({
-					type: actions.ERROR_GET_DICTIONARIES
-				})
-				dispatch({
-					type: SHOW_MESSAGE,
-					msgType: 'error',
-					msg: result.Message
-				})
-			} else {
-				dispatch({
-					type: actions.END_GET_DICTIONARIES,
-					result: result
-				})
-			}
-		})
+	create(request) {
+		return dispatch => {
+			super.create(dispatch, request)
+		}
 	}
 }
 
-const create = (dictionary) => {
-	return dispatch => {
-		dispatch({
-			type: actions.BEGIN_CREATE_DICTIONARY,
-		})
-		client.post(API_PATH, dictionary).then(result => {
-			if (result.Message) {
-				dispatch({
-					type: actions.ERROR_CREATE_DICTIONARY
-				})
-				dispatch({
-					type: SHOW_MESSAGE,
-					msgType: 'error',
-					msg: result.Message
-				})
-			} else {
-				dispatch({
-					type: actions.END_CREATE_DICTIONARY
-				})
-				dispatch({
-					type: SHOW_MESSAGE,
-					msgType: 'success',
-					msg: '添加成功！'
-				})
-			}
-		})
-	}
-}
-
-export {
-	query,
-	create
-}
+export default DictionaryAction

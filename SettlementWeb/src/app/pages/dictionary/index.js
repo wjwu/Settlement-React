@@ -19,7 +19,8 @@ import TTable from '../../../components/TTable'
 
 import CreateDictionary from './busComponents/CreateDictionary'
 
-import * as dictionary from '../../actions/dictionary'
+import DictionaryAction from '../../actions/Dictionary'
+const dictionary = new DictionaryAction()
 
 import genColumns from './columns'
 
@@ -144,6 +145,6 @@ class Dictionary extends Component {
 }
 
 export default connect(state => state, {
-	[createDictionary]: dictionary.create,
-	'queryDictionary': dictionary.query
+	[createDictionary]: dictionary.create.bind(dictionary),
+	'queryDictionary': dictionary.query.bind(dictionary)
 })(TMsgContainer()(Dictionary))

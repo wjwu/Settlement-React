@@ -1,101 +1,33 @@
-import * as client from '../apiClient'
-import * as actions from '../constants/user'
-import {
-	SHOW_MESSAGE
-} from '../constants/message'
+import ActionBase from './ActionBase'
+import * as actionTypes from '../constants/user'
 const md5 = require('md5')
 
 const API_PATH = 'user'
+const MODULE_NAME = 'USER'
 
-export const query = (groupId, pageIndex = 1, pageSize = 10) => {
-	return dispatch => {
-		dispatch({
-			type: actions.BEGIN_GET_USERS
-		})
-		let request = {
-			pageIndex,
-			pageSize,
-			group: groupId
+class UserAction extends ActionBase {
+	constructor() {
+		super(API_PATH, MODULE_NAME, actionTypes)
+	}
+
+	query(request) {
+		return dispatch => {
+			super.query(dispatch, request)
 		}
+	}
 
-		client.get(API_PATH, request).then(result => {
-			if (result.Message) {
-				dispatch({
-					type: actions.ERROR_GET_USERS
-				})
-				dispatch({
-					type: SHOW_MESSAGE,
-					msgType: 'error',
-					msg: result.Message
-				})
-			} else {
-				dispatch({
-					type: actions.END_GET_USERS,
-					result: result
-				})
-			}
-		})
+	create(request) {
+		return dispatch => {
+			request.password = md5(request.password)
+			super.create(dispatch, request)
+		}
+	}
+
+	update(request) {
+		return dispatch => {
+			super.update(dispatch, request)
+		}
 	}
 }
 
-export const create = (user) => {
-	return dispatch => {
-		dispatch({
-			type: actions.BEGIN_CREATE_USER
-		})
-
-		user.password = md5(user.password)
-
-		client.post(API_PATH, user).then(result => {
-			if (result.Message) {
-				dispatch({
-					type: actions.ERROR_CREATE_USER
-				})
-				dispatch({
-					type: SHOW_MESSAGE,
-					msgType: 'error',
-					msg: result.Message
-				})
-			} else {
-				dispatch({
-					type: actions.END_CREATE_USER
-				})
-				dispatch({
-					type: SHOW_MESSAGE,
-					msgType: 'success',
-					msg: '添加成功！'
-				})
-			}
-		})
-	}
-}
-
-export const update = (user) => {
-	return dispatch => {
-		dispatch({
-			type: actions.BEGIN_UPDATE_USER
-		})
-
-		client.put(API_PATH, user).then(result => {
-			if (result.Message) {
-				dispatch({
-					type: actions.ERROR_UPDATE_USER
-				})
-				dispatch({
-					type: SHOW_MESSAGE,
-					msgType: 'error',
-					msg: result.Message
-				})
-			} else {
-				dispatch({
-					type: actions.END_UPDATE_USER
-				})
-				dispatch({
-					type: SHOW_MESSAGE,
-					msgType: 'success',
-					msg: '修改成功！'
-				})
-			}
-		})
-	}
-}
+export default UserAction

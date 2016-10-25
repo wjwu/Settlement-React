@@ -21,8 +21,10 @@ import UpdateGroup from './busComponents/UpdateGroup'
 import CreateUser from './busComponents/CreateUser'
 import UpdateUser from './busComponents/UpdateUser'
 
-import * as group from '../../actions/group'
-import * as user from '../../actions/user'
+import GroupAction from '../../actions/Group'
+const group = new GroupAction()
+import UserAction from '../../actions/User'
+const user = new UserAction()
 
 import genColumns from './columns'
 
@@ -37,6 +39,12 @@ class Group extends React.Component {
 		super(props)
 		this.onTTreeSelect = this.onTTreeSelect.bind(this)
 		this.onTTableLoad = this.onTTableLoad.bind(this)
+		this.queryGroupRequest = {
+			pageIndex: 1
+		}
+		this.queryUserRequset = {
+			pageIndex: 1
+		}
 		this.state = {
 			[createGroup]: false,
 			[createUser]: false,
@@ -46,12 +54,12 @@ class Group extends React.Component {
 	}
 
 	componentDidMount() {
-		this.props.queryGroup()
+		this.props.queryGroup(this.queryGroupRequest)
 	}
 
 	componentDidUpdate() {
 		if (this.props.group.created || this.props.group.updated) {
-			this.props.queryGroup()
+			this.props.queryGroup(this.queryGroupRequest)
 		}
 		if ((this.props.user.created || this.props.user.updated) && this.selectedNode) {
 			this.props.queryUser(this.selectedNode.key)
@@ -85,7 +93,7 @@ class Group extends React.Component {
 			this.props.showGlobleMsg('error', '请选择一个部门！')
 		} else {
 			const {
-				deleteGroup,
+				delGroup,
 				showGlobleMsg,
 				queryGroup,
 				queryUser
@@ -95,14 +103,13 @@ class Group extends React.Component {
 				title: '删除部门',
 				content: '确定要删除选中部门？',
 				onOk() {
-					return deleteGroup(node.key).then(result => {
-						if (result.Message) {
-							showGlobleMsg('error', result.Message)
-						} else {
-							that.selectedNode = null
-							queryGroup()
-							queryUser(node.key)
-						}
+					return delGroup(node.key).then(result => {
+						showGlobleMsg('success', '删除成功！')
+						that.selectedNode = null
+						queryGroup(that.queryGroupRequest)
+						queryUser(node.key)
+					}, error => {
+						showGlobleMsg('error', result.Message)
 					})
 				},
 			})
@@ -186,11 +193,11 @@ class Group extends React.Component {
 }
 
 export default connect(state => state, {
-	'queryGroup': group.query,
-	[createGroup]: group.create,
-	[updateGroup]: group.update,
-	'deleteGroup': group.del,
-	'queryUser': user.query,
-	[createUser]: user.create,
-	[updateUser]: user.update
+	'queryGroup': group.query.bind(group),
+	[createGroup]: group.create.bind(group),
+	[updateGroup]: group.update.bind(group),
+	'delGroup': group.del.bind(group),
+	'queryUser': user.query.bind(user),
+	[createUser]: user.create.bind(user),
+	[updateUser]: user.update.bind(user)
 })(TMsgContainer()(Group))
