@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<commands>
+  <command name="Dictionary.Query" type="text" connection="local">
+    <![CDATA[
+SELECT [ID]
+      ,[Name]
+      ,[Type]
+      ,[Rank]
+      ,[Count]
+      ,[Enabled]
+      ,[CreateTime]
+  FROM [dbo].[Dictionary] WHERE [Deleted]=0
+      ]]>
+  </command>
+</commands>

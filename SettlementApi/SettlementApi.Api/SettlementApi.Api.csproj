@@ -108,8 +108,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Configuration\Connection.xml" />
+    <Content Include="Configuration\Read\Dictionary.xml" />
     <Content Include="Configuration\Read\Group.xml" />
     <Content Include="Configuration\Read\User.xml" />
+    <Content Include="Configuration\Write\Dictionary.xml" />
     <Content Include="Configuration\Write\Group.xml" />
     <Content Include="Configuration\Write\User.xml" />
     <Content Include="packages.config" />
@@ -129,6 +131,7 @@
     <Compile Include="ApiExtended\ValidatorActionFilter.cs" />
     <Compile Include="Apis\BaseApiController.cs" />
     <Compile Include="Apis\CaptchaController.cs" />
+    <Compile Include="Apis\DictionaryController.cs" />
     <Compile Include="Apis\GroupController.cs" />
     <Compile Include="Apis\SignController.cs" />
     <Compile Include="Apis\UserController.cs" />

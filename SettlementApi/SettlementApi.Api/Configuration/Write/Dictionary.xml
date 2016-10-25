@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<commands>
+<command name="Dictionary.Create" type="text" connection="local">
+  <![CDATA[
+INSERT INTO dbo.Dictionary
+        ( ID ,
+          Name ,
+          Type ,
+          Rank ,
+          Count ,
+          Enabled,
+          CreateTime ,
+          LastModifyTime ,
+          LastModifyUser 
+        )
+VALUES  ( NEWID() ,
+          @Name ,
+          @Type ,
+          @Rank ,
+          0 , 
+          @Enabled,
+          GETDATE() , 
+          GETDATE() , 
+          NULL
+        )
+      ]]>
+</command>
+</commands>

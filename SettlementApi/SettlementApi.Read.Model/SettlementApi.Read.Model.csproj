@@ -34,6 +34,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EQueryDictionary.cs" />
     <Compile Include="EQueryGroup.cs" />
     <Compile Include="EQueryUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

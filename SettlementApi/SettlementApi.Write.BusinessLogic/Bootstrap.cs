@@ -13,6 +13,7 @@ namespace SettlementApi.Write.BusinessLogic
             container.RegisterType<ICommandBus, UserBusinessLogic>("UserBusinessLogic");
             container.RegisterType<ICommandBus, GroupBusinessLogic>("GroupBusinessLogic");
             container.RegisterType<IEventSubscribeObject, UserBusinessLogic>("UserBusinessLogic");
+            container.RegisterType<ICommandBus, DictionaryBusinessLogic>("DictionaryBusinessLogic");
         }
     }
 }

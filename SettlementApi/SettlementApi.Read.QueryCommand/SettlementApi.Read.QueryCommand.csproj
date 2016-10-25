@@ -37,6 +37,8 @@
     <Compile Include="BaseCommandResult.cs" />
     <Compile Include="BasePagingCommand.cs" />
     <Compile Include="BasePagingCommandResult.cs" />
+    <Compile Include="DictionaryModule\QueryDictionaryCommand.cs" />
+    <Compile Include="DictionaryModule\RQueryDictionary.cs" />
     <Compile Include="GetByIDCommand.cs" />
     <Compile Include="GroupModule\QueryGroupCommand.cs" />
     <Compile Include="GroupModule\RQueryGroup.cs" />

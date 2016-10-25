@@ -15,7 +15,7 @@ const Option = Select.Option
 const FormItem = Form.Item
 const RadioGroup = Radio.Group
 
-class CreateDictionay extends Component {
+class UpdateDictionay extends Component {
 	constructor(prop) {
 		super(prop)
 		this.submit = this.submit.bind(this)
@@ -114,15 +114,15 @@ class CreateDictionay extends Component {
 	}
 }
 
-CreateDictionay.defaultProps = {
+UpdateDictionay.defaultProps = {
 	submitting: false
 }
 
-CreateDictionay.propTypes = {
+UpdateDictionay.propTypes = {
 	visible: PropTypes.bool.isRequired,
 	submitting: PropTypes.bool,
 	onSubmit: PropTypes.func.isRequired,
 	onCancel: PropTypes.func.isRequired
 }
 
-export default Form.create()(CreateDictionay)
+export default Form.create()(UpdateDictionay)

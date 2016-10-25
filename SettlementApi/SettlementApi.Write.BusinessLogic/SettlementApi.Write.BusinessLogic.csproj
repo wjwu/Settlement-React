@@ -57,6 +57,7 @@
     <Compile Include="Bootstrap.cs" />
     <Compile Include="BusinessLogicBase.cs" />
     <Compile Include="BussinessException.cs" />
+    <Compile Include="DictionaryBusinessLogic.cs" />
     <Compile Include="Event\DeleteGroupEvent.cs" />
     <Compile Include="GroupBusinessLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

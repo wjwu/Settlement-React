@@ -34,6 +34,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DictionaryModule\CreateDictionaryCommand.cs" />
+    <Compile Include="DictionaryModule\UpdateDictionaryCommand.cs" />
     <Compile Include="GroupModule\CreateGroupCommand.cs" />
     <Compile Include="GroupModule\DeleteGroupCommand.cs" />
     <Compile Include="GroupModule\UpdateGroupCommand.cs" />
