@@ -45,7 +45,7 @@ class UpdateGroup extends Component {
 
 		const {
 			visible,
-			submitting
+			loading
 		} = this.props
 
 		const formItemLayout = {
@@ -58,7 +58,7 @@ class UpdateGroup extends Component {
 		}
 
 		return (
-			<Modal title='修改部门' visible={visible} width={500} confirmLoading={submitting} onOk={this.submit} onCancel={this.cancel}>
+			<Modal title='修改部门' visible={true} width={500} confirmLoading={loading} onOk={this.submit} onCancel={this.cancel}>
 				<Form>
 					<FormItem hasFeedback {...formItemLayout} label='部门名称'>
 					{
@@ -81,12 +81,11 @@ class UpdateGroup extends Component {
 }
 
 UpdateGroup.defaultProps = {
-	submitting: false
+	loading: false
 }
 
 UpdateGroup.propTypes = {
-	visible: PropTypes.bool.isRequired,
-	submitting: PropTypes.bool,
+	loading: PropTypes.bool.isRequired,
 	group: PropTypes.object.isRequired,
 	onSubmit: PropTypes.func.isRequired,
 	onCancel: PropTypes.func.isRequired

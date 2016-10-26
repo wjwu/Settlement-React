@@ -18,6 +18,7 @@ import TCard from '../../../components/TCard'
 import TTable from '../../../components/TTable'
 
 import CreateDictionary from './busComponents/CreateDictionary'
+import UpdateDictionary from './busComponents/UpdateDictionary'
 
 import DictionaryAction from '../../actions/Dictionary'
 const dictionary = new DictionaryAction()
@@ -27,6 +28,7 @@ import genColumns from './columns'
 const TabPane = Tabs.TabPane
 
 const createDictionary = 'createDictionary'
+const updateDictionary = 'Dictionary'
 
 class Dictionary extends Component {
 	constructor(props) {
@@ -34,11 +36,19 @@ class Dictionary extends Component {
 		this.selectedTab = 'base'
 		this.loadedSource = false
 		this.base = {
+			request: {
+				type: 'base',
+				pageIndex: 1
+			},
 			getting: false,
 			totalCount: 0,
 			data: []
 		}
 		this.source = {
+			request: {
+				type: 'base',
+				pageIndex: 1
+			},
 			getting: false,
 			totalCount: 0,
 			data: []
@@ -49,7 +59,7 @@ class Dictionary extends Component {
 	}
 
 	componentDidMount() {
-		this.props.queryDictionary(this.selectedTab)
+		this.props.queryDictionary(this.base.request)
 	}
 
 	componentDidUpdate() {
@@ -60,14 +70,17 @@ class Dictionary extends Component {
 	}
 
 	onTTableLoad(pageIndex) {
-		this.props.queryDictionary(this.selectedTab, pageIndex)
+		this.queryDicRequest.pageIndex = pageIndex
+		this.props.queryDictionary(this.queryDicRequest)
 	}
 
 	onTabChange(activeKey) {
 		this.selectedTab = activeKey.substr(2)
 		if (this.selectedTab === 'source' && !this.loadedSource) {
 			this.loadedSource = true
-			this.props.queryDictionary(this.selectedTab)
+			this.queryDicRequest.pageIndex = 1
+			this.queryDicRequest.type = this.selectedTab
+			this.props.queryDictionary(this.queryDicRequest)
 		}
 	}
 
@@ -91,10 +104,12 @@ class Dictionary extends Component {
 		const {
 			getting,
 			creating,
+			updating,
 			result
 		} = this.props.dictionary
 		const {
-			createDictionary: createDicVisible
+			createDictionary: createDicVisible,
+			updateDictionary: updateDicVisible
 		} = this.state
 
 		const columns = genColumns(() => {})
@@ -115,13 +130,20 @@ class Dictionary extends Component {
 			this.source.totalCount = totalCount
 			this.source.getting = getting
 		}
+
+		let modal
+		if (createDicVisible) {
+			modal = <CreateDictionary loading={creating} onSubmit={this.submit.bind(this,createDictionary)} onCancel={this.hideModal.bind(this,createDictionary)}/>
+		} else if (updateDicVisible) {
+			modal = <UpdateDictionary loading={updating} onSubmit={this.submit.bind(this,updateDictionary)} onCancel={this.hideModal.bind(this,updateDictionary)}/>
+		}
 		return (
 			<TMainContainer>
 				<Row>
 					<TCol>
 						<TCard>
 							<Button type='primary' className='button' onClick={this.showModal.bind(this,createDictionary)}>新增字典</Button>
-							<CreateDictionary visible={createDicVisible} submitting={creating} onSubmit={this.submit.bind(this,createDictionary)} onCancel={this.hideModal.bind(this,createDictionary)}/>
+							{modal}
 						</TCard>
 					</TCol>
 				</Row>

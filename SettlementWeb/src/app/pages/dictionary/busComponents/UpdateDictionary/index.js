@@ -57,7 +57,7 @@ class UpdateDictionay extends Component {
 
 		const {
 			visible,
-			submitting
+			loading
 		} = this.props
 
 		const formItemLayout = {
@@ -70,7 +70,7 @@ class UpdateDictionay extends Component {
 		}
 
 		return (
-			<Modal title='新增字典' visible={visible} width={500} confirmLoading={submitting} onOk={this.submit} onCancel={this.cancel}>
+			<Modal title='新增字典' visible={visible} width={500} confirmLoading={loading} onOk={this.submit} onCancel={this.cancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='字典类型'>
 			 			<Select placeholder='请选择字典类型' {...getFieldProps('type',{rules:[{required:true,message:'请选择字典类型！'}]})}>
@@ -120,7 +120,7 @@ UpdateDictionay.defaultProps = {
 
 UpdateDictionay.propTypes = {
 	visible: PropTypes.bool.isRequired,
-	submitting: PropTypes.bool,
+	loading: PropTypes.bool,
 	onSubmit: PropTypes.func.isRequired,
 	onCancel: PropTypes.func.isRequired
 }

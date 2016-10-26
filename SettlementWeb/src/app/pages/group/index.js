@@ -61,18 +61,21 @@ class Group extends React.Component {
 		if (this.props.group.created || this.props.group.updated) {
 			this.props.queryGroup(this.queryGroupRequest)
 		}
-		if ((this.props.user.created || this.props.user.updated) && this.selectedNode) {
-			this.props.queryUser(this.selectedNode.key)
+		if ((this.props.user.created || this.props.user.updated) && this.queryUserRequset.group) {
+			this.props.queryUser(this.queryUserRequset)
 		}
 	}
 
 	onTTreeSelect(node) {
 		this.selectedNode = node
-		this.props.queryUser(node.key, 1)
+		this.queryUserRequset.group = node.key
+		this.queryUserRequset.pageIndex = 1
+		this.props.queryUser(this.queryUserRequset)
 	}
 
 	onTTableLoad(pageIndex) {
-		this.props.queryUser(this.selectedNode.key, pageIndex)
+		this.queryUserRequset.pageIndex = pageIndex
+		this.props.queryUser(this.queryUserRequset)
 	}
 
 	showModal(type) {
@@ -88,8 +91,8 @@ class Group extends React.Component {
 	}
 
 	doDeleteGroup() {
-		let node = this.selectedNode
-		if (!node) {
+		let group = this.queryUserRequset.group
+		if (!group) {
 			this.props.showGlobleMsg('error', '请选择一个部门！')
 		} else {
 			const {
@@ -103,11 +106,10 @@ class Group extends React.Component {
 				title: '删除部门',
 				content: '确定要删除选中部门？',
 				onOk() {
-					return delGroup(node.key).then(result => {
+					return delGroup(group).then(result => {
 						showGlobleMsg('success', '删除成功！')
-						that.selectedNode = null
+						that.queryUserRequset.group = null
 						queryGroup(that.queryGroupRequest)
-						queryUser(node.key)
 					}, error => {
 						showGlobleMsg('error', result.Message)
 					})
@@ -117,8 +119,7 @@ class Group extends React.Component {
 	}
 
 	doUpdateGroup(type) {
-		let node = this.selectedNode
-		if (!node) {
+		if (!this.queryUserRequset.group) {
 			this.props.showGlobleMsg('error', '请选择一个部门！')
 		} else {
 			this.setState({
@@ -163,6 +164,17 @@ class Group extends React.Component {
 			this.showModal(updateUser)
 		})
 		const selectedUser = this.selectedUser || {}
+
+		let modal
+		if (createGroupVisible) {
+			modal = <CreateGroup onSubmit={this.submit.bind(this,createGroup)} loading={groupProps.creating} onCancel={this.hideModal.bind(this,createGroup)} groups={groups}/>
+		} else if (createUserVisible) {
+			modal = <CreateUser onSubmit={this.submit.bind(this,createUser)} loading={userProps.creating} onCancel={this.hideModal.bind(this,createUser)} groups={groups} />
+		} else if (updateGroupVisible) {
+			modal = <UpdateGroup onSubmit={this.submit.bind(this,updateGroup)} loading={groupProps.updating} onCancel={this.hideModal.bind(this,updateGroup)} group={this.selectedNode||{}} />
+		} else if (updateUserVisible) {
+			modal = <UpdateUser onSubmit={this.submit.bind(this,updateUser)} loading={userProps.updating} onCancel={this.hideModal.bind(this,updateUser)} groups={groups} user={selectedUser}/>
+		}
 		return (
 			<TMainContainer>
 				<Row>
@@ -172,10 +184,7 @@ class Group extends React.Component {
 							<Button type='primary' className='button' onClick={this.showModal.bind(this,createUser)}>新增用户</Button>
 							<Button type='ghost' className='button' onClick={this.doUpdateGroup.bind(this,updateGroup)}>修改部门</Button>
 							<Button type='ghost' onClick={this.doDeleteGroup.bind(this)}>删除部门</Button>
-							<CreateGroup visible={createGroupVisible} onSubmit={this.submit.bind(this,createGroup)} submitting={groupProps.creating} onCancel={this.hideModal.bind(this,createGroup)} groups={groups}/>
-							<CreateUser visible={createUserVisible} onSubmit={this.submit.bind(this,createUser)} submitting={userProps.creating} onCancel={this.hideModal.bind(this,createUser)} groups={groups} />
-							<UpdateGroup visible={updateGroupVisible} onSubmit={this.submit.bind(this,updateGroup)} submitting={groupProps.updating} onCancel={this.hideModal.bind(this,updateGroup)} group={this.selectedNode||{}} />
-							<UpdateUser visible={updateUserVisible} onSubmit={this.submit.bind(this,updateUser)} submitting={userProps.updating} onCancel={this.hideModal.bind(this,updateUser)} groups={groups} user={selectedUser}/>
+							{modal}
 						</TCard>
 					</TCol>
 				</Row>

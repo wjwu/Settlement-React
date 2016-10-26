@@ -20,7 +20,7 @@ const RadioGroup = Radio.Group
 class UpdateUser extends Component {
 	constructor(prop) {
 		super(prop)
-		this.treeSelectChange = this.treeSelectChange.bind(this)
+		this.change = this.change.bind(this)
 		this.submit = this.submit.bind(this)
 		this.cancel = this.cancel.bind(this)
 		this.reset = this.reset.bind(this)
@@ -29,8 +29,7 @@ class UpdateUser extends Component {
 	submit() {
 		const {
 			validateFields,
-			getFieldValue,
-			setFields
+			getFieldValue
 		} = this.props.form
 		const {
 			onSubmit,
@@ -48,7 +47,7 @@ class UpdateUser extends Component {
 						phone,
 						name,
 						enabled,
-						group: this.selectedNodeValue
+						group: this.selectedGroup
 					})
 				}
 			}
@@ -64,8 +63,8 @@ class UpdateUser extends Component {
 		this.props.form.resetFields()
 	}
 
-	treeSelectChange(value) {
-		this.selectedNodeValue = value
+	change(value) {
+		this.selectedGroup = value
 	}
 
 	render() {
@@ -76,14 +75,14 @@ class UpdateUser extends Component {
 		const {
 			visible,
 			groups,
-			submitting,
+			loading,
 			user
 		} = this.props
-		this.selectedNodeValue = user.Group
+		this.selectedGroup = user.Group
 
 		let reset = <Button key='reset' type='ghost' size='large' onClick={this.reset}>重置</Button>
 		let cancel = <Button key='cancel' type='ghost' size='large' onClick={this.cancel}>取消</Button>
-		let ok = <Button key='submit' type='primary' size='large' loading={submitting} onClick={this.submit}>确定</Button>
+		let ok = <Button key='submit' type='primary' size='large' loading={loading} onClick={this.submit}>确定</Button>
 
 		const formItemLayout = {
 			labelCol: {
@@ -94,10 +93,10 @@ class UpdateUser extends Component {
 			},
 		}
 		return (
-			<Modal title='修改用户' visible={visible} width={500} footer={[cancel,reset,ok]} onCancel={this.cancel}>
+			<Modal title='修改用户' visible={true} width={500} footer={[cancel,reset,ok]} onCancel={this.cancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='所属部门'>
-						<TTreeSelect defaultValue={user.Group} data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择所属部门' treeDefaultExpandAll onChange={this.treeSelectChange}/>
+						<TTreeSelect value={user.Group} data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择所属部门' treeDefaultExpandAll onChange={this.change}/>
 					</FormItem>
 					<FormItem {...formItemLayout} label='账号'>
 						<Input value={user.LoginID} disabled/>
@@ -149,15 +148,13 @@ class UpdateUser extends Component {
 }
 
 UpdateUser.defaultProps = {
-	groups: [],
-	submitting: false
+	loading: false
 }
 
 UpdateUser.propTypes = {
-	visible: PropTypes.bool,
 	user: PropTypes.object.isRequired,
-	groups: PropTypes.array,
-	submitting: PropTypes.bool,
+	groups: PropTypes.array.isRequired,
+	loading: PropTypes.bool.isRequired,
 	onSubmit: PropTypes.func.isRequired,
 	onCancel: PropTypes.func.isRequired
 }

@@ -15,5 +15,5 @@ export default combineReducers({
 	message,
 	'group': group.reduce.bind(group),
 	'user': user.reduce.bind(user),
-	'dictionary': dictionary.reduce.bind(user)
+	'dictionary': dictionary.reduce.bind(dictionary)
 })

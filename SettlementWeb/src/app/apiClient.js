@@ -24,7 +24,7 @@ const get = (url, request) => {
 				headers: headers
 			}).then(processResponse)
 			.then(processResult.bind(null, reject, resolve))
-			.catch(processError)
+			.catch(processError.bind(null, reject))
 	})
 }
 
@@ -36,7 +36,7 @@ const post = (url, request) => {
 				body: JSON.stringify(request)
 			}).then(processResponse)
 			.then(processResult.bind(null, reject, resolve))
-			.catch(processError)
+			.catch(processError.bind(null, reject))
 	})
 }
 
@@ -46,7 +46,7 @@ const del = (url) => {
 				method: 'DELETE'
 			}).then(processResponse)
 			.then(processResult.bind(null, reject, resolve))
-			.catch(processError)
+			.catch(processError.bind(null, reject))
 	})
 }
 
@@ -58,7 +58,7 @@ const put = (url, request) => {
 				body: JSON.stringify(request)
 			}).then(processResponse)
 			.then(processResult.bind(null, reject, resolve))
-			.catch(processError)
+			.catch(processError.bind(null, reject))
 	})
 }
 
