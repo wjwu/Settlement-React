@@ -1,4 +1,6 @@
-import React from 'react'
+import React, {
+	Component
+} from 'react'
 import {
 	connect
 } from 'react-redux'
@@ -34,7 +36,7 @@ const createUser = 'createUser'
 const updateGroup = 'updateGroup'
 const updateUser = 'updateUser'
 
-class Group extends React.Component {
+class Group extends Component {
 	constructor(props) {
 		super(props)
 		this.onTTreeSelect = this.onTTreeSelect.bind(this)

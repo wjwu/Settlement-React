@@ -1,10 +1,10 @@
 import ActionBase from './ActionBase'
-import * as actionTypes from '../constants/dictionary'
+import * as actionTypes from '../constants/sheet'
 
-const API_PATH = 'dictionary'
-const MODULE_NAME = 'DICTIONARY'
+const API_PATH = 'sheet'
+const MODULE_NAME = 'SHEET'
 
-class DictionaryAction extends ActionBase {
+class SheetAction extends ActionBase {
 	constructor() {
 		super(API_PATH, MODULE_NAME, actionTypes)
 	}
@@ -28,4 +28,4 @@ class DictionaryAction extends ActionBase {
 	}
 }
 
-export default DictionaryAction
+export default SheetAction

@@ -6,6 +6,7 @@ namespace SettlementApi.Read.QueryCommand.DictionaryModule
     {
         public Guid ID { get; set; }
         public string Name { get; set; }
+        public string Type { get; set; }
         public int Rank { get; set; }
         public int Count { get; set; }
         public bool Enabled { get; set; }

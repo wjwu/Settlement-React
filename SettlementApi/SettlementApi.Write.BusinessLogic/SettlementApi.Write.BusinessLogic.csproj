@@ -76,6 +76,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UserRes.resx</DependentUpon>
     </Compile>
+    <Compile Include="SheetBusinessLogic.cs" />
     <Compile Include="UserBusinessLogic.cs" />
     <Compile Include="Utility\IPConverter.cs" />
     <Compile Include="Utility\Security.cs" />

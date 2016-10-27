@@ -25,4 +25,9 @@ VALUES  ( NEWID() ,
         )
       ]]>
 </command>
+  <command name="Dictionary.Update" type="text" connection="local">
+    <![CDATA[
+UPDATE TOP(1) dbo.Dictionary SET [Name]=@Name,[Type]=@Type,[Rank]=@Rank,[Enabled]=@Enabled WHERE [ID]=@ID
+      ]]>
+  </command>
 </commands>

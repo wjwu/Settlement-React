@@ -28,25 +28,38 @@ import genColumns from './columns'
 const TabPane = Tabs.TabPane
 
 const createDictionary = 'createDictionary'
-const updateDictionary = 'Dictionary'
+const updateDictionary = 'updateDictionary'
+
+const DICTIONARY_BASE = 'base'
+const DICTIONARY_SOURCE = 'source'
+const DICTIONARY_COST = 'cost'
 
 class Dictionary extends Component {
 	constructor(props) {
 		super(props)
-		this.selectedTab = 'base'
+		this.selectedTab = DICTIONARY_BASE
 		this.loadedSource = false
-		this.base = {
+		this[DICTIONARY_BASE] = {
 			request: {
-				type: 'base',
+				type: DICTIONARY_BASE,
 				pageIndex: 1
 			},
 			getting: false,
 			totalCount: 0,
 			data: []
 		}
-		this.source = {
+		this[DICTIONARY_SOURCE] = {
 			request: {
-				type: 'base',
+				type: DICTIONARY_SOURCE,
+				pageIndex: 1
+			},
+			getting: false,
+			totalCount: 0,
+			data: []
+		}
+		this[DICTIONARY_COST] = {
+			request: {
+				type: DICTIONARY_COST,
 				pageIndex: 1
 			},
 			getting: false,
@@ -63,25 +76,19 @@ class Dictionary extends Component {
 	}
 
 	componentDidUpdate() {
-		if (this.props.dictionary.created || this.props.dictionary.updated) {
-			// this.selectedTab = this.props.dictionary.dicType
-			// this.props.queryDictionary(this.props.dictionary.dicType)
+		if (this.props.dictionary.updated) {
+			this.props.queryDictionary(this[this.selectedTab].request)
 		}
 	}
 
 	onTTableLoad(pageIndex) {
-		this.queryDicRequest.pageIndex = pageIndex
-		this.props.queryDictionary(this.queryDicRequest)
+		this[this.selectedTab].request.pageIndex = pageIndex
+		this.props.queryDictionary(this[this.selectedTab].request)
 	}
 
 	onTabChange(activeKey) {
 		this.selectedTab = activeKey.substr(2)
-		if (this.selectedTab === 'source' && !this.loadedSource) {
-			this.loadedSource = true
-			this.queryDicRequest.pageIndex = 1
-			this.queryDicRequest.type = this.selectedTab
-			this.props.queryDictionary(this.queryDicRequest)
-		}
+		this.props.queryDictionary(this[this.selectedTab].request)
 	}
 
 	showModal(type) {
@@ -112,7 +119,11 @@ class Dictionary extends Component {
 			updateDictionary: updateDicVisible
 		} = this.state
 
-		const columns = genColumns(() => {})
+		const columns = genColumns(raw => {
+			this.selectedDic = raw
+			this.showModal(updateDictionary)
+		})
+		const selectedDic = this.selectedDic || {}
 
 		let data = []
 		let totalCount = 0
@@ -121,28 +132,22 @@ class Dictionary extends Component {
 			data = result.List
 		}
 
-		if (this.selectedTab === 'base') {
-			this.base.data = data
-			this.base.totalCount = totalCount
-			this.base.getting = getting
-		} else if (this.selectedTab === 'source') {
-			this.source.data = data
-			this.source.totalCount = totalCount
-			this.source.getting = getting
-		}
+		this[this.selectedTab].data = data
+		this[this.selectedTab].totalCount = totalCount
+		this[this.selectedTab].getting = getting
 
 		let modal
 		if (createDicVisible) {
 			modal = <CreateDictionary loading={creating} onSubmit={this.submit.bind(this,createDictionary)} onCancel={this.hideModal.bind(this,createDictionary)}/>
 		} else if (updateDicVisible) {
-			modal = <UpdateDictionary loading={updating} onSubmit={this.submit.bind(this,updateDictionary)} onCancel={this.hideModal.bind(this,updateDictionary)}/>
+			modal = <UpdateDictionary loading={updating} onSubmit={this.submit.bind(this,updateDictionary)} onCancel={this.hideModal.bind(this,updateDictionary)} dictionary={this.selectedDic}/>
 		}
 		return (
 			<TMainContainer>
 				<Row>
 					<TCol>
 						<TCard>
-							<Button type='primary' className='button' onClick={this.showModal.bind(this,createDictionary)}>新增字典</Button>
+							<Button type='primary' onClick={this.showModal.bind(this,createDictionary)}>新增字典</Button>
 							{modal}
 						</TCard>
 					</TCol>
@@ -151,11 +156,14 @@ class Dictionary extends Component {
 					<TCol>
 						<TCard>
 					        <Tabs tabPosition='left' onChange={this.onTabChange.bind(this)}>
-					          <TabPane tab='培训基地' key='base'>
-					          	<TTable title='培训基地' columns={columns} loading={this.base.getting} total={this.base.totalCount} data={this.base.data} onLoad={this.onTTableLoad.bind(this)}/>
+					          <TabPane tab='培训基地' key={DICTIONARY_BASE}>
+					          	<TTable title='培训基地' columns={columns} loading={this[DICTIONARY_BASE].getting} total={this[DICTIONARY_BASE].totalCount} data={this[DICTIONARY_BASE].data} onLoad={this.onTTableLoad.bind(this)}/>
 					          </TabPane>
-					          <TabPane tab='客户来源' key='source'>
-					          	<TTable title='客户来源' columns={columns} loading={this.source.getting} total={this.source.totalCount} data={this.source.data} onLoad={this.onTTableLoad.bind(this)}/>
+					          <TabPane tab='客户来源' key={DICTIONARY_SOURCE}>
+					          	<TTable title='客户来源' columns={columns} loading={this[DICTIONARY_SOURCE].getting} total={this[DICTIONARY_SOURCE].totalCount} data={this[DICTIONARY_SOURCE].data} onLoad={this.onTTableLoad.bind(this)}/>
+					          </TabPane>
+					          <TabPane tab='结算类型' key={DICTIONARY_COST}>
+					          	<TTable title='结算类型' columns={columns} loading={this[DICTIONARY_COST].getting} total={this[DICTIONARY_COST].totalCount} data={this[DICTIONARY_COST].data} onLoad={this.onTTableLoad.bind(this)}/>
 					          </TabPane>
 					        </Tabs>
 						</TCard>
@@ -167,6 +175,7 @@ class Dictionary extends Component {
 }
 
 export default connect(state => state, {
+	'queryDictionary': dictionary.query.bind(dictionary),
 	[createDictionary]: dictionary.create.bind(dictionary),
-	'queryDictionary': dictionary.query.bind(dictionary)
+	[updateDictionary]: dictionary.update.bind(dictionary)
 })(TMsgContainer()(Dictionary))

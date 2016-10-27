@@ -32,9 +32,9 @@ class CreateGroup extends Component {
 		} = this.props
 
 		validateFields((errors, values) => {
-			if (!errors) {
+			let parentId = this.selectedGroup
+			if (!errors && parentId) {
 				let name = getFieldValue('name')
-				let parentId = this.selectedGroup
 				onSubmit({
 					parentId,
 					name

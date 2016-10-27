@@ -35,6 +35,7 @@ class UpdateDictionay extends Component {
 				let rank = getFieldValue('rank')
 				let enabled = getFieldValue('enabled')
 				this.props.onSubmit({
+					id: this.props.dictionary.ID,
 					type,
 					name,
 					rank,
@@ -57,7 +58,8 @@ class UpdateDictionay extends Component {
 
 		const {
 			visible,
-			loading
+			loading,
+			dictionary
 		} = this.props
 
 		const formItemLayout = {
@@ -70,17 +72,19 @@ class UpdateDictionay extends Component {
 		}
 
 		return (
-			<Modal title='新增字典' visible={visible} width={500} confirmLoading={loading} onOk={this.submit} onCancel={this.cancel}>
+			<Modal title='新增字典' visible={true} width={500} confirmLoading={loading} onOk={this.submit} onCancel={this.cancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='字典类型'>
-			 			<Select placeholder='请选择字典类型' {...getFieldProps('type',{rules:[{required:true,message:'请选择字典类型！'}]})}>
-				            <Option value='base'>培训基地</Option>
-				            <Option value='source'>客户来源</Option>
+			 			<Select placeholder='请选择字典类型' {...getFieldProps('type',{initialValue:dictionary.Type,rules:[{required:true,message:'请选择字典类型！'}]})}>
+				            <Option value='Base'>培训基地</Option>
+				            <Option value='Source'>客户来源</Option>
+				            <Option value='Cost'>结算类型</Option>
 			          	</Select>
 					</FormItem>
 					<FormItem {...formItemLayout} label='字典名称'>
 					{
 						getFieldDecorator('name',{
+							initialValue:dictionary.Name,
 							rules:[{
 									required:true,
 									whitespace:true,
@@ -92,14 +96,14 @@ class UpdateDictionay extends Component {
 					<FormItem {...formItemLayout} label='字典顺序'>
 					{
 						getFieldDecorator('rank',{
-							initialValue:0
+							initialValue:dictionary.Rank
 						})(<InputNumber min={0}/>)
 					}
 					</FormItem>
 					<FormItem {...formItemLayout} label='状态'>
 					{
 						getFieldDecorator('enabled',{
-							initialValue: 'true'
+							initialValue: dictionary.hasOwnProperty('Enabled')?dictionary.Enabled.toString():dictionary.Enabled
 						})(
 				            <RadioGroup>
 				              <Radio value='true'>启用</Radio>
@@ -115,12 +119,12 @@ class UpdateDictionay extends Component {
 }
 
 UpdateDictionay.defaultProps = {
-	submitting: false
+	loading: false
 }
 
 UpdateDictionay.propTypes = {
-	visible: PropTypes.bool.isRequired,
-	loading: PropTypes.bool,
+	dictionary: PropTypes.object.isRequired,
+	loading: PropTypes.bool.isRequired,
 	onSubmit: PropTypes.func.isRequired,
 	onCancel: PropTypes.func.isRequired
 }

@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<commands>
+  <command name="Sheet.Query" type="text" connection="local">
+    <![CDATA[
+  SELECT TOP(1) ID,LoginID,Enabled FROM dbo.[User] WHERE LoginID=@LoginID AND Password=@Password AND [Deleted]=0
+  ]]>
+  </command>
+</commands>

@@ -8,7 +8,9 @@ using SettlementApi.Write.Model.Enums;
 
 namespace SettlementApi.Write.BusinessLogic
 {
-    public class DictionaryBusinessLogic : BusinessLogicBase<Dictionary>, ICommandBus<CreateDictionaryCommand>
+    public class DictionaryBusinessLogic : BusinessLogicBase<Dictionary>, 
+        ICommandBus<CreateDictionaryCommand>,
+        ICommandBus<UpdateDictionaryCommand>
     {
         public void Execute(CreateDictionaryCommand command)
         {
@@ -18,10 +20,19 @@ namespace SettlementApi.Write.BusinessLogic
             Create("Dictionary.Create", dic);
         }
 
+        public void Execute(UpdateDictionaryCommand command)
+        {
+            Update("Dictionary.Update",command);
+        }
+
         public void Receive(ICommand command)
         {
             if (command.GetType() == typeof(CreateDictionaryCommand))
                 Execute((CreateDictionaryCommand) command);
+            if (command.GetType()==typeof(UpdateDictionaryCommand))
+            {
+                Execute((UpdateDictionaryCommand)command);
+            }
         }
 
         public ICommandResult ReceiveEx(ICommand command)

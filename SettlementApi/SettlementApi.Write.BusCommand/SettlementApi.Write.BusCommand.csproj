@@ -39,6 +39,7 @@
     <Compile Include="GroupModule\CreateGroupCommand.cs" />
     <Compile Include="GroupModule\DeleteGroupCommand.cs" />
     <Compile Include="GroupModule\UpdateGroupCommand.cs" />
+    <Compile Include="SheetModule\CreateSheetCommand.cs" />
     <Compile Include="UserModule\ChangePasswordCommand.cs" />
     <Compile Include="UserModule\CreateUserCommand.cs" />
     <Compile Include="UserModule\LoginCommand.cs" />

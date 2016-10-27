@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<commands>
+  <command name="Sheet.Create" type="text" connection="local">
+    <![CDATA[
+  INSERT INTO dbo.Sheet
+          ( ID ,
+            ProjectManager ,
+            AuditStatus ,
+            PayStatus ,
+            CustomName ,
+            Contacts ,
+            Phone ,
+            QQ ,
+            WeiXin ,
+            Address ,
+            TimeFrom ,
+            TimeTo ,
+            Base ,
+            People ,
+            Days ,
+            Source ,
+            TotalPrice ,
+            UnitPrice ,
+            CostPrice ,
+            ReceivedMoney ,
+            RemainingMoney ,
+            Remark ,
+            CreateTime ,
+            LastModifyTime ,
+            LastModifyUser 
+          )
+  VALUES  ( @ID ,
+            @ProjectManager ,
+            @AuditStatus,
+            @PayStatus ,
+            @CustomName ,
+            @Contacts ,
+            @Phone,
+            @QQ,
+            @WeiXin,
+            @Address,
+            @TimeFrom,
+            @TimeTo,
+            @Base,
+            @People ,
+            @Days,
+            @Source ,
+            @TotalPrice , 
+            @UnitPrice ,
+            @CostPrice , 
+            @ReceivedMoney ,
+            @RemainingMoney ,
+            @Remark,
+            GETDATE(),
+            GETDATE(),
+            @LastModifyUser 
+          )
+  ]]>
+  </command>
+</commands>

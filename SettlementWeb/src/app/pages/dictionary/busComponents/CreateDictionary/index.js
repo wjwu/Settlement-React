@@ -74,8 +74,9 @@ class CreateDictionay extends Component {
 				<Form>
 					<FormItem {...formItemLayout} label='字典类型'>
 			 			<Select placeholder='请选择字典类型' {...getFieldProps('type',{rules:[{required:true,message:'请选择字典类型！'}]})}>
-				            <Option value='base'>培训基地</Option>
-				            <Option value='source'>客户来源</Option>
+				            <Option value='Base'>培训基地</Option>
+				            <Option value='Source'>客户来源</Option>
+				            <Option value='Cost'>结算类型</Option>
 			          	</Select>
 					</FormItem>
 					<FormItem {...formItemLayout} label='字典名称'>

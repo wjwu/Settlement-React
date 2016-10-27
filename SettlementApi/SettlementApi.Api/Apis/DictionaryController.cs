@@ -23,5 +23,12 @@ namespace SettlementApi.Api.Apis
         {
             CommandService.Send(request, BusName);
         }
+
+        [HttpPut]
+        [Route("api/dictionary")]
+        public void Update([FromBody] UpdateDictionaryCommand request)
+        {
+            CommandService.Send(request, BusName);
+        }
     }
 }
