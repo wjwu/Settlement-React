@@ -52,9 +52,7 @@ class LoginForm extends React.Component {
 				let promise = this.props.login(account, password, captcha, timeSpan)
 				promise.then(response => {
 					let result = response.json()
-					if (response.ok) {
-						window.location.href = '/app'
-					} else {
+					if (!response.ok) {
 						this.props.refresh()
 						setFields({
 							account: {
@@ -70,6 +68,10 @@ class LoginForm extends React.Component {
 							}
 						})
 					}
+				}).then(result => {
+					if (true) {}
+					sessionStorage.setItem('test', 'test')
+					window.location.href = '/app'
 				})
 			}
 		})
@@ -166,11 +168,7 @@ class LoginForm extends React.Component {
 	}
 }
 
-const mapStateToProps = state => {
-	return state
-}
-
-const EleLoginForm = connect(mapStateToProps, {
+const EleLoginForm = connect(state => state, {
 	...actions,
 	refresh
 })(Form.create()(LoginForm))

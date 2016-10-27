@@ -22,11 +22,16 @@ import Sheet from './pages/sheet'
 
 const store = createStore(reducer, applyMiddleware(thunk))
 
+const test = (arg) => {
+	sessionStorage.setItem('test', 'test')
+	console.log(sessionStorage)
+}
+
 ReactDOM.render(
 	<Provider store={store}>
 		<Router history={browserHistory}>
 			<Route path='/home' component={Home}/>
-			<Route path='/group' component={Group}/>
+			<Route path='/group' component={Group} onEnter={test}/>
 			<Route path='/dic' component={Dictionary}/>
 			<Route path='/sheet' component={Sheet}/>
 		</Router>
