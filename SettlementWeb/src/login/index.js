@@ -1,16 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {
-	createStore,
-	combineReducers,
-	applyMiddleware
-} from 'redux'
-import {
-	Provider,
-	connect
-} from 'react-redux'
-import thunk from 'redux-thunk'
-import {
 	Form,
 	Input,
 	Button,
@@ -19,24 +9,30 @@ import {
 } from 'antd'
 
 import Captcha from '../components/Captcha'
-import refresh from '../components/Captcha/action'
 
 import * as constants from './constants'
 import * as actions from './action'
 
-import captchaReducer from '../components/Captcha/reducer'
-import loginReducer from './reducer'
+import {
+	API_URL
+} from './apiClient'
 
 const FormItem = Form.Item
-const reducer = combineReducers({
-	captchaReducer,
-	loginReducer
-})
-const store = createStore(reducer, applyMiddleware(thunk))
+
+const createTimeSpan = () => {
+	let strRand = Math.random() + ''
+	return strRand.substr(2, strRand.length - 2)
+}
 
 class LoginForm extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = {
+			timeSpan: createTimeSpan()
+		}
+	}
 
-	handleSubmit(e) {
+	submit(e) {
 		e.preventDefault()
 		const {
 			validateFields,
@@ -48,30 +44,26 @@ class LoginForm extends React.Component {
 				let account = getFieldValue('account')
 				let password = getFieldValue('password')
 				let captcha = getFieldValue('captcha')
-				let timeSpan = this.props.captchaReducer.timeSpan
-				let promise = this.props.login(account, password, captcha, timeSpan)
-				promise.then(response => {
-					let result = response.json()
-					if (!response.ok) {
-						this.props.refresh()
-						setFields({
-							account: {
-								value: account,
-								errors: [{
-									message: constants.ACCOUNT_ERROR
-								}]
-							},
-							captcha: {
-								errors: [{
-									message: constants.CAPTCHA_REREQUIRED
-								}]
-							}
-						})
-					}
-				}).then(result => {
-					if (true) {}
-					sessionStorage.setItem('test', 'test')
+				let timeSpan = this.state.timeSpan
+				actions.login(account, password, captcha, timeSpan).then(result => {
+					sessionStorage.setItem('token', result.Token)
+					sessionStorage.setItem('user', result.User)
 					window.location.href = '/app'
+				}, error => {
+					this.refreshCaptcha()
+					setFields({
+						account: {
+							value: account,
+							errors: [{
+								message: error
+							}]
+						},
+						captcha: {
+							errors: [{
+								message: constants.CAPTCHA_REREQUIRED
+							}]
+						}
+					})
 				})
 			}
 		})
@@ -79,22 +71,17 @@ class LoginForm extends React.Component {
 
 	checkCaptcha(rule, value, callback) {
 		if (value) {
-			const {
-				checkCaptcha,
-				captchaReducer
-			} = this.props
-
-			let promise = checkCaptcha(value, captchaReducer.timeSpan)
-			promise.then(response => {
-				if (response.ok) {
-					callback()
-				} else {
-					callback([new Error(constants.CAPTCHA_ERROR)])
-				}
-			})
+			const timeSpan = this.state.timeSpan
+			actions.checkCaptcha(value, timeSpan).then(() => callback(), error => callback([new Error(error)]))
 		} else {
 			callback()
 		}
+	}
+
+	refreshCaptcha() {
+		this.setState({
+			timeSpan: createTimeSpan()
+		})
 	}
 
 	render() {
@@ -102,12 +89,9 @@ class LoginForm extends React.Component {
 			getFieldDecorator
 		} = this.props.form
 
-		const {
-			doRefresh,
-			timeSpan
-		} = this.props.captchaReducer
+		const timeSpan = this.state.timeSpan
 
-		const url = `${constants.API_URL}captcha?t=${timeSpan}`
+		const url = `${API_URL}captcha?t=${timeSpan}`
 
 		return (
 			<Form>
@@ -159,23 +143,18 @@ class LoginForm extends React.Component {
 						</FormItem>
 					</Col>
 					<Col span='9'>
-						<Captcha url={url}/>
+						<Captcha url={url} OnRefresh={this.refreshCaptcha.bind(this)}/>
 					</Col>
 				</Row>
-				<Button type='primary' htmlType='button' onClick={this.handleSubmit.bind(this)}>登录</Button>
+				<Button type='primary' size='large' htmlType='button' onClick={this.submit.bind(this)}>登录</Button>
 			</Form>
 		)
 	}
 }
 
-const EleLoginForm = connect(state => state, {
-	...actions,
-	refresh
-})(Form.create()(LoginForm))
+const EleLoginForm = Form.create()(LoginForm)
 
 ReactDOM.render(
-	<Provider store={store}>
-		<EleLoginForm />
-	</Provider>,
+	<EleLoginForm />,
 	document.getElementById('root')
 )

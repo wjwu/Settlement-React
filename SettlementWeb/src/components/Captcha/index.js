@@ -1,31 +1,35 @@
-import React from 'react'
-import {
-	connect
-} from 'react-redux'
-import refresh from './action'
+import React, {
+	Component,
+	PropTypes
+} from 'react'
 
-class Captcha extends React.Component {
-	handleClick(e) {
+class Captcha extends Component {
+	constructor(props) {
+		super(props)
+		this.click = this.click.bind(this)
+	}
+
+	click(e) {
 		e.preventDefault()
-		this.props.refresh()
+		this.props.OnRefresh()
 	}
 
 	render() {
 		const style = {
 			cursor: 'pointer'
 		}
-		return <img src={this.props.url} onClick={this.handleClick.bind(this)} style={style} alt='看不清楚？换一张' title='看不清楚？换一张'/>
+
+		const {
+			url
+		} = this.props
+
+		return <img src={url} onClick={this.click} style={style} alt='看不清楚？换一张' title='看不清楚？换一张'/>
 	}
 }
 
 Captcha.propTypes = {
-	url: React.PropTypes.string
+	url: PropTypes.string.isRequired,
+	OnRefresh: PropTypes.func.isRequired
 }
 
-const mapStateToProps = state => {
-	return state
-}
-
-export default connect(mapStateToProps, {
-	refresh
-})(Captcha)
+export default Captcha

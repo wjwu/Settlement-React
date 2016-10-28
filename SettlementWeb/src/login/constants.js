@@ -1,7 +1,4 @@
-export const API_URL = 'http://localhost:10011/api/'
 export const ACCOUNT_REQUIRED = '请输入用户名！'
-export const ACCOUNT_ERROR = '用户名或密码错误！'
 export const PASSWORD_REQUIRED = '请输入密码！'
 export const CAPTCHA_REQUIRED = '请输入验证码！'
 export const CAPTCHA_REREQUIRED = '请重新输入验证码！'
-export const CAPTCHA_ERROR = '验证码错误！'

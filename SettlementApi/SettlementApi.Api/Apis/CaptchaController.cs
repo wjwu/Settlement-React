@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web.Http;
+using ServiceStack;
 using SettlementApi.Api.Dtos;
 using SettlementApi.Api.Pools;
 using SettlementApi.Api.Resource;
@@ -42,10 +43,10 @@ namespace SettlementApi.Api.Apis
             {
                 return new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
-                    Content = new StringContent(CommonRes.CaptchaError)
+                    Content = new StringContent(new ResponseMessage(CommonRes.CaptchaError).ToJson())
                 };
             }
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            return new HttpResponseMessage(HttpStatusCode.NoContent);
         }
     }
 }
