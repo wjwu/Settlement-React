@@ -10,6 +10,7 @@ namespace SettlementApi.Read.QueryCommand.DictionaryModule
         public int Rank { get; set; }
         public int Count { get; set; }
         public bool Enabled { get; set; }
-        public DateTime CreateTime { get; set; }
+        public DateTime DCreateTime { private get; set; }
+        public string CreateTime => DCreateTime.ToString("yyyy-MM-dd HH:mm:ss");
     }
 }

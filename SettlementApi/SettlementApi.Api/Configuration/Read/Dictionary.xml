@@ -8,7 +8,7 @@ SELECT [ID]
       ,[Rank]
       ,[Count]
       ,[Enabled]
-      ,[CreateTime]
+      ,[CreateTime] AS DCreateTime
   FROM [dbo].[Dictionary] WHERE [Deleted]=0
       ]]>
   </command>

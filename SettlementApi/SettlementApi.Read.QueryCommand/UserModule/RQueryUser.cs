@@ -10,8 +10,10 @@ namespace SettlementApi.Read.QueryCommand.UserModule
         public string Name { get; set; }
         public Guid Group { get; set; }
         public bool Enabled { get; set; }
-        public DateTime CreateTime { get; set; }
+        public DateTime DCreateTime { private get; set; }
+        public string CreateTime => DCreateTime.ToString("yyyy-MM-dd HH:mm:ss");
         public string LastLoginIP { get; set; }
-        public DateTime LastLoginTime { get; set; }
+        public DateTime DLastLoginTime { private get; set; }
+        public string LastLoginTime => DLastLoginTime.ToString("yyyy-MM-dd HH:mm:ss");
     }
 }

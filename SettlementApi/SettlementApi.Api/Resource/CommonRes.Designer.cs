@@ -169,6 +169,15 @@ namespace SettlementApi.Api.Resource {
         }
         
         /// <summary>
+        ///   查找类似 Success 的本地化字符串。
+        /// </summary>
+        internal static string Success {
+            get {
+                return ResourceManager.GetString("Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Upload content type incorrect. 的本地化字符串。
         /// </summary>
         internal static string UploadContentTypeError {

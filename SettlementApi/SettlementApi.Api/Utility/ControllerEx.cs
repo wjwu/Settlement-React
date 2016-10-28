@@ -14,7 +14,7 @@ namespace SettlementApi.Api.Utility
             return new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.InternalServerError,
-                Content = new StringContent(new ResponseMessage(CommonRes.ApiApplicationError).ToJson())
+                Content = new StringContent(new ResponseMessage(CommonRes.ApiApplicationError,true).ToJson())
             };
         }
     }

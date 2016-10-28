@@ -10,7 +10,6 @@ using SettlementApi.Api.Pools;
 using SettlementApi.Api.Resource;
 using SettlementApi.CommandBus;
 using SettlementApi.Common.Mapper;
-using SettlementApi.Write.BusCommand;
 using SettlementApi.Write.BusCommand.UserModule;
 
 namespace SettlementApi.Api.Apis
@@ -23,21 +22,19 @@ namespace SettlementApi.Api.Apis
         [Route("api/sign/in")]
         public SignInResponse SignIn(SignInRequest request)
         {
-            string captcha = CaptchaPool.Get(request.TimeSpan);
+            var captcha = CaptchaPool.Get(request.TimeSpan);
             if (!captcha.ToLower().Equals(request.Captcha.ToLower()))
-            {
                 throw new Exception(CommonRes.CaptchaError);
-            }
-            LoginCommand cmd = MapperHelper.Map<SignInRequest, LoginCommand>(request);
+            var cmd = MapperHelper.Map<SignInRequest, LoginCommand>(request);
 
             var result = CommandService.SendEx(cmd, BusName) as LoginCommandResult;
 
-            ApiContext apiContext = ApiContextPool.StartNewContext(result.ID);
+            var apiContext = ApiContextPool.StartNewContext(result.ID);
 
-            SignInResponse response = MapperHelper.Map<LoginCommandResult, SignInResponse>(result, new ExtendedMapper());
+            var response = MapperHelper.Map<LoginCommandResult, SignInResponse>(result, new ExtendedMapper());
 
             response.Token = apiContext.Token;
-  
+
             return response;
         }
 
@@ -46,17 +43,15 @@ namespace SettlementApi.Api.Apis
         public ResponseMessageResult SignExpired()
         {
             if (ApiContextPool.IsContextInvalid())
-            {
                 return ResponseMessage(new HttpResponseMessage
                 {
-                    StatusCode = HttpStatusCode.NotFound,
-                    Content = new StringContent(new ResponseMessage(CommonRes.SessionExpired).ToJson())
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Content = new StringContent(new ResponseMessage(CommonRes.SessionExpired,true).ToJson())
                 });
-            }
             return ResponseMessage(new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(new ResponseMessage(CommonRes.SessionNotExpired).ToJson())
+                Content = new StringContent(new ResponseMessage(CommonRes.Success).ToJson())
             });
         }
 
@@ -65,9 +60,7 @@ namespace SettlementApi.Api.Apis
         public ResponseMessage SignOut()
         {
             if (ApiContextPool.IsContextInvalid())
-            {
-                return new ResponseMessage(CommonRes.InvalidSession);
-            }
+                return new ResponseMessage(CommonRes.InvalidSession,true);
             ApiContextPool.RemoveContext();
             return new ResponseMessage(CommonRes.SignOutSuccessful);
         }

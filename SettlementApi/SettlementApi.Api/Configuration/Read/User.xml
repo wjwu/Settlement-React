@@ -8,9 +8,9 @@ SELECT [ID]
       ,[Name]
       ,[Group]
       ,[Enabled]
-      ,[CreateTime]
+      ,[CreateTime] AS DCreateTime
       ,[LastLoginIP]
-      ,[LastLoginTime]
+      ,[LastLoginTime] AS DLastLoginTime 
   FROM [dbo].[User] WHERE [Deleted]=0 
       ]]>
   </command>

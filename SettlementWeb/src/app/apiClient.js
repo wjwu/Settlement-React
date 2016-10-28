@@ -1,25 +1,31 @@
 import 'whatwg-fetch'
 
 const API_URL = 'http://localhost:10011/api/'
-const API_SERVER_ERROR = 'Api server error.'
 const headers = {
 	'Accept': 'application/json',
-	'Content-Type': 'application/json'
+	'Content-Type': 'application/json',
+	'x-token': sessionStorage.getItem('token')
 }
 
-const processResponse = response => response.status === 204 ? {} : response.json()
+const processResponse = response => response.json()
 
-const processResult = (reject, resolve, result) => result.Message ? reject(result.Message) : resolve(result)
+const processResult = (reject, resolve, result) => result.IsError ? reject(result.Message) : resolve(result)
 
-const processError = (reject, error) => reject(API_SERVER_ERROR)
+const processError = (reject, error) => reject(error)
 
 const get = (url, request) => {
-	let query = Object.keys(request)
-		.map(key => encodeURIComponent(key) + '=' + encodeURIComponent(request[key]))
-		.join('&')
+	let requestUrl
+	if (request) {
+		let query = Object.keys(request)
+			.map(key => encodeURIComponent(key) + '=' + encodeURIComponent(request[key]))
+			.join('&')
+		requestUrl = `${API_URL}${url}?${query}`
+	} else {
+		requestUrl = `${API_URL}${url}`
+	}
 
 	return new Promise((resolve, reject) => {
-		fetch(`${API_URL}${url}?${query}`, {
+		fetch(requestUrl, {
 				method: 'GET',
 				headers: headers
 			}).then(processResponse)

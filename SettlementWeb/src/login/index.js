@@ -47,7 +47,7 @@ class LoginForm extends React.Component {
 				let timeSpan = this.state.timeSpan
 				actions.login(account, password, captcha, timeSpan).then(result => {
 					sessionStorage.setItem('token', result.Token)
-					sessionStorage.setItem('user', result.User)
+					sessionStorage.setItem('user', JSON.stringify(result.User))
 					window.location.href = '/app'
 				}, error => {
 					this.refreshCaptcha()

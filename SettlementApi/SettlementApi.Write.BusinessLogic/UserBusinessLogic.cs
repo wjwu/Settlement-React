@@ -35,7 +35,7 @@ namespace SettlementApi.Write.BusinessLogic
             else if (command.GetType() == typeof(CreateUserCommand))
                 Execute((CreateUserCommand) command);
             else if (command.GetType() == typeof(UpdateUserCommand))
-                Execute((UpdateUserCommand)command);
+                Execute((UpdateUserCommand) command);
         }
 
         public ICommandResult ReceiveEx(ICommand command)
@@ -49,12 +49,8 @@ namespace SettlementApi.Write.BusinessLogic
         {
             var user = MapperHelper.Map<CreateUserCommand, User>(command);
             user.Password = Security.Md5Encrypt(Security.Encrypt(user.Password));
+           
             Create("User.Create", user);
-        }
-
-        public void Execute(UpdateUserCommand command)
-        {
-            Update("User.Update",command);
         }
 
         public LoginCommandResult Execute(LoginCommand command)
@@ -65,8 +61,13 @@ namespace SettlementApi.Write.BusinessLogic
                 throw new BussinessException(UserRes.LoginFail);
             if (!loginUser.Enabled)
                 throw new BussinessException(UserRes.LoginFailDisabled);
-            var result = MapperHelper.Map<User, LoginCommandResult>(loginUser);
-            return result;
+            Update("User.LoginUpdate", new {LastLoginIP = ServiceContext.RequestIP, loginUser.ID});
+            return MapperHelper.Map<User, LoginCommandResult>(loginUser);
+        }
+
+        public void Execute(UpdateUserCommand command)
+        {
+            Update("User.Update", command);
         }
 
         public void SubscribeEvents()

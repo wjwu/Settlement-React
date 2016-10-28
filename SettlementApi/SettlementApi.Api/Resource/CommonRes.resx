@@ -168,4 +168,7 @@
   <data name="UploadImageTypeError" xml:space="preserve">
     <value>上传的图片格式不正确.</value>
   </data>
+  <data name="Success" xml:space="preserve">
+    <value>Success</value>
+  </data>
 </root>

@@ -17,13 +17,13 @@ namespace SettlementApi.Api.ApiExtended
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
             base.OnActionExecuting(actionContext);
-            if ((actionContext.ControllerContext.Request.Method != HttpMethod.Get) &&
-                (actionContext.ControllerContext.Controller.GetType() != typeof(SignController)) &&
+            //if ((actionContext.ControllerContext.Request.Method != HttpMethod.Get) &&
+            if ((actionContext.ControllerContext.Controller.GetType() != typeof(SignController)) &&
                 (actionContext.ControllerContext.Controller.GetType() != typeof(CaptchaController)))
             {
                 var response = new HttpResponseMessage
                 {
-                    Content = new StringContent(new ResponseMessage(CommonRes.NotAuthorized).ToJson()),
+                    Content = new StringContent(new ResponseMessage(CommonRes.NotAuthorized,true).ToJson()),
                     StatusCode = HttpStatusCode.Unauthorized
                 };
                 try

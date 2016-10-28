@@ -135,6 +135,7 @@
     <Compile Include="Apis\CaptchaController.cs" />
     <Compile Include="Apis\DictionaryController.cs" />
     <Compile Include="Apis\GroupController.cs" />
+    <Compile Include="Apis\SheetController.cs" />
     <Compile Include="Apis\SignController.cs" />
     <Compile Include="Apis\UserController.cs" />
     <Compile Include="Bootstrap.cs" />

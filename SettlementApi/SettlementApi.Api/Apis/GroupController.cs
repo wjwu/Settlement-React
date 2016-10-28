@@ -1,6 +1,10 @@
 ﻿using System;
-using System.Threading;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
+using ServiceStack;
+using SettlementApi.Api.Dtos;
+using SettlementApi.Api.Resource;
 using SettlementApi.CommandBus;
 using SettlementApi.Read.QueryCommand.GroupModule;
 using SettlementApi.Write.BusCommand.GroupModule;
@@ -21,23 +25,35 @@ namespace SettlementApi.Api.Apis
 
         [HttpPost]
         [Route("api/group")]
-        public void Create([FromBody] CreateGroupCommand request)
+        public HttpResponseMessage Create([FromBody] CreateGroupCommand request)
         {
             CommandService.Send(request, BusName);
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(new ResponseMessage(CommonRes.Success).ToJson())
+            };
         }
 
         [HttpPut]
         [Route("api/group")]
-        public void Update([FromBody] UpdateGroupCommand request)
+        public HttpResponseMessage Update([FromBody] UpdateGroupCommand request)
         {
             CommandService.Send(request, BusName);
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(new ResponseMessage(CommonRes.Success).ToJson())
+            };
         }
 
         [HttpDelete]
         [Route("api/group/{id:guid}")]
-        public void Delete(Guid id)
+        public HttpResponseMessage Delete(Guid id)
         {
             CommandService.Send(new DeleteGroupCommand {ID = id}, BusName);
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(new ResponseMessage(CommonRes.Success).ToJson())
+            };
         }
     }
 }

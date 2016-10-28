@@ -2,7 +2,6 @@ import React from 'react'
 import {
 	Icon
 } from 'antd'
-import moment from 'moment'
 
 const genColumns = (editFuc) => {
 	return [{
@@ -39,8 +38,7 @@ const genColumns = (editFuc) => {
 		title: '创建时间',
 		dataIndex: 'CreateTime',
 		key: 'createTime',
-		width: '30%',
-		render: text => moment(text).format('YYYY-MM-DD HH:mm:ss')
+		width: '30%'
 	}, {
 		title: '操作',
 		key: 'operation',

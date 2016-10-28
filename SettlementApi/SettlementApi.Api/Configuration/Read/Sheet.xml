@@ -2,7 +2,20 @@
 <commands>
   <command name="Sheet.Query" type="text" connection="local">
     <![CDATA[
-  SELECT TOP(1) ID,LoginID,Enabled FROM dbo.[User] WHERE LoginID=@LoginID AND Password=@Password AND [Deleted]=0
+SELECT  S.[ID] ,
+        U.Name AS [ProjectManager] ,
+        S.[AuditStatus] ,
+        S.[PayStatus] ,
+        S.[CustomName] ,
+        S.[TimeFrom] AS DTimeFrom ,
+        D.[Name] AS Base ,
+        S.[TotalPrice] ,
+        S.[CostPrice] ,
+        S.[ReceivedMoney] ,
+        S.[RemainingMoney] 
+FROM    [dbo].[Sheet] AS S 
+        LEFT JOIN dbo.[User] AS U ON S.ProjectManager = U.ID 
+		LEFT JOIN dbo.[Dictionary] AS D ON S.Base=D.ID WHERE S.[Deleted]=0 
   ]]>
   </command>
 </commands>

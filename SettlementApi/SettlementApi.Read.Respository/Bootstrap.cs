@@ -12,6 +12,7 @@ namespace SettlementApi.Read.Respository
             container.RegisterType<ICommandBus, QueryGroup>("QueryGroup");
             container.RegisterType<ICommandBus, QueryUser>("QueryUser");
             container.RegisterType<ICommandBus, QueryDictionary>("QueryDictionary");
+            container.RegisterType<ICommandBus, QuerySheet>("QuerySheet");
         }
     }
 }

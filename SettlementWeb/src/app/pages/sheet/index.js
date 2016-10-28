@@ -18,6 +18,9 @@ import TTable from '../../../components/TTable'
 
 import CreateSheet from './busComponents/CreateSheet'
 
+import SheetAction from '../../actions/Sheet'
+const sheet = new SheetAction()
+
 import genColumns from './columns'
 
 const createSheet = 'createSheet'
@@ -26,10 +29,17 @@ const updateSheet = 'updateSheet'
 class Sheet extends Component {
 	constructor(prop) {
 		super(prop)
+		this.request = {
+			pageIndex: 1
+		}
 		this.state = {
 			[createSheet]: false,
 			[updateSheet]: false
 		}
+	}
+
+	componentDidMount() {
+		this.props.querySheet(this.request)
 	}
 
 	onTTableLoad() {
@@ -57,17 +67,31 @@ class Sheet extends Component {
 			createSheet: createSheetVisble,
 			updateSheet: updateSheetVisble
 		} = this.state
+
 		const columns = genColumns(raw => {
 			this.selectedDic = raw
 			this.showModal(updateDictionary)
 		})
-		const data = []
+
+		let {
+			creating,
+			getting,
+			result
+		} = this.props.sheet
+
 		let modal
 		if (createSheetVisble) {
-			modal = <CreateSheet loading={false} onSubmit={this.submit.bind(this,createSheet)} onCancel={this.hideModal.bind(this,createSheet)}/>
+			modal = <CreateSheet loading={creating} onSubmit={this.submit.bind(this,createSheet)} onCancel={this.hideModal.bind(this,createSheet)}/>
 		} else if (updateSheetVisble) {
 
 		}
+
+		let totalCount = 0
+		if (result) {
+			totalCount = result.TotalCount
+		}
+		let sheets = totalCount > 0 ? result.List : []
+
 		return (
 			<TMainContainer>
 				<Row>
@@ -88,7 +112,7 @@ class Sheet extends Component {
 				<Row>
 					<TCol>
 						<TCard>
-							
+							<TTable key='sheets' title='我的结算表' columns={columns} total={totalCount} data={sheets} loading={getting} onLoad={this.onTTableLoad}/>
 						</TCard>
 					</TCol>
 				</Row>
@@ -97,4 +121,7 @@ class Sheet extends Component {
 	}
 }
 
-export default connect(state => state, {})(TMsgContainer()(Sheet))
+export default connect(state => state, {
+	'querySheet': sheet.query.bind(sheet),
+	[createSheet]: sheet.create.bind(sheet)
+})(TMsgContainer()(Sheet))

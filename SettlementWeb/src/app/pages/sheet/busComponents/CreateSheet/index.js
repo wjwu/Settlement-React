@@ -3,6 +3,9 @@ import React, {
 	PropTypes
 } from 'react'
 import {
+	connect
+} from 'react-redux'
+import {
 	Modal,
 	Form,
 	Input,
@@ -18,6 +21,9 @@ const Option = Select.Option
 const FormItem = Form.Item
 const RadioGroup = Radio.Group
 const RangePicker = DatePicker.RangePicker
+
+import DictionaryAction from '../../../../actions/Dictionary'
+const dictionary = new DictionaryAction()
 
 const disabledDate = current => {
 	return current && current.valueOf() > Date.now()
@@ -58,6 +64,14 @@ class CreateSheet extends Component {
 		this.calcUnitPrice = this.calcUnitPrice.bind(this)
 	}
 
+	componentDidMount() {
+		this.props.queryDictionary({
+			type: 'base',
+			pageIndex: 1,
+			pageSize: 999
+		})
+	}
+
 	submit() {
 		const {
 			validateFields,
@@ -65,7 +79,6 @@ class CreateSheet extends Component {
 		} = this.props.form
 
 		validateFields((errors, values) => {
-			console.log(getFieldValue('weixin'))
 			if (!errors) {
 				let customName = getFieldValue('customName')
 				let contacts = getFieldValue('contacts')
@@ -75,18 +88,29 @@ class CreateSheet extends Component {
 				let address = getFieldValue('address')
 				let source = getFieldValue('source')
 				let base = getFieldValue('base')
-				let times = getFieldValue('time')
+				let times = getFieldValue('times')
+				let timeFrom = times[0].format('YYYY-MM-DD HH:mm:ss')
+				let timeTo = times[1].format('YYYY-MM-DD HH:mm:ss')
 				let people = getFieldValue('people')
 				let totalPrice = getFieldValue('totalPrice')
 				let costPrice = getFieldValue('costPrice')
 				let remark = getFieldValue('remark')
-					// this.props.onSubmit({
-					// 	id: this.props.dictionary.ID,
-					// 	type,
-					// 	name,
-					// 	rank,
-					// 	enabled
-					// })
+				this.props.onSubmit({
+					customName,
+					contacts,
+					phone,
+					qq,
+					weixin,
+					address,
+					source,
+					base,
+					timeFrom,
+					timeTo,
+					people,
+					totalPrice,
+					costPrice,
+					remark
+				})
 			}
 		})
 	}
@@ -127,6 +151,13 @@ class CreateSheet extends Component {
 				span: 16
 			},
 		}
+		const result = this.props.dictionary.result
+		let bases = []
+		if (result && result.TotalCount > 0) {
+			bases = result.List.map(item => {
+				return <Option key={item.ID} value={item.ID}>{item.Name}</Option>
+			})
+		}
 		return (
 			<Modal title='新增结算表' visible={true} width={800} confirmLoading={loading} onOk={this.submit} onCancel={this.cancel}>
 				<Form>
@@ -151,9 +182,7 @@ class CreateSheet extends Component {
 						<Col xs={12}>
 							<FormItem {...formItemLayout} label='培训基地'>
 					 			<Select placeholder='请选择培训基地' {...getFieldProps('base',{rules:[{required:true,message:'请选择培训基地！'}]})}>
-						            <Option value='Base'>培训基地</Option>
-						            <Option value='Source'>客户来源</Option>
-						            <Option value='Cost'>结算类型</Option>
+						            {bases}
 					          	</Select>
 				          	</FormItem>
 						</Col>
@@ -178,7 +207,7 @@ class CreateSheet extends Component {
 						</Col>
 						<Col xs={12}>
 							<FormItem {...formItemLayout} label='培训时间'>
-								<RangePicker {...getFieldProps('time',{rules:[{required:true,type:'array',message:'请选择培训时间！'}]})} format='YYYY-MM-DD' disabledDate={disabledDate} disabledTime={disabledTime}/>
+								<RangePicker {...getFieldProps('times',{rules:[{required:true,type:'array',message:'请选择培训时间！'}]})} format='YYYY-MM-DD' disabledDate={disabledDate} disabledTime={disabledTime}/>
 							</FormItem>
 						</Col>
 					</Row>
@@ -321,4 +350,6 @@ CreateSheet.propTypes = {
 	onCancel: PropTypes.func.isRequired
 }
 
-export default Form.create()(CreateSheet)
+export default connect(state => state, {
+	'queryDictionary': dictionary.query.bind(dictionary)
+})(Form.create()(CreateSheet))

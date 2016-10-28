@@ -43,10 +43,13 @@ namespace SettlementApi.Api.Apis
             {
                 return new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
-                    Content = new StringContent(new ResponseMessage(CommonRes.CaptchaError).ToJson())
+                    Content = new StringContent(new ResponseMessage(CommonRes.CaptchaError,true).ToJson())
                 };
             }
-            return new HttpResponseMessage(HttpStatusCode.NoContent);
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(new ResponseMessage(CommonRes.Success).ToJson())
+            };
         }
     }
 }

@@ -19,7 +19,7 @@ namespace SettlementApi.Api.ApiExtended
                 context.Response = new HttpResponseMessage
                 {
                     StatusCode = HttpStatusCode.BadRequest,
-                    Content = new StringContent(new ResponseMessage(context.Exception.Message).ToJson())
+                    Content = new StringContent(new ResponseMessage(context.Exception.Message,true).ToJson())
                 };
             }
             else if (httpResponseException != null)
@@ -31,7 +31,7 @@ namespace SettlementApi.Api.ApiExtended
                 context.Response = new HttpResponseMessage
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
-                    Content = new StringContent(new ResponseMessage(context.Exception.Message).ToJson())
+                    Content = new StringContent(new ResponseMessage(context.Exception.Message,true).ToJson())
                 };
             }
         }

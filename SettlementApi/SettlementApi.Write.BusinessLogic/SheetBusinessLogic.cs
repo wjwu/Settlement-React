@@ -19,15 +19,15 @@ namespace SettlementApi.Write.BusinessLogic
         {
             var sheet = MapperHelper.Map<CreateSheetCommand, Sheet>(command);
             sheet.ID=Guid.NewGuid();
-            sheet.ProjectManager=Guid.Empty;
+            sheet.ProjectManager= ServiceContext.OperatorID;
             sheet.AuditStatus = Enum.GetName(typeof(AuditStatus), AuditStatus.UnSubmit);
             sheet.PayStatus= Enum.GetName(typeof(PayStatus), PayStatus.Unpaid);
-            sheet.Days = sheet.TimeFrom.Subtract(sheet.TimeTo).Days;
+            sheet.Days = sheet.TimeTo.Subtract(sheet.TimeFrom).Days;
             sheet.UnitPrice = Math.Round(sheet.TotalPrice/sheet.People);
             sheet.ReceivedMoney = 0;
             sheet.RemainingMoney = sheet.TotalPrice;
-            sheet.LastModifyUser = null;
-            //todo
+            sheet.LastModifyUser = ServiceContext.OperatorID;
+            Create("Sheet.Create",sheet);
         }
 
         public void Receive(ICommand command)

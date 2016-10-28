@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="EQueryDictionary.cs" />
     <Compile Include="EQueryGroup.cs" />
+    <Compile Include="EQuerySheet.cs" />
     <Compile Include="EQueryUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

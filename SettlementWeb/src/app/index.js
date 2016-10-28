@@ -14,6 +14,7 @@ import {
 } from 'react-router'
 import thunk from 'redux-thunk'
 import reducer from './reducers'
+import auth from './auth'
 
 import Home from './pages/home'
 import Group from './pages/group'
@@ -22,18 +23,25 @@ import Sheet from './pages/sheet'
 
 const store = createStore(reducer, applyMiddleware(thunk))
 
-const test = (arg) => {
-	sessionStorage.setItem('test', 'test')
-	console.log(sessionStorage)
+const enter = (nextState, replace, callback) => {
+	auth().then(result => {
+		callback()
+	}, error => {
+		if (window.top == window.self) {
+			window.location.href = '/'
+		} else {
+			window.top.location.href = '/'
+		}
+	})
 }
 
 ReactDOM.render(
 	<Provider store={store}>
 		<Router history={browserHistory}>
-			<Route path='/home' component={Home}/>
-			<Route path='/group' component={Group} onEnter={test}/>
-			<Route path='/dic' component={Dictionary}/>
-			<Route path='/sheet' component={Sheet}/>
+			<Route path='/home' component={Home} onEnter={enter}/>
+			<Route path='/group' component={Group} onEnter={enter}/>
+			<Route path='/dic' component={Dictionary} onEnter={enter}/>
+			<Route path='/sheet' component={Sheet} onEnter={enter}/>
 		</Router>
 	</Provider>,
 	document.getElementById('root')
