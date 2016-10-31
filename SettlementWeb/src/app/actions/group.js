@@ -34,4 +34,4 @@ class GroupAction extends ActionBase {
 	}
 }
 
-export default GroupAction
+export default new GroupAction()

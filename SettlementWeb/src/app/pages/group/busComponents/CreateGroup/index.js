@@ -3,6 +3,9 @@ import React, {
 	PropTypes
 } from 'react'
 import {
+	connect
+} from 'react-redux'
+import {
 	Modal,
 	Form,
 	Tree,
@@ -10,6 +13,7 @@ import {
 	Input
 } from 'antd'
 import TTreeSelect from '../../../../../components/TTreeSelect'
+import group from '../../../../actions/Group'
 
 const FormItem = Form.Item
 const TreeNode = Tree.TreeNode
@@ -27,15 +31,12 @@ class CreateGroup extends Component {
 			validateFields,
 			getFieldValue
 		} = this.props.form
-		const {
-			onSubmit
-		} = this.props
 
 		validateFields((errors, values) => {
 			let parentId = this.selectedGroup
 			if (!errors && parentId) {
 				let name = getFieldValue('name')
-				onSubmit({
+				this.props.submit({
 					parentId,
 					name
 				})
@@ -53,15 +54,9 @@ class CreateGroup extends Component {
 	}
 
 	render() {
-		const {
-			getFieldDecorator
-		} = this.props.form
-
-		const {
-			visible,
-			groups,
-			loading
-		} = this.props
+		const getFieldDecorator = this.props.form.getFieldDecorator
+		const groups = this.props.groups
+		const creating = this.props.group.creating
 
 		const formItemLayout = {
 			labelCol: {
@@ -73,7 +68,7 @@ class CreateGroup extends Component {
 		}
 
 		return (
-			<Modal title='新增部门' visible={true} width={500} confirmLoading={loading} onOk={this.submit} onCancel={this.cancel}>
+			<Modal title='新增部门' visible={true} width={500} confirmLoading={creating} onOk={this.submit} onCancel={this.cancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='上级部门'>
 						<TTreeSelect data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择上级部门' treeDefaultExpandAll onChange={this.change}/>
@@ -85,6 +80,10 @@ class CreateGroup extends Component {
 								required:true,
 								whitespace:true,
 								message:'请输入部门名称！'
+							},{
+								length:true,
+								max:50,
+								message:'部门名称最多50个字符！'
 							}]
 						})(
 							<Input placeholder='请输入部门名称'/>
@@ -97,15 +96,11 @@ class CreateGroup extends Component {
 	}
 }
 
-CreateGroup.defaultProps = {
-	loading: false
-}
-
 CreateGroup.propTypes = {
 	groups: PropTypes.array.isRequired,
-	loading: PropTypes.bool.isRequired,
-	onSubmit: PropTypes.func.isRequired,
 	onCancel: PropTypes.func.isRequired
 }
 
-export default Form.create()(CreateGroup)
+export default connect(state => state, {
+	'submit': group.create.bind(group)
+})(Form.create()(CreateGroup))

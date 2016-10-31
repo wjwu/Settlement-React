@@ -10,5 +10,7 @@ namespace SettlementApi.Read.Model
     public class EQueryDictionary: BaseQueryEntity
     {
         public string Type { get; set; }
+
+        public bool? Enabled { get; set; }
     }
 }

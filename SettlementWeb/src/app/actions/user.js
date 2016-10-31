@@ -30,4 +30,4 @@ class UserAction extends ActionBase {
 	}
 }
 
-export default UserAction
+export default new UserAction()

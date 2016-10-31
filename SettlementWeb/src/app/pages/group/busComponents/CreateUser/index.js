@@ -3,6 +3,9 @@ import React, {
 	PropTypes
 } from 'react'
 import {
+	connect
+} from 'react-redux'
+import {
 	Modal,
 	Form,
 	Tree,
@@ -14,6 +17,7 @@ import {
 	Col
 } from 'antd'
 import TTreeSelect from '../../../../../components/TTreeSelect'
+import user from '../../../../actions/User'
 
 const FormItem = Form.Item
 const TreeNode = Tree.TreeNode
@@ -34,10 +38,6 @@ class CreateUser extends Component {
 			getFieldValue
 		} = this.props.form
 
-		const {
-			onSubmit
-		} = this.props
-
 		validateFields((errors, values) => {
 			if (!errors) {
 				let loginId = getFieldValue('loginId')
@@ -45,7 +45,7 @@ class CreateUser extends Component {
 				let phone = getFieldValue('phone')
 				let name = getFieldValue('name')
 				let enabled = getFieldValue('enabled')
-				onSubmit({
+				this.props.submit({
 					loginId,
 					password,
 					phone,
@@ -71,19 +71,13 @@ class CreateUser extends Component {
 	}
 
 	render() {
-		const {
-			getFieldDecorator
-		} = this.props.form
-
-		const {
-			visible,
-			groups,
-			loading
-		} = this.props
+		const getFieldDecorator = this.props.form.getFieldDecorator
+		const groups = this.props.groups
+		const creating = this.props.user.creating
 
 		let reset = <Button key='reset' type='ghost' size='large' onClick={this.reset}>重置</Button>
 		let cancel = <Button key='cancel' type='ghost' size='large' onClick={this.cancel}>取消</Button>
-		let ok = <Button key='submit' type='primary' size='large' loading={loading} onClick={this.submit}>确定</Button>
+		let ok = <Button key='submit' type='primary' size='large' loading={creating} onClick={this.submit}>确定</Button>
 
 		const formItemLayout = {
 			labelCol: {
@@ -106,6 +100,10 @@ class CreateUser extends Component {
 								required:true,
 								whitespace:true,
 								message:'请输入账号！'
+							},{
+								length:true,
+								max:50,
+								message:'账号最多50个字符！'
 							}]
 						})(
 							<Input placeholder='请输入账号'/>
@@ -119,6 +117,10 @@ class CreateUser extends Component {
 								required:true,
 								whitespace:true,
 								message:'请输入初始密码！'
+							},{
+								length:true,
+								max:20,
+								message:'密码长度不能超过20个字符！'
 							}]
 						})(
 							<Input type='password' placeholder='请输入初始密码'/>
@@ -132,6 +134,9 @@ class CreateUser extends Component {
 								required:true,
 								whitespace:true,
 								message:'请输入手机号码！'
+							},{
+								pattern:/^1[34578]\d{9}$/,
+								message:'手机号码格式不正确！'
 							}]
 						})(
 							<Input placeholder='请输入手机号码'/>
@@ -145,6 +150,10 @@ class CreateUser extends Component {
 								required:true,
 								whitespace:true,
 								message:'请输入姓名！'
+							},{
+								length:true,
+								max:10,
+								message:'姓名最多10个字符！'
 							}]
 						})(
 							<Input placeholder='请输入姓名'/>
@@ -169,15 +178,11 @@ class CreateUser extends Component {
 	}
 }
 
-CreateUser.defaultProps = {
-	loading: false
-}
-
 CreateUser.propTypes = {
 	groups: PropTypes.array.isRequired,
-	loading: PropTypes.bool.isRequired,
-	onSubmit: PropTypes.func.isRequired,
 	onCancel: PropTypes.func.isRequired
 }
 
-export default Form.create()(CreateUser)
+export default connect(state => state, {
+	'submit': user.create.bind(user)
+})(Form.create()(CreateUser))

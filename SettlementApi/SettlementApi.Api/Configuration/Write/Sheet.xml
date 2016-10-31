@@ -57,4 +57,9 @@
           )
   ]]>
   </command>
+  <command name="Sheet.Update" type="text" connection="local">
+    <![CDATA[
+    UPDATE TOP(1) dbo.Sheet SET [CustomName]=@CustomName,[Contacts]=@Contacts,[Phone]=@Phone,[QQ]=@QQ,[WeiXin]=@WeiXin,[Address]=@Address,[TimeFrom]=@TimeFrom,[TimeTo]=@TimeTo,[Base]=@Base,[People]=@People,[Days]=@Days,[Source]=@Source,[TotalPrice]=@TotalPrice,[UnitPrice]=@UnitPrice,[CostPrice]=@CostPrice,[ReceivedMoney]=@ReceivedMoney,[RemainingMoney]=@RemainingMoney,[Remark]=@Remark,[LastModifyTime]=GETDATE(),[LastModifyUser]=@LastModifyUser WHERE [ID]=@ID
+  ]]>
+  </command>
 </commands>

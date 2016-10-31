@@ -4,15 +4,17 @@ using SettlementApi.Common.Mapper;
 using SettlementApi.Write.BusCommand.SheetModule;
 using SettlementApi.Write.Model;
 using SettlementApi.Write.Model.Enums;
+using SettlementApi.Write.BusinessLogic.Resource;
 
 namespace SettlementApi.Write.BusinessLogic
 {
     public class SheetBusinessLogic: BusinessLogicBase<Sheet>,
-        ICommandBus<CreateSheetCommand>
+        ICommandBus<CreateSheetCommand>,
+        ICommandBus<UpdateSheetCommand>
     {
         public override Sheet GetEntity(Guid id)
         {
-            throw new NotImplementedException();
+            return GetEntity("Sheet.GetByID", new { ID = id });
         }
 
         public void Execute(CreateSheetCommand command)
@@ -30,11 +32,30 @@ namespace SettlementApi.Write.BusinessLogic
             Create("Sheet.Create",sheet);
         }
 
+        public void Execute(UpdateSheetCommand command)
+        {
+            var oldSheet = GetEntity(command.ID);
+            if (oldSheet == null)
+            {
+                throw new BussinessException(CommonRes.InvalidOperation);
+            }
+            var newSheet = MapperHelper.Map<UpdateSheetCommand, Sheet>(command);
+            newSheet.Days = newSheet.TimeTo.Subtract(newSheet.TimeFrom).Days;
+            newSheet.UnitPrice = Math.Round(newSheet.TotalPrice / newSheet.People);
+            newSheet.RemainingMoney = newSheet.TotalPrice - oldSheet.ReceivedMoney;
+            newSheet.LastModifyUser = ServiceContext.OperatorID;
+            Update("Sheet.Update", newSheet);
+        }
+
         public void Receive(ICommand command)
         {
             if (command.GetType()==typeof(CreateSheetCommand))
             {
                 Execute((CreateSheetCommand)command);
+            }
+            else if (command.GetType() == typeof(UpdateSheetCommand))
+            {
+                Execute((UpdateSheetCommand)command);
             }
         }
 

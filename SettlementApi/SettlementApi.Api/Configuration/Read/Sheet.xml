@@ -18,4 +18,40 @@ FROM    [dbo].[Sheet] AS S
 		LEFT JOIN dbo.[Dictionary] AS D ON S.Base=D.ID WHERE S.[Deleted]=0 
   ]]>
   </command>
+  <command name="Sheet.Query.GetByID" type="text" connection="local">
+    <![CDATA[
+SELECT TOP 1 [ID]
+      ,[CustomName]
+      ,[Contacts]
+      ,[Phone]
+      ,[QQ]
+      ,[WeiXin]
+      ,[Address]
+      ,[TimeFrom] AS DTimeFrom
+      ,[TimeTo] AS DTimeTo
+      ,[Base]
+      ,[People]
+      ,[Source]
+      ,[TotalPrice]
+      ,[UnitPrice]
+      ,[CostPrice]
+      ,[Remark]
+  FROM [dbo].[Sheet] WHERE [ID]=@ID
+  ]]>
+  </command>
+  <command name="Sheet.GetByID" type="text" connection="local">
+    <![CDATA[
+SELECT TOP 1 [ID]
+      ,[TimeFrom]
+      ,[TimeTo]
+      ,[Base]
+      ,[People]
+      ,[Source]
+      ,[TotalPrice]
+      ,[UnitPrice]
+      ,[CostPrice]
+      ,[ReceivedMoney]
+  FROM [dbo].[Sheet] WHERE [ID]=@ID
+  ]]>
+  </command>
 </commands>

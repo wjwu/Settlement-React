@@ -8,6 +8,11 @@ class SheetAction extends ActionBase {
 	constructor() {
 		super(API_PATH, MODULE_NAME, actionTypes)
 	}
+	get(id) {
+		return dispatch => {
+			super.get(dispatch, id)
+		}
+	}
 
 	query(request) {
 		return dispatch => {
@@ -28,4 +33,4 @@ class SheetAction extends ActionBase {
 	}
 }
 
-export default SheetAction
+export default new SheetAction()

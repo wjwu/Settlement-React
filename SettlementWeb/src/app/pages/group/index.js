@@ -23,10 +23,8 @@ import UpdateGroup from './busComponents/UpdateGroup'
 import CreateUser from './busComponents/CreateUser'
 import UpdateUser from './busComponents/UpdateUser'
 
-import GroupAction from '../../actions/Group'
-const group = new GroupAction()
-import UserAction from '../../actions/User'
-const user = new UserAction()
+import group from '../../actions/Group'
+import user from '../../actions/User'
 
 import genColumns from './columns'
 
@@ -130,10 +128,6 @@ class Group extends Component {
 		}
 	}
 
-	submit(type, data) {
-		this.props[type](data)
-	}
-
 	render() {
 		let groupProps = this.props.group
 		let userProps = this.props.user
@@ -146,8 +140,8 @@ class Group extends Component {
 		} = this.state
 
 		let groups = []
-		if (groupProps.result && groupProps.result.List) {
-			const loop = (parentId) => groupProps.result.List.filter(item => item.ParentID === parentId).map(item => {
+		if (groupProps.results && groupProps.results.List) {
+			const loop = (parentId) => groupProps.results.List.filter(item => item.ParentID === parentId).map(item => {
 				item.children = loop(item.ID)
 				return item
 			})
@@ -156,10 +150,10 @@ class Group extends Component {
 		}
 
 		let totalCount = 0
-		if (userProps.result) {
-			totalCount = userProps.result.TotalCount
+		if (userProps.results) {
+			totalCount = userProps.results.TotalCount
 		}
-		let users = totalCount > 0 ? userProps.result.List : []
+		let users = totalCount > 0 ? userProps.results.List : []
 
 		const columns = genColumns(raw => {
 			this.selectedUser = raw
@@ -169,13 +163,13 @@ class Group extends Component {
 
 		let modal
 		if (createGroupVisible) {
-			modal = <CreateGroup onSubmit={this.submit.bind(this,createGroup)} loading={groupProps.creating} onCancel={this.hideModal.bind(this,createGroup)} groups={groups}/>
+			modal = <CreateGroup onCancel={this.hideModal.bind(this,createGroup)} groups={groups}/>
 		} else if (createUserVisible) {
-			modal = <CreateUser onSubmit={this.submit.bind(this,createUser)} loading={userProps.creating} onCancel={this.hideModal.bind(this,createUser)} groups={groups} />
+			modal = <CreateUser onCancel={this.hideModal.bind(this,createUser)} groups={groups} />
 		} else if (updateGroupVisible) {
-			modal = <UpdateGroup onSubmit={this.submit.bind(this,updateGroup)} loading={groupProps.updating} onCancel={this.hideModal.bind(this,updateGroup)} group={this.selectedNode||{}} />
+			modal = <UpdateGroup onCancel={this.hideModal.bind(this,updateGroup)} data={this.selectedNode||{}} />
 		} else if (updateUserVisible) {
-			modal = <UpdateUser onSubmit={this.submit.bind(this,updateUser)} loading={userProps.updating} onCancel={this.hideModal.bind(this,updateUser)} groups={groups} user={selectedUser}/>
+			modal = <UpdateUser onCancel={this.hideModal.bind(this,updateUser)} groups={groups} data={selectedUser}/>
 		}
 		return (
 			<TMainContainer>
@@ -192,10 +186,12 @@ class Group extends Component {
 				</Row>
 				<Row gutter={24}>
 					<TCol xs={24} sm={7} md={7} lg={6}>
-						<TTree title='部门结构' loading={groupProps.getting} data={groups} onSelect={this.onTTreeSelect}/>
+						<TTree title='部门结构' loading={groupProps.querying} data={groups} onSelect={this.onTTreeSelect}/>
 					</TCol>
 					<TCol xs={24} sm={17} md={17} lg={18}>
-						<TTable title='用户数据' columns={columns} total={totalCount} data={users} loading={userProps.getting} onLoad={this.onTTableLoad}/>
+						<TCard title='用户数据'>
+							<TTable columns={columns} total={totalCount} dataSource={users} loading={userProps.querying} onLoad={this.onTTableLoad}/>
+						</TCard>
 					</TCol>
 				</Row>
 			</TMainContainer>
@@ -205,10 +201,6 @@ class Group extends Component {
 
 export default connect(state => state, {
 	'queryGroup': group.query.bind(group),
-	[createGroup]: group.create.bind(group),
-	[updateGroup]: group.update.bind(group),
 	'delGroup': group.del.bind(group),
 	'queryUser': user.query.bind(user),
-	[createUser]: user.create.bind(user),
-	[updateUser]: user.update.bind(user)
 })(TMsgContainer()(Group))

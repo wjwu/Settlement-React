@@ -31,6 +31,22 @@ class ReducerBase {
 				return {
 					...state
 				}
+			case this.actionTypes[`BEGIN_QUERY_${this.moduleName}`]:
+				return {
+					...state,
+					querying: true
+				}
+			case this.actionTypes[`END_QUERY_${this.moduleName}`]:
+				delete state.querying
+				return {
+					...state,
+					results: action.result
+				}
+			case this.actionTypes[`ERROR_QUERY_${this.moduleName}`]:
+				delete state.querying
+				return {
+					...state
+				}
 			case this.actionTypes[`BEGIN_CREATE_${this.moduleName}`]:
 				return {
 					...state,

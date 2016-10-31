@@ -10,11 +10,11 @@ class ActionBase {
 		this.actionTypes = actionTypes
 	}
 
-	query(dispatch, request) {
+	get(dispatch, id) {
 		dispatch({
 			type: this.actionTypes[`BEGIN_GET_${this.moduleName}`]
 		})
-		apiClient.get(this.apiPath, request).then(result => {
+		apiClient.get(`${this.apiPath}/${id}`).then(result => {
 			dispatch({
 				type: this.actionTypes[`END_GET_${this.moduleName}`],
 				result: result
@@ -22,6 +22,27 @@ class ActionBase {
 		}, error => {
 			dispatch({
 				type: this.actionTypes[`ERROR_GET_${this.moduleName}`]
+			})
+			dispatch({
+				type: SHOW_MESSAGE,
+				msgType: 'error',
+				msg: error
+			})
+		})
+	}
+
+	query(dispatch, request) {
+		dispatch({
+			type: this.actionTypes[`BEGIN_QUERY_${this.moduleName}`]
+		})
+		apiClient.get(this.apiPath, request).then(result => {
+			dispatch({
+				type: this.actionTypes[`END_QUERY_${this.moduleName}`],
+				result: result
+			})
+		}, error => {
+			dispatch({
+				type: this.actionTypes[`ERROR_QUERY_${this.moduleName}`]
 			})
 			dispatch({
 				type: SHOW_MESSAGE,

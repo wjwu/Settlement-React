@@ -6,8 +6,18 @@ using SettlementApi.Read.QueryCommand.SheetModule;
 
 namespace SettlementApi.Read.Respository
 {
-    public class QuerySheet : BaseRRespository, ICommandBus<QuerySheetCommand, BasePagingCommandResult<RQuerySheet>>
+    public class QuerySheet : BaseRRespository, ICommandBus<QuerySheetCommand, BasePagingCommandResult<RQuerySheet>>,
+        ICommandBus<GetByIDCommand,GetSheetCommandResult>
     {
+        public GetSheetCommandResult Execute(GetByIDCommand command)
+        {
+            var result = GetByID<GetSheetCommandResult>("Sheet.Query.GetByID", new
+            {
+                command.ID
+            });
+            return result;
+        }
+
         public BasePagingCommandResult<RQuerySheet> Execute(QuerySheetCommand command)
         {
             return QueryPaging<EQuerySheet, RQuerySheet, QuerySheetCommand>("Sheet.Query", command);
@@ -22,6 +32,8 @@ namespace SettlementApi.Read.Respository
         {
             if (command.GetType() == typeof(QuerySheetCommand))
                 return Execute((QuerySheetCommand) command);
+            if (command.GetType() == typeof(GetByIDCommand))
+                return Execute((GetByIDCommand)command);
             return null;
         }
     }

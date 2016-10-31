@@ -28,4 +28,4 @@ class DictionaryAction extends ActionBase {
 	}
 }
 
-export default DictionaryAction
+export default new DictionaryAction()

@@ -14,8 +14,10 @@ import {
 	Row,
 	Col,
 	InputNumber,
-	DatePicker
+	DatePicker,
+	Spin
 } from 'antd'
+import moment from 'moment'
 
 const Option = Select.Option
 const FormItem = Form.Item
@@ -23,7 +25,6 @@ const RadioGroup = Radio.Group
 const RangePicker = DatePicker.RangePicker
 
 import dictionary from '../../../../actions/Dictionary'
-
 import sheet from '../../../../actions/Sheet'
 
 const disabledDate = current => {
@@ -57,7 +58,7 @@ const disabledTime = (time, type) => {
 	}
 }
 
-class CreateSheet extends Component {
+class UpdateSheet extends Component {
 	constructor(prop) {
 		super(prop)
 		this.submit = this.submit.bind(this)
@@ -66,11 +67,17 @@ class CreateSheet extends Component {
 	}
 
 	componentDidMount() {
-		this.props.queryDictionary({
+		const {
+			queryDictionary,
+			getSheet,
+			id
+		} = this.props
+		queryDictionary({
 			type: 'base',
 			pageIndex: 1,
 			pageSize: 999
 		})
+		getSheet(id)
 	}
 
 	submit() {
@@ -97,6 +104,7 @@ class CreateSheet extends Component {
 				let costPrice = getFieldValue('costPrice')
 				let remark = getFieldValue('remark')
 				this.props.submit({
+					id: this.props.sheet.result.ID,
 					customName,
 					contacts,
 					phone,
@@ -141,7 +149,9 @@ class CreateSheet extends Component {
 			getFieldProps
 		} = this.props.form
 		const {
-			creating
+			getting,
+			updating,
+			result
 		} = this.props.sheet
 
 		const formItemLayout = {
@@ -159,14 +169,22 @@ class CreateSheet extends Component {
 				return <Option key={item.ID} value={item.ID}>{item.Name}</Option>
 			})
 		}
+		if (!result) {
+			return (
+				<Modal title='修改结算表' visible={true} width={800} onCancel={this.cancel}>
+					<Spin tip='Loading...'/>
+				</Modal>
+			)
+		}
 		return (
-			<Modal title='新增结算表' visible={true} width={800} confirmLoading={creating} onOk={this.submit} onCancel={this.cancel}>
+			<Modal title='修改结算表' visible={true} width={800} confirmLoading={updating} onOk={this.submit} onCancel={this.cancel}>
 				<Form>
 					<Row>
 						<Col xs={12}>
 							<FormItem {...formItemLayout} label='客户名称'>
 								{
 									getFieldDecorator('customName',{
+										initialValue:result.CustomName,
 										rules:[{
 												required:true,
 												whitespace:true,
@@ -182,7 +200,7 @@ class CreateSheet extends Component {
 						</Col>
 						<Col xs={12}>
 							<FormItem {...formItemLayout} label='培训基地'>
-					 			<Select placeholder='请选择培训基地' {...getFieldProps('base',{rules:[{required:true,message:'请选择培训基地！'}]})}>
+					 			<Select placeholder='请选择培训基地' {...getFieldProps('base',{initialValue:result.Base,rules:[{required:true,message:'请选择培训基地！'}]})}>
 						            {bases}
 					          	</Select>
 				          	</FormItem>
@@ -193,6 +211,7 @@ class CreateSheet extends Component {
 							<FormItem {...formItemLayout} label='联系人'>
 								{
 									getFieldDecorator('contacts',{
+										initialValue:result.Contacts,
 										rules:[{
 												required:true,
 												whitespace:true,
@@ -208,7 +227,7 @@ class CreateSheet extends Component {
 						</Col>
 						<Col xs={12}>
 							<FormItem {...formItemLayout} label='培训时间'>
-								<RangePicker {...getFieldProps('times',{rules:[{required:true,type:'array',message:'请选择培训时间！'}]})} format='YYYY-MM-DD' disabledDate={disabledDate} disabledTime={disabledTime}/>
+								<RangePicker {...getFieldProps('times',{initialValue:[moment(result.TimeFrom, 'YYYY-MM-DD'),moment(result.TimeTo, 'YYYY-MM-DD')],rules:[{required:true,type:'array',message:'请选择培训时间！'}]})} format='YYYY-MM-DD' disabledDate={disabledDate} disabledTime={disabledTime}/>
 							</FormItem>
 						</Col>
 					</Row>
@@ -217,6 +236,7 @@ class CreateSheet extends Component {
 							<FormItem {...formItemLayout} label='手机号码'>
 								{
 									getFieldDecorator('phone',{
+										initialValue:result.Phone,
 										rules:[{
 												required:true,
 												whitespace:true,
@@ -233,7 +253,7 @@ class CreateSheet extends Component {
 							<FormItem {...formItemLayout} label='培训人数'>
 								{
 									getFieldDecorator('people',{
-										initialValue:0,
+										initialValue:result.People,
 										rules:[{required:true},{
 												range:true,
 												min:1,
@@ -249,7 +269,9 @@ class CreateSheet extends Component {
 						<Col xs={12}>
 							<FormItem {...formItemLayout} label='QQ'>
 								{
-									getFieldDecorator('qq')(<Input/>)
+									getFieldDecorator('qq',{
+										initialValue:result.QQ,
+									})(<Input/>)
 								}
 							</FormItem>
 						</Col>
@@ -257,7 +279,7 @@ class CreateSheet extends Component {
 							<FormItem {...formItemLayout} label='总成交额'>
 								{
 									getFieldDecorator('totalPrice',{
-										initialValue:0,
+										initialValue:result.TotalPrice,
 										rules:[{required:true},{
 												range:true,
 												min:1,
@@ -273,14 +295,18 @@ class CreateSheet extends Component {
 						<Col xs={12}>
 							<FormItem {...formItemLayout} label='微信'>
 								{
-									getFieldDecorator('weixin')(<Input/>)
+									getFieldDecorator('weixin',{
+										initialValue:result.WeiXin
+									})(<Input/>)
 								}
 							</FormItem>
 						</Col>
 						<Col xs={12}>
 							<FormItem {...formItemLayout} label='均价'>
 								{
-									getFieldDecorator('unitPrice',{initialValue:0})(<InputNumber disabled min={0}/>)
+									getFieldDecorator('unitPrice',{
+										initialValue:result.UnitPrice
+									})(<InputNumber disabled min={0}/>)
 								}
 							</FormItem>
 						</Col>
@@ -289,7 +315,9 @@ class CreateSheet extends Component {
 						<Col xs={12}>
 							<FormItem {...formItemLayout} label='客户地址'>
 								{
-									getFieldDecorator('address')(<Input/>)
+									getFieldDecorator('address',{
+										initialValue:result.Address
+									})(<Input/>)
 								}
 							</FormItem>
 						</Col>
@@ -297,7 +325,7 @@ class CreateSheet extends Component {
 							<FormItem {...formItemLayout} label='总成本'>
 								{
 									getFieldDecorator('costPrice',{
-										initialValue:0,
+										initialValue:result.CostPrice,
 										rules:[{required:true},{
 												range:true,
 												min:1,
@@ -313,7 +341,7 @@ class CreateSheet extends Component {
 						<Col xs={12}>
 							<FormItem {...formItemLayout} label='客户来源'>
 								{
-									getFieldDecorator('source',{initialValue:'EC95F7AA-2448-472E-A429-7EAD93360226'})
+									getFieldDecorator('source',{initialValue:result.Source.toUpperCase()})
 									(
 										<RadioGroup>
 									        <Radio value='EC95F7AA-2448-472E-A429-7EAD93360226'>电话开发</Radio>
@@ -330,7 +358,9 @@ class CreateSheet extends Component {
 						<Col xs={12}>
 							<FormItem {...formItemLayout} label='备注'>
 								{
-									getFieldDecorator('remark')(<Input type='textarea' rows={4}/>)
+									getFieldDecorator('remark',{
+										initialValue:result.Remark,
+									})(<Input type='textarea' rows={4}/>)
 								}
 							</FormItem>
 						</Col>
@@ -341,11 +371,13 @@ class CreateSheet extends Component {
 	}
 }
 
-CreateSheet.propTypes = {
+UpdateSheet.propTypes = {
+	id: PropTypes.string.isRequired,
 	onCancel: PropTypes.func.isRequired
 }
 
 export default connect(state => state, {
 	'queryDictionary': dictionary.query.bind(dictionary),
-	'submit': sheet.create.bind(sheet)
-})(Form.create()(CreateSheet))
+	'getSheet': sheet.get.bind(sheet),
+	'submit': sheet.update.bind(sheet)
+})(Form.create()(UpdateSheet))

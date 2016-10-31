@@ -17,11 +17,7 @@ let pagination = {
 class TTable extends Component {
 	render() {
 		const {
-			title,
-			columns,
-			loading,
 			total,
-			data,
 			onLoad
 		} = this.props
 
@@ -31,25 +27,14 @@ class TTable extends Component {
 		}
 
 		return (
-			<TCard title={title}>
-				<Table columns={columns} dataSource={data} pagination={pagination} loading={loading}/>
-			</TCard>
+			<Table {...this.props}/>
 		)
 	}
 }
 
-TTable.defaultProps = {
-	columns: [],
-	data: []
-}
-
 TTable.propTypes = {
-	title: PropTypes.string,
-	columns: PropTypes.array,
-	loading: PropTypes.bool,
-	total: PropTypes.number,
-	data: PropTypes.array,
-	onLoad: PropTypes.func
+	total: PropTypes.number.isRequired,
+	onLoad: PropTypes.func.isRequired
 }
 
 export default TTable

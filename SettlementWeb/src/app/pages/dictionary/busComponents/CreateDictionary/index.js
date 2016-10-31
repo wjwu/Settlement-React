@@ -3,6 +3,9 @@ import React, {
 	PropTypes
 } from 'react'
 import {
+	connect
+} from 'react-redux'
+import {
 	Modal,
 	Form,
 	Input,
@@ -10,6 +13,8 @@ import {
 	Radio,
 	InputNumber
 } from 'antd'
+
+import dictionary from '../../../../actions/Dictionary'
 
 const Option = Select.Option
 const FormItem = Form.Item
@@ -34,7 +39,7 @@ class CreateDictionay extends Component {
 				let name = getFieldValue('name')
 				let rank = getFieldValue('rank')
 				let enabled = getFieldValue('enabled')
-				this.props.onSubmit({
+				this.props.submit({
 					type,
 					name,
 					rank,
@@ -55,10 +60,7 @@ class CreateDictionay extends Component {
 			getFieldProps
 		} = this.props.form
 
-		const {
-			visible,
-			loading
-		} = this.props
+		const creating = this.props.dictionary.creating
 
 		const formItemLayout = {
 			labelCol: {
@@ -70,7 +72,7 @@ class CreateDictionay extends Component {
 		}
 
 		return (
-			<Modal title='新增字典' visible={true} width={500} confirmLoading={loading} onOk={this.submit} onCancel={this.cancel}>
+			<Modal title='新增字典' visible={true} width={500} confirmLoading={creating} onOk={this.submit} onCancel={this.cancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='字典类型'>
 			 			<Select placeholder='请选择字典类型' {...getFieldProps('type',{rules:[{required:true,message:'请选择字典类型！'}]})}>
@@ -86,6 +88,10 @@ class CreateDictionay extends Component {
 									required:true,
 									whitespace:true,
 									message:'请输入字典名称！'
+								},{
+									length:true,
+									max:100,
+									message:'字典名称最多100个字符！'
 								}]
 							})(<Input placeholder='请输入字典名称'/>)
 					}
@@ -115,14 +121,10 @@ class CreateDictionay extends Component {
 	}
 }
 
-CreateDictionay.defaultProps = {
-	loading: false
-}
-
 CreateDictionay.propTypes = {
-	loading: PropTypes.bool.isRequired,
-	onSubmit: PropTypes.func.isRequired,
 	onCancel: PropTypes.func.isRequired
 }
 
-export default Form.create()(CreateDictionay)
+export default connect(state => state, {
+	'submit': dictionary.create.bind(dictionary)
+})(Form.create()(CreateDictionay))

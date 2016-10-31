@@ -7,6 +7,8 @@ using SettlementApi.Api.Resource;
 using SettlementApi.CommandBus;
 using SettlementApi.Read.QueryCommand.SheetModule;
 using SettlementApi.Write.BusCommand.SheetModule;
+using System;
+using SettlementApi.Read.QueryCommand;
 
 namespace SettlementApi.Api.Apis
 {
@@ -14,6 +16,16 @@ namespace SettlementApi.Api.Apis
     {
         private const string BusName = "SheetBusinessLogic";
         private const string ReadName = "QuerySheet";
+
+        [HttpGet]
+        [Route("api/sheet/{id:guid}")]
+        public ICommandResult Query(Guid id)
+        {
+            return CommandService.SendEx(new GetByIDCommand
+            {
+                ID = id
+            }, ReadName);
+        }
 
         [HttpGet]
         [Route("api/sheet")]
@@ -33,6 +45,15 @@ namespace SettlementApi.Api.Apis
             };
         }
 
-
+        [HttpPut]
+        [Route("api/sheet")]
+        public HttpResponseMessage Update([FromBody] UpdateSheetCommand request)
+        {
+            CommandService.Send(request, BusName);
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(new ResponseMessage(CommonRes.Success).ToJson())
+            };
+        }
     }
 }

@@ -3,6 +3,9 @@ import React, {
 	PropTypes
 } from 'react'
 import {
+	connect
+} from 'react-redux'
+import {
 	Modal,
 	Form,
 	Input,
@@ -10,6 +13,8 @@ import {
 	Radio,
 	InputNumber
 } from 'antd'
+
+import dictionary from '../../../../actions/Dictionary'
 
 const Option = Select.Option
 const FormItem = Form.Item
@@ -34,8 +39,8 @@ class UpdateDictionay extends Component {
 				let name = getFieldValue('name')
 				let rank = getFieldValue('rank')
 				let enabled = getFieldValue('enabled')
-				this.props.onSubmit({
-					id: this.props.dictionary.ID,
+				this.props.submit({
+					id: this.props.data.ID,
 					type,
 					name,
 					rank,
@@ -56,11 +61,8 @@ class UpdateDictionay extends Component {
 			getFieldProps
 		} = this.props.form
 
-		const {
-			visible,
-			loading,
-			dictionary
-		} = this.props
+		const dictionary = this.props.data
+		const updating = this.props.dictionary.updating
 
 		const formItemLayout = {
 			labelCol: {
@@ -72,7 +74,7 @@ class UpdateDictionay extends Component {
 		}
 
 		return (
-			<Modal title='新增字典' visible={true} width={500} confirmLoading={loading} onOk={this.submit} onCancel={this.cancel}>
+			<Modal title='新增字典' visible={true} width={500} confirmLoading={updating} onOk={this.submit} onCancel={this.cancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='字典类型'>
 			 			<Select placeholder='请选择字典类型' {...getFieldProps('type',{initialValue:dictionary.Type,rules:[{required:true,message:'请选择字典类型！'}]})}>
@@ -89,6 +91,10 @@ class UpdateDictionay extends Component {
 									required:true,
 									whitespace:true,
 									message:'请输入字典名称！'
+								},{
+									length:true,
+									max:100,
+									message:'字典名称最多100个字符！'
 								}]
 							})(<Input placeholder='请输入字典名称'/>)
 					}
@@ -118,15 +124,12 @@ class UpdateDictionay extends Component {
 	}
 }
 
-UpdateDictionay.defaultProps = {
-	loading: false
-}
 
 UpdateDictionay.propTypes = {
-	dictionary: PropTypes.object.isRequired,
-	loading: PropTypes.bool.isRequired,
-	onSubmit: PropTypes.func.isRequired,
+	data: PropTypes.object.isRequired,
 	onCancel: PropTypes.func.isRequired
 }
 
-export default Form.create()(UpdateDictionay)
+export default connect(state => state, {
+	'submit': dictionary.update.bind(dictionary)
+})(Form.create()(UpdateDictionay))

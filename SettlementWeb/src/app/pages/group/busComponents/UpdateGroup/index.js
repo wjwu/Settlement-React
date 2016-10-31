@@ -3,10 +3,14 @@ import React, {
 	PropTypes
 } from 'react'
 import {
+	connect
+} from 'react-redux'
+import {
 	Modal,
 	Form,
 	Input
 } from 'antd'
+import group from '../../../../actions/Group'
 
 const FormItem = Form.Item
 
@@ -26,8 +30,8 @@ class UpdateGroup extends Component {
 		validateFields((errors, values) => {
 			if (!errors) {
 				let name = getFieldValue('name')
-				this.props.onSubmit({
-					id: this.props.group.key,
+				this.props.submit({
+					id: this.props.data.key,
 					name
 				})
 			}
@@ -39,14 +43,8 @@ class UpdateGroup extends Component {
 	}
 
 	render() {
-		const {
-			getFieldDecorator
-		} = this.props.form
-
-		const {
-			visible,
-			loading
-		} = this.props
+		const getFieldDecorator = this.props.form.getFieldDecorator
+		const updating = this.props.group.updating
 
 		const formItemLayout = {
 			labelCol: {
@@ -58,16 +56,20 @@ class UpdateGroup extends Component {
 		}
 
 		return (
-			<Modal title='修改部门' visible={true} width={500} confirmLoading={loading} onOk={this.submit} onCancel={this.cancel}>
+			<Modal title='修改部门' visible={true} width={500} confirmLoading={updating} onOk={this.submit} onCancel={this.cancel}>
 				<Form>
 					<FormItem hasFeedback {...formItemLayout} label='部门名称'>
 					{
 						getFieldDecorator('name',{
-							initialValue:this.props.group.title,
+							initialValue:this.props.data.title,
 							rules:[{
 								required:true,
 								whitespace:true,
 								message:'请输入部门名称！'
+							},{
+								length:true,
+								max:50,
+								message:'部门名称最多50个字符！'
 							}]
 						})(
 							<Input placeholder='请输入部门名称'/>
@@ -80,15 +82,12 @@ class UpdateGroup extends Component {
 	}
 }
 
-UpdateGroup.defaultProps = {
-	loading: false
-}
 
 UpdateGroup.propTypes = {
-	loading: PropTypes.bool.isRequired,
-	group: PropTypes.object.isRequired,
-	onSubmit: PropTypes.func.isRequired,
+	data: PropTypes.object.isRequired,
 	onCancel: PropTypes.func.isRequired
 }
 
-export default Form.create()(UpdateGroup)
+export default connect(state => state, {
+	'submit': group.update.bind(group)
+})(Form.create()(UpdateGroup))

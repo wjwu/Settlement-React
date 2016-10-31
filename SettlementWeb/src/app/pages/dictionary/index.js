@@ -7,8 +7,7 @@ import {
 import {
 	Row,
 	Tabs,
-	Button,
-	Modal
+	Button
 } from 'antd'
 
 import TMainContainer from '../../../components/TMainContainer'
@@ -20,8 +19,7 @@ import TTable from '../../../components/TTable'
 import CreateDictionary from './busComponents/CreateDictionary'
 import UpdateDictionary from './busComponents/UpdateDictionary'
 
-import DictionaryAction from '../../actions/Dictionary'
-const dictionary = new DictionaryAction()
+import dictionary from '../../actions/Dictionary'
 
 import genColumns from './columns'
 
@@ -44,7 +42,7 @@ class Dictionary extends Component {
 				type: DICTIONARY_BASE,
 				pageIndex: 1
 			},
-			getting: false,
+			querying: false,
 			totalCount: 0,
 			data: []
 		}
@@ -53,7 +51,7 @@ class Dictionary extends Component {
 				type: DICTIONARY_SOURCE,
 				pageIndex: 1
 			},
-			getting: false,
+			querying: false,
 			totalCount: 0,
 			data: []
 		}
@@ -62,7 +60,7 @@ class Dictionary extends Component {
 				type: DICTIONARY_COST,
 				pageIndex: 1
 			},
-			getting: false,
+			querying: false,
 			totalCount: 0,
 			data: []
 		}
@@ -103,16 +101,12 @@ class Dictionary extends Component {
 		})
 	}
 
-	submit(type, data) {
-		this.props[type](data)
-	}
-
 	render() {
 		const {
-			getting,
+			querying,
 			creating,
 			updating,
-			result
+			results
 		} = this.props.dictionary
 		const {
 			createDictionary: createDicVisible,
@@ -127,20 +121,20 @@ class Dictionary extends Component {
 
 		let data = []
 		let totalCount = 0
-		if (result && result.TotalCount > 0) {
-			totalCount = result.TotalCount
-			data = result.List
+		if (results && results.TotalCount > 0) {
+			totalCount = results.TotalCount
+			data = results.List
 		}
 
 		this[this.selectedTab].data = data
 		this[this.selectedTab].totalCount = totalCount
-		this[this.selectedTab].getting = getting
+		this[this.selectedTab].querying = querying
 
 		let modal
 		if (createDicVisible) {
-			modal = <CreateDictionary loading={creating} onSubmit={this.submit.bind(this,createDictionary)} onCancel={this.hideModal.bind(this,createDictionary)}/>
+			modal = <CreateDictionary onCancel={this.hideModal.bind(this,createDictionary)}/>
 		} else if (updateDicVisible) {
-			modal = <UpdateDictionary loading={updating} onSubmit={this.submit.bind(this,updateDictionary)} onCancel={this.hideModal.bind(this,updateDictionary)} dictionary={this.selectedDic}/>
+			modal = <UpdateDictionary onCancel={this.hideModal.bind(this,updateDictionary)} data={this.selectedDic}/>
 		}
 		return (
 			<TMainContainer>
@@ -157,13 +151,13 @@ class Dictionary extends Component {
 						<TCard>
 					        <Tabs tabPosition='left' onChange={this.onTabChange.bind(this)}>
 					          <TabPane tab='培训基地' key={DICTIONARY_BASE}>
-					          	<TTable title='培训基地' columns={columns} loading={this[DICTIONARY_BASE].getting} total={this[DICTIONARY_BASE].totalCount} data={this[DICTIONARY_BASE].data} onLoad={this.onTTableLoad.bind(this)}/>
+					          	<TTable columns={columns} loading={this[DICTIONARY_BASE].querying} total={this[DICTIONARY_BASE].totalCount} dataSource={this[DICTIONARY_BASE].data} onLoad={this.onTTableLoad.bind(this)}/>
 					          </TabPane>
 					          <TabPane tab='客户来源' key={DICTIONARY_SOURCE}>
-					          	<TTable title='客户来源' columns={columns} loading={this[DICTIONARY_SOURCE].getting} total={this[DICTIONARY_SOURCE].totalCount} data={this[DICTIONARY_SOURCE].data} onLoad={this.onTTableLoad.bind(this)}/>
+					          	<TTable columns={columns} loading={this[DICTIONARY_SOURCE].querying} total={this[DICTIONARY_SOURCE].totalCount} dataSource={this[DICTIONARY_SOURCE].data} onLoad={this.onTTableLoad.bind(this)}/>
 					          </TabPane>
 					          <TabPane tab='结算类型' key={DICTIONARY_COST}>
-					          	<TTable title='结算类型' columns={columns} loading={this[DICTIONARY_COST].getting} total={this[DICTIONARY_COST].totalCount} data={this[DICTIONARY_COST].data} onLoad={this.onTTableLoad.bind(this)}/>
+					          	<TTable columns={columns} loading={this[DICTIONARY_COST].querying} total={this[DICTIONARY_COST].totalCount} dataSource={this[DICTIONARY_COST].data} onLoad={this.onTTableLoad.bind(this)}/>
 					          </TabPane>
 					        </Tabs>
 						</TCard>
@@ -175,7 +169,5 @@ class Dictionary extends Component {
 }
 
 export default connect(state => state, {
-	'queryDictionary': dictionary.query.bind(dictionary),
-	[createDictionary]: dictionary.create.bind(dictionary),
-	[updateDictionary]: dictionary.update.bind(dictionary)
+	'queryDictionary': dictionary.query.bind(dictionary)
 })(TMsgContainer()(Dictionary))

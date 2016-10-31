@@ -10,6 +10,8 @@ namespace SettlementApi.Read.QueryCommand.SheetModule
 
         private string _payStatus;
 
+        public Guid ID { get; set; }
+
         public string CustomName { get; set; }
 
         public string Base { get; set; }

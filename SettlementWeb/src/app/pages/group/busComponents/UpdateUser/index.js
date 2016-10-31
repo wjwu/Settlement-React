@@ -3,6 +3,9 @@ import React, {
 	PropTypes
 } from 'react'
 import {
+	connect
+} from 'react-redux'
+import {
 	Modal,
 	Form,
 	Input,
@@ -12,6 +15,7 @@ import {
 } from 'antd'
 
 import TTreeSelect from '../../../../../components/TTreeSelect'
+import user from '../../../../actions/User'
 
 const FormItem = Form.Item
 const TreeNode = Tree.TreeNode
@@ -31,25 +35,19 @@ class UpdateUser extends Component {
 			validateFields,
 			getFieldValue
 		} = this.props.form
-		const {
-			onSubmit,
-			user
-		} = this.props
 
 		validateFields((errors, values) => {
 			if (!errors) {
 				let phone = getFieldValue('phone')
 				let name = getFieldValue('name')
 				let enabled = getFieldValue('enabled')
-				if (onSubmit) {
-					onSubmit({
-						id: user.ID,
-						phone,
-						name,
-						enabled,
-						group: this.selectedGroup
-					})
-				}
+				this.props.submit({
+					id: this.props.data.ID,
+					phone,
+					name,
+					enabled,
+					group: this.selectedGroup
+				})
 			}
 		})
 	}
@@ -68,21 +66,18 @@ class UpdateUser extends Component {
 	}
 
 	render() {
+		const getFieldDecorator = this.props.form.getFieldDecorator
+		const updating = this.props.user.updating
 		const {
-			getFieldDecorator
-		} = this.props.form
-
-		const {
-			visible,
 			groups,
-			loading,
-			user
+			data
 		} = this.props
-		this.selectedGroup = user.Group
+
+		this.selectedGroup = data.Group
 
 		let reset = <Button key='reset' type='ghost' size='large' onClick={this.reset}>重置</Button>
 		let cancel = <Button key='cancel' type='ghost' size='large' onClick={this.cancel}>取消</Button>
-		let ok = <Button key='submit' type='primary' size='large' loading={loading} onClick={this.submit}>确定</Button>
+		let ok = <Button key='submit' type='primary' size='large' loading={updating} onClick={this.submit}>确定</Button>
 
 		const formItemLayout = {
 			labelCol: {
@@ -96,19 +91,22 @@ class UpdateUser extends Component {
 			<Modal title='修改用户' visible={true} width={500} footer={[cancel,reset,ok]} onCancel={this.cancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='所属部门'>
-						<TTreeSelect value={user.Group} data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择所属部门' treeDefaultExpandAll onChange={this.change}/>
+						<TTreeSelect value={data.Group} data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择所属部门' treeDefaultExpandAll onChange={this.change}/>
 					</FormItem>
 					<FormItem {...formItemLayout} label='账号'>
-						<Input value={user.LoginID} disabled/>
+						<Input value={data.LoginID} disabled/>
 					</FormItem>
 					<FormItem hasFeedback {...formItemLayout} label='手机号码'>
 					{
 						getFieldDecorator('phone',{
-							initialValue:user.Phone,
+							initialValue:data.Phone,
 							rules:[{
 								required:true,
 								whitespace:true,
 								message:'请输入手机号码！'
+							},{
+								pattern:/^1[34578]\d{9}$/,
+								message:'手机号码格式不正确！'
 							}]
 						})(
 							<Input placeholder='请输入手机号码'/>
@@ -118,11 +116,15 @@ class UpdateUser extends Component {
 					<FormItem hasFeedback {...formItemLayout} label='姓名'>
 					{
 						getFieldDecorator('name',{
-							initialValue:user.Name,
+							initialValue:data.Name,
 							rules:[{
 								required:true,
 								whitespace:true,
 								message:'请输入姓名！'
+							},{
+								length:true,
+								max:10,
+								message:'姓名最多10个字符！'
 							}]
 						})(
 							<Input placeholder='请输入姓名'/>
@@ -132,7 +134,7 @@ class UpdateUser extends Component {
 					<FormItem {...formItemLayout} label='状态'>
 					{
 						getFieldDecorator('enabled',{
-							initialValue: user.hasOwnProperty('Enabled')?user.Enabled.toString():user.Enabled
+							initialValue: data.hasOwnProperty('Enabled')?data.Enabled.toString():data.Enabled
 						})(
 				            <RadioGroup>
 				              <Radio value='true'>启用</Radio>
@@ -147,17 +149,14 @@ class UpdateUser extends Component {
 	}
 }
 
-UpdateUser.defaultProps = {
-	loading: false
-}
 
 UpdateUser.propTypes = {
-	user: PropTypes.object.isRequired,
+	data: PropTypes.object.isRequired,
 	groups: PropTypes.array.isRequired,
-	loading: PropTypes.bool.isRequired,
-	onSubmit: PropTypes.func.isRequired,
 	onCancel: PropTypes.func.isRequired
 }
 
 
-export default Form.create()(UpdateUser)
+export default connect(state => state, {
+	'submit': user.update.bind(user)
+})(Form.create()(UpdateUser))

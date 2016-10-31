@@ -11,7 +11,13 @@ const processResponse = response => response.json()
 
 const processResult = (reject, resolve, result) => result.IsError ? reject(result.Message) : resolve(result)
 
-const processError = (reject, error) => reject(error)
+const processError = (reject, error) => {
+	if (typeof error == 'string' && error.constructor == String) {
+		reject(error)
+	} else {
+		reject(error.message)
+	}
+}
 
 const get = (url, request) => {
 	let requestUrl
@@ -49,7 +55,8 @@ const post = (url, request) => {
 const del = (url) => {
 	return new Promise((resolve, reject) => {
 		fetch(`${API_URL}${url}`, {
-				method: 'DELETE'
+				method: 'DELETE',
+				headers: headers,
 			}).then(processResponse)
 			.then(processResult.bind(null, reject, resolve))
 			.catch(processError.bind(null, reject))

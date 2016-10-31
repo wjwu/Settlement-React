@@ -6,8 +6,7 @@ import {
 } from 'react-redux'
 import {
 	Row,
-	Button,
-	Modal
+	Button
 } from 'antd'
 
 import TMainContainer from '../../../components/TMainContainer'
@@ -17,9 +16,10 @@ import TCard from '../../../components/TCard'
 import TTable from '../../../components/TTable'
 
 import CreateSheet from './busComponents/CreateSheet'
+import UpdateSheet from './busComponents/UpdateSheet'
+import SearchPanel from './busComponents/SearchPanel'
 
-import SheetAction from '../../actions/Sheet'
-const sheet = new SheetAction()
+import sheet from '../../actions/Sheet'
 
 import genColumns from './columns'
 
@@ -42,6 +42,12 @@ class Sheet extends Component {
 		this.props.querySheet(this.request)
 	}
 
+	componentDidUpdate() {
+		if (this.props.sheet.created || this.props.sheet.updated) {
+			this.props.querySheet(this.request)
+		}
+	}
+
 	onTTableLoad() {
 
 	}
@@ -58,10 +64,6 @@ class Sheet extends Component {
 		})
 	}
 
-	submit(type, data) {
-		this.props[type](data)
-	}
-
 	render() {
 		const {
 			createSheet: createSheetVisble,
@@ -69,51 +71,41 @@ class Sheet extends Component {
 		} = this.state
 
 		const columns = genColumns(raw => {
-			this.selectedDic = raw
-			this.showModal(updateDictionary)
+			this.selectedSheet = raw
+			this.showModal(updateSheet)
 		})
 
 		let {
-			creating,
-			getting,
-			result
+			querying,
+			results
 		} = this.props.sheet
 
 		let modal
 		if (createSheetVisble) {
-			modal = <CreateSheet loading={creating} onSubmit={this.submit.bind(this,createSheet)} onCancel={this.hideModal.bind(this,createSheet)}/>
+			modal = <CreateSheet onCancel={this.hideModal.bind(this,createSheet)}/>
 		} else if (updateSheetVisble) {
-
+			modal = <UpdateSheet id={this.selectedSheet.ID} onCancel={this.hideModal.bind(this,updateSheet)}/>
 		}
 
 		let totalCount = 0
-		if (result) {
-			totalCount = result.TotalCount
+		if (results) {
+			totalCount = results.TotalCount
 		}
-		let sheets = totalCount > 0 ? result.List : []
+		let sheets = totalCount > 0 ? results.List : []
 
 		return (
 			<TMainContainer>
 				<Row>
 					<TCol>
 						<TCard>
-							<Button type='primary' icon='plus-circle-o' onClick={this.showModal.bind(this,createSheet)}>新增结算表</Button>
+							<SearchPanel/>
 							{modal}
 						</TCard>
 					</TCol>
 				</Row>
 				<Row>
 					<TCol>
-						<TCard>
-							<Button type='primary' icon='search'>查询</Button>
-						</TCard>
-					</TCol>
-				</Row>
-				<Row>
-					<TCol>
-						<TCard>
-							<TTable key='sheets' title='我的结算表' columns={columns} total={totalCount} data={sheets} loading={getting} onLoad={this.onTTableLoad}/>
-						</TCard>
+						<TTable key='sheets' bordered columns={columns} total={totalCount} dataSource={sheets} loading={querying} onLoad={this.onTTableLoad}/>
 					</TCol>
 				</Row>
 			</TMainContainer>
@@ -122,6 +114,5 @@ class Sheet extends Component {
 }
 
 export default connect(state => state, {
-	'querySheet': sheet.query.bind(sheet),
-	[createSheet]: sheet.create.bind(sheet)
+	'querySheet': sheet.query.bind(sheet)
 })(TMsgContainer()(Sheet))
