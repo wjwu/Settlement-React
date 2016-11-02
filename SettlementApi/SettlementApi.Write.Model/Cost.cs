@@ -2,7 +2,7 @@
 
 namespace SettlementApi.Write.Model
 {
-    public class CostDetail : BaseModel
+    public class Cost : BaseModel
     {
         public Guid ID { get; set; }
 
@@ -13,6 +13,8 @@ namespace SettlementApi.Write.Model
         public int Amount { get; set; }
 
         public decimal UnitPrice { get; set; }
+
+        public decimal Total { get; set; }
 
         public string Status { get; set; }
 

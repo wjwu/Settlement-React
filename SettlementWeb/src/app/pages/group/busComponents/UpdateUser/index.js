@@ -103,7 +103,7 @@ class UpdateUser extends Component {
 							rules:[{
 								required:true,
 								whitespace:true,
-								message:'请输入手机号码！'
+								message:'手机号码不能为空！'
 							},{
 								pattern:/^1[34578]\d{9}$/,
 								message:'手机号码格式不正确！'
@@ -120,7 +120,7 @@ class UpdateUser extends Component {
 							rules:[{
 								required:true,
 								whitespace:true,
-								message:'请输入姓名！'
+								message:'姓名不能为空！'
 							},{
 								length:true,
 								max:10,

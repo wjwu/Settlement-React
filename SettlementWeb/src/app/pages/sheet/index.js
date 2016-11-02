@@ -15,7 +15,6 @@ import TCol from '../../../components/TCol'
 import TCard from '../../../components/TCard'
 import TTable from '../../../components/TTable'
 
-import CreateSheet from './busComponents/CreateSheet'
 import UpdateSheet from './busComponents/UpdateSheet'
 import SearchPanel from './busComponents/SearchPanel'
 
@@ -23,7 +22,6 @@ import sheet from '../../actions/Sheet'
 
 import genColumns from './columns'
 
-const createSheet = 'createSheet'
 const updateSheet = 'updateSheet'
 
 class Sheet extends Component {
@@ -33,7 +31,6 @@ class Sheet extends Component {
 			pageIndex: 1
 		}
 		this.state = {
-			[createSheet]: false,
 			[updateSheet]: false
 		}
 	}
@@ -48,8 +45,9 @@ class Sheet extends Component {
 		}
 	}
 
-	onTTableLoad() {
-
+	onTTableLoad(pageIndex) {
+		this.request.pageIndex = pageIndex
+		this.props.querySheet(this.request)
 	}
 
 	showModal(type) {
@@ -66,7 +64,6 @@ class Sheet extends Component {
 
 	render() {
 		const {
-			createSheet: createSheetVisble,
 			updateSheet: updateSheetVisble
 		} = this.state
 
@@ -81,9 +78,7 @@ class Sheet extends Component {
 		} = this.props.sheet
 
 		let modal
-		if (createSheetVisble) {
-			modal = <CreateSheet onCancel={this.hideModal.bind(this,createSheet)}/>
-		} else if (updateSheetVisble) {
+		if (updateSheetVisble) {
 			modal = <UpdateSheet id={this.selectedSheet.ID} onCancel={this.hideModal.bind(this,updateSheet)}/>
 		}
 

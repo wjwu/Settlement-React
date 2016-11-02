@@ -1,10 +1,11 @@
 import React from 'react'
 import {
-	Icon
+	Icon,
+	Tag
 } from 'antd'
 import moment from 'moment'
 
-const genColumns = (editFuc) => {
+const columns = (editFuc) => {
 	return [{
 		title: '客户名称',
 		dataIndex: 'CustomName',
@@ -64,12 +65,30 @@ const genColumns = (editFuc) => {
 		title: '审核状态',
 		dataIndex: 'AuditStatus',
 		key: 'auditStatus',
-		width: '8.333%'
+		width: '8.333%',
+		render: (text) => {
+			if (text === '未提交') {
+				return <Tag color='blue'>{text}</Tag>
+			} else if (text === '审核中') {
+				return <Tag color='yellow'>{text}</Tag>
+			} else if (text === '通过') {
+				return <Tag color='green'>{text}</Tag>
+			} else if (text === '未通过') {
+				return <Tag color='red'>{text}</Tag>
+			}
+		}
 	}, {
 		title: '付款状态',
 		dataIndex: 'PayStatus',
 		key: 'payStatus',
-		width: '8.333%'
+		width: '8.333%',
+		render: (text) => {
+			if (text === '已付清') {
+				return <Tag color='green'>{text}</Tag>
+			} else if (text === '未付清') {
+				return <Tag color='red'>{text}</Tag>
+			}
+		}
 	}, {
 		title: '操作',
 		key: 'operation',
@@ -86,4 +105,4 @@ const genColumns = (editFuc) => {
 }
 
 
-export default genColumns
+export default columns

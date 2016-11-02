@@ -90,7 +90,7 @@ class UpdateDictionay extends Component {
 							rules:[{
 									required:true,
 									whitespace:true,
-									message:'请输入字典名称！'
+									message:'字典名称不能为空！'
 								},{
 									length:true,
 									max:100,

@@ -35,7 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseModel.cs" />
-    <Compile Include="CostDetail.cs" />
+    <Compile Include="Cost.cs" />
     <Compile Include="Dictionary.cs" />
     <Compile Include="Enums\AuditStatus.cs" />
     <Compile Include="Enums\CostStatus.cs" />

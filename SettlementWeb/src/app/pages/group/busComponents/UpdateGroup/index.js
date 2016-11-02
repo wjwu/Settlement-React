@@ -65,7 +65,7 @@ class UpdateGroup extends Component {
 							rules:[{
 								required:true,
 								whitespace:true,
-								message:'请输入部门名称！'
+								message:'部门名称不能为空！'
 							},{
 								length:true,
 								max:50,
