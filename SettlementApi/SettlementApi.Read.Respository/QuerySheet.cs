@@ -3,6 +3,8 @@ using SettlementApi.CommandBus;
 using SettlementApi.Read.Model;
 using SettlementApi.Read.QueryCommand;
 using SettlementApi.Read.QueryCommand.SheetModule;
+using SettlementApi.Read.QueryCommand.CostModule;
+using SettlementApi.Read.QueryCommand.ReceivedModule;
 
 namespace SettlementApi.Read.Respository
 {
@@ -15,6 +17,11 @@ namespace SettlementApi.Read.Respository
             {
                 command.ID
             });
+            if (result!=null)
+            {
+                result.Costs = new QueryCost().Execute(new QueryCostCommand { SheetID = result.ID });
+                result.Receiveds = new QueryReceived().Execute(new QueryReceivedCommand { SheetID = result.ID });
+            }
             return result;
         }
 

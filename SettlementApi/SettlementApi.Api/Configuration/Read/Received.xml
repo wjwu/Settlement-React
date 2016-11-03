@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<commands>
+  <command name="Received.Query" type="text" connection="local">
+    <![CDATA[
+SELECT [ID]
+      ,[SheetID]
+      ,[Money]
+      ,[Time] AS DTime 
+  FROM [dbo].[Received] WHERE [Deleted]=0 
+      ]]>
+  </command>
+</commands>

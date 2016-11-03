@@ -2,6 +2,9 @@ import * as apiClient from '../apiClient'
 import {
 	SHOW_MESSAGE
 } from '../constants/message'
+import {
+	random
+} from '../common'
 
 class ActionBase {
 	constructor(apiPath, moduleName, actionTypes) {
@@ -32,12 +35,14 @@ class ActionBase {
 	}
 
 	query(dispatch, request) {
+		let randomStr = random()
 		dispatch({
 			type: this.actionTypes[`BEGIN_QUERY_${this.moduleName}`]
 		})
 		apiClient.get(this.apiPath, request).then(result => {
 			dispatch({
 				type: this.actionTypes[`END_QUERY_${this.moduleName}`],
+				version: randomStr,
 				result: result
 			})
 		}, error => {
@@ -50,6 +55,7 @@ class ActionBase {
 				msg: error
 			})
 		})
+		return randomStr
 	}
 
 	create(dispatch, request) {

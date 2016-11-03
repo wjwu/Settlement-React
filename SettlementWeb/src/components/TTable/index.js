@@ -8,10 +8,7 @@ import {
 import TCard from '../TCard'
 
 let pagination = {
-	showQuickJumper: true,
-	onChange(current) {
-		getUsers(that.selectedNodeId, current)
-	}
+	showQuickJumper: true
 }
 
 class TTable extends Component {
@@ -25,9 +22,13 @@ class TTable extends Component {
 		pagination.onChange = current => {
 			onLoad(current)
 		}
-
+		if (this.props.pagination === false) {
+			return (
+				<Table {...this.props}/>
+			)
+		}
 		return (
-			<Table {...this.props}/>
+			<Table pagination={pagination} {...this.props}/>
 		)
 	}
 }

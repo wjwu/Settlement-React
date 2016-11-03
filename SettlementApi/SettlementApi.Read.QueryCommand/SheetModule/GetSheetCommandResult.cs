@@ -1,5 +1,8 @@
 ﻿using SettlementApi.CommandBus;
+using SettlementApi.Read.QueryCommand.CostModule;
+using SettlementApi.Read.QueryCommand.ReceivedModule;
 using System;
+using System.Collections.Generic;
 
 namespace SettlementApi.Read.QueryCommand.SheetModule
 {
@@ -40,5 +43,9 @@ namespace SettlementApi.Read.QueryCommand.SheetModule
         public decimal CostPrice { get; set; }
 
         public string Remark { get; set; }
+
+        public List<RQueryCost> Costs { get; set; }
+
+        public List<RQueryReceived> Receiveds { get; set; }
     }
 }

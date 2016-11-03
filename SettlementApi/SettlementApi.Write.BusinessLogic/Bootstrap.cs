@@ -15,6 +15,8 @@ namespace SettlementApi.Write.BusinessLogic
             container.RegisterType<IEventSubscribeObject, UserBusinessLogic>("UserBusinessLogic");
             container.RegisterType<ICommandBus, DictionaryBusinessLogic>("DictionaryBusinessLogic");
             container.RegisterType<ICommandBus, SheetBusinessLogic>("SheetBusinessLogic");
+            container.RegisterType<IEventSubscribeObject, CostBusinessLogic>("CostBusinessLogic");
+            container.RegisterType<IEventSubscribeObject, ReceivedBusinessLogic>("ReceivedBusinessLogic");
         }
     }
 }

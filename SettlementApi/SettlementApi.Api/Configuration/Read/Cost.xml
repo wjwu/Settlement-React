@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<commands>
+  <command name="Cost.Query" type="text" connection="local">
+    <![CDATA[
+SELECT  C.[ID] ,
+        C.[Type] ,
+        D.[Name] AS [TypeName] ,
+        C.[Amount] ,
+        C.[UnitPrice] ,
+        C.[Total] ,
+        C.[Status] ,
+        C.[Remark]
+FROM    [dbo].[Cost] AS C
+        LEFT JOIN [dbo].[Dictionary] AS D ON C.[Type] = D.[ID]
+WHERE   C.[Deleted] = 0  
+      ]]>
+  </command>
+</commands>

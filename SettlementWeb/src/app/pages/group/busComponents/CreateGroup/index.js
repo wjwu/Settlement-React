@@ -9,7 +9,6 @@ import {
 	Modal,
 	Form,
 	Tree,
-	TreeSelect,
 	Input
 } from 'antd'
 import TTreeSelect from '../../../../../components/TTreeSelect'

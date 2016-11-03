@@ -19,14 +19,22 @@ import UpdateSheet from './busComponents/UpdateSheet'
 import SearchPanel from './busComponents/SearchPanel'
 
 import sheet from '../../actions/Sheet'
+import dictionary from '../../actions/Dictionary'
 
 import genColumns from './columns'
+import {
+	getResult
+} from '../../common'
 
 const updateSheet = 'updateSheet'
+const querySheet = 'querySheet'
+const queryBase = 'queryBase'
 
 class Sheet extends Component {
 	constructor(prop) {
 		super(prop)
+		this.query = this.query.bind(this)
+		this.onTTableLoad = this.onTTableLoad.bind(this)
 		this.request = {
 			pageIndex: 1
 		}
@@ -36,7 +44,13 @@ class Sheet extends Component {
 	}
 
 	componentDidMount() {
-		this.props.querySheet(this.request)
+		this[queryBase] = this.props.queryBase({
+			type: 'base',
+			enabled: true,
+			pageIndex: 1,
+			pageSize: 999
+		})
+		this.query()
 	}
 
 	componentDidUpdate() {
@@ -47,7 +61,15 @@ class Sheet extends Component {
 
 	onTTableLoad(pageIndex) {
 		this.request.pageIndex = pageIndex
-		this.props.querySheet(this.request)
+		this.query()
+	}
+
+	query(request) {
+		if (request) {
+			this.request = Object.assign(this.request, request)
+		}
+		const randomStr = this.props.querySheet(this.request)
+		this[querySheet] = randomStr
 	}
 
 	showModal(type) {
@@ -72,35 +94,28 @@ class Sheet extends Component {
 			this.showModal(updateSheet)
 		})
 
-		let {
-			querying,
-			results
-		} = this.props.sheet
+		let querying = this.props.sheet.querying
+		let bases = getResult(this[queryBase], this.props.dictionary.results)
+		let sheets = getResult(this[querySheet], this.props.sheet.results)
 
 		let modal
 		if (updateSheetVisble) {
-			modal = <UpdateSheet id={this.selectedSheet.ID} onCancel={this.hideModal.bind(this,updateSheet)}/>
+			modal = <UpdateSheet id={this.selectedSheet.ID} onCancel={this.hideModal.bind(this,updateSheet)} bases={bases.data}/>
 		}
-
-		let totalCount = 0
-		if (results) {
-			totalCount = results.TotalCount
-		}
-		let sheets = totalCount > 0 ? results.List : []
 
 		return (
 			<TMainContainer>
 				<Row>
 					<TCol>
 						<TCard>
-							<SearchPanel/>
+							<SearchPanel onSearch={this.query} bases={bases.data}/>
 							{modal}
 						</TCard>
 					</TCol>
 				</Row>
 				<Row>
 					<TCol>
-						<TTable key='sheets' bordered columns={columns} total={totalCount} dataSource={sheets} loading={querying} onLoad={this.onTTableLoad}/>
+						<TTable key='sheets' bordered columns={columns} total={sheets.totalCount} dataSource={sheets.data} loading={querying} onLoad={this.onTTableLoad}/>
 					</TCol>
 				</Row>
 			</TMainContainer>
@@ -109,5 +124,6 @@ class Sheet extends Component {
 }
 
 export default connect(state => state, {
-	'querySheet': sheet.query.bind(sheet)
+	[querySheet]: sheet.query.bind(sheet),
+	[queryBase]: dictionary.query.bind(dictionary)
 })(TMsgContainer()(Sheet))

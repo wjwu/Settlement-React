@@ -108,12 +108,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Configuration\Connection.xml" />
+    <Content Include="Configuration\Read\Cost.xml" />
     <Content Include="Configuration\Read\Dictionary.xml" />
     <Content Include="Configuration\Read\Group.xml" />
+    <Content Include="Configuration\Read\Received.xml" />
     <Content Include="Configuration\Read\Sheet.xml" />
     <Content Include="Configuration\Read\User.xml" />
+    <Content Include="Configuration\Write\Cost.xml" />
     <Content Include="Configuration\Write\Dictionary.xml" />
     <Content Include="Configuration\Write\Group.xml" />
+    <Content Include="Configuration\Write\Received.xml" />
     <Content Include="Configuration\Write\Sheet.xml" />
     <Content Include="Configuration\Write\User.xml" />
     <Content Include="packages.config" />

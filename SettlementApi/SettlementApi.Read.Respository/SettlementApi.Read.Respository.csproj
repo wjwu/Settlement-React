@@ -57,8 +57,10 @@
     <Compile Include="BaseRRespository.cs" />
     <Compile Include="Bootstrap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryCost.cs" />
     <Compile Include="QueryDictionary.cs" />
     <Compile Include="QueryGroup.cs" />
+    <Compile Include="QueryReceived.cs" />
     <Compile Include="QuerySheet.cs" />
     <Compile Include="QueryUser.cs" />
   </ItemGroup>

@@ -7,22 +7,22 @@ import {
 const genCostColumns = (editFuc) => {
 	return [{
 		title: '名目',
-		dataIndex: 'name',
+		dataIndex: 'TypeName',
 		key: 'name',
 		width: '20%'
 	}, {
 		title: '单价',
-		dataIndex: 'unitPrice',
+		dataIndex: 'UnitPrice',
 		key: 'unitPrice',
 		width: '10%',
 	}, {
 		title: '数量',
-		dataIndex: 'amount',
+		dataIndex: 'Amount',
 		key: 'amount',
 		width: '10%'
 	}, {
 		title: '小计',
-		dataIndex: 'total',
+		dataIndex: 'Total',
 		key: 'total',
 		width: '15%',
 		render: (text) => {
@@ -30,7 +30,7 @@ const genCostColumns = (editFuc) => {
 		}
 	}, {
 		title: '付款状态',
-		dataIndex: 'status',
+		dataIndex: 'Status',
 		key: 'status',
 		width: '15%',
 		render: (text) => {
@@ -42,7 +42,7 @@ const genCostColumns = (editFuc) => {
 		}
 	}, {
 		title: '备注',
-		dataIndex: 'remark',
+		dataIndex: 'Remark',
 		key: 'remark',
 		width: '20%'
 	}, {
@@ -52,7 +52,7 @@ const genCostColumns = (editFuc) => {
 		render: (text, raw) => {
 			return (
 				<span>
-					<a href='javascript:;' onClick={editFuc.bind(null,raw,'edit')}><Icon type='edit' /></a>&nbsp;&nbsp;
+					<a href='javascript:;' onClick={editFuc.bind(null,raw,'update')}><Icon type='edit' /></a>&nbsp;&nbsp;
 					<a href='javascript:;' onClick={editFuc.bind(null,raw,'delete')}><Icon type='delete' /></a>
 				</span>
 			)

@@ -37,12 +37,16 @@
     <Compile Include="BaseCommandResult.cs" />
     <Compile Include="BasePagingCommand.cs" />
     <Compile Include="BasePagingCommandResult.cs" />
+    <Compile Include="CostModule\QueryCostCommand.cs" />
+    <Compile Include="CostModule\RQueryCost.cs" />
     <Compile Include="DictionaryModule\QueryDictionaryCommand.cs" />
     <Compile Include="DictionaryModule\RQueryDictionary.cs" />
     <Compile Include="GetByIDCommand.cs" />
     <Compile Include="GroupModule\QueryGroupCommand.cs" />
     <Compile Include="GroupModule\RQueryGroup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReceivedModule\QueryReceivedCommand.cs" />
+    <Compile Include="ReceivedModule\RQueryReceived.cs" />
     <Compile Include="SheetModule\GetSheetCommandResult.cs" />
     <Compile Include="SheetModule\QuerySheetCommand.cs" />
     <Compile Include="SheetModule\RQuerySheet.cs" />

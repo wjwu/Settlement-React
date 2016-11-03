@@ -38,9 +38,15 @@ class ReducerBase {
 				}
 			case this.actionTypes[`END_QUERY_${this.moduleName}`]:
 				delete state.querying
+				if (!state.results) {
+					state.results = []
+				}
+				state.results.push({
+					version: action.version,
+					result: action.result
+				})
 				return {
-					...state,
-					results: action.result
+					...state
 				}
 			case this.actionTypes[`ERROR_QUERY_${this.moduleName}`]:
 				delete state.querying

@@ -1,5 +1,6 @@
 ﻿using SettlementApi.CommandBus;
 using System;
+using System.Collections.Generic;
 
 namespace SettlementApi.Write.BusCommand.SheetModule
 {
@@ -34,5 +35,9 @@ namespace SettlementApi.Write.BusCommand.SheetModule
         public decimal CostPrice { get; set; }
 
         public string Remark { get; set; }
+
+        public List<CostEntity> Costs { get; set; }
+
+        public List<ReceivedEntity> Receiveds { get; set; }
     }
 }

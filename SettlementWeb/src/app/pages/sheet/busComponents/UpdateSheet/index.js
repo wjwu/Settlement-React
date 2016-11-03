@@ -9,12 +9,14 @@ import {
 	Modal,
 	Form,
 	Input,
+	Button,
 	Select,
 	Radio,
 	Row,
 	Col,
 	InputNumber,
 	DatePicker,
+	Tabs,
 	Spin
 } from 'antd'
 import moment from 'moment'
@@ -23,61 +25,64 @@ const Option = Select.Option
 const FormItem = Form.Item
 const RadioGroup = Radio.Group
 const RangePicker = DatePicker.RangePicker
+const TabPane = Tabs.TabPane
+
+import TTable from '../../../../../components/TTable'
+import TCard from '../../../../../components/TCard'
+
+import CreateCost from '../CreateCost'
+import UpdateCost from '../UpdateCost'
+import CreateReceived from '../CreateReceived'
+import UpdateReceived from '../UpdateReceived'
+
+import genCostColumns from '../costColumns'
+import genReceivedColumns from '../receivedColumns'
 
 import dictionary from '../../../../actions/Dictionary'
 import sheet from '../../../../actions/Sheet'
 
-const disabledDate = current => {
-	return current && current.valueOf() > Date.now()
-}
+import {
+	getResult,
+	disabledTime,
+	disabledDate
+} from '../../../../common'
 
-const disabledTime = (time, type) => {
-	if (type === 'start') {
-		return {
-			disabledHours() {
-				return newArray(0, 60).splice(4, 20)
-			},
-			disabledMinutes() {
-				return newArray(30, 60)
-			},
-			disabledSeconds() {
-				return [55, 56]
-			},
-		}
-	}
-	return {
-		disabledHours() {
-			return newArray(0, 60).splice(20, 4)
-		},
-		disabledMinutes() {
-			return newArray(0, 31)
-		},
-		disabledSeconds() {
-			return [55, 56]
-		},
-	}
-}
+const createCost = 'createCost'
+const updateCost = 'updateCost'
+const createReceived = 'createReceived'
+const updateReceived = 'updateReceived'
+const querySource = 'querySource'
+const queryCost = 'queryCost'
 
 class UpdateSheet extends Component {
 	constructor(prop) {
 		super(prop)
+		super(prop)
 		this.submit = this.submit.bind(this)
 		this.cancel = this.cancel.bind(this)
 		this.calcUnitPrice = this.calcUnitPrice.bind(this)
+		this.state = {
+			[createCost]: false,
+			[updateCost]: false,
+			[createReceived]: false,
+			[updateReceived]: false,
+			costs: [],
+			receiveds: []
+		}
 	}
 
 	componentDidMount() {
-		const {
-			queryDictionary,
-			getSheet,
-			id
-		} = this.props
-		queryDictionary({
-			type: 'base',
+		this[querySource] = this.props.queryDictionary({
+			type: 'Source',
 			pageIndex: 1,
 			pageSize: 999
 		})
-		getSheet(id)
+		this[queryCost] = this.props.queryDictionary({
+			type: 'Cost',
+			pageIndex: 1,
+			pageSize: 999
+		})
+		this.props.getSheet(this.props.id)
 	}
 
 	submit() {
@@ -101,8 +106,9 @@ class UpdateSheet extends Component {
 				let timeTo = times[1].format('YYYY-MM-DD HH:mm:ss')
 				let people = getFieldValue('people')
 				let totalPrice = getFieldValue('totalPrice')
-				let costPrice = getFieldValue('costPrice')
 				let remark = getFieldValue('remark')
+				let costs = this.state.costs
+				let receiveds = this.state.receiveds
 				this.props.submit({
 					id: this.props.sheet.result.ID,
 					customName,
@@ -117,8 +123,9 @@ class UpdateSheet extends Component {
 					timeTo,
 					people,
 					totalPrice,
-					costPrice,
-					remark
+					remark,
+					costs,
+					receiveds
 				})
 			}
 		})
@@ -143,16 +150,54 @@ class UpdateSheet extends Component {
 		}
 	}
 
+	showModal(type) {
+		this.setState({
+			[type]: true
+		})
+	}
+
+	hideModal(type, result, action) {
+		this.state[type] = false
+		if (result && (type === createCost || type === updateCost)) {
+			let costs = this.state.costs
+			if (action === 'create') {
+				costs.push(result)
+			} else if (action === 'update') {
+				let idx = costs.indexOf(this.selectedCost)
+				costs.splice(idx, 1, result)
+			}
+			this.state.costs = costs
+		} else if (result && (type === createReceived || type === updateReceived)) {
+			let receiveds = this.state.receiveds
+			if (action === 'create') {
+				receiveds.push(result)
+			} else if (action === 'update') {
+				let idx = receiveds.indexOf(this.selectedReceived)
+				receiveds.splice(idx, 1, result)
+			}
+			this.state.receiveds = receiveds
+		}
+		this.setState({
+			...this.state
+		})
+	}
+
 	render() {
-		const {
-			getFieldDecorator,
-			getFieldProps
-		} = this.props.form
+		const getFieldDecorator = this.props.form.getFieldDecorator
+
 		const {
 			getting,
 			updating,
-			result
+			result: sheet
 		} = this.props.sheet
+
+		if (!sheet) {
+			return (
+				<Modal title='修改结算表' visible={true} width={800} onCancel={this.cancel}>
+					<Spin tip='Loading...'/>
+				</Modal>
+			)
+		}
 
 		const formItemLayout = {
 			labelCol: {
@@ -162,210 +207,272 @@ class UpdateSheet extends Component {
 				span: 16
 			},
 		}
-		const results = this.props.dictionary.results
+
 		let bases = []
-		if (results && results.TotalCount > 0) {
-			bases = results.List.map(item => {
+		if (this.props.bases) {
+			bases = this.props.bases.map(item => {
 				return <Option key={item.ID} value={item.ID}>{item.Name}</Option>
 			})
 		}
-		if (!result) {
-			return (
-				<Modal title='修改结算表' visible={true} width={800} onCancel={this.cancel}>
-					<Spin tip='Loading...'/>
-				</Modal>
-			)
+
+		let result = getResult(this[querySource], this.props.dictionary.results)
+		let radios = result.data.map(item => {
+			return <Radio value={item.ID} key={item.ID}>{item.Name}</Radio>
+		})
+
+		const costColumns = genCostColumns((raw, action) => {
+			this.selectedCost = raw
+			if (action === 'update') {
+				this.showModal(updateCost)
+			} else {
+				let costs = this.state.costs
+				let idx = costs.indexOf(raw)
+				costs.splice(idx, 1)
+				this.state.costs = costs
+				this.setState({
+					...this.state
+				})
+			}
+		})
+		const receivedColumns = genReceivedColumns((raw, action) => {
+			this.selectedReceived = raw
+			if (action === 'update') {
+				this.showModal(updateReceived)
+			} else {
+				let receiveds = this.state.receiveds
+				let idx = receiveds.indexOf(raw)
+				receiveds.splice(idx, 1)
+				this.state.receiveds = receiveds
+				this.setState({
+					...this.state
+				})
+			}
+		})
+		let costs = sheet.Costs
+		let receiveds = sheet.Receiveds
+		let modal
+		if (this.state[createCost]) {
+			result = getResult(this[queryCost], this.props.dictionary.results)
+			modal = <CreateCost onCancel = {this.hideModal.bind(this,createCost)} costs={result.data}/>
+		} else if (this.state[updateCost]) {
+			result = getResult(this[queryCost], this.props.dictionary.results)
+			modal = <UpdateCost onCancel = {this.hideModal.bind(this,updateCost)} data={this.selectedCost} costs={result.data}/>
+		} else if (this.state[createReceived]) {
+			modal = <CreateReceived onCancel = {this.hideModal.bind(this,createReceived)}/>
+		} else if (this.state[updateReceived]) {
+			modal = <UpdateReceived onCancel = {this.hideModal.bind(this,updateReceived)} data={this.selectedReceived}/>
 		}
+
 		return (
 			<Modal title='修改结算表' visible={true} width={800} confirmLoading={updating} onOk={this.submit} onCancel={this.cancel}>
-				<Form>
-					<Row>
-						<Col xs={12}>
-							<FormItem {...formItemLayout} label='客户名称'>
-								{
-									getFieldDecorator('customName',{
-										initialValue:result.CustomName,
-										rules:[{
+				<Tabs tabPosition='left'>
+					<TabPane tab='基本信息' key='baseInfo'>
+						<Form>
+							<Row>
+								<Col xs={12}>
+									<FormItem {...formItemLayout} label='客户名称'>
+										{
+											getFieldDecorator('customName',{
+												initialValue:sheet.CustomName,
+												rules:[{
+														required:true,
+														whitespace:true,
+														message:'客户名称不能为空！'
+													},{
+														length:true,
+														max:100,
+														message:'客户名称最多100个字符！'
+													}]
+												})(<Input placeholder='请输入客户名称'/>)
+										}
+									</FormItem>
+								</Col>
+								<Col xs={12}>
+									<FormItem {...formItemLayout} label='培训基地'>
+									{
+										getFieldDecorator('base',{
+											initialValue:sheet.Base,
+											rules:[{
 												required:true,
-												whitespace:true,
-												message:'客户名称不能为空！'
-											},{
-												length:true,
-												max:100,
-												message:'客户名称最多100个字符！'
+												message:'请选择培训基地！'
 											}]
-										})(<Input placeholder='请输入客户名称'/>)
-								}
-							</FormItem>
-						</Col>
-						<Col xs={12}>
-							<FormItem {...formItemLayout} label='培训基地'>
-					 			<Select placeholder='请选择培训基地' {...getFieldProps('base',{initialValue:result.Base,rules:[{required:true,message:'请选择培训基地！'}]})}>
-						            {bases}
-					          	</Select>
-				          	</FormItem>
-						</Col>
-					</Row>
-					<Row>
-						<Col xs={12}>
-							<FormItem {...formItemLayout} label='联系人'>
-								{
-									getFieldDecorator('contacts',{
-										initialValue:result.Contacts,
-										rules:[{
+										})(
+								 			<Select placeholder='请选择培训基地'>
+									            {bases}
+								          	</Select>
+										)
+									}
+						          	</FormItem>
+								</Col>
+							</Row>
+							<Row>
+								<Col xs={12}>
+									<FormItem {...formItemLayout} label='联系人'>
+										{
+											getFieldDecorator('contacts',{
+												initialValue:sheet.Contacts,
+												rules:[{
+														required:true,
+														whitespace:true,
+														message:'联系人不能为空！'
+													},{
+														length:true,
+														max:20,
+														message:'联系人最多20个字符！'
+													}]
+												})(<Input placeholder='请输入联系人'/>)
+										}
+									</FormItem>
+								</Col>
+								<Col xs={12}>
+									<FormItem {...formItemLayout} label='培训时间'>
+									{
+										getFieldDecorator('times',{
+											initialValue:[
+												moment(sheet.TimeFrom, 'YYYY-MM-DD'),
+												moment(sheet.TimeTo, 'YYYY-MM-DD')
+											],
+											rules:[{
 												required:true,
-												whitespace:true,
-												message:'联系人不能为空！'
-											},{
-												length:true,
-												max:20,
-												message:'联系人最多20个字符！'
+												type:'array',
+												message:'请选择培训时间！'
 											}]
-										})(<Input placeholder='请输入联系人'/>)
-								}
-							</FormItem>
-						</Col>
-						<Col xs={12}>
-							<FormItem {...formItemLayout} label='培训时间'>
-								<RangePicker {...getFieldProps('times',{initialValue:[moment(result.TimeFrom, 'YYYY-MM-DD'),moment(result.TimeTo, 'YYYY-MM-DD')],rules:[{required:true,type:'array',message:'请选择培训时间！'}]})} format='YYYY-MM-DD' disabledDate={disabledDate} disabledTime={disabledTime}/>
-							</FormItem>
-						</Col>
-					</Row>
-					<Row>
-						<Col xs={12}>
-							<FormItem {...formItemLayout} label='手机号码'>
-								{
-									getFieldDecorator('phone',{
-										initialValue:result.Phone,
-										rules:[{
-												required:true,
-												whitespace:true,
-												message:'手机号码不能为空！'
-											},{
-												pattern:/^1[34578]\d{9}$/,
-												message:'手机号码格式不正确！'
-											}]
-										})(<Input placeholder='请输入手机号码'/>)
-								}
-							</FormItem>
-						</Col>
-						<Col xs={12}>
-							<FormItem {...formItemLayout} label='培训人数'>
-								{
-									getFieldDecorator('people',{
-										initialValue:result.People,
-										rules:[{required:true},{
-												range:true,
-												min:1,
-												type:'integer',
-												message:'请输入培训人数！'
-											}]
-										})(<InputNumber min={0} onChange={this.calcUnitPrice} onBlur={this.calcUnitPrice}/>)
-								}
-							</FormItem>
-						</Col>
-					</Row>
-					<Row>
-						<Col xs={12}>
-							<FormItem {...formItemLayout} label='QQ'>
-								{
-									getFieldDecorator('qq',{
-										initialValue:result.QQ,
-									})(<Input/>)
-								}
-							</FormItem>
-						</Col>
-						<Col xs={12}>
-							<FormItem {...formItemLayout} label='总成交额'>
-								{
-									getFieldDecorator('totalPrice',{
-										initialValue:result.TotalPrice,
-										rules:[{required:true},{
-												range:true,
-												min:1,
-												type:'number',
-												message:'请输入总成交额！'
-											}]
-										})(<InputNumber min={0} onChange={this.calcUnitPrice} onBlur={this.calcUnitPrice}/>)
-								}
-							</FormItem>
-						</Col>
-					</Row>
-					<Row>
-						<Col xs={12}>
-							<FormItem {...formItemLayout} label='微信'>
-								{
-									getFieldDecorator('weixin',{
-										initialValue:result.WeiXin
-									})(<Input/>)
-								}
-							</FormItem>
-						</Col>
-						<Col xs={12}>
-							<FormItem {...formItemLayout} label='均价'>
-								{
-									getFieldDecorator('unitPrice',{
-										initialValue:result.UnitPrice
-									})(<InputNumber disabled min={0}/>)
-								}
-							</FormItem>
-						</Col>
-					</Row>
-					<Row>
-						<Col xs={12}>
-							<FormItem {...formItemLayout} label='客户地址'>
-								{
-									getFieldDecorator('address',{
-										initialValue:result.Address
-									})(<Input/>)
-								}
-							</FormItem>
-						</Col>
-						<Col xs={12}>
-							<FormItem {...formItemLayout} label='总成本'>
-								{
-									getFieldDecorator('costPrice',{
-										initialValue:result.CostPrice,
-										rules:[{required:true},{
-												range:true,
-												min:1,
-												type:'number',
-												message:'请输入总成本！'
-											}]
-										})(<InputNumber min={0}/>)
-								}
-							</FormItem>
-						</Col>
-					</Row>
-					<Row>
-						<Col xs={12}>
-							<FormItem {...formItemLayout} label='客户来源'>
-								{
-									getFieldDecorator('source',{initialValue:result.Source.toUpperCase()})
-									(
-										<RadioGroup>
-									        <Radio value='EC95F7AA-2448-472E-A429-7EAD93360226'>电话开发</Radio>
-									        <Radio value='E0C97EE9-4980-45D5-AD3D-FDC080072E1A'>百度咨询</Radio>
-									        <Radio value='DFC79585-F391-46A0-B8FA-83E01A51A8D8'>客户介绍</Radio>
-									        <Radio value='3D9217B0-2350-4886-989C-30CCF33B2ED9'>老客户</Radio>
-									        <Radio value='763DA71B-4CBA-4217-8644-388C8031006B'>渠道</Radio>
-									        <Radio value='446BA72D-4D23-4274-89E1-0D9E5291ECFF'>其他</Radio>
-						      			</RadioGroup>
-									)
-								}
-							</FormItem>
-						</Col>
-						<Col xs={12}>
-							<FormItem {...formItemLayout} label='备注'>
-								{
-									getFieldDecorator('remark',{
-										initialValue:result.Remark,
-									})(<Input type='textarea' rows={4}/>)
-								}
-							</FormItem>
-						</Col>
-					</Row>
-				</Form>
+										})(<RangePicker format='YYYY-MM-DD' disabledDate={disabledDate} disabledTime={disabledTime}/>)
+									}
+									</FormItem>
+								</Col>
+							</Row>
+							<Row>
+								<Col xs={12}>
+									<FormItem {...formItemLayout} label='手机号码'>
+										{
+											getFieldDecorator('phone',{
+												initialValue:sheet.Phone,
+												rules:[{
+														required:true,
+														whitespace:true,
+														message:'手机号码不能为空！'
+													},{
+														pattern:/^1[34578]\d{9}$/,
+														message:'手机号码格式不正确！'
+													}]
+												})(<Input placeholder='请输入手机号码'/>)
+										}
+									</FormItem>
+								</Col>
+								<Col xs={12}>
+									<FormItem {...formItemLayout} label='培训人数'>
+										{
+											getFieldDecorator('people',{
+												initialValue:sheet.People,
+												rules:[{required:true},{
+														range:true,
+														min:1,
+														type:'integer',
+														message:'请输入培训人数！'
+													}]
+												})(<InputNumber min={0} onChange={this.calcUnitPrice} onBlur={this.calcUnitPrice}/>)
+										}
+									</FormItem>
+								</Col>
+							</Row>
+							<Row>
+								<Col xs={12}>
+									<FormItem {...formItemLayout} label='QQ'>
+										{
+											getFieldDecorator('qq',{
+												initialValue:sheet.QQ,
+											})(<Input/>)
+										}
+									</FormItem>
+								</Col>
+								<Col xs={12}>
+									<FormItem {...formItemLayout} label='总成交额'>
+										{
+											getFieldDecorator('totalPrice',{
+												initialValue:sheet.TotalPrice,
+												rules:[{required:true},{
+														range:true,
+														min:1,
+														type:'number',
+														message:'请输入总成交额！'
+													}]
+												})(<InputNumber min={0} onChange={this.calcUnitPrice} onBlur={this.calcUnitPrice}/>)
+										}
+									</FormItem>
+								</Col>
+							</Row>
+							<Row>
+								<Col xs={12}>
+									<FormItem {...formItemLayout} label='微信'>
+										{
+											getFieldDecorator('weixin',{
+												initialValue:sheet.WeiXin
+											})(<Input/>)
+										}
+									</FormItem>
+								</Col>
+								<Col xs={12}>
+									<FormItem {...formItemLayout} label='均价'>
+										{
+											getFieldDecorator('unitPrice',{
+												initialValue:sheet.UnitPrice
+											})(<InputNumber disabled min={0}/>)
+										}
+									</FormItem>
+								</Col>
+							</Row>
+							<Row>
+								<Col xs={12}>
+									<FormItem {...formItemLayout} label='客户地址'>
+										{
+											getFieldDecorator('address',{
+												initialValue:sheet.Address
+											})(<Input/>)
+										}
+									</FormItem>
+								</Col>
+							</Row>
+							<Row>
+								<Col xs={12}>
+									<FormItem {...formItemLayout} label='客户来源'>
+										{
+											getFieldDecorator('source',{initialValue:sheet.Source.toLowerCase()})
+											(
+												<RadioGroup>
+											        {radios}
+								      			</RadioGroup>
+											)
+										}
+									</FormItem>
+								</Col>
+								<Col xs={12}>
+									<FormItem {...formItemLayout} label='备注'>
+										{
+											getFieldDecorator('remark',{
+												initialValue:sheet.Remark,
+											})(<Input type='textarea' rows={4}/>)
+										}
+									</FormItem>
+								</Col>
+							</Row>
+						</Form>
+					</TabPane>
+					<TabPane tab='结算明细' key='costInfo'>
+						<div style={{marginBottom:16,textAlign:'right'}}>
+							<Button type='primary' icon='plus-circle-o' onClick={this.showModal.bind(this,createCost)}>新增明细</Button>
+							{modal}
+						</div>
+						<TTable key='cost' bordered columns={costColumns} total={costs.length} dataSource={costs} pagination={false} onLoad={()=>{}}/>
+					</TabPane> 
+					<TabPane tab='收款明细' key='receivedInfo'>
+						<div style={{marginBottom:16,textAlign:'right'}}>
+							<Button type='primary' icon='plus-circle-o' onClick={this.showModal.bind(this,createReceived)}>新增明细</Button>
+							{modal}
+						</div>
+						<TTable key='received' bordered columns={receivedColumns} total={receiveds.length} dataSource={receiveds} pagination={false} onLoad={()=>{}}/>
+					</TabPane> 
+				</Tabs>
 			</Modal>
 		)
 	}
@@ -373,6 +480,7 @@ class UpdateSheet extends Component {
 
 UpdateSheet.propTypes = {
 	id: PropTypes.string.isRequired,
+	bases: PropTypes.array.isRequired,
 	onCancel: PropTypes.func.isRequired
 }
 

@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<commands>
+<command name="Cost.Create" type="text" connection="local">
+  <![CDATA[
+INSERT INTO dbo.Cost
+        ( ID ,
+          SheetID ,
+          Type ,
+          Amount ,
+          UnitPrice ,
+          Total ,
+          Status ,
+          Remark ,
+          CreateTime ,
+          LastModifyTime ,
+          LastModifyUser 
+        )
+VALUES  ( NEWID() ,
+          @SheetID ,
+          @Type ,
+          @Amount ,
+          @UnitPrice ,
+          @Total ,
+          @Status , 
+          @Remark ,
+          GETDATE() ,
+          GETDATE() ,
+          @LastModifyUser
+        )
+  ]]>
+</command>
+  <command name="Cost.Delete" type="text" connection="local">
+  <![CDATA[
+  UPDATE dbo.Cost SET [Deleted]=1 WHERE [SheetID]=@SheetID
+    ]]>
+</command>
+</commands>

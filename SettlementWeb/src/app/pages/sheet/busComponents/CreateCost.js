@@ -3,38 +3,28 @@ import React, {
 	PropTypes
 } from 'react'
 import {
-	connect
-} from 'react-redux'
-import {
 	Modal,
 	Form,
 	Input,
 	Select,
 	Radio,
 	Button,
-	InputNumber,
-	Spin
+	InputNumber
 } from 'antd'
 
 const Option = Select.Option
 const FormItem = Form.Item
 const RadioGroup = Radio.Group
 
-import dictionary from '../../../../actions/Dictionary'
+import {
+	random
+} from '../../../common'
 
-class UpdateCost extends Component {
+class CreateCost extends Component {
 	constructor(props) {
 		super(props)
 		this.submit = this.submit.bind(this)
 		this.cancel = this.cancel.bind(this)
-	}
-
-	componentDidMount() {
-		this.props.queryDictionary({
-			type: 'Cost',
-			pageIndex: 1,
-			pageSize: 999
-		})
 	}
 
 	submit() {
@@ -46,7 +36,7 @@ class UpdateCost extends Component {
 		validateFields((errors, values) => {
 			if (!errors) {
 				const type = getFieldValue('type')
-				const selectedCost = this.props.dictionary.results.List.filter(item => {
+				const selectedCost = this.props.costs.filter(item => {
 					return item.ID === type
 				})
 				const name = selectedCost[0].Name
@@ -55,15 +45,15 @@ class UpdateCost extends Component {
 				const status = getFieldValue('status')
 				const remark = getFieldValue('remark')
 				this.props.onCancel({
-					id: this.props.data.id,
-					name,
-					type,
-					unitPrice,
-					amount,
-					status,
-					remark,
-					total: unitPrice * amount
-				}, 'edit')
+					ID: random(),
+					Type: type,
+					TypeName: name,
+					UnitPrice: unitPrice,
+					Amount: amount,
+					Status: status,
+					Remark: remark,
+					Total: unitPrice * amount
+				}, 'create')
 			}
 		})
 	}
@@ -82,27 +72,17 @@ class UpdateCost extends Component {
 			},
 		}
 
-		const {
-			getFieldDecorator,
-			getFieldProps
-		} = this.props.form
+		const getFieldDecorator = this.props.form.getFieldDecorator
 
-		const results = this.props.dictionary.results
-
-		const cost = this.props.data
-
-		let modalBody = <Spin tip='Loading...'/>
-		if (results) {
-			const costs = results.List.map(item => {
-				return <Option key={item.ID} value={item.ID}>{item.Name}</Option>
-			})
-
-			modalBody = (
+		const costs = this.props.costs.map(item => {
+			return <Option key={item.ID} value={item.ID}>{item.Name}</Option>
+		})
+		return (
+			<Modal title='新增结算明细' visible={true} width={460} onOk={this.submit} onCancel={this.cancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='明细类型'>
 					{
 						getFieldDecorator('type',{
-							initialValue:cost.type,
 							rules:[{
 								required:true,
 								message:'请选择明细类型！'
@@ -117,7 +97,7 @@ class UpdateCost extends Component {
 					<FormItem {...formItemLayout} label='单价'>
 					{
 						getFieldDecorator('unitPrice',{
-							initialValue:cost.unitPrice,
+							initialValue:0,
 							rules:[{
 								required:true
 							},{
@@ -132,7 +112,7 @@ class UpdateCost extends Component {
 					<FormItem {...formItemLayout} label='数量'>
 					{
 						getFieldDecorator('amount',{
-							initialValue:cost.amount,
+							initialValue:0,
 							rules:[{
 								required:true
 							},{
@@ -147,7 +127,6 @@ class UpdateCost extends Component {
 					<FormItem {...formItemLayout} label='付款状态'>
 					{
 						getFieldDecorator('status',{
-							initialValue:cost.status,
 							rules:[{
 								required:true,
 								message:'请选择付款状态！'
@@ -162,29 +141,20 @@ class UpdateCost extends Component {
 					</FormItem>
 					<FormItem {...formItemLayout} label='备注'>
 					{
-						getFieldDecorator('remark',{
-							initialValue:cost.remark
-						})(
+						getFieldDecorator('remark')(
 							<Input type='textarea' rows={4}/>
 						)
 					}
 					</FormItem>
 				</Form>
-			)
-		}
-		return (
-			<Modal title='新增结算明细' visible={true} width={460} onOk={this.submit} onCancel={this.cancel}>
-				{modalBody}
 			</Modal>
 		)
 	}
 }
 
-UpdateCost.propTypes = {
-	data: PropTypes.object.isRequired,
+CreateCost.propTypes = {
+	costs: PropTypes.array.isRequired,
 	onCancel: PropTypes.func.isRequired
 }
 
-export default connect(state => state, {
-	'queryDictionary': dictionary.query.bind(dictionary)
-})(Form.create()(UpdateCost))
+export default Form.create()(CreateCost)

@@ -28,50 +28,29 @@ const TabPane = Tabs.TabPane
 import TTable from '../../../../../components/TTable'
 import TCard from '../../../../../components/TCard'
 
-import CreateCost from './CreateCost'
-import UpdateCost from './UpdateCost'
+import CreateCost from '../CreateCost'
+import UpdateCost from '../UpdateCost'
+import CreateReceived from '../CreateReceived'
+import UpdateReceived from '../UpdateReceived'
+
+import genCostColumns from '../costColumns'
+import genReceivedColumns from '../receivedColumns'
 
 import dictionary from '../../../../actions/Dictionary'
-
-import genCostColumns from './costColumns'
-
 import sheet from '../../../../actions/Sheet'
 
-const disabledDate = current => {
-	return current && current.valueOf() > Date.now()
-}
-
-const disabledTime = (time, type) => {
-	if (type === 'start') {
-		return {
-			disabledHours() {
-				return newArray(0, 60).splice(4, 20)
-			},
-			disabledMinutes() {
-				return newArray(30, 60)
-			},
-			disabledSeconds() {
-				return [55, 56]
-			},
-		}
-	}
-	return {
-		disabledHours() {
-			return newArray(0, 60).splice(20, 4)
-		},
-		disabledMinutes() {
-			return newArray(0, 31)
-		},
-		disabledSeconds() {
-			return [55, 56]
-		},
-	}
-}
+import {
+	getResult,
+	disabledTime,
+	disabledDate
+} from '../../../../common'
 
 const createCost = 'createCost'
 const updateCost = 'updateCost'
 const createReceived = 'createReceived'
 const updateReceived = 'updateReceived'
+const querySource = 'querySource'
+const queryCost = 'queryCost'
 
 class CreateSheet extends Component {
 	constructor(prop) {
@@ -84,13 +63,19 @@ class CreateSheet extends Component {
 			[updateCost]: false,
 			[createReceived]: false,
 			[updateReceived]: false,
-			costs: []
+			costs: [],
+			receiveds: []
 		}
 	}
 
 	componentDidMount() {
-		this.props.queryDictionary({
-			type: 'base',
+		this[querySource] = this.props.queryDictionary({
+			type: 'Source',
+			pageIndex: 1,
+			pageSize: 999
+		})
+		this[queryCost] = this.props.queryDictionary({
+			type: 'Cost',
 			pageIndex: 1,
 			pageSize: 999
 		})
@@ -117,8 +102,9 @@ class CreateSheet extends Component {
 				let timeTo = times[1].format('YYYY-MM-DD HH:mm:ss')
 				let people = getFieldValue('people')
 				let totalPrice = getFieldValue('totalPrice')
-				let costPrice = getFieldValue('costPrice')
 				let remark = getFieldValue('remark')
+				let costs = this.state.costs
+				let receiveds = this.state.receiveds
 				this.props.submit({
 					customName,
 					contacts,
@@ -132,8 +118,9 @@ class CreateSheet extends Component {
 					timeTo,
 					people,
 					totalPrice,
-					costPrice,
-					remark
+					remark,
+					costs,
+					receiveds
 				})
 			}
 		})
@@ -148,6 +135,7 @@ class CreateSheet extends Component {
 			getFieldValue,
 			setFieldsValue
 		} = this.props.form
+
 		let people = getFieldValue('people')
 		let totalPrice = getFieldValue('totalPrice')
 		if (people > 0 && totalPrice > 0) {
@@ -166,15 +154,24 @@ class CreateSheet extends Component {
 
 	hideModal(type, result, action) {
 		this.state[type] = false
-		if (result) {
+		if (result && (type === createCost || type === updateCost)) {
 			let costs = this.state.costs
 			if (action === 'create') {
 				costs.push(result)
-			} else if (action === 'edit') {
+			} else if (action === 'update') {
 				let idx = costs.indexOf(this.selectedCost)
 				costs.splice(idx, 1, result)
 			}
 			this.state.costs = costs
+		} else if (result && (type === createReceived || type === updateReceived)) {
+			let receiveds = this.state.receiveds
+			if (action === 'create') {
+				receiveds.push(result)
+			} else if (action === 'update') {
+				let idx = receiveds.indexOf(this.selectedReceived)
+				receiveds.splice(idx, 1, result)
+			}
+			this.state.receiveds = receiveds
 		}
 		this.setState({
 			...this.state
@@ -182,13 +179,8 @@ class CreateSheet extends Component {
 	}
 
 	render() {
-		const {
-			getFieldDecorator,
-			getFieldProps
-		} = this.props.form
-		const {
-			creating
-		} = this.props.sheet
+		const getFieldDecorator = this.props.form.getFieldDecorator
+		const creating = this.props.sheet.creating
 
 		const formItemLayout = {
 			labelCol: {
@@ -198,17 +190,22 @@ class CreateSheet extends Component {
 				span: 16
 			},
 		}
-		const results = this.props.dictionary.results
+
 		let bases = []
-		if (results && results.TotalCount > 0) {
-			bases = results.List.map(item => {
+		if (this.props.bases) {
+			bases = this.props.bases.map(item => {
 				return <Option key={item.ID} value={item.ID}>{item.Name}</Option>
 			})
 		}
 
+		let result = getResult(this[querySource], this.props.dictionary.results)
+		let radios = result.data.map(item => {
+			return <Radio value={item.ID} key={item.ID}>{item.Name}</Radio>
+		})
+
 		const costColumns = genCostColumns((raw, action) => {
 			this.selectedCost = raw
-			if (action === 'edit') {
+			if (action === 'update') {
 				this.showModal(updateCost)
 			} else {
 				let costs = this.state.costs
@@ -220,17 +217,33 @@ class CreateSheet extends Component {
 				})
 			}
 		})
-
+		const receivedColumns = genReceivedColumns((raw, action) => {
+			this.selectedReceived = raw
+			if (action === 'update') {
+				this.showModal(updateReceived)
+			} else {
+				let receiveds = this.state.receiveds
+				let idx = receiveds.indexOf(raw)
+				receiveds.splice(idx, 1)
+				this.state.receiveds = receiveds
+				this.setState({
+					...this.state
+				})
+			}
+		})
 		let costs = this.state.costs
+		let receiveds = this.state.receiveds
 		let modal
 		if (this.state[createCost]) {
-			modal = <CreateCost onCancel = {this.hideModal.bind(this,createCost)}/>
+			result = getResult(this[queryCost], this.props.dictionary.results)
+			modal = <CreateCost onCancel = {this.hideModal.bind(this,createCost)} costs={result.data}/>
 		} else if (this.state[updateCost]) {
-			modal = <UpdateCost onCancel = {this.hideModal.bind(this,updateCost)} data={this.selectedCost}/>
+			result = getResult(this[queryCost], this.props.dictionary.results)
+			modal = <UpdateCost onCancel = {this.hideModal.bind(this,updateCost)} data={this.selectedCost} costs={result.data}/>
 		} else if (this.state[createReceived]) {
-			modal = {}
+			modal = <CreateReceived onCancel = {this.hideModal.bind(this,createReceived)}/>
 		} else if (this.state[updateReceived]) {
-			modal = {}
+			modal = <UpdateReceived onCancel = {this.hideModal.bind(this,updateReceived)} data={this.selectedReceived}/>
 		}
 		return (
 			<Modal title='新增结算表' visible={true} width={900} confirmLoading={creating} onOk={this.submit} onCancel={this.cancel}>
@@ -257,9 +270,18 @@ class CreateSheet extends Component {
 								</Col>
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='培训基地'>
-							 			<Select placeholder='请选择培训基地' {...getFieldProps('base',{rules:[{required:true,message:'请选择培训基地！'}]})}>
-								            {bases}
-							          	</Select>
+									{
+										getFieldDecorator('base',{
+											rules:[{
+												required:true,
+												message:'请选择培训基地！'
+											}]
+										})(
+								 			<Select placeholder='请选择培训基地'>
+									            {bases}
+								          	</Select>
+							          	)
+							        }
 						          	</FormItem>
 								</Col>
 							</Row>
@@ -283,7 +305,15 @@ class CreateSheet extends Component {
 								</Col>
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='培训时间'>
-										<RangePicker {...getFieldProps('times',{rules:[{required:true,type:'array',message:'请选择培训时间！'}]})} format='YYYY-MM-DD' disabledDate={disabledDate} disabledTime={disabledTime}/>
+									{
+										getFieldDecorator('times',{
+											rules:[{
+												required:true,
+												type:'array',
+												message:'请选择培训时间！'
+											}]
+										})(<RangePicker format='YYYY-MM-DD' disabledDate={disabledDate} disabledTime={disabledTime}/>)
+									}
 									</FormItem>
 								</Col>
 							</Row>
@@ -368,35 +398,20 @@ class CreateSheet extends Component {
 										}
 									</FormItem>
 								</Col>
-								<Col xs={12}>
-									<FormItem {...formItemLayout} label='总成本'>
-										{
-											getFieldDecorator('costPrice',{
-												initialValue:0,
-												rules:[{required:true},{
-														range:true,
-														min:1,
-														type:'number',
-														message:'请输入总成本！'
-													}]
-												})(<InputNumber min={0}/>)
-										}
-									</FormItem>
-								</Col>
 							</Row>
 							<Row>
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='客户来源'>
 										{
-											getFieldDecorator('source',{initialValue:'EC95F7AA-2448-472E-A429-7EAD93360226'})
+											getFieldDecorator('source',{
+												rules:[{
+													required:true,
+													message:'请选择客户来源！'
+												}]
+											})
 											(
 												<RadioGroup>
-											        <Radio value='EC95F7AA-2448-472E-A429-7EAD93360226'>电话开发</Radio>
-											        <Radio value='E0C97EE9-4980-45D5-AD3D-FDC080072E1A'>百度咨询</Radio>
-											        <Radio value='DFC79585-F391-46A0-B8FA-83E01A51A8D8'>客户介绍</Radio>
-											        <Radio value='3D9217B0-2350-4886-989C-30CCF33B2ED9'>老客户</Radio>
-											        <Radio value='763DA71B-4CBA-4217-8644-388C8031006B'>渠道</Radio>
-											        <Radio value='446BA72D-4D23-4274-89E1-0D9E5291ECFF'>其他</Radio>
+											        {radios}
 								      			</RadioGroup>
 											)
 										}
@@ -420,6 +435,11 @@ class CreateSheet extends Component {
 						<TTable key='cost' bordered columns={costColumns} total={costs.length} dataSource={costs} pagination={false} onLoad={()=>{}}/>
 					</TabPane> 
 					<TabPane tab='收款明细' key='receivedInfo'>
+						<div style={{marginBottom:16,textAlign:'right'}}>
+							<Button type='primary' icon='plus-circle-o' onClick={this.showModal.bind(this,createReceived)}>新增明细</Button>
+							{modal}
+						</div>
+						<TTable key='received' bordered columns={receivedColumns} total={receiveds.length} dataSource={receiveds} pagination={false} onLoad={()=>{}}/>
 					</TabPane> 
 				</Tabs>
 			</Modal>
@@ -428,6 +448,7 @@ class CreateSheet extends Component {
 }
 
 CreateSheet.propTypes = {
+	bases: PropTypes.array.isRequired,
 	onCancel: PropTypes.func.isRequired
 }
 

@@ -11,7 +11,7 @@ class DictionaryAction extends ActionBase {
 
 	query(request) {
 		return dispatch => {
-			super.query(dispatch, request)
+			return super.query(dispatch, request)
 		}
 	}
 

@@ -17,14 +17,21 @@ import {
 import TTreeSelect from '../../../../../components/TTreeSelect'
 import CreateSheet from '../CreateSheet'
 
-import sheet from '../../../../actions/Sheet'
-import dictionary from '../../../../actions/Dictionary'
 import group from '../../../../actions/Group'
 
-const EMPTY_GUID = '00000000-0000-0000-0000-000000000000'
+import {
+	getResult,
+	tree,
+	EMPTY_GUID,
+	disabledTime,
+	disabledDate
+} from '../../../../common'
+
 const Option = Select.Option
 const FormItem = Form.Item
 const RangePicker = DatePicker.RangePicker
+
+const queryGroup = 'queryGroup'
 
 class SearchPanel extends Component {
 	constructor(props) {
@@ -39,13 +46,7 @@ class SearchPanel extends Component {
 	}
 
 	componentDidMount() {
-		this.props.queryDictionary({
-			type: 'base',
-			enabled: true,
-			pageIndex: 1,
-			pageSize: 999
-		})
-		this.props.queryGroup({
+		this[queryGroup] = this.props.queryGroup({
 			pageIndex: 1
 		})
 	}
@@ -68,7 +69,7 @@ class SearchPanel extends Component {
 			let customName = getFieldValue('customName') || ''
 			let auditStatus = getFieldValue('auditStatus')
 			let payStatus = getFieldValue('payStatus')
-			this.props.querySheet({
+			this.props.onSearch({
 				group,
 				base,
 				timeFrom,
@@ -97,10 +98,7 @@ class SearchPanel extends Component {
 	}
 
 	render() {
-		const {
-			getFieldDecorator,
-			getFieldProps
-		} = this.props.form
+		const getFieldDecorator = this.props.form.getFieldDecorator
 
 		const formItemLayout = {
 			labelCol: {
@@ -118,29 +116,17 @@ class SearchPanel extends Component {
 			lg: 6
 		}
 
-		let results = this.props.group.results
-		let groups = []
-		if (results && results.List) {
-			const loop = (parentId) => results.List.filter(item => item.ParentID === parentId).map(item => {
-				item.children = loop(item.ID)
-				return item
-			})
+		let result = getResult(this[queryGroup], this.props.group.results)
+		let groups = tree(result.data, EMPTY_GUID)
 
-			groups = loop(EMPTY_GUID)
-		}
-
-		results = this.props.dictionary.results
-		let bases = []
-		if (results && results.TotalCount > 0) {
-			bases = results.List.map(item => {
-				return <Option key={item.ID} value={item.ID}>{item.Name}</Option>
-			})
-			bases.unshift(<Option key='all' value=''>{`全部`}</Option>)
-		}
+		let bases = this.props.bases.map(item => {
+			return <Option key={item.ID} value={item.ID}>{item.Name}</Option>
+		})
+		bases.unshift(<Option key='all' value=''>{`全部`}</Option>)
 
 		let modal
 		if (this.state.showCreate) {
-			modal = <CreateSheet onCancel={this.hideModal}/>
+			modal = <CreateSheet onCancel={this.hideModal} bases={this.props.bases}/>
 		}
 
 		return (
@@ -165,7 +151,9 @@ class SearchPanel extends Component {
 					</Col>
 					<Col {...colLayout}>
 						<FormItem {...formItemLayout}  label='培训时间'>
-							<RangePicker {...getFieldProps('times')} format='YYYY-MM-DD' allowClear/>
+						{
+							getFieldDecorator('times')(<RangePicker format='YYYY-MM-DD' disabledDate={disabledDate} disabledTime={disabledTime} allowClear/>)
+						}
 						</FormItem>
 					</Col>
 					<Col {...colLayout}>
@@ -220,8 +208,11 @@ class SearchPanel extends Component {
 	}
 }
 
+SearchPanel.propTypes = {
+	bases: PropTypes.array.isRequired,
+	onSearch: PropTypes.func.isRequired
+}
+
 export default connect(state => state, {
-	'queryDictionary': dictionary.query.bind(dictionary),
-	'queryGroup': group.query.bind(group),
-	'querySheet': sheet.query.bind(sheet)
+	'queryGroup': group.query.bind(group)
 })(Form.create()(SearchPanel))

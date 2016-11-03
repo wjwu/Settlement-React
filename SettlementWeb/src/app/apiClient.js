@@ -12,7 +12,7 @@ const processResponse = response => response.json()
 const processResult = (reject, resolve, result) => result.IsError ? reject(result.Message) : resolve(result)
 
 const processError = (reject, error) => {
-	if (typeof error == 'string' && error.constructor == String) {
+	if (typeof error === 'string' && error.constructor === String) {
 		reject(error)
 	} else {
 		reject(error.message)

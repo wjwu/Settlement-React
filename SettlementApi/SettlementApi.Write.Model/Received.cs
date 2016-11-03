@@ -2,7 +2,7 @@
 
 namespace SettlementApi.Write.Model
 {
-    public class ReceivedDetail : BaseModel
+    public class Received : BaseModel
     {
         public Guid ID { get; set; }
 

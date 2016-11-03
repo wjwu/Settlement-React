@@ -5,10 +5,13 @@ using SettlementApi.Write.BusCommand.SheetModule;
 using SettlementApi.Write.Model;
 using SettlementApi.Write.Model.Enums;
 using SettlementApi.Write.BusinessLogic.Resource;
+using SettlementApi.EventBus;
+using SettlementApi.Write.BusinessLogic.Event;
+using System.Collections.Generic;
 
 namespace SettlementApi.Write.BusinessLogic
 {
-    public class SheetBusinessLogic: BusinessLogicBase<Sheet>,
+    public class SheetBusinessLogic: BusinessLogicBase<Sheet>, IEventPublishObject,
         ICommandBus<CreateSheetCommand>,
         ICommandBus<UpdateSheetCommand>
     {
@@ -20,16 +23,36 @@ namespace SettlementApi.Write.BusinessLogic
         public void Execute(CreateSheetCommand command)
         {
             var sheet = MapperHelper.Map<CreateSheetCommand, Sheet>(command);
+            var costs = MapperHelper.Map<List<CostEntity>, List<Cost>>(command.Costs);
+            var receiveds = MapperHelper.Map<List<ReceivedEntity>, List<Received>>(command.Receiveds);
             sheet.ID=Guid.NewGuid();
             sheet.ProjectManager= ServiceContext.OperatorID;
             sheet.AuditStatus = Enum.GetName(typeof(AuditStatus), AuditStatus.UnSubmit);
             sheet.PayStatus= Enum.GetName(typeof(PayStatus), PayStatus.Unpaid);
             sheet.Days = sheet.TimeTo.Subtract(sheet.TimeFrom).Days;
             sheet.UnitPrice = Math.Round(sheet.TotalPrice/sheet.People);
-            sheet.ReceivedMoney = 0;
-            sheet.RemainingMoney = sheet.TotalPrice;
+            if (costs!=null)
+            {
+                costs.ForEach(cost=> {
+                    sheet.CostPrice += cost.Amount * cost.UnitPrice;
+                });
+            }
+            if (receiveds!=null)
+            {
+                receiveds.ForEach(received=>
+                {
+                    sheet.ReceivedMoney +=received.Money;
+                });
+            }
+            sheet.RemainingMoney = sheet.TotalPrice - sheet.ReceivedMoney;
             sheet.LastModifyUser = ServiceContext.OperatorID;
             Create("Sheet.Create",sheet);
+           
+            this.Publish(new CreateSheetEvent() {
+                   SheetID=sheet.ID,
+                   Costs= costs,
+                   Receiveds= receiveds
+            });
         }
 
         public void Execute(UpdateSheetCommand command)
@@ -40,11 +63,22 @@ namespace SettlementApi.Write.BusinessLogic
                 throw new BussinessException(CommonRes.InvalidOperation);
             }
             var newSheet = MapperHelper.Map<UpdateSheetCommand, Sheet>(command);
+            var costs = MapperHelper.Map<List<CostEntity>, List<Cost>>(command.Costs);
+            var receiveds = MapperHelper.Map<List<ReceivedEntity>, List<Received>>(command.Receiveds);
+
             newSheet.Days = newSheet.TimeTo.Subtract(newSheet.TimeFrom).Days;
             newSheet.UnitPrice = Math.Round(newSheet.TotalPrice / newSheet.People);
+            //////todo
             newSheet.RemainingMoney = newSheet.TotalPrice - oldSheet.ReceivedMoney;
             newSheet.LastModifyUser = ServiceContext.OperatorID;
             Update("Sheet.Update", newSheet);
+
+            this.Publish(new UpdateSheetEvent()
+            {
+                SheetID = command.ID,
+                Costs = costs,
+                Receiveds = receiveds
+            });
         }
 
         public void Receive(ICommand command)

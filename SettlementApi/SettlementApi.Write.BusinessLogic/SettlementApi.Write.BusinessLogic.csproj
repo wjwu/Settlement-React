@@ -57,10 +57,13 @@
     <Compile Include="Bootstrap.cs" />
     <Compile Include="BusinessLogicBase.cs" />
     <Compile Include="BussinessException.cs" />
+    <Compile Include="CostBusinessLogic.cs" />
     <Compile Include="DictionaryBusinessLogic.cs" />
+    <Compile Include="Event\CreateSheetEvent.cs" />
     <Compile Include="Event\DeleteGroupEvent.cs" />
     <Compile Include="GroupBusinessLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReceivedBusinessLogic.cs" />
     <Compile Include="Resource\CommonRes.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -70,6 +73,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>GroupRes.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resource\SheetRes.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SheetRes.resx</DependentUpon>
     </Compile>
     <Compile Include="Resource\UserRes.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -124,6 +132,10 @@
     <EmbeddedResource Include="Resource\GroupRes.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>GroupRes.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\SheetRes.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SheetRes.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resource\UserRes.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<commands>
+<command name="Received.Create" type="text" connection="local">
+  <![CDATA[
+		INSERT INTO dbo.Received
+		        ( ID ,
+		          SheetID ,
+		          Money ,
+		          Time ,
+		          CreateTime ,
+		          LastModifyTime ,
+		          LastModifyUser 
+		        )
+		VALUES  ( NEWID() ,
+		          @SheetID ,
+		          @Money ,
+		          @Time , 
+		          GETDATE() ,
+		          GETDATE(),
+		          @LastModifyUser
+		        )
+  ]]>
+</command>
+  <command name="Received.Delete" type="text" connection="local">
+    <![CDATA[
+  UPDATE dbo.Received SET [Deleted]=1 WHERE [SheetID]=@SheetID
+    ]]>
+  </command>
+</commands>
