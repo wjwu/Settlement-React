@@ -65,9 +65,7 @@ class UpdateSheet extends Component {
 			[createCost]: false,
 			[updateCost]: false,
 			[createReceived]: false,
-			[updateReceived]: false,
-			costs: [],
-			receiveds: []
+			[updateReceived]: false
 		}
 	}
 
@@ -159,7 +157,7 @@ class UpdateSheet extends Component {
 	hideModal(type, result, action) {
 		this.state[type] = false
 		if (result && (type === createCost || type === updateCost)) {
-			let costs = this.state.costs
+			let costs = this.state.costs || []
 			if (action === 'create') {
 				costs.push(result)
 			} else if (action === 'update') {
@@ -168,7 +166,7 @@ class UpdateSheet extends Component {
 			}
 			this.state.costs = costs
 		} else if (result && (type === createReceived || type === updateReceived)) {
-			let receiveds = this.state.receiveds
+			let receiveds = this.state.receiveds || []
 			if (action === 'create') {
 				receiveds.push(result)
 			} else if (action === 'update') {
@@ -248,8 +246,17 @@ class UpdateSheet extends Component {
 				})
 			}
 		})
-		let costs = sheet.Costs
-		let receiveds = sheet.Receiveds
+
+		if (!this.state.costs && sheet.Costs) {
+			this.state = {
+				...this.state,
+				'costs': sheet.Costs,
+				'receiveds': sheet.Receiveds
+			}
+		}
+
+		let costs = this.state.costs
+		let receiveds = this.state.receiveds
 		let modal
 		if (this.state[createCost]) {
 			result = getResult(this[queryCost], this.props.dictionary.results)

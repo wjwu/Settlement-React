@@ -16,6 +16,9 @@ class ReducerBase {
 		}
 		switch (action.type) {
 			case this.actionTypes[`BEGIN_GET_${this.moduleName}`]:
+				if (state.hasOwnProperty('result')) {
+					delete state.result
+				}
 				return {
 					...state,
 					getting: true

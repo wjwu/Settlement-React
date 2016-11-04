@@ -31,6 +31,12 @@ class SheetAction extends ActionBase {
 			super.update(dispatch, request)
 		}
 	}
+
+	del(id) {
+		return dispatch => {
+			return super.del(id)
+		}
+	}
 }
 
 export default new SheetAction()

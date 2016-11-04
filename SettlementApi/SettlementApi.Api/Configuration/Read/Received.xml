@@ -6,7 +6,7 @@ SELECT [ID]
       ,[SheetID]
       ,[Money]
       ,[Time] AS DTime 
-  FROM [dbo].[Received] WHERE [Deleted]=0 
+  FROM [dbo].[Received] WHERE [Deleted]=0 AND [SheetID]=@SheetID 
       ]]>
   </command>
 </commands>

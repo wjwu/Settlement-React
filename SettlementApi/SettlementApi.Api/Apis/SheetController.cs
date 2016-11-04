@@ -55,5 +55,16 @@ namespace SettlementApi.Api.Apis
                 Content = new StringContent(new ResponseMessage(CommonRes.Success).ToJson())
             };
         }
+
+        [HttpDelete]
+        [Route("api/sheet/{id:guid}")]
+        public HttpResponseMessage Delete(Guid id)
+        {
+            CommandService.Send(new DeleteSheetCommand { ID=id}, BusName);
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(new ResponseMessage(CommonRes.Success).ToJson())
+            };
+        }
     }
 }

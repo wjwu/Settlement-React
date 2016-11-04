@@ -6,7 +6,8 @@ import {
 } from 'react-redux'
 import {
 	Row,
-	Button
+	Button,
+	Modal
 } from 'antd'
 
 import TMainContainer from '../../../components/TMainContainer'
@@ -26,8 +27,10 @@ import {
 	getResult
 } from '../../common'
 
+const confirm = Modal.confirm
 const updateSheet = 'updateSheet'
 const querySheet = 'querySheet'
+const deleteSheet = 'deleteSheet'
 const queryBase = 'queryBase'
 
 class Sheet extends Component {
@@ -84,14 +87,40 @@ class Sheet extends Component {
 		})
 	}
 
+	doDeleteSheet(id) {
+		const {
+			deleteSheet,
+			showGlobleMsg
+		} = this.props
+		let that = this
+		confirm({
+			title: '删除结算表',
+			content: '确定要删除选中结算表？',
+			onOk() {
+				return deleteSheet(id).then(result => {
+					showGlobleMsg('success', '删除成功！')
+					that.query()
+				}, error => {
+					showGlobleMsg('error', result.Message)
+				})
+			},
+		})
+
+		console.log(id)
+	}
+
 	render() {
 		const {
 			updateSheet: updateSheetVisble
 		} = this.state
 
-		const columns = genColumns(raw => {
-			this.selectedSheet = raw
-			this.showModal(updateSheet)
+		const columns = genColumns((raw, action) => {
+			if (action === 'update') {
+				this.selectedSheet = raw
+				this.showModal(updateSheet)
+			} else if (action === 'delete') {
+				this.doDeleteSheet(raw.ID)
+			}
 		})
 
 		let querying = this.props.sheet.querying
@@ -125,5 +154,6 @@ class Sheet extends Component {
 
 export default connect(state => state, {
 	[querySheet]: sheet.query.bind(sheet),
-	[queryBase]: dictionary.query.bind(dictionary)
+	[queryBase]: dictionary.query.bind(dictionary),
+	[deleteSheet]: sheet.del.bind(sheet)
 })(TMsgContainer()(Sheet))

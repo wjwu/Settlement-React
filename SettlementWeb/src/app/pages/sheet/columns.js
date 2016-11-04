@@ -96,8 +96,8 @@ const columns = (editFuc) => {
 		render: (text, raw) => {
 			return (
 				<span>
-					<a href='javascript:;' onClick={editFuc.bind(null,raw)}><Icon type='edit' /></a>&nbsp;&nbsp;
-					<a href='javascript:;' onClick={editFuc.bind(null,raw)}><Icon type='delete' /></a>
+					<a href='javascript:;' onClick={editFuc.bind(null,raw,'update')}><Icon type='edit' /></a>&nbsp;&nbsp;
+					<a href='javascript:;' onClick={editFuc.bind(null,raw,'delete')}><Icon type='delete' /></a>
 				</span>
 			)
 		}

@@ -12,7 +12,7 @@ SELECT  C.[ID] ,
         C.[Remark]
 FROM    [dbo].[Cost] AS C
         LEFT JOIN [dbo].[Dictionary] AS D ON C.[Type] = D.[ID]
-WHERE   C.[Deleted] = 0  
+WHERE   C.[Deleted] = 0  AND [SheetID]=@SheetID 
       ]]>
   </command>
 </commands>

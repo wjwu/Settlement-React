@@ -38,6 +38,7 @@ class SearchPanel extends Component {
 		super(props)
 		this.query = this.query.bind(this)
 		this.change = this.change.bind(this)
+		this.search = this.search.bind(this)
 		this.showModal = this.showModal.bind(this)
 		this.hideModal = this.hideModal.bind(this)
 		this.state = {
@@ -80,6 +81,9 @@ class SearchPanel extends Component {
 			})
 		})
 	}
+	search() {
+		this.props.onSearch()
+	}
 
 	change(value) {
 		this.selectedGroup = value
@@ -91,7 +95,7 @@ class SearchPanel extends Component {
 		})
 	}
 
-	hideModal(type) {
+	hideModal() {
 		this.setState({
 			showCreate: false
 		})
@@ -198,6 +202,7 @@ class SearchPanel extends Component {
 				</Row>
 				<Row>
 					<Col style={{ textAlign: 'right' }}>
+						<Button type='primary' icon='reload' className='button' onClick={this.search}>刷新</Button>
 						<Button type='primary' icon='search' className='button' onClick={this.query}>查询</Button>
 						<Button type='primary' icon='plus-circle-o' onClick={this.showModal}>新增结算表</Button>
 						{modal}

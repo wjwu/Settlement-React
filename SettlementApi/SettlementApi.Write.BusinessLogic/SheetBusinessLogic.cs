@@ -13,7 +13,8 @@ namespace SettlementApi.Write.BusinessLogic
 {
     public class SheetBusinessLogic: BusinessLogicBase<Sheet>, IEventPublishObject,
         ICommandBus<CreateSheetCommand>,
-        ICommandBus<UpdateSheetCommand>
+        ICommandBus<UpdateSheetCommand>,
+         ICommandBus<DeleteSheetCommand>
     {
         public override Sheet GetEntity(Guid id)
         {
@@ -68,8 +69,21 @@ namespace SettlementApi.Write.BusinessLogic
 
             newSheet.Days = newSheet.TimeTo.Subtract(newSheet.TimeFrom).Days;
             newSheet.UnitPrice = Math.Round(newSheet.TotalPrice / newSheet.People);
-            //////todo
-            newSheet.RemainingMoney = newSheet.TotalPrice - oldSheet.ReceivedMoney;
+
+            if (costs != null)
+            {
+                costs.ForEach(cost => {
+                    newSheet.CostPrice += cost.Amount * cost.UnitPrice;
+                });
+            }
+            if (receiveds != null)
+            {
+                receiveds.ForEach(received =>
+                {
+                    newSheet.ReceivedMoney += received.Money;
+                });
+            }
+            newSheet.RemainingMoney = newSheet.TotalPrice - newSheet.ReceivedMoney;
             newSheet.LastModifyUser = ServiceContext.OperatorID;
             Update("Sheet.Update", newSheet);
 
@@ -81,6 +95,12 @@ namespace SettlementApi.Write.BusinessLogic
             });
         }
 
+
+        public void Execute(DeleteSheetCommand command)
+        {
+            Update("Sheet.Delete", new { ID = command.ID, LastModifyUser = ServiceContext.OperatorID });
+        }
+
         public void Receive(ICommand command)
         {
             if (command.GetType()==typeof(CreateSheetCommand))
@@ -90,6 +110,10 @@ namespace SettlementApi.Write.BusinessLogic
             else if (command.GetType() == typeof(UpdateSheetCommand))
             {
                 Execute((UpdateSheetCommand)command);
+            }
+            else if (command.GetType() == typeof(DeleteSheetCommand))
+            {
+                Execute((DeleteSheetCommand)command);
             }
         }
 
