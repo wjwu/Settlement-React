@@ -9,14 +9,14 @@ import {
 	Button,
 	Modal
 } from 'antd'
-
-const confirm = Modal.confirm
-import TMainContainer from '../../../components/TMainContainer'
-import TMsgContainer from '../../../components/TMsgContainer'
-import TCol from '../../../components/TCol'
-import TTree from '../../../components/TTree'
-import TTable from '../../../components/TTable'
-import TCard from '../../../components/TCard'
+import {
+	TMainContainer,
+	TMsgContainer,
+	TCol,
+	TTree,
+	TTable,
+	TCard
+} from '../../../components'
 
 import CreateGroup from './busComponents/CreateGroup'
 import UpdateGroup from './busComponents/UpdateGroup'
@@ -27,8 +27,15 @@ import group from '../../actions/Group'
 import user from '../../actions/User'
 
 import genColumns from './columns'
+import {
+	tree,
+	getResult,
+	EMPTY_GUID
+} from '../../common'
+const confirm = Modal.confirm
 
-const EMPTY_GUID = '00000000-0000-0000-0000-000000000000'
+const queryGroup = 'queryGroup'
+const queryUser = 'queryUser'
 const createGroup = 'createGroup'
 const createUser = 'createUser'
 const updateGroup = 'updateGroup'
@@ -54,15 +61,15 @@ class Group extends Component {
 	}
 
 	componentDidMount() {
-		this.props.queryGroup(this.queryGroupRequest)
+		this[queryGroup] = this.props.queryGroup(this.queryGroupRequest)
 	}
 
 	componentDidUpdate() {
 		if (this.props.group.created || this.props.group.updated) {
-			this.props.queryGroup(this.queryGroupRequest)
+			this[queryGroup] = this.props.queryGroup(this.queryGroupRequest)
 		}
 		if ((this.props.user.created || this.props.user.updated) && this.queryUserRequset.group) {
-			this.props.queryUser(this.queryUserRequset)
+			this[queryUser] = this.props.queryUser(this.queryUserRequset)
 		}
 	}
 
@@ -70,12 +77,12 @@ class Group extends Component {
 		this.selectedNode = node
 		this.queryUserRequset.group = node.key
 		this.queryUserRequset.pageIndex = 1
-		this.props.queryUser(this.queryUserRequset)
+		this[queryUser] = this.props.queryUser(this.queryUserRequset)
 	}
 
 	onTTableLoad(pageIndex) {
 		this.queryUserRequset.pageIndex = pageIndex
-		this.props.queryUser(this.queryUserRequset)
+		this[queryUser] = this.props.queryUser(this.queryUserRequset)
 	}
 
 	showModal(type) {
@@ -109,7 +116,7 @@ class Group extends Component {
 					return delGroup(group).then(result => {
 						showGlobleMsg('success', '删除成功！')
 						that.queryUserRequset.group = null
-						queryGroup(that.queryGroupRequest)
+						that['queryGroup'] = queryGroup(that.queryGroupRequest)
 					}, error => {
 						showGlobleMsg('error', result.Message)
 					})
@@ -139,21 +146,12 @@ class Group extends Component {
 			updateUser: updateUserVisible,
 		} = this.state
 
-		let groups = []
-		if (groupProps.results && groupProps.results.List) {
-			const loop = (parentId) => groupProps.results.List.filter(item => item.ParentID === parentId).map(item => {
-				item.children = loop(item.ID)
-				return item
-			})
+		let result = getResult(this[queryGroup], groupProps.results)
+		let groups = tree(result.data, EMPTY_GUID)
 
-			groups = loop(EMPTY_GUID)
-		}
-
-		let totalCount = 0
-		if (userProps.results) {
-			totalCount = userProps.results.TotalCount
-		}
-		let users = totalCount > 0 ? userProps.results.List : []
+		result = getResult(this[queryUser], userProps.results)
+		let users = result.data
+		let totalCount = result.totalCount
 
 		const columns = genColumns(raw => {
 			this.selectedUser = raw
@@ -200,7 +198,7 @@ class Group extends Component {
 }
 
 export default connect(state => state, {
-	'queryGroup': group.query.bind(group),
+	[queryGroup]: group.query.bind(group),
 	'delGroup': group.del.bind(group),
-	'queryUser': user.query.bind(user),
+	[queryUser]: user.query.bind(user),
 })(TMsgContainer()(Group))

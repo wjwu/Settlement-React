@@ -23,6 +23,10 @@ import dictionary from '../../actions/Dictionary'
 
 import genColumns from './columns'
 
+import {
+	getResult
+} from '../../common'
+
 const TabPane = Tabs.TabPane
 
 const createDictionary = 'createDictionary'
