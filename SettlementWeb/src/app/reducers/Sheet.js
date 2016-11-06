@@ -1,11 +1,8 @@
 import ReducerBase from './ReducerBase'
-import * as actionTypes from '../constants/sheet'
-
-const MODULE_NAME = 'SHEET'
 
 class SheetReducer extends ReducerBase {
 	constructor() {
-		super(MODULE_NAME, actionTypes)
+		super('SHEET')
 	}
 }
-export default SheetReducer
+export default new SheetReducer()

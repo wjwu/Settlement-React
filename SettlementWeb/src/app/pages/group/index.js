@@ -18,13 +18,15 @@ import {
 	TCard
 } from '../../../components'
 
-import CreateGroup from './busComponents/CreateGroup'
-import UpdateGroup from './busComponents/UpdateGroup'
-import CreateUser from './busComponents/CreateUser'
-import UpdateUser from './busComponents/UpdateUser'
+import CreateGroup from './bus-components/CreateGroup'
+import UpdateGroup from './bus-components/UpdateGroup'
+import CreateUser from './bus-components/CreateUser'
+import UpdateUser from './bus-components/UpdateUser'
 
-import group from '../../actions/Group'
-import user from '../../actions/User'
+import {
+	group,
+	user
+} from '../../actions'
 
 import genColumns from './columns'
 import {

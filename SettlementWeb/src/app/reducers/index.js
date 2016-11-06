@@ -3,15 +3,10 @@ import {
 } from 'redux'
 
 import message from './message'
-import GroupReducer from './Group'
-import UserReducer from './User'
-import DictionaryReducer from './Dictionary'
-import SheetReducer from './Sheet'
-
-const group = new GroupReducer()
-const user = new UserReducer()
-const dictionary = new DictionaryReducer()
-const sheet = new SheetReducer()
+import group from './Group'
+import user from './User'
+import dictionary from './Dictionary'
+import sheet from './Sheet'
 
 export default combineReducers({
 	message,

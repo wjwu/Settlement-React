@@ -10,16 +10,20 @@ import {
 	Button
 } from 'antd'
 
-import TMainContainer from '../../../components/TMainContainer'
-import TMsgContainer from '../../../components/TMsgContainer'
-import TCol from '../../../components/TCol'
-import TCard from '../../../components/TCard'
-import TTable from '../../../components/TTable'
+import {
+	TMainContainer,
+	TMsgContainer,
+	TCol,
+	TCard,
+	TTable
+} from '../../../components/TMainContainer'
 
-import CreateDictionary from './busComponents/CreateDictionary'
-import UpdateDictionary from './busComponents/UpdateDictionary'
+import CreateDictionary from './bus-components/CreateDictionary'
+import UpdateDictionary from './bus-components/UpdateDictionary'
 
-import dictionary from '../../actions/Dictionary'
+import {
+	dictionary
+} from '../../actions'
 
 import genColumns from './columns'
 

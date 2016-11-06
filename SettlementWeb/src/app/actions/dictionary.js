@@ -1,12 +1,8 @@
 import ActionBase from './ActionBase'
-import * as actionTypes from '../constants/dictionary'
-
-const API_PATH = 'dictionary'
-const MODULE_NAME = 'DICTIONARY'
 
 class DictionaryAction extends ActionBase {
 	constructor() {
-		super(API_PATH, MODULE_NAME, actionTypes)
+		super('dictionary', 'DICTIONARY')
 	}
 
 	query(request) {

@@ -7,24 +7,23 @@ import {
 } from '../common'
 
 class ActionBase {
-	constructor(apiPath, moduleName, actionTypes) {
+	constructor(apiPath, moduleName) {
 		this.apiPath = apiPath
 		this.moduleName = moduleName
-		this.actionTypes = actionTypes
 	}
 
 	get(dispatch, id) {
 		dispatch({
-			type: this.actionTypes[`BEGIN_GET_${this.moduleName}`]
+			type: `BEGIN_GET_${this.moduleName}`
 		})
 		apiClient.get(`${this.apiPath}/${id}`).then(result => {
 			dispatch({
-				type: this.actionTypes[`END_GET_${this.moduleName}`],
+				type: `END_GET_${this.moduleName}`,
 				result: result
 			})
 		}, error => {
 			dispatch({
-				type: this.actionTypes[`ERROR_GET_${this.moduleName}`]
+				type: `ERROR_GET_${this.moduleName}`
 			})
 			dispatch({
 				type: SHOW_MESSAGE,
@@ -37,17 +36,17 @@ class ActionBase {
 	query(dispatch, request) {
 		let randomStr = random()
 		dispatch({
-			type: this.actionTypes[`BEGIN_QUERY_${this.moduleName}`]
+			type: `BEGIN_QUERY_${this.moduleName}`
 		})
 		apiClient.get(this.apiPath, request).then(result => {
 			dispatch({
-				type: this.actionTypes[`END_QUERY_${this.moduleName}`],
+				type: `END_QUERY_${this.moduleName}`,
 				version: randomStr,
 				result: result
 			})
 		}, error => {
 			dispatch({
-				type: this.actionTypes[`ERROR_QUERY_${this.moduleName}`]
+				type: `ERROR_QUERY_${this.moduleName}`
 			})
 			dispatch({
 				type: SHOW_MESSAGE,
@@ -60,11 +59,11 @@ class ActionBase {
 
 	create(dispatch, request) {
 		dispatch({
-			type: this.actionTypes[`BEGIN_CREATE_${this.moduleName}`],
+			type: `BEGIN_CREATE_${this.moduleName}`,
 		})
 		apiClient.post(this.apiPath, request).then(result => {
 			dispatch({
-				type: this.actionTypes[`END_CREATE_${this.moduleName}`],
+				type: `END_CREATE_${this.moduleName}`,
 				result: result
 			})
 			dispatch({
@@ -74,7 +73,7 @@ class ActionBase {
 			})
 		}, error => {
 			dispatch({
-				type: this.actionTypes[`ERROR_CREATE_${this.moduleName}`]
+				type: `ERROR_CREATE_${this.moduleName}`
 			})
 			dispatch({
 				type: SHOW_MESSAGE,
@@ -86,11 +85,11 @@ class ActionBase {
 
 	update(dispatch, request) {
 		dispatch({
-			type: this.actionTypes[`BEGIN_UPDATE_${this.moduleName}`],
+			type: `BEGIN_UPDATE_${this.moduleName}`,
 		})
 		apiClient.put(this.apiPath, request).then(result => {
 			dispatch({
-				type: this.actionTypes[`END_UPDATE_${this.moduleName}`],
+				type: `END_UPDATE_${this.moduleName}`,
 				result: result
 			})
 			dispatch({
@@ -100,7 +99,7 @@ class ActionBase {
 			})
 		}, error => {
 			dispatch({
-				type: this.actionTypes[`ERROR_UPDATE_${this.moduleName}`]
+				type: `ERROR_UPDATE_${this.moduleName}`
 			})
 			dispatch({
 				type: SHOW_MESSAGE,

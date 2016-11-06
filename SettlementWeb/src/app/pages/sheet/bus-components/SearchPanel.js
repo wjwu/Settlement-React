@@ -14,10 +14,14 @@ import {
 	DatePicker,
 	Button
 } from 'antd'
-import TTreeSelect from '../../../../../components/TTreeSelect'
-import CreateSheet from '../CreateSheet'
+import {
+	TTreeSelect,
+	CreateSheet
+} from '../../../../components'
 
-import group from '../../../../actions/Group'
+import {
+	group
+} from '../../../actions'
 
 import {
 	getResult,
@@ -25,7 +29,7 @@ import {
 	EMPTY_GUID,
 	disabledTime,
 	disabledDate
-} from '../../../../common'
+} from '../../../common'
 
 const Option = Select.Option
 const FormItem = Form.Item

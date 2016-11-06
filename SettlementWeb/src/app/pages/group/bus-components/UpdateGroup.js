@@ -10,7 +10,9 @@ import {
 	Form,
 	Input
 } from 'antd'
-import group from '../../../../actions/Group'
+import {
+	group
+} from '../../../actions'
 
 const FormItem = Form.Item
 

@@ -9,19 +9,19 @@ import {
 	Button,
 	Modal
 } from 'antd'
-
-import TMainContainer from '../../../components/TMainContainer'
-import TMsgContainer from '../../../components/TMsgContainer'
-import TCol from '../../../components/TCol'
-import TCard from '../../../components/TCard'
-import TTable from '../../../components/TTable'
-
-import UpdateSheet from './busComponents/UpdateSheet'
-import SearchPanel from './busComponents/SearchPanel'
-
-import sheet from '../../actions/Sheet'
-import dictionary from '../../actions/Dictionary'
-
+import {
+	TMainContainer,
+	TMsgContainer,
+	TCol,
+	TCard,
+	TTable
+} from '../../../components'
+import UpdateSheet from './bus-components/UpdateSheet'
+import SearchPanel from './bus-components/SearchPanel'
+import {
+	dictionary,
+	sheet
+} from '../../actions'
 import genColumns from './columns'
 import {
 	getResult

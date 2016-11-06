@@ -14,7 +14,9 @@ import {
 	InputNumber
 } from 'antd'
 
-import dictionary from '../../../../actions/Dictionary'
+import {
+	dictionary
+} from '../../../actions'
 
 const Option = Select.Option
 const FormItem = Form.Item

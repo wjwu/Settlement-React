@@ -1,12 +1,8 @@
 import ActionBase from './ActionBase'
-import * as actionTypes from '../constants/sheet'
-
-const API_PATH = 'sheet'
-const MODULE_NAME = 'SHEET'
 
 class SheetAction extends ActionBase {
 	constructor() {
-		super(API_PATH, MODULE_NAME, actionTypes)
+		super('sheet', 'SHEET')
 	}
 	get(id) {
 		return dispatch => {

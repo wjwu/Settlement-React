@@ -1,12 +1,8 @@
 import ActionBase from './ActionBase'
-import * as actionTypes from '../constants/group'
-
-const API_PATH = 'group'
-const MODULE_NAME = 'GROUP'
 
 class GroupAction extends ActionBase {
 	constructor() {
-		super(API_PATH, MODULE_NAME, actionTypes)
+		super('group', 'GROUP')
 	}
 
 	query(request) {

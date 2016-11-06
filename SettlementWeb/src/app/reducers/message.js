@@ -9,10 +9,11 @@ const message = (state = {}, action) => {
 	}
 	switch (action.type) {
 		case SHOW_MESSAGE:
-			return Object.assign({}, state, {
+			return {
+				...state,
 				type: action.msgType,
 				msg: action.msg
-			})
+			}
 		default:
 			return state
 	}

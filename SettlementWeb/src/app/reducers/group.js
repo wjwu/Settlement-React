@@ -1,11 +1,8 @@
 import ReducerBase from './ReducerBase'
-import * as actionTypes from '../constants/group'
-
-const MODULE_NAME = 'GROUP'
 
 class GroupReducer extends ReducerBase {
 	constructor() {
-		super(MODULE_NAME, actionTypes)
+		super('GROUP')
 	}
 }
-export default GroupReducer
+export default new GroupReducer()

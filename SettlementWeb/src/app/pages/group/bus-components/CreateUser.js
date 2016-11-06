@@ -16,8 +16,12 @@ import {
 	Row,
 	Col
 } from 'antd'
-import TTreeSelect from '../../../../../components/TTreeSelect'
-import user from '../../../../actions/User'
+import {
+	TTreeSelect
+} from '../../../../components'
+import {
+	user
+} from '../../../actions'
 
 const FormItem = Form.Item
 const TreeNode = Tree.TreeNode

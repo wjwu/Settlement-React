@@ -11,8 +11,12 @@ import {
 	Tree,
 	Input
 } from 'antd'
-import TTreeSelect from '../../../../../components/TTreeSelect'
-import group from '../../../../actions/Group'
+import {
+	TTreeSelect
+} from '../../../../components'
+import {
+	group
+} from '../../../actions'
 
 const FormItem = Form.Item
 const TreeNode = Tree.TreeNode

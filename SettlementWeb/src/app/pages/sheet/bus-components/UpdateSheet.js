@@ -9,41 +9,45 @@ import {
 	Modal,
 	Form,
 	Input,
+	Button,
 	Select,
 	Radio,
-	Button,
 	Row,
 	Col,
 	InputNumber,
 	DatePicker,
-	Tabs
+	Tabs,
+	Spin
 } from 'antd'
+import moment from 'moment'
+
+import {
+	TTable,
+	TCard
+} from '../../../../components'
+import CreateCost from './CreateCost'
+import UpdateCost from './UpdateCost'
+import CreateReceived from './CreateReceived'
+import UpdateReceived from './UpdateReceived'
+import {
+	genCostColumns,
+	genReceivedColumns
+} from './columns'
+import {
+	dictionary,
+	sheet
+} from '../../../actions'
+import {
+	getResult,
+	disabledTime,
+	disabledDate
+} from '../../../common'
 
 const Option = Select.Option
 const FormItem = Form.Item
 const RadioGroup = Radio.Group
 const RangePicker = DatePicker.RangePicker
 const TabPane = Tabs.TabPane
-
-import TTable from '../../../../../components/TTable'
-import TCard from '../../../../../components/TCard'
-
-import CreateCost from '../CreateCost'
-import UpdateCost from '../UpdateCost'
-import CreateReceived from '../CreateReceived'
-import UpdateReceived from '../UpdateReceived'
-
-import genCostColumns from '../costColumns'
-import genReceivedColumns from '../receivedColumns'
-
-import dictionary from '../../../../actions/Dictionary'
-import sheet from '../../../../actions/Sheet'
-
-import {
-	getResult,
-	disabledTime,
-	disabledDate
-} from '../../../../common'
 
 const createCost = 'createCost'
 const updateCost = 'updateCost'
@@ -52,8 +56,9 @@ const updateReceived = 'updateReceived'
 const querySource = 'querySource'
 const queryCost = 'queryCost'
 
-class CreateSheet extends Component {
+class UpdateSheet extends Component {
 	constructor(prop) {
+		super(prop)
 		super(prop)
 		this.submit = this.submit.bind(this)
 		this.cancel = this.cancel.bind(this)
@@ -62,9 +67,7 @@ class CreateSheet extends Component {
 			[createCost]: false,
 			[updateCost]: false,
 			[createReceived]: false,
-			[updateReceived]: false,
-			costs: [],
-			receiveds: []
+			[updateReceived]: false
 		}
 	}
 
@@ -79,6 +82,7 @@ class CreateSheet extends Component {
 			pageIndex: 1,
 			pageSize: 999
 		})
+		this.props.getSheet(this.props.id)
 	}
 
 	submit() {
@@ -106,6 +110,7 @@ class CreateSheet extends Component {
 				let costs = this.state.costs
 				let receiveds = this.state.receiveds
 				this.props.submit({
+					id: this.props.sheet.result.ID,
 					customName,
 					contacts,
 					phone,
@@ -135,7 +140,6 @@ class CreateSheet extends Component {
 			getFieldValue,
 			setFieldsValue
 		} = this.props.form
-
 		let people = getFieldValue('people')
 		let totalPrice = getFieldValue('totalPrice')
 		if (people > 0 && totalPrice > 0) {
@@ -155,7 +159,7 @@ class CreateSheet extends Component {
 	hideModal(type, result, action) {
 		this.state[type] = false
 		if (result && (type === createCost || type === updateCost)) {
-			let costs = this.state.costs
+			let costs = this.state.costs || []
 			if (action === 'create') {
 				costs.push(result)
 			} else if (action === 'update') {
@@ -164,7 +168,7 @@ class CreateSheet extends Component {
 			}
 			this.state.costs = costs
 		} else if (result && (type === createReceived || type === updateReceived)) {
-			let receiveds = this.state.receiveds
+			let receiveds = this.state.receiveds || []
 			if (action === 'create') {
 				receiveds.push(result)
 			} else if (action === 'update') {
@@ -180,7 +184,20 @@ class CreateSheet extends Component {
 
 	render() {
 		const getFieldDecorator = this.props.form.getFieldDecorator
-		const creating = this.props.sheet.creating
+
+		const {
+			getting,
+			updating,
+			result: sheet
+		} = this.props.sheet
+
+		if (!sheet) {
+			return (
+				<Modal title='修改结算表' visible={true} width={800} onCancel={this.cancel}>
+					<Spin tip='Loading...'/>
+				</Modal>
+			)
+		}
 
 		const formItemLayout = {
 			labelCol: {
@@ -231,6 +248,15 @@ class CreateSheet extends Component {
 				})
 			}
 		})
+
+		if (!this.state.costs && sheet.Costs) {
+			this.state = {
+				...this.state,
+				'costs': sheet.Costs,
+				'receiveds': sheet.Receiveds
+			}
+		}
+
 		let costs = this.state.costs
 		let receiveds = this.state.receiveds
 		let modal
@@ -245,16 +271,18 @@ class CreateSheet extends Component {
 		} else if (this.state[updateReceived]) {
 			modal = <UpdateReceived onCancel = {this.hideModal.bind(this,updateReceived)} data={this.selectedReceived}/>
 		}
+
 		return (
-			<Modal title='新增结算表' visible={true} width={900} confirmLoading={creating} onOk={this.submit} onCancel={this.cancel}>
+			<Modal title='修改结算表' visible={true} width={800} confirmLoading={updating} onOk={this.submit} onCancel={this.cancel}>
 				<Tabs tabPosition='left'>
-					<TabPane tab='基本信息' key='baseInfo'> 
+					<TabPane tab='基本信息' key='baseInfo'>
 						<Form>
 							<Row>
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='客户名称'>
 										{
 											getFieldDecorator('customName',{
+												initialValue:sheet.CustomName,
 												rules:[{
 														required:true,
 														whitespace:true,
@@ -272,6 +300,7 @@ class CreateSheet extends Component {
 									<FormItem {...formItemLayout} label='培训基地'>
 									{
 										getFieldDecorator('base',{
+											initialValue:sheet.Base,
 											rules:[{
 												required:true,
 												message:'请选择培训基地！'
@@ -280,8 +309,8 @@ class CreateSheet extends Component {
 								 			<Select placeholder='请选择培训基地'>
 									            {bases}
 								          	</Select>
-							          	)
-							        }
+										)
+									}
 						          	</FormItem>
 								</Col>
 							</Row>
@@ -290,6 +319,7 @@ class CreateSheet extends Component {
 									<FormItem {...formItemLayout} label='联系人'>
 										{
 											getFieldDecorator('contacts',{
+												initialValue:sheet.Contacts,
 												rules:[{
 														required:true,
 														whitespace:true,
@@ -307,6 +337,10 @@ class CreateSheet extends Component {
 									<FormItem {...formItemLayout} label='培训时间'>
 									{
 										getFieldDecorator('times',{
+											initialValue:[
+												moment(sheet.TimeFrom, 'YYYY-MM-DD'),
+												moment(sheet.TimeTo, 'YYYY-MM-DD')
+											],
 											rules:[{
 												required:true,
 												type:'array',
@@ -322,6 +356,7 @@ class CreateSheet extends Component {
 									<FormItem {...formItemLayout} label='手机号码'>
 										{
 											getFieldDecorator('phone',{
+												initialValue:sheet.Phone,
 												rules:[{
 														required:true,
 														whitespace:true,
@@ -338,7 +373,7 @@ class CreateSheet extends Component {
 									<FormItem {...formItemLayout} label='培训人数'>
 										{
 											getFieldDecorator('people',{
-												initialValue:0,
+												initialValue:sheet.People,
 												rules:[{required:true},{
 														range:true,
 														min:1,
@@ -354,7 +389,9 @@ class CreateSheet extends Component {
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='QQ'>
 										{
-											getFieldDecorator('qq')(<Input/>)
+											getFieldDecorator('qq',{
+												initialValue:sheet.QQ,
+											})(<Input/>)
 										}
 									</FormItem>
 								</Col>
@@ -362,7 +399,7 @@ class CreateSheet extends Component {
 									<FormItem {...formItemLayout} label='总成交额'>
 										{
 											getFieldDecorator('totalPrice',{
-												initialValue:0,
+												initialValue:sheet.TotalPrice,
 												rules:[{required:true},{
 														range:true,
 														min:1,
@@ -378,14 +415,18 @@ class CreateSheet extends Component {
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='微信'>
 										{
-											getFieldDecorator('weixin')(<Input/>)
+											getFieldDecorator('weixin',{
+												initialValue:sheet.WeiXin
+											})(<Input/>)
 										}
 									</FormItem>
 								</Col>
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='均价'>
 										{
-											getFieldDecorator('unitPrice',{initialValue:0})(<InputNumber disabled min={0}/>)
+											getFieldDecorator('unitPrice',{
+												initialValue:sheet.UnitPrice
+											})(<InputNumber disabled min={0}/>)
 										}
 									</FormItem>
 								</Col>
@@ -394,7 +435,9 @@ class CreateSheet extends Component {
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='客户地址'>
 										{
-											getFieldDecorator('address')(<Input/>)
+											getFieldDecorator('address',{
+												initialValue:sheet.Address
+											})(<Input/>)
 										}
 									</FormItem>
 								</Col>
@@ -403,12 +446,7 @@ class CreateSheet extends Component {
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='客户来源'>
 										{
-											getFieldDecorator('source',{
-												rules:[{
-													required:true,
-													message:'请选择客户来源！'
-												}]
-											})
+											getFieldDecorator('source',{initialValue:sheet.Source.toLowerCase()})
 											(
 												<RadioGroup>
 											        {radios}
@@ -420,13 +458,15 @@ class CreateSheet extends Component {
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='备注'>
 										{
-											getFieldDecorator('remark')(<Input type='textarea' rows={4}/>)
+											getFieldDecorator('remark',{
+												initialValue:sheet.Remark,
+											})(<Input type='textarea' rows={4}/>)
 										}
 									</FormItem>
 								</Col>
 							</Row>
 						</Form>
-					</TabPane> 
+					</TabPane>
 					<TabPane tab='结算明细' key='costInfo'>
 						<div style={{marginBottom:16,textAlign:'right'}}>
 							<Button type='primary' icon='plus-circle-o' onClick={this.showModal.bind(this,createCost)}>新增明细</Button>
@@ -447,12 +487,14 @@ class CreateSheet extends Component {
 	}
 }
 
-CreateSheet.propTypes = {
+UpdateSheet.propTypes = {
+	id: PropTypes.string.isRequired,
 	bases: PropTypes.array.isRequired,
 	onCancel: PropTypes.func.isRequired
 }
 
 export default connect(state => state, {
 	'queryDictionary': dictionary.query.bind(dictionary),
-	'submit': sheet.create.bind(sheet)
-})(Form.create()(CreateSheet))
+	'getSheet': sheet.get.bind(sheet),
+	'submit': sheet.update.bind(sheet)
+})(Form.create()(UpdateSheet))
