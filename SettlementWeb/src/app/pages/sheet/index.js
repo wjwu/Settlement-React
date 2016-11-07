@@ -16,22 +16,16 @@ import {
 	TCard,
 	TTable
 } from '../../../components'
+
 import UpdateSheet from './bus-components/UpdateSheet'
 import SearchPanel from './bus-components/SearchPanel'
 import {
-	dictionary,
 	sheet
 } from '../../actions'
 import genColumns from './columns'
-import {
-	getResult
-} from '../../common'
 
 const confirm = Modal.confirm
 const updateSheet = 'updateSheet'
-const querySheet = 'querySheet'
-const deleteSheet = 'deleteSheet'
-const queryBase = 'queryBase'
 
 class Sheet extends Component {
 	constructor(prop) {
@@ -42,23 +36,50 @@ class Sheet extends Component {
 			pageIndex: 1
 		}
 		this.state = {
-			[updateSheet]: false
+			[updateSheet]: false,
+			base: {
+				data: []
+			},
+			sheet: {
+				data: [],
+				totalCount: 0
+			}
 		}
 	}
 
 	componentDidMount() {
-		this[queryBase] = this.props.queryBase({
-			type: 'base',
-			enabled: true,
-			pageIndex: 1,
-			pageSize: 999
-		})
 		this.query()
 	}
 
 	componentDidUpdate() {
 		if (this.props.sheet.created || this.props.sheet.updated) {
 			this.props.querySheet(this.request)
+		}
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.dictionary.result) {
+			if (this.state.base.version !== nextProps.dictionary.version) {
+				this.setState({
+					...this.state,
+					base: {
+						data: nextProps.dictionary.result.List,
+						version: nextProps.dictionary.version
+					}
+				})
+			}
+		}
+		if (nextProps.sheet.result) {
+			if (this.state.sheet.version !== nextProps.sheet.version) {
+				this.setState({
+					...this.state,
+					sheet: {
+						data: nextProps.sheet.result.List,
+						totalCount: nextProps.sheet.result.TotalCount,
+						version: nextProps.sheet.version
+					}
+				})
+			}
 		}
 	}
 
@@ -71,8 +92,7 @@ class Sheet extends Component {
 		if (request) {
 			this.request = Object.assign(this.request, request)
 		}
-		const randomStr = this.props.querySheet(this.request)
-		this[querySheet] = randomStr
+		this.props.querySheet(this.request)
 	}
 
 	showModal(type) {
@@ -105,12 +125,13 @@ class Sheet extends Component {
 				})
 			},
 		})
-
-		console.log(id)
 	}
 
 	render() {
+
 		const {
+			base,
+			sheet,
 			updateSheet: updateSheetVisble
 		} = this.state
 
@@ -124,12 +145,10 @@ class Sheet extends Component {
 		})
 
 		let querying = this.props.sheet.querying
-		let bases = getResult(this[queryBase], this.props.dictionary.results)
-		let sheets = getResult(this[querySheet], this.props.sheet.results)
 
 		let modal
 		if (updateSheetVisble) {
-			modal = <UpdateSheet id={this.selectedSheet.ID} onCancel={this.hideModal.bind(this,updateSheet)} bases={bases.data}/>
+			modal = <UpdateSheet id={this.selectedSheet.ID} onCancel={this.hideModal.bind(this,updateSheet)} bases={base.data}/>
 		}
 
 		return (
@@ -137,14 +156,14 @@ class Sheet extends Component {
 				<Row>
 					<TCol>
 						<TCard>
-							<SearchPanel onSearch={this.query} bases={bases.data}/>
+							<SearchPanel onSearch={this.query} bases={base.data}/>
 							{modal}
 						</TCard>
 					</TCol>
 				</Row>
 				<Row>
 					<TCol>
-						<TTable key='sheets' bordered columns={columns} total={sheets.totalCount} dataSource={sheets.data} loading={querying} onLoad={this.onTTableLoad}/>
+						<TTable key='sheets' bordered columns={columns} total={sheet.totalCount} dataSource={sheet.data} loading={querying} onLoad={this.onTTableLoad}/>
 					</TCol>
 				</Row>
 			</TMainContainer>
@@ -153,7 +172,6 @@ class Sheet extends Component {
 }
 
 export default connect(state => state, {
-	[querySheet]: sheet.query.bind(sheet),
-	[queryBase]: dictionary.query.bind(dictionary),
-	[deleteSheet]: sheet.del.bind(sheet)
+	'querySheet': sheet.query.bind(sheet),
+	'deleteSheet': sheet.del.bind(sheet)
 })(TMsgContainer()(Sheet))

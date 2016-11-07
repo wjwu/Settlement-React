@@ -3,9 +3,6 @@ import React, {
 	PropTypes
 } from 'react'
 import {
-	connect
-} from 'react-redux'
-import {
 	Form,
 	Input,
 	Select,
@@ -15,16 +12,15 @@ import {
 	Button
 } from 'antd'
 import {
-	TTreeSelect,
-	CreateSheet
-} from '../../../../components'
-
+	SelectDictionary,
+	TreeSelectGroup
+} from '../../../components'
+import CreateSheet from './CreateSheet'
 import {
 	group
 } from '../../../actions'
 
 import {
-	getResult,
 	tree,
 	EMPTY_GUID,
 	disabledTime,
@@ -35,8 +31,6 @@ const Option = Select.Option
 const FormItem = Form.Item
 const RangePicker = DatePicker.RangePicker
 
-const queryGroup = 'queryGroup'
-
 class SearchPanel extends Component {
 	constructor(props) {
 		super(props)
@@ -46,14 +40,11 @@ class SearchPanel extends Component {
 		this.showModal = this.showModal.bind(this)
 		this.hideModal = this.hideModal.bind(this)
 		this.state = {
-			showCreate: false
+			showCreate: false,
+			group: {
+				data: []
+			}
 		}
-	}
-
-	componentDidMount() {
-		this[queryGroup] = this.props.queryGroup({
-			pageIndex: 1
-		})
 	}
 
 	query() {
@@ -85,6 +76,7 @@ class SearchPanel extends Component {
 			})
 		})
 	}
+
 	search() {
 		this.props.onSearch()
 	}
@@ -124,17 +116,9 @@ class SearchPanel extends Component {
 			lg: 6
 		}
 
-		let result = getResult(this[queryGroup], this.props.group.results)
-		let groups = tree(result.data, EMPTY_GUID)
-
-		let bases = this.props.bases.map(item => {
-			return <Option key={item.ID} value={item.ID}>{item.Name}</Option>
-		})
-		bases.unshift(<Option key='all' value=''>{`全部`}</Option>)
-
 		let modal
 		if (this.state.showCreate) {
-			modal = <CreateSheet onCancel={this.hideModal} bases={this.props.bases}/>
+			modal = <CreateSheet onCancel={this.hideModal}/>
 		}
 
 		return (
@@ -142,7 +126,7 @@ class SearchPanel extends Component {
 				<Row gutter={24}>
 					<Col {...colLayout}>
 						<FormItem {...formItemLayout} label='部门'>
-							<TTreeSelect data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} treeDefaultExpandAll onChange={this.change}/>
+							<TreeSelectGroup dropdownStyle={{maxHeight:400,overflow:'auto'}} treeDefaultExpandAll onChange={this.change}/>
 						</FormItem>
 					</Col>
 					<Col {...colLayout}>
@@ -150,9 +134,7 @@ class SearchPanel extends Component {
 						{
 							getFieldDecorator('base',{initialValue:''})
 							(
-								<Select>
-								{bases}
-								</Select>
+								<SelectDictionary all type='base'/>
 							)
 						}
 						</FormItem>
@@ -218,10 +200,7 @@ class SearchPanel extends Component {
 }
 
 SearchPanel.propTypes = {
-	bases: PropTypes.array.isRequired,
 	onSearch: PropTypes.func.isRequired
 }
 
-export default connect(state => state, {
-	'queryGroup': group.query.bind(group)
-})(Form.create()(SearchPanel))
+export default Form.create()(SearchPanel)

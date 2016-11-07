@@ -6,25 +6,26 @@ import {
 	Modal,
 	Form,
 	Input,
-	Select,
 	Radio,
 	Button,
 	InputNumber
 } from 'antd'
-
-const Option = Select.Option
-const FormItem = Form.Item
-const RadioGroup = Radio.Group
-
+import {
+	SelectDictionary
+} from '../../../components'
 import {
 	random
 } from '../../../common'
+
+const FormItem = Form.Item
+const RadioGroup = Radio.Group
 
 class CreateCost extends Component {
 	constructor(props) {
 		super(props)
 		this.submit = this.submit.bind(this)
 		this.cancel = this.cancel.bind(this)
+		this.select = this.select.bind(this)
 	}
 
 	submit() {
@@ -36,10 +37,7 @@ class CreateCost extends Component {
 		validateFields((errors, values) => {
 			if (!errors) {
 				const type = getFieldValue('type')
-				const selectedCost = this.props.costs.filter(item => {
-					return item.ID === type
-				})
-				const name = selectedCost[0].Name
+				const name = this.selectName
 				const unitPrice = getFieldValue('unitPrice')
 				const amount = getFieldValue('amount')
 				const status = getFieldValue('status')
@@ -62,6 +60,10 @@ class CreateCost extends Component {
 		this.props.onCancel()
 	}
 
+	select(value, option) {
+		this.selectName = option.props.children
+	}
+
 	render() {
 		const formItemLayout = {
 			labelCol: {
@@ -74,9 +76,6 @@ class CreateCost extends Component {
 
 		const getFieldDecorator = this.props.form.getFieldDecorator
 
-		const costs = this.props.costs.map(item => {
-			return <Option key={item.ID} value={item.ID}>{item.Name}</Option>
-		})
 		return (
 			<Modal title='新增结算明细' visible={true} width={460} onOk={this.submit} onCancel={this.cancel}>
 				<Form>
@@ -88,9 +87,7 @@ class CreateCost extends Component {
 								message:'请选择明细类型！'
 							}]
 						})(
-							<Select placeholder='请选择明细类型'>
-								{costs}
-							</Select>
+							<SelectDictionary type='cost' placeholder='请选择明细类型' onSelect={this.select}/>
 						)
 					}
 					</FormItem>
@@ -153,7 +150,6 @@ class CreateCost extends Component {
 }
 
 CreateCost.propTypes = {
-	costs: PropTypes.array.isRequired,
 	onCancel: PropTypes.func.isRequired
 }
 

@@ -9,8 +9,6 @@ import {
 	Modal,
 	Form,
 	Input,
-	Select,
-	Radio,
 	Button,
 	Row,
 	Col,
@@ -18,36 +16,31 @@ import {
 	DatePicker,
 	Tabs
 } from 'antd'
-
 import {
 	TTable,
 	TCard
 } from '../../../../components'
-
+import {
+	SelectDictionary,
+	RadioDictionary
+} from '../../../components'
 import CreateCost from './CreateCost'
 import UpdateCost from './UpdateCost'
 import CreateReceived from './CreateReceived'
 import UpdateReceived from './UpdateReceived'
-
 import {
 	genCostColumns,
 	genReceivedColumns
 } from './columns'
-
 import {
-	dictionary,
 	sheet
 } from '../../../actions'
-
 import {
-	getResult,
 	disabledTime,
 	disabledDate
 } from '../../../common'
 
-const Option = Select.Option
 const FormItem = Form.Item
-const RadioGroup = Radio.Group
 const RangePicker = DatePicker.RangePicker
 const TabPane = Tabs.TabPane
 
@@ -55,8 +48,6 @@ const createCost = 'createCost'
 const updateCost = 'updateCost'
 const createReceived = 'createReceived'
 const updateReceived = 'updateReceived'
-const querySource = 'querySource'
-const queryCost = 'queryCost'
 
 class CreateSheet extends Component {
 	constructor(prop) {
@@ -72,19 +63,6 @@ class CreateSheet extends Component {
 			costs: [],
 			receiveds: []
 		}
-	}
-
-	componentDidMount() {
-		this[querySource] = this.props.queryDictionary({
-			type: 'Source',
-			pageIndex: 1,
-			pageSize: 999
-		})
-		this[queryCost] = this.props.queryDictionary({
-			type: 'Cost',
-			pageIndex: 1,
-			pageSize: 999
-		})
 	}
 
 	submit() {
@@ -197,18 +175,6 @@ class CreateSheet extends Component {
 			},
 		}
 
-		let bases = []
-		if (this.props.bases) {
-			bases = this.props.bases.map(item => {
-				return <Option key={item.ID} value={item.ID}>{item.Name}</Option>
-			})
-		}
-
-		let result = getResult(this[querySource], this.props.dictionary.results)
-		let radios = result.data.map(item => {
-			return <Radio value={item.ID} key={item.ID}>{item.Name}</Radio>
-		})
-
 		const costColumns = genCostColumns((raw, action) => {
 			this.selectedCost = raw
 			if (action === 'update') {
@@ -241,11 +207,9 @@ class CreateSheet extends Component {
 		let receiveds = this.state.receiveds
 		let modal
 		if (this.state[createCost]) {
-			result = getResult(this[queryCost], this.props.dictionary.results)
-			modal = <CreateCost onCancel = {this.hideModal.bind(this,createCost)} costs={result.data}/>
+			modal = <CreateCost onCancel = {this.hideModal.bind(this,createCost)}/>
 		} else if (this.state[updateCost]) {
-			result = getResult(this[queryCost], this.props.dictionary.results)
-			modal = <UpdateCost onCancel = {this.hideModal.bind(this,updateCost)} data={this.selectedCost} costs={result.data}/>
+			modal = <UpdateCost onCancel = {this.hideModal.bind(this,updateCost)} data={this.selectedCost}/>
 		} else if (this.state[createReceived]) {
 			modal = <CreateReceived onCancel = {this.hideModal.bind(this,createReceived)}/>
 		} else if (this.state[updateReceived]) {
@@ -283,9 +247,7 @@ class CreateSheet extends Component {
 												message:'请选择培训基地！'
 											}]
 										})(
-								 			<Select placeholder='请选择培训基地'>
-									            {bases}
-								          	</Select>
+								 			<SelectDictionary type='base' placeholder='请选择培训基地'/>
 							          	)
 							        }
 						          	</FormItem>
@@ -416,9 +378,7 @@ class CreateSheet extends Component {
 												}]
 											})
 											(
-												<RadioGroup>
-											        {radios}
-								      			</RadioGroup>
+												<RadioDictionary type='source'/>
 											)
 										}
 									</FormItem>
@@ -454,11 +414,9 @@ class CreateSheet extends Component {
 }
 
 CreateSheet.propTypes = {
-	bases: PropTypes.array.isRequired,
 	onCancel: PropTypes.func.isRequired
 }
 
 export default connect(state => state, {
-	'queryDictionary': dictionary.query.bind(dictionary),
 	'submit': sheet.create.bind(sheet)
 })(Form.create()(CreateSheet))

@@ -16,7 +16,7 @@ import {
 	TCol,
 	TCard,
 	TTable
-} from '../../../components/TMainContainer'
+} from '../../../components'
 
 import CreateDictionary from './bus-components/CreateDictionary'
 import UpdateDictionary from './bus-components/UpdateDictionary'

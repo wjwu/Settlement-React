@@ -10,8 +10,6 @@ import {
 	Form,
 	Input,
 	Button,
-	Select,
-	Radio,
 	Row,
 	Col,
 	InputNumber,
@@ -20,11 +18,14 @@ import {
 	Spin
 } from 'antd'
 import moment from 'moment'
-
 import {
 	TTable,
 	TCard
 } from '../../../../components'
+import {
+	SelectDictionary,
+	RadioDictionary
+} from '../../../components'
 import CreateCost from './CreateCost'
 import UpdateCost from './UpdateCost'
 import CreateReceived from './CreateReceived'
@@ -34,18 +35,14 @@ import {
 	genReceivedColumns
 } from './columns'
 import {
-	dictionary,
 	sheet
 } from '../../../actions'
 import {
-	getResult,
 	disabledTime,
 	disabledDate
 } from '../../../common'
 
-const Option = Select.Option
 const FormItem = Form.Item
-const RadioGroup = Radio.Group
 const RangePicker = DatePicker.RangePicker
 const TabPane = Tabs.TabPane
 
@@ -53,12 +50,9 @@ const createCost = 'createCost'
 const updateCost = 'updateCost'
 const createReceived = 'createReceived'
 const updateReceived = 'updateReceived'
-const querySource = 'querySource'
-const queryCost = 'queryCost'
 
 class UpdateSheet extends Component {
 	constructor(prop) {
-		super(prop)
 		super(prop)
 		this.submit = this.submit.bind(this)
 		this.cancel = this.cancel.bind(this)
@@ -72,16 +66,6 @@ class UpdateSheet extends Component {
 	}
 
 	componentDidMount() {
-		this[querySource] = this.props.queryDictionary({
-			type: 'Source',
-			pageIndex: 1,
-			pageSize: 999
-		})
-		this[queryCost] = this.props.queryDictionary({
-			type: 'Cost',
-			pageIndex: 1,
-			pageSize: 999
-		})
 		this.props.getSheet(this.props.id)
 	}
 
@@ -208,18 +192,6 @@ class UpdateSheet extends Component {
 			},
 		}
 
-		let bases = []
-		if (this.props.bases) {
-			bases = this.props.bases.map(item => {
-				return <Option key={item.ID} value={item.ID}>{item.Name}</Option>
-			})
-		}
-
-		let result = getResult(this[querySource], this.props.dictionary.results)
-		let radios = result.data.map(item => {
-			return <Radio value={item.ID} key={item.ID}>{item.Name}</Radio>
-		})
-
 		const costColumns = genCostColumns((raw, action) => {
 			this.selectedCost = raw
 			if (action === 'update') {
@@ -306,9 +278,7 @@ class UpdateSheet extends Component {
 												message:'请选择培训基地！'
 											}]
 										})(
-								 			<Select placeholder='请选择培训基地'>
-									            {bases}
-								          	</Select>
+								 			<SelectDictionary type='base' placeholder='请选择培训基地'/>
 										)
 									}
 						          	</FormItem>
@@ -448,9 +418,7 @@ class UpdateSheet extends Component {
 										{
 											getFieldDecorator('source',{initialValue:sheet.Source.toLowerCase()})
 											(
-												<RadioGroup>
-											        {radios}
-								      			</RadioGroup>
+												<RadioDictionary typp='source'/>
 											)
 										}
 									</FormItem>
@@ -489,12 +457,10 @@ class UpdateSheet extends Component {
 
 UpdateSheet.propTypes = {
 	id: PropTypes.string.isRequired,
-	bases: PropTypes.array.isRequired,
 	onCancel: PropTypes.func.isRequired
 }
 
 export default connect(state => state, {
-	'queryDictionary': dictionary.query.bind(dictionary),
 	'getSheet': sheet.get.bind(sheet),
 	'submit': sheet.update.bind(sheet)
 })(Form.create()(UpdateSheet))

@@ -34,11 +34,11 @@ class ActionBase {
 	}
 
 	query(dispatch, request) {
-		let randomStr = random()
 		dispatch({
 			type: `BEGIN_QUERY_${this.moduleName}`
 		})
 		apiClient.get(this.apiPath, request).then(result => {
+			let randomStr = random()
 			dispatch({
 				type: `END_QUERY_${this.moduleName}`,
 				version: randomStr,
@@ -54,7 +54,6 @@ class ActionBase {
 				msg: error
 			})
 		})
-		return randomStr
 	}
 
 	create(dispatch, request) {

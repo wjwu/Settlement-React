@@ -5,24 +5,6 @@ const random = () => {
 	return strRand.substr(2, strRand.length - 2)
 }
 
-const getResult = (randomStr, results) => {
-	let result = {
-		data: [],
-		totalCount: 0
-	}
-	if (Array.isArray(results)) {
-		for (let item of results) {
-			if (item.version === randomStr) {
-				result.data = item.result.List
-				result.totalCount = item.result.TotalCount
-				break
-			}
-		}
-	}
-	return result
-}
-
-
 const tree = (data, root) => {
 	if (Array.isArray(data)) {
 		const loop = (parentId) => data.filter(item => item.ParentID === parentId).map(item => {

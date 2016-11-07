@@ -8,7 +8,7 @@ class UserAction extends ActionBase {
 
 	query(request) {
 		return dispatch => {
-			return super.query(dispatch, request)
+			super.query(dispatch, request)
 		}
 	}
 

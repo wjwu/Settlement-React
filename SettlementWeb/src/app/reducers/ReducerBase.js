@@ -40,15 +40,10 @@ class ReducerBase {
 				}
 			case `END_QUERY_${this.moduleName}`:
 				delete state.querying
-				if (!state.results) {
-					state.results = []
-				}
-				state.results.push({
+				return {
+					...state,
 					version: action.version,
 					result: action.result
-				})
-				return {
-					...state
 				}
 			case `ERROR_QUERY_${this.moduleName}`:
 				delete state.querying

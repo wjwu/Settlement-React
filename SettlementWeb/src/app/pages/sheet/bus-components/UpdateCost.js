@@ -6,13 +6,14 @@ import {
 	Modal,
 	Form,
 	Input,
-	Select,
 	Radio,
 	Button,
 	InputNumber
 } from 'antd'
+import {
+	SelectDictionary
+} from '../../../components'
 
-const Option = Select.Option
 const FormItem = Form.Item
 const RadioGroup = Radio.Group
 
@@ -69,10 +70,6 @@ class UpdateCost extends Component {
 		}
 
 		const getFieldDecorator = this.props.form.getFieldDecorator
-		const cost = this.props.data
-		const costs = this.props.costs.map(item => {
-			return <Option key={item.ID} value={item.ID}>{item.Name}</Option>
-		})
 
 		return (
 			<Modal title='新增结算明细' visible={true} width={460} onOk={this.submit} onCancel={this.cancel}>
@@ -86,9 +83,7 @@ class UpdateCost extends Component {
 								message:'请选择明细类型！'
 							}]
 						})(
-							<Select placeholder='请选择明细类型'>
-								{costs}
-							</Select>
+							<SelectDictionary type='cost' placeholder='请选择明细类型'/>
 						)
 					}
 					</FormItem>
@@ -155,7 +150,6 @@ class UpdateCost extends Component {
 
 UpdateCost.propTypes = {
 	data: PropTypes.object.isRequired,
-	costs: PropTypes.array.isRequired,
 	onCancel: PropTypes.func.isRequired
 }
 

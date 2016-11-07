@@ -91,7 +91,7 @@ const genReceivedColumns = (editFuc) => {
 	}]
 }
 
-export default {
+export {
 	genCostColumns,
 	genReceivedColumns
 }
