@@ -3,19 +3,13 @@ import React, {
 	PropTypes
 } from 'react'
 import {
-	connect
-} from 'react-redux'
-import {
 	Modal,
 	Form,
 	Input
 } from 'antd'
 import {
-	TreeSelectGroup
-} from '../../../components'
-import {
-	group
-} from '../../../actions'
+	TTreeSelect
+} from '../../../../components'
 
 const FormItem = Form.Item
 
@@ -23,8 +17,6 @@ class CreateGroup extends Component {
 	constructor(prop) {
 		super(prop)
 		this.submit = this.submit.bind(this)
-		this.cancel = this.cancel.bind(this)
-		this.change = this.change.bind(this)
 	}
 
 	submit() {
@@ -34,10 +26,10 @@ class CreateGroup extends Component {
 		} = this.props.form
 
 		validateFields((errors, values) => {
-			let parentId = this.selectedGroup
-			if (!errors && parentId) {
+			if (!errors) {
+				let parentId = getFieldValue('parent')
 				let name = getFieldValue('name')
-				this.props.submit({
+				this.props.onSubmit({
 					parentId,
 					name
 				})
@@ -45,18 +37,12 @@ class CreateGroup extends Component {
 		})
 	}
 
-	cancel() {
-		this.props.form.resetFields(['name'])
-		this.props.onCancel()
-	}
-
-	change(value) {
-		this.selectedGroup = value
-	}
-
 	render() {
 		const getFieldDecorator = this.props.form.getFieldDecorator
-		const creating = this.props.group.creating
+		const {
+			groups,
+			creating
+		} = this.props
 
 		const formItemLayout = {
 			labelCol: {
@@ -68,10 +54,18 @@ class CreateGroup extends Component {
 		}
 
 		return (
-			<Modal title='新增部门' visible={true} width={500} confirmLoading={creating} onOk={this.submit} onCancel={this.cancel}>
+			<Modal title='新增部门' visible={true} width={500} confirmLoading={creating} onOk={this.submit} onCancel={this.props.onCancel}>
 				<Form>
-					<FormItem {...formItemLayout} label='上级部门'>
-						<TreeSelectGroup dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择上级部门' treeDefaultExpandAll onChange={this.change}/>
+					<FormItem {...formItemLayout} label='上级部门'>{
+						getFieldDecorator('parent',{
+							rules:[{
+								required:true,
+								message:'上级部门不能为空！'
+							}]
+						})(
+							<TTreeSelect data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择上级部门' treeDefaultExpandAll/>
+						)
+					}
 					</FormItem>
 					<FormItem hasFeedback {...formItemLayout} label='部门名称'>
 					{
@@ -96,10 +90,15 @@ class CreateGroup extends Component {
 	}
 }
 
-CreateGroup.propTypes = {
-	onCancel: PropTypes.func.isRequired
+CreateGroup.defaultProps = {
+	creating: false
 }
 
-export default connect(state => state, {
-	'submit': group.create.bind(group)
-})(Form.create()(CreateGroup))
+CreateGroup.propTypes = {
+	creating: PropTypes.bool.isRequired,
+	groups: PropTypes.array.isRequired,
+	onCancel: PropTypes.func.isRequired,
+	onSubmit: PropTypes.func.isRequired
+}
+
+export default Form.create()(CreateGroup)

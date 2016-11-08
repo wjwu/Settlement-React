@@ -14,19 +14,14 @@ import {
 	InputNumber
 } from 'antd'
 
-import {
-	dictionary
-} from '../../../actions'
-
 const Option = Select.Option
 const FormItem = Form.Item
 const RadioGroup = Radio.Group
 
-class CreateDictionay extends Component {
+class UpdateDictionay extends Component {
 	constructor(prop) {
 		super(prop)
 		this.submit = this.submit.bind(this)
-		this.cancel = this.cancel.bind(this)
 	}
 
 	submit() {
@@ -41,7 +36,8 @@ class CreateDictionay extends Component {
 				let name = getFieldValue('name')
 				let rank = getFieldValue('rank')
 				let enabled = getFieldValue('enabled')
-				this.props.submit({
+				this.props.onSubmit({
+					id: this.props.data.ID,
 					type,
 					name,
 					rank,
@@ -52,17 +48,15 @@ class CreateDictionay extends Component {
 	}
 
 	cancel() {
-		this.props.form.resetFields()
 		this.props.onCancel()
 	}
 
 	render() {
+		const getFieldDecorator = this.props.form.getFieldDecorator
 		const {
-			getFieldDecorator,
-			getFieldProps
-		} = this.props.form
-
-		const creating = this.props.dictionary.creating
+			dictionary,
+			updating
+		} = this.props
 
 		const formItemLayout = {
 			labelCol: {
@@ -74,18 +68,25 @@ class CreateDictionay extends Component {
 		}
 
 		return (
-			<Modal title='新增字典' visible={true} width={500} confirmLoading={creating} onOk={this.submit} onCancel={this.cancel}>
+			<Modal title='新增字典' visible={true} width={500} confirmLoading={updating} onOk={this.submit} onCancel={this.props.onCancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='字典类型'>
-			 			<Select placeholder='请选择字典类型' {...getFieldProps('type',{rules:[{required:true,message:'请选择字典类型！'}]})}>
-				            <Option value='Base'>培训基地</Option>
-				            <Option value='Source'>客户来源</Option>
-				            <Option value='Cost'>结算类型</Option>
-			          	</Select>
+					{
+						getFieldDecorator('type',{
+							initialValue:dictionary.Type
+						})(
+				 			<Select placeholder='请选择字典类型'>
+					            <Option value='Base'>培训基地</Option>
+					            <Option value='Source'>客户来源</Option>
+					            <Option value='Cost'>结算类型</Option>
+				          	</Select>
+						)
+					}
 					</FormItem>
 					<FormItem {...formItemLayout} label='字典名称'>
 					{
 						getFieldDecorator('name',{
+							initialValue:dictionary.Name,
 							rules:[{
 									required:true,
 									whitespace:true,
@@ -101,14 +102,14 @@ class CreateDictionay extends Component {
 					<FormItem {...formItemLayout} label='字典顺序'>
 					{
 						getFieldDecorator('rank',{
-							initialValue:0
+							initialValue:dictionary.Rank
 						})(<InputNumber min={0}/>)
 					}
 					</FormItem>
 					<FormItem {...formItemLayout} label='状态'>
 					{
 						getFieldDecorator('enabled',{
-							initialValue: 'true'
+							initialValue: dictionary.hasOwnProperty('Enabled')?dictionary.Enabled.toString():dictionary.Enabled
 						})(
 				            <RadioGroup>
 				              <Radio value='true'>启用</Radio>
@@ -123,10 +124,15 @@ class CreateDictionay extends Component {
 	}
 }
 
-CreateDictionay.propTypes = {
-	onCancel: PropTypes.func.isRequired
+UpdateDictionay.defaultProps = {
+	updating: false
 }
 
-export default connect(state => state, {
-	'submit': dictionary.create.bind(dictionary)
-})(Form.create()(CreateDictionay))
+UpdateDictionay.propTypes = {
+	dictionary: PropTypes.object.isRequired,
+	onCancel: PropTypes.func.isRequired,
+	onSubmit: PropTypes.func.isRequired,
+	updating: PropTypes.bool
+}
+
+export default Form.create()(UpdateDictionay)

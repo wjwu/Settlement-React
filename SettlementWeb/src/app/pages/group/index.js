@@ -18,15 +18,20 @@ import {
 	TCard
 } from '../../../components'
 
-import CreateGroup from './bus-components/CreateGroup'
-import UpdateGroup from './bus-components/UpdateGroup'
-import CreateUser from './bus-components/CreateUser'
-import UpdateUser from './bus-components/UpdateUser'
+import CreateGroup from './components/CreateGroup'
+import UpdateGroup from './components/UpdateGroup'
+import CreateUser from './components/CreateUser'
+import UpdateUser from './components/UpdateUser'
 
 import {
-	group,
-	user
-} from '../../actions'
+	queryGroups,
+	queryUsers,
+	createGroup,
+	updateGroup,
+	deleteGroup,
+	createUser,
+	updateUser
+} from './action'
 
 import genColumns from './columns'
 import {
@@ -34,11 +39,6 @@ import {
 	EMPTY_GUID
 } from '../../common'
 const confirm = Modal.confirm
-
-const createGroup = 'createGroup'
-const createUser = 'createUser'
-const updateGroup = 'updateGroup'
-const updateUser = 'updateUser'
 
 class Group extends Component {
 	constructor(props) {
@@ -52,23 +52,23 @@ class Group extends Component {
 			pageIndex: 1
 		}
 		this.state = {
-			[createGroup]: false,
-			[createUser]: false,
-			[updateGroup]: false,
-			[updateUser]: false
+			createGroupVisible: false,
+			createUserVisible: false,
+			updateGroupVisible: false,
+			updateUserVisible: false
 		}
 	}
 
 	componentDidMount() {
-		this.props.queryGroup(this.queryGroupRequest)
+		this.props.queryGroups(this.queryGroupRequest)
 	}
 
 	componentDidUpdate() {
-		if (this.props.group.created || this.props.group.updated) {
-			this.props.queryGroup(this.queryGroupRequest)
+		if (this.props.group.createdGroup || this.props.group.updatedGroup) {
+			this.props.queryGroups(this.queryGroupRequest)
 		}
-		if ((this.props.user.created || this.props.user.updated) && this.queryUserRequset.group) {
-			this.props.queryUser(this.queryUserRequset)
+		if ((this.props.group.createdUser || this.props.group.updatedUser) && this.queryUserRequset.group) {
+			this.props.queryUsers(this.queryUserRequset)
 		}
 	}
 
@@ -76,12 +76,12 @@ class Group extends Component {
 		this.selectedNode = node
 		this.queryUserRequset.group = node.key
 		this.queryUserRequset.pageIndex = 1
-		this.props.queryUser(this.queryUserRequset)
+		this.props.queryUsers(this.queryUserRequset)
 	}
 
 	onTTableLoad(pageIndex) {
 		this.queryUserRequset.pageIndex = pageIndex
-		this.props.queryUser(this.queryUserRequset)
+		this.props.queryUsers(this.queryUserRequset)
 	}
 
 	showModal(type) {
@@ -102,20 +102,21 @@ class Group extends Component {
 			this.props.showGlobleMsg('error', '请选择一个部门！')
 		} else {
 			const {
-				delGroup,
+				deleteGroup,
 				showGlobleMsg,
-				queryGroup,
-				queryUser
+				queryGroups,
+				queryUsers
 			} = this.props
 			let that = this
 			confirm({
 				title: '删除部门',
 				content: '确定要删除选中部门？',
 				onOk() {
-					return delGroup(group).then(result => {
+					return deleteGroup(group).then(result => {
 						showGlobleMsg('success', '删除成功！')
-						that.queryUserRequset.group = null
-						queryGroup(that.queryGroupRequest)
+						that.queryUserRequset.group = '00000000-0000-0000-0000-000000000000'
+						queryGroups(that.queryGroupRequest)
+						queryUsers(that.queryUserRequset)
 					}, error => {
 						showGlobleMsg('error', result.Message)
 					})
@@ -135,54 +136,55 @@ class Group extends Component {
 	}
 
 	render() {
-		let groupProps = this.props.group
-		let userProps = this.props.user
+		let {
+			groups,
+			users,
+			queryingGroups,
+			queryingUsers,
+			creatingGroup,
+			updatingGroup,
+			creatingUser,
+			updatingUser
+		} = this.props.group
+		let empty = {
+			List: [],
+			TotalCount: 0
+		}
+		groups = groups || empty
+		users = users || empty
+		groups = tree(groups.List, EMPTY_GUID)
 
 		const {
-			createGroup: createGroupVisible,
-			createUser: createUserVisible,
-			updateGroup: updateGroupVisible,
-			updateUser: updateUserVisible,
+			createGroupVisible,
+			createUserVisible,
+			updateGroupVisible,
+			updateUserVisible,
 		} = this.state
-
-		let result = groupProps.result
-		let groups = []
-		if (result) {
-			groups = tree(result.List, EMPTY_GUID)
-		}
-
-		result = userProps.result
-		let users = []
-		let totalCount = 0
-		if (result) {
-			users = result.List
-			totalCount = result.TotalCount
-		}
 
 		const columns = genColumns(raw => {
 			this.selectedUser = raw
-			this.showModal(updateUser)
+			this.showModal('updateUserVisible')
 		})
 		const selectedUser = this.selectedUser || {}
 
 		let modal
 		if (createGroupVisible) {
-			modal = <CreateGroup onCancel={this.hideModal.bind(this,createGroup)} />
+			modal = <CreateGroup onCancel={this.hideModal.bind(this,'createGroupVisible')} onSubmit={this.props.createGroup} groups={groups} creating={creatingGroup}/>
 		} else if (createUserVisible) {
-			modal = <CreateUser onCancel={this.hideModal.bind(this,createUser)} />
+			modal = <CreateUser onCancel={this.hideModal.bind(this,'createUserVisible')} onSubmit={this.props.createUser} groups={groups} creating={creatingUser}/>
 		} else if (updateGroupVisible) {
-			modal = <UpdateGroup onCancel={this.hideModal.bind(this,updateGroup)} data={this.selectedNode||{}} />
+			modal = <UpdateGroup onCancel={this.hideModal.bind(this,'updateGroupVisible')} onSubmit={this.props.updateGroup} group={this.selectedNode} updating={updatingGroup}/>
 		} else if (updateUserVisible) {
-			modal = <UpdateUser onCancel={this.hideModal.bind(this,updateUser)} data={selectedUser}/>
+			modal = <UpdateUser onCancel={this.hideModal.bind(this,'updateUserVisible')} onSubmit={this.props.updateUser} groups={groups} user={selectedUser} updating={updatingUser}/>
 		}
 		return (
 			<TMainContainer>
 				<Row>
 					<TCol>
 						<TCard>
-							<Button type='primary' className='button' onClick={this.showModal.bind(this,createGroup)}>新增部门</Button>
-							<Button type='primary' className='button' onClick={this.showModal.bind(this,createUser)}>新增用户</Button>
-							<Button type='ghost' className='button' onClick={this.doUpdateGroup.bind(this,updateGroup)}>修改部门</Button>
+							<Button type='primary' className='button' onClick={this.showModal.bind(this,'createGroupVisible')}>新增部门</Button>
+							<Button type='primary' className='button' onClick={this.showModal.bind(this,'createUserVisible')}>新增用户</Button>
+							<Button type='ghost' className='button' onClick={this.doUpdateGroup.bind(this,'updateGroupVisible')}>修改部门</Button>
 							<Button type='ghost' onClick={this.doDeleteGroup.bind(this)}>删除部门</Button>
 							{modal}
 						</TCard>
@@ -190,11 +192,11 @@ class Group extends Component {
 				</Row>
 				<Row gutter={24}>
 					<TCol xs={24} sm={7} md={7} lg={6}>
-						<TTree title='部门结构' loading={groupProps.querying} data={groups} onSelect={this.onTTreeSelect}/>
+						<TTree title='部门结构' loading={queryingGroups} data={groups} onSelect={this.onTTreeSelect}/>
 					</TCol>
 					<TCol xs={24} sm={17} md={17} lg={18}>
 						<TCard title='用户数据'>
-							<TTable columns={columns} total={totalCount} dataSource={users} loading={userProps.querying} onLoad={this.onTTableLoad}/>
+							<TTable columns={columns} total={users.TotalCount} dataSource={users.List} loading={queryingUsers} onLoad={this.onTTableLoad}/>
 						</TCard>
 					</TCol>
 				</Row>
@@ -204,7 +206,11 @@ class Group extends Component {
 }
 
 export default connect(state => state, {
-	'queryGroup': group.query.bind(group),
-	'delGroup': group.del.bind(group),
-	'queryUser': user.query.bind(user),
+	queryGroups,
+	queryUsers,
+	createGroup,
+	updateGroup,
+	deleteGroup,
+	createUser,
+	updateUser
 })(TMsgContainer()(Group))

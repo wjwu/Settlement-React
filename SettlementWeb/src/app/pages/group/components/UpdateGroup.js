@@ -3,16 +3,10 @@ import React, {
 	PropTypes
 } from 'react'
 import {
-	connect
-} from 'react-redux'
-import {
 	Modal,
 	Form,
 	Input
 } from 'antd'
-import {
-	group
-} from '../../../actions'
 
 const FormItem = Form.Item
 
@@ -20,7 +14,6 @@ class UpdateGroup extends Component {
 	constructor(prop) {
 		super(prop)
 		this.submit = this.submit.bind(this)
-		this.cancel = this.cancel.bind(this)
 	}
 
 	submit() {
@@ -32,21 +25,20 @@ class UpdateGroup extends Component {
 		validateFields((errors, values) => {
 			if (!errors) {
 				let name = getFieldValue('name')
-				this.props.submit({
-					id: this.props.data.key,
+				this.props.onSubmit({
+					id: this.props.group.key,
 					name
 				})
 			}
 		})
 	}
 
-	cancel() {
-		this.props.onCancel()
-	}
-
 	render() {
 		const getFieldDecorator = this.props.form.getFieldDecorator
-		const updating = this.props.group.updating
+		const {
+			updating,
+			group
+		} = this.props
 
 		const formItemLayout = {
 			labelCol: {
@@ -58,12 +50,12 @@ class UpdateGroup extends Component {
 		}
 
 		return (
-			<Modal title='修改部门' visible={true} width={500} confirmLoading={updating} onOk={this.submit} onCancel={this.cancel}>
+			<Modal title='修改部门' visible={true} width={500} confirmLoading={updating} onOk={this.submit} onCancel={this.props.onCancel}>
 				<Form>
 					<FormItem hasFeedback {...formItemLayout} label='部门名称'>
 					{
 						getFieldDecorator('name',{
-							initialValue:this.props.data.title,
+							initialValue:group.title,
 							rules:[{
 								required:true,
 								whitespace:true,
@@ -84,12 +76,15 @@ class UpdateGroup extends Component {
 	}
 }
 
-
-UpdateGroup.propTypes = {
-	data: PropTypes.object.isRequired,
-	onCancel: PropTypes.func.isRequired
+UpdateGroup.defaultProps = {
+	updating: false
 }
 
-export default connect(state => state, {
-	'submit': group.update.bind(group)
-})(Form.create()(UpdateGroup))
+UpdateGroup.propTypes = {
+	group: PropTypes.object.isRequired,
+	updating: PropTypes.bool.isRequired,
+	onCancel: PropTypes.func.isRequired,
+	onSubmit: PropTypes.func.isRequired,
+}
+
+export default Form.create()(UpdateGroup)

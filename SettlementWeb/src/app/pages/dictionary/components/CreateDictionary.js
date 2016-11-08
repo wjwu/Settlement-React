@@ -3,9 +3,6 @@ import React, {
 	PropTypes
 } from 'react'
 import {
-	connect
-} from 'react-redux'
-import {
 	Modal,
 	Form,
 	Input,
@@ -14,19 +11,14 @@ import {
 	InputNumber
 } from 'antd'
 
-import {
-	dictionary
-} from '../../../actions'
-
 const Option = Select.Option
 const FormItem = Form.Item
 const RadioGroup = Radio.Group
 
-class UpdateDictionay extends Component {
+class CreateDictionay extends Component {
 	constructor(prop) {
 		super(prop)
 		this.submit = this.submit.bind(this)
-		this.cancel = this.cancel.bind(this)
 	}
 
 	submit() {
@@ -41,8 +33,7 @@ class UpdateDictionay extends Component {
 				let name = getFieldValue('name')
 				let rank = getFieldValue('rank')
 				let enabled = getFieldValue('enabled')
-				this.props.submit({
-					id: this.props.data.ID,
+				this.props.onSubmit({
 					type,
 					name,
 					rank,
@@ -52,19 +43,8 @@ class UpdateDictionay extends Component {
 		})
 	}
 
-	cancel() {
-		this.props.form.resetFields()
-		this.props.onCancel()
-	}
-
 	render() {
-		const {
-			getFieldDecorator,
-			getFieldProps
-		} = this.props.form
-
-		const dictionary = this.props.data
-		const updating = this.props.dictionary.updating
+		const getFieldDecorator = this.props.form.getFieldDecorator
 
 		const formItemLayout = {
 			labelCol: {
@@ -76,19 +56,27 @@ class UpdateDictionay extends Component {
 		}
 
 		return (
-			<Modal title='新增字典' visible={true} width={500} confirmLoading={updating} onOk={this.submit} onCancel={this.cancel}>
+			<Modal title='新增字典' visible={true} width={500} confirmLoading={this.props.creating} onOk={this.submit} onCancel={this.props.onCancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='字典类型'>
-			 			<Select placeholder='请选择字典类型' {...getFieldProps('type',{initialValue:dictionary.Type,rules:[{required:true,message:'请选择字典类型！'}]})}>
-				            <Option value='Base'>培训基地</Option>
-				            <Option value='Source'>客户来源</Option>
-				            <Option value='Cost'>结算类型</Option>
-			          	</Select>
+					{
+						getFieldDecorator('type',{
+							rules:[{
+								required:true,
+								message:'请选择字典类型！'
+							}]
+						})(
+				 			<Select placeholder='请选择字典类型'>
+					            <Option value='Base'>培训基地</Option>
+					            <Option value='Source'>客户来源</Option>
+					            <Option value='Cost'>结算类型</Option>
+				          	</Select>
+						)
+					}
 					</FormItem>
 					<FormItem {...formItemLayout} label='字典名称'>
 					{
 						getFieldDecorator('name',{
-							initialValue:dictionary.Name,
 							rules:[{
 									required:true,
 									whitespace:true,
@@ -104,14 +92,14 @@ class UpdateDictionay extends Component {
 					<FormItem {...formItemLayout} label='字典顺序'>
 					{
 						getFieldDecorator('rank',{
-							initialValue:dictionary.Rank
+							initialValue:0
 						})(<InputNumber min={0}/>)
 					}
 					</FormItem>
 					<FormItem {...formItemLayout} label='状态'>
 					{
 						getFieldDecorator('enabled',{
-							initialValue: dictionary.hasOwnProperty('Enabled')?dictionary.Enabled.toString():dictionary.Enabled
+							initialValue: 'true'
 						})(
 				            <RadioGroup>
 				              <Radio value='true'>启用</Radio>
@@ -126,12 +114,14 @@ class UpdateDictionay extends Component {
 	}
 }
 
-
-UpdateDictionay.propTypes = {
-	data: PropTypes.object.isRequired,
-	onCancel: PropTypes.func.isRequired
+CreateDictionay.defaultProps = {
+	creating: false
 }
 
-export default connect(state => state, {
-	'submit': dictionary.update.bind(dictionary)
-})(Form.create()(UpdateDictionay))
+CreateDictionay.propTypes = {
+	onCancel: PropTypes.func.isRequired,
+	onSubmit: PropTypes.func.isRequired,
+	creating: PropTypes.bool
+}
+
+export default Form.create()(CreateDictionay)

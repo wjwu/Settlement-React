@@ -3,9 +3,6 @@ import React, {
 	PropTypes
 } from 'react'
 import {
-	connect
-} from 'react-redux'
-import {
 	Modal,
 	Form,
 	Input,
@@ -13,20 +10,16 @@ import {
 	Radio
 } from 'antd'
 import {
-	TreeSelectGroup
-} from '../../../components'
-import {
-	user
-} from '../../../actions'
+	TTreeSelect
+} from '../../../../components'
 
 const FormItem = Form.Item
 const RadioGroup = Radio.Group
 
-class UpdateUser extends Component {
+class CreateUser extends Component {
 	constructor(prop) {
 		super(prop)
 		this.submit = this.submit.bind(this)
-		this.cancel = this.cancel.bind(this)
 		this.reset = this.reset.bind(this)
 	}
 
@@ -35,14 +28,18 @@ class UpdateUser extends Component {
 			validateFields,
 			getFieldValue
 		} = this.props.form
+
 		validateFields((errors, values) => {
 			if (!errors) {
 				let group = getFieldValue('group')
+				let loginId = getFieldValue('loginId')
+				let password = getFieldValue('password')
 				let phone = getFieldValue('phone')
 				let name = getFieldValue('name')
 				let enabled = getFieldValue('enabled')
-				this.props.submit({
-					id: this.props.data.ID,
+				this.props.onSubmit({
+					loginId,
+					password,
 					phone,
 					name,
 					enabled,
@@ -52,23 +49,20 @@ class UpdateUser extends Component {
 		})
 	}
 
-	cancel() {
-		this.props.form.resetFields()
-		this.props.onCancel()
-	}
-
 	reset() {
 		this.props.form.resetFields()
 	}
 
 	render() {
 		const getFieldDecorator = this.props.form.getFieldDecorator
-		const updating = this.props.user.updating
-		const user = this.props.data
+		const {
+			groups,
+			creating
+		} = this.props
 
 		let reset = <Button key='reset' type='ghost' size='large' onClick={this.reset}>重置</Button>
-		let cancel = <Button key='cancel' type='ghost' size='large' onClick={this.cancel}>取消</Button>
-		let ok = <Button key='submit' type='primary' size='large' loading={updating} onClick={this.submit}>确定</Button>
+		let cancel = <Button key='cancel' type='ghost' size='large' onClick={this.props.onCancel}>取消</Button>
+		let ok = <Button key='submit' type='primary' size='large' loading={creating} onClick={this.submit}>确定</Button>
 
 		const formItemLayout = {
 			labelCol: {
@@ -79,25 +73,57 @@ class UpdateUser extends Component {
 			},
 		}
 		return (
-			<Modal title='修改用户' visible={true} width={500} footer={[cancel,reset,ok]} onCancel={this.cancel}>
+			<Modal title='新增用户' visible={true} width={500} footer={[cancel,reset,ok]} onCancel={this.props.onCancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='所属部门'>
 					{
 						getFieldDecorator('group',{
-							initialValue:user.Group
-						})
-						(
-							<TreeSelectGroup dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择所属部门' treeDefaultExpandAll/>
+							rules:[{
+								required:true,
+								message:'所属部门不能为空！'
+							}]
+						})(
+							<TTreeSelect data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择所属部门' treeDefaultExpandAll/>
 						)
 					}
 					</FormItem>
-					<FormItem {...formItemLayout} label='账号'>
-						<Input value={user.LoginID} disabled/>
+					<FormItem hasFeedback {...formItemLayout} label='账号'>
+					{
+						getFieldDecorator('loginId',{
+							rules:[{
+								required:true,
+								whitespace:true,
+								message:'账号不能为空！'
+							},{
+								length:true,
+								max:50,
+								message:'账号最多50个字符！'
+							}]
+						})(
+							<Input placeholder='请输入账号'/>
+						)
+					}
+					</FormItem>
+					<FormItem hasFeedback {...formItemLayout} label='初始密码'>
+					{
+						getFieldDecorator('password',{
+							rules:[{
+								required:true,
+								whitespace:true,
+								message:'初始密码不能为空！'
+							},{
+								length:true,
+								max:20,
+								message:'密码长度不能超过20个字符！'
+							}]
+						})(
+							<Input type='password' placeholder='请输入初始密码'/>
+						)
+					}
 					</FormItem>
 					<FormItem hasFeedback {...formItemLayout} label='手机号码'>
 					{
 						getFieldDecorator('phone',{
-							initialValue:user.Phone,
 							rules:[{
 								required:true,
 								whitespace:true,
@@ -114,7 +140,6 @@ class UpdateUser extends Component {
 					<FormItem hasFeedback {...formItemLayout} label='姓名'>
 					{
 						getFieldDecorator('name',{
-							initialValue:user.Name,
 							rules:[{
 								required:true,
 								whitespace:true,
@@ -132,7 +157,7 @@ class UpdateUser extends Component {
 					<FormItem {...formItemLayout} label='状态'>
 					{
 						getFieldDecorator('enabled',{
-							initialValue: user.hasOwnProperty('Enabled')?user.Enabled.toString():user.Enabled
+							initialValue: 'true'
 						})(
 				            <RadioGroup>
 				              <Radio value='true'>启用</Radio>
@@ -147,13 +172,15 @@ class UpdateUser extends Component {
 	}
 }
 
-
-UpdateUser.propTypes = {
-	data: PropTypes.object.isRequired,
-	onCancel: PropTypes.func.isRequired
+CreateUser.defaultProps = {
+	creating: false
 }
 
+CreateUser.propTypes = {
+	groups: PropTypes.array.isRequired,
+	creating: PropTypes.bool.isRequired,
+	onCancel: PropTypes.func.isRequired,
+	onSubmit: PropTypes.func.isRequired
+}
 
-export default connect(state => state, {
-	'submit': user.update.bind(user)
-})(Form.create()(UpdateUser))
+export default Form.create()(CreateUser)
