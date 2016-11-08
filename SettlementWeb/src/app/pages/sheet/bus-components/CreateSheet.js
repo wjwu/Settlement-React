@@ -17,8 +17,7 @@ import {
 	Tabs
 } from 'antd'
 import {
-	TTable,
-	TCard
+	TTable
 } from '../../../../components'
 import {
 	SelectDictionary,

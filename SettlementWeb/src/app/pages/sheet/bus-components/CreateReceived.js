@@ -10,12 +10,11 @@ import {
 	InputNumber,
 	DatePicker
 } from 'antd'
-
-const FormItem = Form.Item
-
 import {
 	random
 } from '../../../common'
+
+const FormItem = Form.Item
 
 class CreateReceived extends Component {
 	constructor(props) {

@@ -8,18 +8,16 @@ import {
 import {
 	Modal,
 	Form,
-	Tree,
 	Input
 } from 'antd'
 import {
-	TTreeSelect
-} from '../../../../components'
+	TreeSelectGroup
+} from '../../../components'
 import {
 	group
 } from '../../../actions'
 
 const FormItem = Form.Item
-const TreeNode = Tree.TreeNode
 
 class CreateGroup extends Component {
 	constructor(prop) {
@@ -58,7 +56,6 @@ class CreateGroup extends Component {
 
 	render() {
 		const getFieldDecorator = this.props.form.getFieldDecorator
-		const groups = this.props.groups
 		const creating = this.props.group.creating
 
 		const formItemLayout = {
@@ -74,7 +71,7 @@ class CreateGroup extends Component {
 			<Modal title='新增部门' visible={true} width={500} confirmLoading={creating} onOk={this.submit} onCancel={this.cancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='上级部门'>
-						<TTreeSelect data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择上级部门' treeDefaultExpandAll onChange={this.change}/>
+						<TreeSelectGroup dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择上级部门' treeDefaultExpandAll onChange={this.change}/>
 					</FormItem>
 					<FormItem hasFeedback {...formItemLayout} label='部门名称'>
 					{
@@ -100,7 +97,6 @@ class CreateGroup extends Component {
 }
 
 CreateGroup.propTypes = {
-	groups: PropTypes.array.isRequired,
 	onCancel: PropTypes.func.isRequired
 }
 

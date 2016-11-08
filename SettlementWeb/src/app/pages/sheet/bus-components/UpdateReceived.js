@@ -56,11 +56,9 @@ class UpdateReceived extends Component {
 			},
 		}
 
-		const {
-			getFieldDecorator
-		} = this.props.form
-
+		const getFieldDecorator = this.props.form.getFieldDecorator
 		const received = this.props.data
+
 		return (
 			<Modal title='新增收款明细' visible={true} width={460} onOk={this.submit} onCancel={this.cancel}>
 				<Form>

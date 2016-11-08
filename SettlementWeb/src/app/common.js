@@ -47,7 +47,6 @@ const disabledTime = (time, type) => {
 }
 export {
 	random,
-	getResult,
 	tree,
 	EMPTY_GUID,
 	disabledDate,

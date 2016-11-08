@@ -8,8 +8,6 @@ import {
 import {
 	Modal,
 	Form,
-	Tree,
-	TreeSelect,
 	Input,
 	Button,
 	Radio,
@@ -17,20 +15,18 @@ import {
 	Col
 } from 'antd'
 import {
-	TTreeSelect
-} from '../../../../components'
+	TreeSelectGroup
+} from '../../../components'
 import {
 	user
 } from '../../../actions'
 
 const FormItem = Form.Item
-const TreeNode = Tree.TreeNode
 const RadioGroup = Radio.Group
 
 class CreateUser extends Component {
 	constructor(prop) {
 		super(prop)
-		this.change = this.change.bind(this)
 		this.submit = this.submit.bind(this)
 		this.cancel = this.cancel.bind(this)
 		this.reset = this.reset.bind(this)
@@ -44,6 +40,7 @@ class CreateUser extends Component {
 
 		validateFields((errors, values) => {
 			if (!errors) {
+				let group = getFieldValue('group')
 				let loginId = getFieldValue('loginId')
 				let password = getFieldValue('password')
 				let phone = getFieldValue('phone')
@@ -55,14 +52,13 @@ class CreateUser extends Component {
 					phone,
 					name,
 					enabled,
-					group: this.selectedGroup
+					group
 				})
 			}
 		})
 	}
 
 	cancel() {
-		this.props.form.resetFields()
 		this.props.onCancel()
 	}
 
@@ -70,13 +66,8 @@ class CreateUser extends Component {
 		this.props.form.resetFields()
 	}
 
-	change(value) {
-		this.selectedGroup = value
-	}
-
 	render() {
 		const getFieldDecorator = this.props.form.getFieldDecorator
-		const groups = this.props.groups
 		const creating = this.props.user.creating
 
 		let reset = <Button key='reset' type='ghost' size='large' onClick={this.reset}>重置</Button>
@@ -95,7 +86,16 @@ class CreateUser extends Component {
 			<Modal title='新增用户' visible={true} width={500} footer={[cancel,reset,ok]} onCancel={this.cancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='所属部门'>
-						<TTreeSelect data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择所属部门' treeDefaultExpandAll onChange={this.change}/>
+					{
+						getFieldDecorator('group',{
+							rules:[{
+								required:true,
+								message:'请选择所属部门！'
+							}]
+						})(
+							<TreeSelectGroup dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择所属部门' treeDefaultExpandAll/>
+						)
+					}
 					</FormItem>
 					<FormItem hasFeedback {...formItemLayout} label='账号'>
 					{
@@ -183,7 +183,6 @@ class CreateUser extends Component {
 }
 
 CreateUser.propTypes = {
-	groups: PropTypes.array.isRequired,
 	onCancel: PropTypes.func.isRequired
 }
 

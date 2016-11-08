@@ -27,10 +27,6 @@ import {
 
 import genColumns from './columns'
 
-import {
-	getResult
-} from '../../common'
-
 const TabPane = Tabs.TabPane
 
 const createDictionary = 'createDictionary'
@@ -114,7 +110,7 @@ class Dictionary extends Component {
 			querying,
 			creating,
 			updating,
-			results
+			result
 		} = this.props.dictionary
 		const {
 			createDictionary: createDicVisible,
@@ -129,9 +125,9 @@ class Dictionary extends Component {
 
 		let data = []
 		let totalCount = 0
-		if (results && results.TotalCount > 0) {
-			totalCount = results.TotalCount
-			data = results.List
+		if (result && result.TotalCount > 0) {
+			totalCount = result.TotalCount
+			data = result.List
 		}
 
 		this[this.selectedTab].data = data

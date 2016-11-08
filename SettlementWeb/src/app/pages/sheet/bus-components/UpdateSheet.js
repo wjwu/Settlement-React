@@ -19,8 +19,7 @@ import {
 } from 'antd'
 import moment from 'moment'
 import {
-	TTable,
-	TCard
+	TTable
 } from '../../../../components'
 import {
 	SelectDictionary,
@@ -41,6 +40,7 @@ import {
 	disabledTime,
 	disabledDate
 } from '../../../common'
+import * as apiClient from '../../../apiClient'
 
 const FormItem = Form.Item
 const RangePicker = DatePicker.RangePicker
@@ -66,7 +66,16 @@ class UpdateSheet extends Component {
 	}
 
 	componentDidMount() {
-		this.props.getSheet(this.props.id)
+		apiClient.get(`sheet/${this.props.id}`).then(result => {
+			this.setState({
+				...this.state,
+				'sheet': result,
+				'costs': result.Costs,
+				'receiveds': result.Receiveds
+			})
+		}, error => {
+			console.error(error)
+		})
 	}
 
 	submit() {
@@ -168,12 +177,8 @@ class UpdateSheet extends Component {
 
 	render() {
 		const getFieldDecorator = this.props.form.getFieldDecorator
-
-		const {
-			getting,
-			updating,
-			result: sheet
-		} = this.props.sheet
+		const updating = this.props.sheet.updating
+		const sheet = this.state.sheet
 
 		if (!sheet) {
 			return (
@@ -221,23 +226,13 @@ class UpdateSheet extends Component {
 			}
 		})
 
-		if (!this.state.costs && sheet.Costs) {
-			this.state = {
-				...this.state,
-				'costs': sheet.Costs,
-				'receiveds': sheet.Receiveds
-			}
-		}
-
 		let costs = this.state.costs
 		let receiveds = this.state.receiveds
 		let modal
 		if (this.state[createCost]) {
-			result = getResult(this[queryCost], this.props.dictionary.results)
-			modal = <CreateCost onCancel = {this.hideModal.bind(this,createCost)} costs={result.data}/>
+			modal = <CreateCost onCancel = {this.hideModal.bind(this,createCost)}/>
 		} else if (this.state[updateCost]) {
-			result = getResult(this[queryCost], this.props.dictionary.results)
-			modal = <UpdateCost onCancel = {this.hideModal.bind(this,updateCost)} data={this.selectedCost} costs={result.data}/>
+			modal = <UpdateCost onCancel = {this.hideModal.bind(this,updateCost)} data={this.selectedCost}/>
 		} else if (this.state[createReceived]) {
 			modal = <CreateReceived onCancel = {this.hideModal.bind(this,createReceived)}/>
 		} else if (this.state[updateReceived]) {
@@ -418,7 +413,7 @@ class UpdateSheet extends Component {
 										{
 											getFieldDecorator('source',{initialValue:sheet.Source.toLowerCase()})
 											(
-												<RadioDictionary typp='source'/>
+												<RadioDictionary type='source'/>
 											)
 										}
 									</FormItem>
@@ -461,6 +456,5 @@ UpdateSheet.propTypes = {
 }
 
 export default connect(state => state, {
-	'getSheet': sheet.get.bind(sheet),
 	'submit': sheet.update.bind(sheet)
 })(Form.create()(UpdateSheet))
