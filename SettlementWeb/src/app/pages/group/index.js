@@ -25,13 +25,15 @@ import UpdateUser from './components/UpdateUser'
 
 import {
 	queryGroups,
-	queryUsers,
 	createGroup,
 	updateGroup,
-	deleteGroup,
+	deleteGroup
+} from '../../../actions/group'
+import {
+	queryUsers,
 	createUser,
 	updateUser
-} from './action'
+} from '../../../actions/user'
 
 import genColumns from './columns'
 import {
@@ -207,10 +209,10 @@ class Group extends Component {
 
 export default connect(state => state, {
 	queryGroups,
-	queryUsers,
 	createGroup,
 	updateGroup,
 	deleteGroup,
+	queryUsers,
 	createUser,
 	updateUser
 })(TMsgContainer()(Group))

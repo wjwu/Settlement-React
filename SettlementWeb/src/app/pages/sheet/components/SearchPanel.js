@@ -200,6 +200,7 @@ class SearchPanel extends Component {
 }
 
 SearchPanel.propTypes = {
+	groups: PropTypes.array.isRequired
 	onSearch: PropTypes.func.isRequired
 }
 

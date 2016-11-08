@@ -3,24 +3,15 @@ import {
 } from 'redux'
 
 import message from './message'
-// import group from './Group'
-// import user from './User'
-// import dictionary from './Dictionary'
-// import sheet from './Sheet'
-
-// export default combineReducers({
-// 	message,
-// 	'group': group.reduce.bind(group),
-// 	'user': user.reduce.bind(user),
-// 	'dictionary': dictionary.reduce.bind(dictionary),
-// 	'sheet': sheet.reduce.bind(sheet)
-// })
-
-import dictionary from '../pages/dictionary/reducer'
-import group from '../pages/group/reducer'
+import dictionary from './dictionary'
+import group from './group'
+import user from './user'
+import sheet from './sheet'
 
 export default combineReducers({
 	message,
 	dictionary,
-	group
+	group,
+	user,
+	sheet
 })

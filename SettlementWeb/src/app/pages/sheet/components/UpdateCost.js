@@ -6,6 +6,7 @@ import {
 	Modal,
 	Form,
 	Input,
+	Select,
 	Radio,
 	Button,
 	InputNumber
@@ -13,18 +14,15 @@ import {
 import {
 	SelectDictionary
 } from '../../../components'
-import {
-	random
-} from '../../../common'
 
 const FormItem = Form.Item
+const Option = Select.Option
 const RadioGroup = Radio.Group
 
-class CreateCost extends Component {
+class UpdateCost extends Component {
 	constructor(props) {
 		super(props)
 		this.submit = this.submit.bind(this)
-		this.cancel = this.cancel.bind(this)
 		this.select = this.select.bind(this)
 	}
 
@@ -43,7 +41,7 @@ class CreateCost extends Component {
 				const status = getFieldValue('status')
 				const remark = getFieldValue('remark')
 				this.props.onCancel({
-					ID: random(),
+					ID: this.props.data.ID,
 					Type: type,
 					TypeName: name,
 					UnitPrice: unitPrice,
@@ -51,13 +49,9 @@ class CreateCost extends Component {
 					Status: status,
 					Remark: remark,
 					Total: unitPrice * amount
-				}, 'create')
+				}, 'update')
 			}
 		})
-	}
-
-	cancel() {
-		this.props.onCancel()
 	}
 
 	select(value, option) {
@@ -75,26 +69,37 @@ class CreateCost extends Component {
 		}
 
 		const getFieldDecorator = this.props.form.getFieldDecorator
+		let {
+			cost,
+			types
+		} = this.props
+
+		const options = this.props.types.map(item => {
+			return <Option key={item.ID} value={item.ID}>{item.Name}</Option>
+		})
 
 		return (
-			<Modal title='新增结算明细' visible={true} width={460} onOk={this.submit} onCancel={this.cancel}>
+			<Modal title='新增结算明细' visible={true} width={460} onOk={this.submit} onCancel={this.props.onCancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='明细类型'>
 					{
 						getFieldDecorator('type',{
+							initialValue:cost.Type,
 							rules:[{
 								required:true,
 								message:'请选择明细类型！'
 							}]
 						})(
-							<SelectDictionary type='cost' placeholder='请选择明细类型' onSelect={this.select}/>
+							<Select placeholder='请选择明细类型' onSelect={this.select}>
+								{options}
+							</Select>
 						)
 					}
 					</FormItem>
 					<FormItem {...formItemLayout} label='单价'>
 					{
 						getFieldDecorator('unitPrice',{
-							initialValue:0,
+							initialValue:cost.UnitPrice,
 							rules:[{
 								required:true
 							},{
@@ -109,7 +114,7 @@ class CreateCost extends Component {
 					<FormItem {...formItemLayout} label='数量'>
 					{
 						getFieldDecorator('amount',{
-							initialValue:0,
+							initialValue:cost.Amount,
 							rules:[{
 								required:true
 							},{
@@ -124,6 +129,7 @@ class CreateCost extends Component {
 					<FormItem {...formItemLayout} label='付款状态'>
 					{
 						getFieldDecorator('status',{
+							initialValue:cost.Status,
 							rules:[{
 								required:true,
 								message:'请选择付款状态！'
@@ -138,7 +144,9 @@ class CreateCost extends Component {
 					</FormItem>
 					<FormItem {...formItemLayout} label='备注'>
 					{
-						getFieldDecorator('remark')(
+						getFieldDecorator('remark',{
+							initialValue:cost.Remark
+						})(
 							<Input type='textarea' rows={4}/>
 						)
 					}
@@ -149,8 +157,10 @@ class CreateCost extends Component {
 	}
 }
 
-CreateCost.propTypes = {
+UpdateCost.propTypes = {
+	cost: PropTypes.object.isRequired,
+	types: PropTypes.array.isRequired,
 	onCancel: PropTypes.func.isRequired
 }
 
-export default Form.create()(CreateCost)
+export default Form.create()(UpdateCost)

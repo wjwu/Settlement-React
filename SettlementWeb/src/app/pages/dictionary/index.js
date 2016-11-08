@@ -24,7 +24,7 @@ import {
 	queryCosts,
 	createDictionary,
 	updateDictionary
-} from './action'
+} from '../../../actions/dictionary'
 
 import genColumns from './columns'
 
@@ -119,8 +119,8 @@ class Dictionary extends Component {
 			queryingBases,
 			queryingSources,
 			queryingCosts,
-			creatingDic,
-			updatingDic,
+			creating,
+			updating,
 			bases,
 			sources,
 			costs
@@ -146,9 +146,9 @@ class Dictionary extends Component {
 
 		let modal
 		if (createDicVisible) {
-			modal = <CreateDictionary onCancel={this.hideModal.bind(this,'createDicVisible')} onSubmit={this.props.createDictionary} creating={creatingDic}/>
+			modal = <CreateDictionary onCancel={this.hideModal.bind(this,'createDicVisible')} onSubmit={this.props.createDictionary} creating={creating}/>
 		} else if (updateDicVisible) {
-			modal = <UpdateDictionary onCancel={this.hideModal.bind(this,'updateDicVisible')} onSubmit={this.props.updateDictionary} updating={updatingDic} dictionary={this.selectedDic}/>
+			modal = <UpdateDictionary onCancel={this.hideModal.bind(this,'updateDicVisible')} onSubmit={this.props.updateDictionary} updating={updating} dictionary={this.selectedDic}/>
 		}
 		return (
 			<TMainContainer>

@@ -6,7 +6,6 @@ import {
 	Modal,
 	Form,
 	Input,
-	Button,
 	InputNumber,
 	DatePicker
 } from 'antd'
@@ -20,7 +19,6 @@ class CreateReceived extends Component {
 	constructor(props) {
 		super(props)
 		this.submit = this.submit.bind(this)
-		this.cancel = this.cancel.bind(this)
 	}
 
 	submit() {
@@ -44,10 +42,6 @@ class CreateReceived extends Component {
 		})
 	}
 
-	cancel() {
-		this.props.onCancel()
-	}
-
 	render() {
 		const formItemLayout = {
 			labelCol: {
@@ -58,12 +52,10 @@ class CreateReceived extends Component {
 			},
 		}
 
-		const {
-			getFieldDecorator
-		} = this.props.form
+		const getFieldDecorator = this.props.form.getFieldDecorator
 
 		return (
-			<Modal title='新增收款明细' visible={true} width={460} onOk={this.submit} onCancel={this.cancel}>
+			<Modal title='新增收款明细' visible={true} width={460} onOk={this.submit} onCancel={this.props.onCancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='收款金额'>
 					{

@@ -16,12 +16,22 @@ import {
 	TCard,
 	TTable
 } from '../../../components'
-
-import UpdateSheet from './bus-components/UpdateSheet'
-import SearchPanel from './bus-components/SearchPanel'
+import UpdateSheet from './components/UpdateSheet'
+import SearchPanel from './components/SearchPanel'
 import {
-	sheet
-} from '../../actions'
+	querySheets,
+	createSheet,
+	updateSheet
+} from '../../../actions/sheet'
+import {
+	queryBases,
+	querySources,
+	queryCosts,
+} from '../../../actions/dictionary'
+import {
+	queryGroups
+} from '../../../actions/group'
+
 import genColumns from './columns'
 
 const confirm = Modal.confirm
@@ -128,12 +138,21 @@ class Sheet extends Component {
 	}
 
 	render() {
-
-		const {
+		let {
 			base,
-			sheet,
 			updateSheet: updateSheetVisble
 		} = this.state
+
+		let {
+			queryingSheets,
+			updateSheet
+		} = this.props
+
+		let empty = {
+			List: [],
+			TotalCount: 0
+		}
+		sheets = sheets || empty
 
 		const columns = genColumns((raw, action) => {
 			if (action === 'update') {
@@ -163,7 +182,7 @@ class Sheet extends Component {
 				</Row>
 				<Row>
 					<TCol>
-						<TTable key='sheets' bordered columns={columns} total={sheet.totalCount} dataSource={sheet.data} loading={querying} onLoad={this.onTTableLoad}/>
+						<TTable key='sheets' bordered columns={columns} total={sheets.TotalCount} dataSource={sheets.List} loading={querying} onLoad={this.onTTableLoad}/>
 					</TCol>
 				</Row>
 			</TMainContainer>
@@ -172,6 +191,11 @@ class Sheet extends Component {
 }
 
 export default connect(state => state, {
-	'querySheet': sheet.query.bind(sheet),
-	'deleteSheet': sheet.del.bind(sheet)
+	querySheet,
+	createSheet,
+	updateSheet,
+	queryBases,
+	querySources,
+	queryCosts,
+	queryGroups
 })(TMsgContainer()(Sheet))
