@@ -3,13 +3,11 @@ import React, {
 	PropTypes
 } from 'react'
 import {
-	connect
-} from 'react-redux'
-import {
 	Modal,
 	Form,
 	Input,
 	Button,
+	Select,
 	Row,
 	Col,
 	InputNumber,
@@ -19,10 +17,7 @@ import {
 import {
 	TTable
 } from '../../../../components'
-import {
-	SelectDictionary,
-	RadioDictionary
-} from '../../../components'
+
 import CreateCost from './CreateCost'
 import UpdateCost from './UpdateCost'
 import CreateReceived from './CreateReceived'
@@ -32,15 +27,13 @@ import {
 	genReceivedColumns
 } from './columns'
 import {
-	sheet
-} from '../../../actions'
-import {
 	disabledTime,
 	disabledDate
 } from '../../../common'
 
 const FormItem = Form.Item
 const RangePicker = DatePicker.RangePicker
+const Option = Select.Option
 const TabPane = Tabs.TabPane
 
 const createCost = 'createCost'
@@ -52,7 +45,6 @@ class CreateSheet extends Component {
 	constructor(prop) {
 		super(prop)
 		this.submit = this.submit.bind(this)
-		this.cancel = this.cancel.bind(this)
 		this.calcUnitPrice = this.calcUnitPrice.bind(this)
 		this.state = {
 			[createCost]: false,
@@ -109,10 +101,6 @@ class CreateSheet extends Component {
 		})
 	}
 
-	cancel() {
-		this.props.onCancel()
-	}
-
 	calcUnitPrice() {
 		const {
 			getFieldValue,
@@ -163,7 +151,12 @@ class CreateSheet extends Component {
 
 	render() {
 		const getFieldDecorator = this.props.form.getFieldDecorator
-		const creating = this.props.sheet.creating
+		const {
+			creating,
+			bases,
+			sourceTypes,
+			costTypes
+		} = this.props
 
 		const formItemLayout = {
 			labelCol: {
@@ -215,7 +208,7 @@ class CreateSheet extends Component {
 			modal = <UpdateReceived onCancel = {this.hideModal.bind(this,updateReceived)} data={this.selectedReceived}/>
 		}
 		return (
-			<Modal title='新增结算表' visible={true} width={900} confirmLoading={creating} onOk={this.submit} onCancel={this.cancel}>
+			<Modal title='新增结算表' visible={true} width={900} confirmLoading={creating} onOk={this.submit} onCancel={this.props.onCancel}>
 				<Tabs tabPosition='left'>
 					<TabPane tab='基本信息' key='baseInfo'> 
 						<Form>
@@ -246,7 +239,11 @@ class CreateSheet extends Component {
 												message:'请选择培训基地！'
 											}]
 										})(
-								 			<SelectDictionary type='base' placeholder='请选择培训基地'/>
+								 			<Select placeholder='请选择培训基地'>
+								 			{
+								 				bases.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>)
+								 			}
+								 			</Select>
 							          	)
 							        }
 						          	</FormItem>
@@ -411,11 +408,17 @@ class CreateSheet extends Component {
 		)
 	}
 }
-
-CreateSheet.propTypes = {
-	onCancel: PropTypes.func.isRequired
+CreateSheet.defaultProps = {
+	creating: false
 }
 
-export default connect(state => state, {
-	'submit': sheet.create.bind(sheet)
-})(Form.create()(CreateSheet))
+CreateSheet.propTypes = {
+	creating: PropTypes.bool.isRequired,
+	bases: PropTypes.array.isRequired,
+	sourceTypes: PropTypes.array.isRequired,
+	costTypes: PropTypes.array.isRequired,
+	onCancel: PropTypes.func.isRequired,
+	onSubmit: PropTypes.func.isRequired
+}
+
+export default Form.create()(CreateSheet)

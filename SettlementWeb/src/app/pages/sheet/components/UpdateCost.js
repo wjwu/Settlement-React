@@ -11,9 +11,6 @@ import {
 	Button,
 	InputNumber
 } from 'antd'
-import {
-	SelectDictionary
-} from '../../../components'
 
 const FormItem = Form.Item
 const Option = Select.Option
@@ -91,7 +88,9 @@ class UpdateCost extends Component {
 							}]
 						})(
 							<Select placeholder='请选择明细类型' onSelect={this.select}>
-								{options}
+								{
+									types.map(item=><Option key={item.ID} value={item.ID}>{item.Name}</Option>)
+								}
 							</Select>
 						)
 					}

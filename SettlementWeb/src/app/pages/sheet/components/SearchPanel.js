@@ -11,15 +11,7 @@ import {
 	DatePicker,
 	Button
 } from 'antd'
-import {
-	SelectDictionary,
-	TreeSelectGroup
-} from '../../../components'
 import CreateSheet from './CreateSheet'
-import {
-	group
-} from '../../../actions'
-
 import {
 	tree,
 	EMPTY_GUID,
@@ -35,15 +27,11 @@ class SearchPanel extends Component {
 	constructor(props) {
 		super(props)
 		this.query = this.query.bind(this)
-		this.change = this.change.bind(this)
 		this.search = this.search.bind(this)
 		this.showModal = this.showModal.bind(this)
 		this.hideModal = this.hideModal.bind(this)
 		this.state = {
 			showCreate: false,
-			group: {
-				data: []
-			}
 		}
 	}
 
@@ -53,7 +41,7 @@ class SearchPanel extends Component {
 			getFieldValue
 		} = this.props.form
 		validateFields((errors, values) => {
-			let group = this.selectedGroup || ''
+			let group = getFieldValue('group')
 			let base = getFieldValue('base')
 			let times = getFieldValue('times')
 			let timeFrom = ''
@@ -79,10 +67,6 @@ class SearchPanel extends Component {
 
 	search() {
 		this.props.onSearch()
-	}
-
-	change(value) {
-		this.selectedGroup = value
 	}
 
 	showModal() {
@@ -200,7 +184,7 @@ class SearchPanel extends Component {
 }
 
 SearchPanel.propTypes = {
-	groups: PropTypes.array.isRequired
+	groups: PropTypes.array.isRequired,
 	onSearch: PropTypes.func.isRequired
 }
 

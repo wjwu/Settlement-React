@@ -22,20 +22,19 @@ import {
 	querySheets,
 	createSheet,
 	updateSheet
-} from '../../../actions/sheet'
+} from '../../actions/sheet'
 import {
 	queryBases,
 	querySources,
 	queryCosts,
-} from '../../../actions/dictionary'
+} from '../../actions/dictionary'
 import {
 	queryGroups
-} from '../../../actions/group'
+} from '../../actions/group'
 
 import genColumns from './columns'
 
 const confirm = Modal.confirm
-const updateSheet = 'updateSheet'
 
 class Sheet extends Component {
 	constructor(prop) {
@@ -46,14 +45,7 @@ class Sheet extends Component {
 			pageIndex: 1
 		}
 		this.state = {
-			[updateSheet]: false,
-			base: {
-				data: []
-			},
-			sheet: {
-				data: [],
-				totalCount: 0
-			}
+			updateSheetVisble: false
 		}
 	}
 
@@ -105,15 +97,15 @@ class Sheet extends Component {
 		this.props.querySheet(this.request)
 	}
 
-	showModal(type) {
+	showModal() {
 		this.setState({
-			[type]: true
+			updateSheetVisble: true
 		})
 	}
 
 	hideModal(type) {
 		this.setState({
-			[type]: false
+			updateSheetVisble: false
 		})
 	}
 
@@ -139,12 +131,15 @@ class Sheet extends Component {
 
 	render() {
 		let {
-			base,
-			updateSheet: updateSheetVisble
+			updateSheetVisble
 		} = this.state
 
 		let {
 			queryingSheets,
+			sheets,
+			bases,
+			sources,
+			costs,
 			updateSheet
 		} = this.props
 
@@ -157,7 +152,7 @@ class Sheet extends Component {
 		const columns = genColumns((raw, action) => {
 			if (action === 'update') {
 				this.selectedSheet = raw
-				this.showModal(updateSheet)
+				this.showModal()
 			} else if (action === 'delete') {
 				this.doDeleteSheet(raw.ID)
 			}
@@ -167,7 +162,7 @@ class Sheet extends Component {
 
 		let modal
 		if (updateSheetVisble) {
-			modal = <UpdateSheet id={this.selectedSheet.ID} onCancel={this.hideModal.bind(this,updateSheet)} bases={base.data}/>
+			modal = <UpdateSheet id={this.selectedSheet.ID} onCancel={this.hideModal.bind(this)} bases={base.data}/>
 		}
 
 		return (

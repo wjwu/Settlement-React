@@ -28,12 +28,12 @@ import {
 	createGroup,
 	updateGroup,
 	deleteGroup
-} from '../../../actions/group'
+} from '../../actions/group'
 import {
 	queryUsers,
 	createUser,
 	updateUser
-} from '../../../actions/user'
+} from '../../actions/user'
 
 import genColumns from './columns'
 import {

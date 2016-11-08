@@ -24,7 +24,7 @@ import {
 	queryCosts,
 	createDictionary,
 	updateDictionary
-} from '../../../actions/dictionary'
+} from '../../actions/dictionary'
 
 import genColumns from './columns'
 

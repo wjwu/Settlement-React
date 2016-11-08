@@ -18,7 +18,6 @@ class UpdateReceived extends Component {
 	constructor(props) {
 		super(props)
 		this.submit = this.submit.bind(this)
-		this.cancel = this.cancel.bind(this)
 	}
 
 	submit() {
@@ -42,10 +41,6 @@ class UpdateReceived extends Component {
 		})
 	}
 
-	cancel() {
-		this.props.onCancel()
-	}
-
 	render() {
 		const formItemLayout = {
 			labelCol: {
@@ -57,10 +52,10 @@ class UpdateReceived extends Component {
 		}
 
 		const getFieldDecorator = this.props.form.getFieldDecorator
-		const received = this.props.data
+		const received = this.props.received
 
 		return (
-			<Modal title='新增收款明细' visible={true} width={460} onOk={this.submit} onCancel={this.cancel}>
+			<Modal title='新增收款明细' visible={true} width={460} onOk={this.submit} onCancel={this.props.onCancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='收款金额'>
 					{
@@ -107,6 +102,7 @@ class UpdateReceived extends Component {
 }
 
 UpdateReceived.propTypes = {
+	received: PropTypes.object.isRequired,
 	onCancel: PropTypes.func.isRequired
 }
 
