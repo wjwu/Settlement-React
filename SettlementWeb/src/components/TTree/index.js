@@ -9,6 +9,7 @@ import {
 import TCard from '../TCard'
 
 const TreeNode = Tree.TreeNode
+const EMPTY_GUID = '00000000-0000-0000-0000-000000000000'
 
 class TTree extends Component {
 	constructor(prop) {
@@ -39,13 +40,22 @@ class TTree extends Component {
 				</TCard>
 			)
 		}
-		const loop = data => data.map(item => {
-			if (item.children && item.children.length > 0) {
-				return <TreeNode title={item.Name} key={item.ID}>{loop(item.children)}</TreeNode>
-			}
-			return <TreeNode title={item.Name} key={item.ID}/>
-		})
-		const treeNodes = loop(data)
+		let treeNodes = []
+		if (data) {
+			const dataLoop = parentId => data.filter(item => item.ParentID === parentId).map(item => {
+				item.children = dataLoop(item.ID)
+				return item
+			})
+			let treeData = dataLoop(EMPTY_GUID)
+
+			const nodeLoop = dt => dt.map(item => {
+				if (item.children.length > 0) {
+					return <TreeNode value={item.ID} title={item.Name} key={item.ID}>{nodeLoop(item.children)}</TreeNode>
+				}
+				return <TreeNode value={item.ID} title={item.Name} key={item.ID}/>
+			})
+			treeNodes = nodeLoop(treeData)
+		}
 		return (
 			<TCard title={title}>
 				<Tree onSelect={this.onSelect} defaultExpandAll>
@@ -57,14 +67,14 @@ class TTree extends Component {
 }
 
 TTree.defaultProps = {
-	data: []
+	loading: false
 }
 
 TTree.propTypes = {
 	title: PropTypes.string,
 	loading: PropTypes.bool,
-	data: PropTypes.array,
-	onSelect: PropTypes.func
+	data: PropTypes.array.isRequired,
+	onSelect: PropTypes.func.isRequired
 }
 
 export default TTree

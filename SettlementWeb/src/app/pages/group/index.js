@@ -140,21 +140,23 @@ class Group extends Component {
 	render() {
 		let {
 			groups,
-			users,
 			queryingGroups,
-			queryingUsers,
 			creatingGroup,
-			updatingGroup,
+			updatingGroup
+		} = this.props.group
+		let {
+			users,
+			queryingUsers,
 			creatingUser,
 			updatingUser
-		} = this.props.group
+		} = this.props.user
+
 		let empty = {
 			List: [],
 			TotalCount: 0
 		}
 		groups = groups || empty
 		users = users || empty
-		groups = tree(groups.List, EMPTY_GUID)
 
 		const {
 			createGroupVisible,
@@ -171,13 +173,13 @@ class Group extends Component {
 
 		let modal
 		if (createGroupVisible) {
-			modal = <CreateGroup onCancel={this.hideModal.bind(this,'createGroupVisible')} onSubmit={this.props.createGroup} groups={groups} creating={creatingGroup}/>
+			modal = <CreateGroup onCancel={this.hideModal.bind(this,'createGroupVisible')} onSubmit={this.props.createGroup} groups={groups.List} creating={creatingGroup}/>
 		} else if (createUserVisible) {
-			modal = <CreateUser onCancel={this.hideModal.bind(this,'createUserVisible')} onSubmit={this.props.createUser} groups={groups} creating={creatingUser}/>
+			modal = <CreateUser onCancel={this.hideModal.bind(this,'createUserVisible')} onSubmit={this.props.createUser} groups={groups.List} creating={creatingUser}/>
 		} else if (updateGroupVisible) {
 			modal = <UpdateGroup onCancel={this.hideModal.bind(this,'updateGroupVisible')} onSubmit={this.props.updateGroup} group={this.selectedNode} updating={updatingGroup}/>
 		} else if (updateUserVisible) {
-			modal = <UpdateUser onCancel={this.hideModal.bind(this,'updateUserVisible')} onSubmit={this.props.updateUser} groups={groups} user={selectedUser} updating={updatingUser}/>
+			modal = <UpdateUser onCancel={this.hideModal.bind(this,'updateUserVisible')} onSubmit={this.props.updateUser} groups={groups.List} user={selectedUser} updating={updatingUser}/>
 		}
 		return (
 			<TMainContainer>
@@ -194,7 +196,7 @@ class Group extends Component {
 				</Row>
 				<Row gutter={24}>
 					<TCol xs={24} sm={7} md={7} lg={6}>
-						<TTree title='部门结构' loading={queryingGroups} data={groups} onSelect={this.onTTreeSelect}/>
+						<TTree title='部门结构' loading={queryingGroups} data={groups.List} onSelect={this.onTTreeSelect}/>
 					</TCol>
 					<TCol xs={24} sm={17} md={17} lg={18}>
 						<TCard title='用户数据'>
