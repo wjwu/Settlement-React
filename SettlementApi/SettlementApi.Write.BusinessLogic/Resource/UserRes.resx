@@ -124,7 +124,7 @@
     <value> 登录失败，当前用户已被禁用！</value>
   </data>
   <data name="LoginIDExists" xml:space="preserve">
-    <value>用户名已被注册！</value>
+    <value>账号名已被存在！</value>
   </data>
   <data name="OldPasswordError" xml:space="preserve">
     <value>原始密码不正确！</value>

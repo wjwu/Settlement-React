@@ -1,4 +1,7 @@
 import React from 'react'
+import {
+	TMainContainer
+} from '../../../components'
 
 class Home extends React.Component {
 	render() {
@@ -6,4 +9,4 @@ class Home extends React.Component {
 	}
 }
 
-export default Home
+export default TMainContainer()(Home)

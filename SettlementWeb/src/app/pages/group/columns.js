@@ -35,10 +35,24 @@ const genColumns = (editFuc) => {
 			}
 		}
 	}, {
+		title: '角色',
+		dataIndex: 'Role',
+		key: 'role',
+		width: '15%',
+		render: text => {
+			if (text.toLowerCase() === 'admin') {
+				return '系统管理员'
+			} else if (text.toLowerCase() === 'deptmanager') {
+				return '部门主管'
+			} else if (text.toLowerCase() === 'employee') {
+				return '普通员工'
+			}
+		}
+	}, {
 		title: '创建时间',
 		dataIndex: 'CreateTime',
 		key: 'createTime',
-		width: '30%'
+		width: '15%'
 	}, {
 		title: '操作',
 		key: 'operation',

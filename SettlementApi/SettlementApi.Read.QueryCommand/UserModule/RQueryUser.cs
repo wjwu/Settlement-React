@@ -9,6 +9,7 @@ namespace SettlementApi.Read.QueryCommand.UserModule
         public string Phone { get; set; }
         public string Name { get; set; }
         public Guid Group { get; set; }
+        public string Role { get; set; }
         public bool Enabled { get; set; }
         public DateTime DCreateTime { private get; set; }
         public string CreateTime => DCreateTime.ToString("yyyy-MM-dd HH:mm:ss");

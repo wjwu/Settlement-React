@@ -79,7 +79,7 @@ namespace SettlementApi.Write.BusinessLogic.Resource {
         }
         
         /// <summary>
-        ///   查找类似 用户名已被注册！ 的本地化字符串。
+        ///   查找类似 账号名已被存在！ 的本地化字符串。
         /// </summary>
         internal static string LoginIDExists {
             get {

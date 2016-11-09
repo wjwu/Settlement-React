@@ -6,6 +6,7 @@ import {
 	Modal,
 	Form,
 	Input,
+	Select,
 	Button,
 	Radio
 } from 'antd'
@@ -15,6 +16,7 @@ import {
 
 const FormItem = Form.Item
 const RadioGroup = Radio.Group
+const Option = Select.Option
 
 class CreateUser extends Component {
 	constructor(prop) {
@@ -32,6 +34,7 @@ class CreateUser extends Component {
 		validateFields((errors, values) => {
 			if (!errors) {
 				let group = getFieldValue('group')
+				let role = getFieldValue('role')
 				let loginId = getFieldValue('loginId')
 				let password = getFieldValue('password')
 				let phone = getFieldValue('phone')
@@ -43,7 +46,8 @@ class CreateUser extends Component {
 					phone,
 					name,
 					enabled,
-					group
+					group,
+					role
 				})
 			}
 		})
@@ -87,6 +91,23 @@ class CreateUser extends Component {
 						)
 					}
 					</FormItem>
+					<FormItem {...formItemLayout} label='角色'>
+					{
+						getFieldDecorator('role',{
+							rules:[{
+								required:true,
+								message:'角色不能为空！'
+							}]
+						})
+						(
+							<Select placeholder='请选择角色'>
+								<Option key='admin' value='admin'>系统管理员</Option>
+								<Option key='deptmanager' value='deptmanager'>部门主管</Option>
+								<Option key='employee' value='employee'>普通员工</Option>
+							</Select>
+						)
+					}
+					</FormItem>
 					<FormItem hasFeedback {...formItemLayout} label='账号'>
 					{
 						getFieldDecorator('loginId',{
@@ -115,6 +136,10 @@ class CreateUser extends Component {
 								length:true,
 								max:20,
 								message:'密码长度不能超过20个字符！'
+							},{
+								length:true,
+								min:8,
+								message:'密码长度最少8个字符！'
 							}]
 						})(
 							<Input type='password' placeholder='请输入初始密码'/>

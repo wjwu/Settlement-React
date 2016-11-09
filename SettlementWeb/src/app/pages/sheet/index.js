@@ -157,7 +157,7 @@ class Sheet extends Component {
 		}
 
 		return (
-			<TMainContainer>
+			<div>
 				<Row>
 					<TCol>
 						<TCard>
@@ -171,12 +171,12 @@ class Sheet extends Component {
 						<TTable key='sheets' bordered columns={columns} total={sheets.TotalCount} dataSource={sheets.List} loading={queryingSheets} onLoad={this.onTTableLoad}/>
 					</TCol>
 				</Row>
-			</TMainContainer>
+			</div>
 		)
 	}
 }
 
-export default connect(state => state, {
+export default TMainContainer()(connect(state => state, {
 	querySheets,
 	createSheet,
 	updateSheet,
@@ -184,4 +184,4 @@ export default connect(state => state, {
 	querySources,
 	queryCosts,
 	queryGroups
-})(TMsgContainer()(Sheet))
+})(TMsgContainer()(Sheet)))

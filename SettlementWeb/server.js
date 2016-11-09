@@ -13,7 +13,7 @@ app.get('/', function(req, res) {
 })
 
 app.get('/app', function(req, res) {
-	res.sendFile(path.join(__dirname, '/src/app/index.html'))
+	res.sendFile(path.join(__dirname, '/src/frame/index.html'))
 })
 
 app.use(express.static(__dirname + '/libs/'))
@@ -26,7 +26,7 @@ app.use(webpackDevMiddleware(compiler, {
 app.use(webpackHotMiddleware(compiler))
 
 app.get('*', function(req, res) {
-	res.sendFile(path.join(__dirname, '/src/app/app.html'))
+	res.sendFile(path.join(__dirname, '/src/app/index.html'))
 })
 
 

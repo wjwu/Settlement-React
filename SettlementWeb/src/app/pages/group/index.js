@@ -66,10 +66,10 @@ class Group extends Component {
 	}
 
 	componentDidUpdate() {
-		if (this.props.group.createdGroup || this.props.group.updatedGroup) {
+		if (this.props.group.created || this.props.group.updated) {
 			this.props.queryGroups(this.queryGroupRequest)
 		}
-		if ((this.props.group.createdUser || this.props.group.updatedUser) && this.queryUserRequset.group) {
+		if ((this.props.user.created || this.props.user.updated) && this.queryUserRequset.group) {
 			this.props.queryUsers(this.queryUserRequset)
 		}
 	}
@@ -182,7 +182,7 @@ class Group extends Component {
 			modal = <UpdateUser onCancel={this.hideModal.bind(this,'updateUserVisible')} onSubmit={this.props.updateUser} groups={groups.List} user={selectedUser} updating={updatingUser}/>
 		}
 		return (
-			<TMainContainer>
+			<div>
 				<Row>
 					<TCol>
 						<TCard>
@@ -204,12 +204,12 @@ class Group extends Component {
 						</TCard>
 					</TCol>
 				</Row>
-			</TMainContainer>
+			</div>
 		)
 	}
 }
 
-export default connect(state => state, {
+export default TMainContainer()(connect(state => state, {
 	queryGroups,
 	createGroup,
 	updateGroup,
@@ -217,4 +217,4 @@ export default connect(state => state, {
 	queryUsers,
 	createUser,
 	updateUser
-})(TMsgContainer()(Group))
+})(TMsgContainer()(Group)))

@@ -147,7 +147,7 @@ class Dictionary extends Component {
 			modal = <UpdateDictionary onCancel={this.hideModal.bind(this,'updateDicVisible')} onSubmit={this.props.updateDictionary} updating={updating} dictionary={this.selectedDic}/>
 		}
 		return (
-			<TMainContainer>
+			<div>
 				<Row>
 					<TCol>
 						<TCard>
@@ -173,15 +173,15 @@ class Dictionary extends Component {
 						</TCard>
 					</TCol>
 				</Row>
-			</TMainContainer>
+			</div>
 		)
 	}
 }
 
-export default connect(state => state, {
+export default TMainContainer()(connect(state => state, {
 	queryBases,
 	querySources,
 	queryCosts,
 	createDictionary,
 	updateDictionary
-})(TMsgContainer()(Dictionary))
+})(TMsgContainer()(Dictionary)))

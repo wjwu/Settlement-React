@@ -56,6 +56,14 @@
       <Project>{a72e3634-1108-4528-8c7d-fe77cbdaa558}</Project>
       <Name>SettlementApi.CommandBus</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SettlementApi.Common\SettlementApi.Common.csproj">
+      <Project>{18ecf9b2-b05e-4b16-ba91-e63a0d31dbbf}</Project>
+      <Name>SettlementApi.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SettlementApi.Write.Model\SettlementApi.Write.Model.csproj">
+      <Project>{343D4D15-9973-4219-B0E5-829CA24F0FC0}</Project>
+      <Name>SettlementApi.Write.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CostModule\" />

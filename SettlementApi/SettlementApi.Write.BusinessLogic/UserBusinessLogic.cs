@@ -7,6 +7,8 @@ using SettlementApi.Write.BusinessLogic.Event;
 using SettlementApi.Write.BusinessLogic.Resource;
 using SettlementApi.Write.BusinessLogic.Utility;
 using SettlementApi.Write.Model;
+using SettlementApi.Write.Model.Enums;
+using SettlementApi.Common;
 
 namespace SettlementApi.Write.BusinessLogic
 {
@@ -47,9 +49,14 @@ namespace SettlementApi.Write.BusinessLogic
 
         public void Execute(CreateUserCommand command)
         {
+            var chkUser=GetEntity("User.CheckLoginID", new {command.LoginID});
+            if (chkUser!=null)
+            {
+                throw new BussinessException(UserRes.LoginIDExists);
+            }
             var user = MapperHelper.Map<CreateUserCommand, User>(command);
             user.Password = Security.Md5Encrypt(Security.Encrypt(user.Password));
-           
+            user.Role = Enum.GetName(typeof(RoleType),EnumUtity.ToEnum(command.Role, RoleType.None));
             Create("User.Create", user);
         }
 
@@ -67,6 +74,7 @@ namespace SettlementApi.Write.BusinessLogic
 
         public void Execute(UpdateUserCommand command)
         {
+            command.Role = Enum.GetName(typeof(RoleType), EnumUtity.ToEnum(command.Role, RoleType.None));
             Update("User.Update", command);
         }
 

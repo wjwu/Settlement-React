@@ -7,6 +7,7 @@ SELECT [ID]
       ,[Phone]
       ,[Name]
       ,[Group]
+      ,[Role]
       ,[Enabled]
       ,[CreateTime] AS DCreateTime
       ,[LastLoginIP]

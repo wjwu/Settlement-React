@@ -11,6 +11,10 @@ if (process.env.NODE_ENV === 'prd') {
 	compress = false;
 	mangle = false;
 	entry = {
+		'frame/frame': [
+			'./src/frame/index.js',
+			'whatwg-fetch'
+		],
 		'app/app': [
 			'./src/app/index.js',
 			'whatwg-fetch'
@@ -25,6 +29,11 @@ if (process.env.NODE_ENV === 'prd') {
 	compress = false;
 	mangle = false;
 	entry = {
+		'frame/frame': [
+			'webpack-hot-middleware/client?reload=true',
+			'./src/frame/index.js',
+			'whatwg-fetch'
+		],
 		'app/app': [
 			'webpack-hot-middleware/client?reload=true',
 			'./src/app/index.js',
@@ -79,7 +88,7 @@ module.exports = {
 			mangle: mangle,
 			comments: false
 		}),
-		new webpack.optimize.CommonsChunkPlugin('common.js', ['app/app', 'login/login']),
+		new webpack.optimize.CommonsChunkPlugin('common.js', ['app/app', 'frame/frame', 'login/login']),
 		new webpack.optimize.OccurenceOrderPlugin(),
 		new webpack.HotModuleReplacementPlugin(),
 		new webpack.NoErrorsPlugin(),

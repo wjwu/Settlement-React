@@ -41,6 +41,7 @@
     <Compile Include="Enums\CostStatus.cs" />
     <Compile Include="Enums\DictionaryType.cs" />
     <Compile Include="Enums\PayStatus.cs" />
+    <Compile Include="Enums\RoleType.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Received.cs" />

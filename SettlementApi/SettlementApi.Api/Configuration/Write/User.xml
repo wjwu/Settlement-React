@@ -3,7 +3,7 @@
 <commands>
   <command name="User.Login" type="text" connection="local">
     <![CDATA[
-  SELECT TOP(1) ID,LoginID,Enabled FROM dbo.[User] WHERE LoginID=@LoginID AND Password=@Password AND [Deleted]=0
+  SELECT TOP(1) [ID],[LoginID],[Role],[LastLoginIP],[LastLoginTime],[Enabled] FROM dbo.[User] WHERE LoginID=@LoginID AND Password=@Password AND [Deleted]=0
   ]]>
   </command>
   <command name="User.LoginUpdate" type="text" connection="local">
@@ -21,9 +21,14 @@
       UPDATE dbo.[User] SET [Group]=@NewGroup WHERE [Group]=@OldGroup AND [Deleted]=0
       ]]>
   </command>
+  <command name="User.CheckLoginID" type="text" connection="local">
+    <![CDATA[
+  SELECT TOP(1) ID,LoginID,Enabled FROM dbo.[User] WHERE LoginID=@LoginID
+      ]]>
+  </command>
   <command name="User.Update" type="text" connection="local">
     <![CDATA[
-      UPDATE TOP(1) dbo.[User] SET [Phone]=@Phone,[Name]=@Name,[Group]=@Group,[Enabled]=@Enabled WHERE ID=@ID AND [Deleted]=0
+      UPDATE TOP(1) dbo.[User] SET [Phone]=@Phone,[Name]=@Name,[Group]=@Group,[Role]=@Role,[Enabled]=@Enabled WHERE ID=@ID AND [Deleted]=0
       ]]>
   </command>
   <command name="User.Create" type="text" connection="local">
@@ -35,6 +40,7 @@ INSERT INTO dbo.[User]
           Phone ,
           Name ,
           [Group] ,
+          [Role],
           Enabled ,
           CreateTime ,
           LastLoginIP ,
@@ -48,6 +54,7 @@ VALUES  ( NEWID() ,
           @Phone,
           @Name, 
           @Group , 
+          @Role,
           @Enabled ,
           GETDATE() ,
           NULL ,

@@ -7,6 +7,7 @@ import {
 	Form,
 	Input,
 	Button,
+	Select,
 	Radio
 } from 'antd'
 import {
@@ -15,6 +16,7 @@ import {
 
 const FormItem = Form.Item
 const RadioGroup = Radio.Group
+const Option = Select.Option
 
 class UpdateUser extends Component {
 	constructor(prop) {
@@ -31,6 +33,7 @@ class UpdateUser extends Component {
 		validateFields((errors, values) => {
 			if (!errors) {
 				let group = getFieldValue('group')
+				let role = getFieldValue('role')
 				let phone = getFieldValue('phone')
 				let name = getFieldValue('name')
 				let enabled = getFieldValue('enabled')
@@ -39,7 +42,8 @@ class UpdateUser extends Component {
 					phone,
 					name,
 					enabled,
-					group
+					group,
+					role
 				})
 			}
 		})
@@ -79,6 +83,20 @@ class UpdateUser extends Component {
 						})
 						(
 							<TTreeSelect data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择所属部门' treeDefaultExpandAll/>
+						)
+					}
+					</FormItem>
+					<FormItem {...formItemLayout} label='角色'>
+					{
+						getFieldDecorator('role',{
+							initialValue:user.Role.toLowerCase()
+						})
+						(
+							<Select>
+								<Option key='admin' value='admin'>系统管理员</Option>
+								<Option key='deptmanager' value='deptmanager'>部门主管</Option>
+								<Option key='employee' value='employee'>普通员工</Option>
+							</Select>
 						)
 					}
 					</FormItem>
