@@ -32,7 +32,7 @@ class UpdateReceived extends Component {
 				const time = getFieldValue('time').format('YYYY-MM-DD')
 				const remark = getFieldValue('remark')
 				this.props.onCancel({
-					ID: this.props.data.ID,
+					ID: this.props.received.ID,
 					Money: money,
 					Time: time,
 					Remark: remark
@@ -52,10 +52,13 @@ class UpdateReceived extends Component {
 		}
 
 		const getFieldDecorator = this.props.form.getFieldDecorator
-		const received = this.props.received
+		const {
+			received,
+			onCancel
+		} = this.props
 
 		return (
-			<Modal title='新增收款明细' visible={true} width={460} onOk={this.submit} onCancel={this.props.onCancel}>
+			<Modal title='新增收款明细' visible={true} width={460} onOk={this.submit} onCancel={onCancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='收款金额'>
 					{

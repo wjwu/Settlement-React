@@ -32,13 +32,13 @@ class UpdateCost extends Component {
 		validateFields((errors, values) => {
 			if (!errors) {
 				const type = getFieldValue('type')
-				const name = this.selectName
+				const name = this.selectName || this.props.cost.TypeName
 				const unitPrice = getFieldValue('unitPrice')
 				const amount = getFieldValue('amount')
 				const status = getFieldValue('status')
 				const remark = getFieldValue('remark')
 				this.props.onCancel({
-					ID: this.props.data.ID,
+					ID: this.props.cost.ID,
 					Type: type,
 					TypeName: name,
 					UnitPrice: unitPrice,
@@ -68,15 +68,12 @@ class UpdateCost extends Component {
 		const getFieldDecorator = this.props.form.getFieldDecorator
 		let {
 			cost,
-			types
+			costs,
+			onCancel
 		} = this.props
 
-		const options = this.props.types.map(item => {
-			return <Option key={item.ID} value={item.ID}>{item.Name}</Option>
-		})
-
 		return (
-			<Modal title='新增结算明细' visible={true} width={460} onOk={this.submit} onCancel={this.props.onCancel}>
+			<Modal title='新增结算明细' visible={true} width={460} onOk={this.submit} onCancel={onCancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='明细类型'>
 					{
@@ -89,7 +86,7 @@ class UpdateCost extends Component {
 						})(
 							<Select placeholder='请选择明细类型' onSelect={this.select}>
 								{
-									types.map(item=><Option key={item.ID} value={item.ID}>{item.Name}</Option>)
+									costs.map(item=><Option key={item.ID} value={item.ID}>{item.Name}</Option>)
 								}
 							</Select>
 						)
@@ -158,7 +155,7 @@ class UpdateCost extends Component {
 
 UpdateCost.propTypes = {
 	cost: PropTypes.object.isRequired,
-	types: PropTypes.array.isRequired,
+	costs: PropTypes.array.isRequired,
 	onCancel: PropTypes.func.isRequired
 }
 

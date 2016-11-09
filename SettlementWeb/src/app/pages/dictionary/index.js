@@ -40,20 +40,17 @@ class Dictionary extends Component {
 		this.selectedTab = DICTIONARY_BASE
 		this[DICTIONARY_BASE] = {
 			request: {
-				type: DICTIONARY_BASE,
 				pageIndex: 1
 			}
 		}
 		this[DICTIONARY_SOURCE] = {
 			request: {
-				type: DICTIONARY_SOURCE,
 				pageIndex: 1
 			},
 			queryed: false,
 		}
 		this[DICTIONARY_COST] = {
 			request: {
-				type: DICTIONARY_COST,
 				pageIndex: 1
 			},
 			queryed: false,
@@ -69,7 +66,6 @@ class Dictionary extends Component {
 	}
 
 	componentDidUpdate() {
-		debugger
 		if (this.props.dictionary.createdDic || this.props.dictionary.updatedDic) {
 			if (this.selectedTab === DICTIONARY_BASE) {
 				this.props.queryBases(this.base.request)

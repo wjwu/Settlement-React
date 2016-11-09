@@ -20,11 +20,14 @@ import {
 	ERROR_UPDATE_DICTIONARY
 } from '../constants/dictionary'
 
-export const queryBases = (request) => {
+export const queryBases = request => {
 	return dispatch => {
 		dispatch({
 			type: BEGIN_QUERY_BASES
 		})
+		if (request) {
+			request.type = 'base'
+		}
 		apiClient.get('dictionary', request).then(result => {
 			dispatch({
 				type: END_QUERY_BASES,
@@ -43,11 +46,14 @@ export const queryBases = (request) => {
 	}
 }
 
-export const querySources = (request) => {
+export const querySources = request => {
 	return dispatch => {
 		dispatch({
 			type: BEGIN_QUERY_SOURCES
 		})
+		if (request) {
+			request.type = 'source'
+		}
 		apiClient.get('dictionary', request).then(result => {
 			dispatch({
 				type: END_QUERY_SOURCES,
@@ -66,11 +72,14 @@ export const querySources = (request) => {
 	}
 }
 
-export const queryCosts = (request) => {
+export const queryCosts = request => {
 	return dispatch => {
 		dispatch({
 			type: BEGIN_QUERY_COSTS
 		})
+		if (request) {
+			request.type = 'cost'
+		}
 		apiClient.get('dictionary', request).then(result => {
 			dispatch({
 				type: END_QUERY_COSTS,

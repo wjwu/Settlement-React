@@ -8,6 +8,7 @@ import {
 	Input,
 	Button,
 	Select,
+	Radio,
 	Row,
 	Col,
 	InputNumber,
@@ -17,7 +18,6 @@ import {
 import {
 	TTable
 } from '../../../../components'
-
 import CreateCost from './CreateCost'
 import UpdateCost from './UpdateCost'
 import CreateReceived from './CreateReceived'
@@ -35,6 +35,7 @@ const FormItem = Form.Item
 const RangePicker = DatePicker.RangePicker
 const Option = Select.Option
 const TabPane = Tabs.TabPane
+const RadioGroup = Radio.Group
 
 const createCost = 'createCost'
 const updateCost = 'updateCost'
@@ -80,7 +81,7 @@ class CreateSheet extends Component {
 				let remark = getFieldValue('remark')
 				let costs = this.state.costs
 				let receiveds = this.state.receiveds
-				this.props.submit({
+				this.props.onSubmit({
 					customName,
 					contacts,
 					phone,
@@ -154,8 +155,8 @@ class CreateSheet extends Component {
 		const {
 			creating,
 			bases,
-			sourceTypes,
-			costTypes
+			sources,
+			costs: costTypes
 		} = this.props
 
 		const formItemLayout = {
@@ -199,13 +200,13 @@ class CreateSheet extends Component {
 		let receiveds = this.state.receiveds
 		let modal
 		if (this.state[createCost]) {
-			modal = <CreateCost onCancel = {this.hideModal.bind(this,createCost)}/>
+			modal = <CreateCost onCancel = {this.hideModal.bind(this,createCost)} costs={costTypes}/>
 		} else if (this.state[updateCost]) {
-			modal = <UpdateCost onCancel = {this.hideModal.bind(this,updateCost)} data={this.selectedCost}/>
+			modal = <UpdateCost onCancel = {this.hideModal.bind(this,updateCost)} costs={costTypes} cost={this.selectedCost}/>
 		} else if (this.state[createReceived]) {
 			modal = <CreateReceived onCancel = {this.hideModal.bind(this,createReceived)}/>
 		} else if (this.state[updateReceived]) {
-			modal = <UpdateReceived onCancel = {this.hideModal.bind(this,updateReceived)} data={this.selectedReceived}/>
+			modal = <UpdateReceived onCancel = {this.hideModal.bind(this,updateReceived)} received={this.selectedReceived}/>
 		}
 		return (
 			<Modal title='新增结算表' visible={true} width={900} confirmLoading={creating} onOk={this.submit} onCancel={this.props.onCancel}>
@@ -374,7 +375,11 @@ class CreateSheet extends Component {
 												}]
 											})
 											(
-												<RadioDictionary type='source'/>
+												<RadioGroup>
+													{
+														sources.map(item=><Radio key={item.ID} value={item.ID}>{item.Name}</Radio>)	
+													}
+												</RadioGroup>
 											)
 										}
 									</FormItem>
@@ -415,8 +420,8 @@ CreateSheet.defaultProps = {
 CreateSheet.propTypes = {
 	creating: PropTypes.bool.isRequired,
 	bases: PropTypes.array.isRequired,
-	sourceTypes: PropTypes.array.isRequired,
-	costTypes: PropTypes.array.isRequired,
+	sources: PropTypes.array.isRequired,
+	costs: PropTypes.array.isRequired,
 	onCancel: PropTypes.func.isRequired,
 	onSubmit: PropTypes.func.isRequired
 }

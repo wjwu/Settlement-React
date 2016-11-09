@@ -7,6 +7,7 @@ import {
 } from 'antd'
 
 const TreeNode = Tree.TreeNode
+const EMPTY_GUID = '00000000-0000-0000-0000-000000000000'
 
 class TTreeSelect extends Component {
 	render() {
@@ -14,13 +15,19 @@ class TTreeSelect extends Component {
 		let treeNodes = []
 
 		if (data) {
-			const loop = data => data.map(item => {
+			const dataLoop = parentId => data.filter(item => item.ParentID === parentId).map(item => {
+				item.children = dataLoop(item.ID)
+				return item
+			})
+			let treeData = dataLoop(EMPTY_GUID)
+
+			const nodeLoop = dt => dt.map(item => {
 				if (item.children.length > 0) {
-					return <TreeNode value={item.ID} title={item.Name} key={item.ID}>{loop(item.children)}</TreeNode>
+					return <TreeNode value={item.ID} title={item.Name} key={item.ID}>{nodeLoop(item.children)}</TreeNode>
 				}
 				return <TreeNode value={item.ID} title={item.Name} key={item.ID}/>
 			})
-			treeNodes = loop(data)
+			treeNodes = nodeLoop(treeData)
 		}
 
 		return (

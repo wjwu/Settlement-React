@@ -6,6 +6,9 @@ import {
 	BEGIN_QUERY_SHEETS,
 	END_QUERY_SHEETS,
 	ERROR_QUERY_SHEETS,
+	BEGIN_GET_SHEET,
+	END_GET_SHEET,
+	ERROR_GET_SHEET,
 	BEGIN_CREATE_SHEET,
 	END_CREATE_SHEET,
 	ERROR_CREATE_SHEET,
@@ -13,6 +16,29 @@ import {
 	END_UPDATE_SHEET,
 	ERROR_UPDATE_SHEET
 } from '../constants/sheet'
+
+export const getSheet = id => {
+	return dispatch => {
+		dispatch({
+			type: BEGIN_GET_SHEET
+		})
+		apiClient.get(`sheet/${id}`).then(result => {
+			dispatch({
+				type: END_GET_SHEET,
+				result: result
+			})
+		}, error => {
+			dispatch({
+				type: ERROR_GET_SHEET
+			})
+			dispatch({
+				type: SHOW_MESSAGE,
+				msgType: 'error',
+				msg: error
+			})
+		})
+	}
+}
 
 export const querySheets = request => {
 	return dispatch => {

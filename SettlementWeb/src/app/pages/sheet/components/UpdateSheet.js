@@ -10,6 +10,8 @@ import {
 	Form,
 	Input,
 	Button,
+	Select,
+	Radio,
 	Row,
 	Col,
 	InputNumber,
@@ -33,11 +35,17 @@ import {
 	disabledTime,
 	disabledDate
 } from '../../../common'
+import {
+	getSheet
+} from '../../../actions/sheet'
+
 import * as apiClient from '../../../apiClient'
 
 const FormItem = Form.Item
 const RangePicker = DatePicker.RangePicker
 const TabPane = Tabs.TabPane
+const Option = Select.Option
+const RadioGroup = Radio.Group
 
 const createCost = 'createCost'
 const updateCost = 'updateCost'
@@ -48,27 +56,31 @@ class UpdateSheet extends Component {
 	constructor(prop) {
 		super(prop)
 		this.submit = this.submit.bind(this)
-		this.cancel = this.cancel.bind(this)
 		this.calcUnitPrice = this.calcUnitPrice.bind(this)
 		this.state = {
 			[createCost]: false,
 			[updateCost]: false,
 			[createReceived]: false,
-			[updateReceived]: false
+			[updateReceived]: false,
+			costs: [],
+			receiveds: []
 		}
 	}
 
 	componentDidMount() {
-		apiClient.get(`sheet/${this.props.id}`).then(result => {
+		this.props.getSheet(this.props.id)
+	}
+
+	componentWillReceiveProps(nextProps) {
+		let sheet = nextProps.sheet.sheet
+		if (sheet && !this.state.loaded) {
 			this.setState({
 				...this.state,
-				'sheet': result,
-				'costs': result.Costs,
-				'receiveds': result.Receiveds
+				costs: sheet.Costs || [],
+				receiveds: sheet.Receiveds || [],
+				loaded: true
 			})
-		}, error => {
-			console.error(error)
-		})
+		}
 	}
 
 	submit() {
@@ -95,8 +107,8 @@ class UpdateSheet extends Component {
 				let remark = getFieldValue('remark')
 				let costs = this.state.costs
 				let receiveds = this.state.receiveds
-				this.props.submit({
-					id: this.props.sheet.result.ID,
+				this.props.onSubmit({
+					id: this.props.sheet.sheet.ID,
 					customName,
 					contacts,
 					phone,
@@ -115,10 +127,6 @@ class UpdateSheet extends Component {
 				})
 			}
 		})
-	}
-
-	cancel() {
-		this.props.onCancel()
 	}
 
 	calcUnitPrice() {
@@ -169,17 +177,23 @@ class UpdateSheet extends Component {
 	}
 
 	render() {
-		const getFieldDecorator = this.props.form.getFieldDecorator
-		const updating = this.props.sheet.updating
-		const sheet = this.state.sheet
+		const sheet = this.props.sheet.sheet
 
 		if (!sheet) {
 			return (
-				<Modal title='修改结算表' visible={true} width={800} onCancel={this.cancel}>
+				<Modal title='修改结算表' visible={true} width={800} onCancel={this.props.onCancel}>
 					<Spin tip='Loading...'/>
 				</Modal>
 			)
 		}
+		const getFieldDecorator = this.props.form.getFieldDecorator
+
+		const {
+			updating,
+			bases,
+			sources,
+			costs: costTypes
+		} = this.props
 
 		const formItemLayout = {
 			labelCol: {
@@ -221,19 +235,20 @@ class UpdateSheet extends Component {
 
 		let costs = this.state.costs
 		let receiveds = this.state.receiveds
+
 		let modal
 		if (this.state[createCost]) {
-			modal = <CreateCost onCancel = {this.hideModal.bind(this,createCost)}/>
+			modal = <CreateCost onCancel = {this.hideModal.bind(this,createCost)} costs={costTypes}/>
 		} else if (this.state[updateCost]) {
-			modal = <UpdateCost onCancel = {this.hideModal.bind(this,updateCost)} data={this.selectedCost}/>
+			modal = <UpdateCost onCancel = {this.hideModal.bind(this,updateCost)} costs={costTypes} cost={this.selectedCost}/>
 		} else if (this.state[createReceived]) {
 			modal = <CreateReceived onCancel = {this.hideModal.bind(this,createReceived)}/>
 		} else if (this.state[updateReceived]) {
-			modal = <UpdateReceived onCancel = {this.hideModal.bind(this,updateReceived)} data={this.selectedReceived}/>
+			modal = <UpdateReceived onCancel = {this.hideModal.bind(this,updateReceived)} received={this.selectedReceived}/>
 		}
 
 		return (
-			<Modal title='修改结算表' visible={true} width={800} confirmLoading={updating} onOk={this.submit} onCancel={this.cancel}>
+			<Modal title='修改结算表' visible={true} width={800} confirmLoading={updating} onOk={this.submit} onCancel={this.props.onCancel}>
 				<Tabs tabPosition='left'>
 					<TabPane tab='基本信息' key='baseInfo'>
 						<Form>
@@ -266,7 +281,11 @@ class UpdateSheet extends Component {
 												message:'请选择培训基地！'
 											}]
 										})(
-								 			<SelectDictionary type='base' placeholder='请选择培训基地'/>
+								 			<Select placeholder='请选择培训基地'>
+								 			{
+								 				bases.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>)
+								 			}
+								 			</Select>
 										)
 									}
 						          	</FormItem>
@@ -406,7 +425,11 @@ class UpdateSheet extends Component {
 										{
 											getFieldDecorator('source',{initialValue:sheet.Source.toLowerCase()})
 											(
-												<RadioDictionary type='source'/>
+												<RadioGroup>
+													{
+														sources.map(item=><Radio key={item.ID} value={item.ID}>{item.Name}</Radio>)	
+													}
+												</RadioGroup>
 											)
 										}
 									</FormItem>
@@ -443,11 +466,21 @@ class UpdateSheet extends Component {
 	}
 }
 
+UpdateSheet.defaultProps = {
+	updating: false
+}
+
 UpdateSheet.propTypes = {
 	id: PropTypes.string.isRequired,
-	onCancel: PropTypes.func.isRequired
+	updating: PropTypes.bool.isRequired,
+	groups: PropTypes.array.isRequired,
+	bases: PropTypes.array.isRequired,
+	sources: PropTypes.array.isRequired,
+	costs: PropTypes.array.isRequired,
+	onCancel: PropTypes.func.isRequired,
+	onSubmit: PropTypes.func.isRequired
 }
 
 export default connect(state => state, {
-	'submit': sheet.update.bind(sheet)
+	getSheet
 })(Form.create()(UpdateSheet))

@@ -2,6 +2,9 @@ import {
 	BEGIN_QUERY_SHEETS,
 	END_QUERY_SHEETS,
 	ERROR_QUERY_SHEETS,
+	BEGIN_GET_SHEET,
+	END_GET_SHEET,
+	ERROR_GET_SHEET,
 	BEGIN_CREATE_SHEET,
 	END_CREATE_SHEET,
 	ERROR_CREATE_SHEET,
@@ -31,6 +34,22 @@ export default (state = {}, action) => {
 			}
 		case ERROR_QUERY_SHEETS:
 			delete state.queryingSheets
+			return {
+				...state
+			}
+		case BEGIN_GET_SHEET:
+			return {
+				...state,
+				getting: true
+			}
+		case END_GET_SHEET:
+			delete state.getting
+			return {
+				...state,
+				sheet: action.result
+			}
+		case ERROR_GET_SHEET:
+			delete state.getting
 			return {
 				...state
 			}

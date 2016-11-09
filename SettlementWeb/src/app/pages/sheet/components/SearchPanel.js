@@ -13,7 +13,7 @@ import {
 } from 'antd'
 import {
 	TTreeSelect
-} from ''
+} from '../../../../components'
 import CreateSheet from './CreateSheet'
 import {
 	tree,
@@ -44,7 +44,7 @@ class SearchPanel extends Component {
 			getFieldValue
 		} = this.props.form
 		validateFields((errors, values) => {
-			let group = getFieldValue('group')
+			let group = getFieldValue('group') || ''
 			let base = getFieldValue('base')
 			let times = getFieldValue('times')
 			let timeFrom = ''
@@ -103,9 +103,14 @@ class SearchPanel extends Component {
 			lg: 6
 		}
 
+		const {
+			groups,
+			bases
+		} = this.props
+
 		let modal
 		if (this.state.showCreate) {
-			modal = <CreateSheet onCancel={this.hideModal}/>
+			modal = <CreateSheet onCancel={this.hideModal} {...this.props}/>
 		}
 
 		return (
@@ -113,7 +118,7 @@ class SearchPanel extends Component {
 				<Row gutter={24}>
 					<Col {...colLayout}>
 						<FormItem {...formItemLayout} label='部门'>
-							<TreeSelectGroup dropdownStyle={{maxHeight:400,overflow:'auto'}} treeDefaultExpandAll onChange={this.change}/>
+							<TTreeSelect data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} treeDefaultExpandAll/>
 						</FormItem>
 					</Col>
 					<Col {...colLayout}>
@@ -121,7 +126,11 @@ class SearchPanel extends Component {
 						{
 							getFieldDecorator('base',{initialValue:''})
 							(
-								<SelectDictionary all type='base'/>
+								<Select>
+									{
+										bases.map(item=><Option key={item.ID} value={item.ID}>{item.Name}</Option>)
+									}
+								</Select>
 							)
 						}
 						</FormItem>
@@ -186,9 +195,18 @@ class SearchPanel extends Component {
 	}
 }
 
+SearchPanel.defaultProps = {
+	creating: false
+}
+
 SearchPanel.propTypes = {
 	groups: PropTypes.array.isRequired,
-	onSearch: PropTypes.func.isRequired
+	bases: PropTypes.array.isRequired,
+	sources: PropTypes.array.isRequired,
+	costs: PropTypes.array.isRequired,
+	creating: PropTypes.bool.isRequired,
+	onSearch: PropTypes.func.isRequired,
+	onSubmit: PropTypes.func.isRequired
 }
 
 export default Form.create()(SearchPanel)

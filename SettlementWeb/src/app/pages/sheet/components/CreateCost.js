@@ -68,23 +68,26 @@ class CreateCost extends Component {
 		}
 
 		const getFieldDecorator = this.props.form.getFieldDecorator
-		const options = this.props.types.map(item => {
-			return <Option key={item.ID} value={item.ID}>{item.Name}</Option>
-		})
+		const {
+			costs,
+			onCancel
+		} = this.props
 
 		return (
-			<Modal title='新增结算明细' visible={true} width={460} onOk={this.submit} onCancel={this.props.onCancel}>
+			<Modal title='新增结算明细' visible={true} width={460} onOk={this.submit} onCancel={onCancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='明细类型'>
 					{
 						getFieldDecorator('type',{
 							rules:[{
 								required:true,
-								message:'请选择明细类型！'
+								message:'明细类型不能为空！'
 							}]
 						})(
 							<Select placeholder='请选择明细类型' onSelect={this.select}>
-								{options}
+								{
+									costs.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>)
+								}
 							</Select>
 						)
 					}
@@ -148,7 +151,7 @@ class CreateCost extends Component {
 }
 
 CreateCost.propTypes = {
-	types: PropTypes.array.isRequired,
+	costs: PropTypes.array.isRequired,
 	onCancel: PropTypes.func.isRequired
 }
 

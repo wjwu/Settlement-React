@@ -51,37 +51,20 @@ class Sheet extends Component {
 
 	componentDidMount() {
 		this.query()
+		let request = {
+			pageIndex: 1,
+			pageSize: 999,
+			enabled: true
+		}
+		this.props.queryBases(request)
+		this.props.querySources(request)
+		this.props.queryCosts(request)
+		this.props.queryGroups(request)
 	}
 
 	componentDidUpdate() {
 		if (this.props.sheet.created || this.props.sheet.updated) {
-			this.props.querySheet(this.request)
-		}
-	}
-
-	componentWillReceiveProps(nextProps) {
-		if (nextProps.dictionary.result) {
-			if (this.state.base.version !== nextProps.dictionary.version) {
-				this.setState({
-					...this.state,
-					base: {
-						data: nextProps.dictionary.result.List,
-						version: nextProps.dictionary.version
-					}
-				})
-			}
-		}
-		if (nextProps.sheet.result) {
-			if (this.state.sheet.version !== nextProps.sheet.version) {
-				this.setState({
-					...this.state,
-					sheet: {
-						data: nextProps.sheet.result.List,
-						totalCount: nextProps.sheet.result.TotalCount,
-						version: nextProps.sheet.version
-					}
-				})
-			}
+			this.props.querySheets(this.request)
 		}
 	}
 
@@ -94,7 +77,7 @@ class Sheet extends Component {
 		if (request) {
 			this.request = Object.assign(this.request, request)
 		}
-		this.props.querySheet(this.request)
+		this.props.querySheets(this.request)
 	}
 
 	showModal() {
@@ -137,17 +120,27 @@ class Sheet extends Component {
 		let {
 			queryingSheets,
 			sheets,
+			creating,
+			updating
+		} = this.props.sheet
+
+		let {
 			bases,
 			sources,
-			costs,
-			updateSheet
-		} = this.props
+			costs
+		} = this.props.dictionary
+
+		let groups = this.props.group.groups
 
 		let empty = {
 			List: [],
 			TotalCount: 0
 		}
 		sheets = sheets || empty
+		bases = bases || empty
+		sources = sources || empty
+		costs = costs || empty
+		groups = groups || empty
 
 		const columns = genColumns((raw, action) => {
 			if (action === 'update') {
@@ -158,11 +151,9 @@ class Sheet extends Component {
 			}
 		})
 
-		let querying = this.props.sheet.querying
-
 		let modal
 		if (updateSheetVisble) {
-			modal = <UpdateSheet id={this.selectedSheet.ID} onCancel={this.hideModal.bind(this)} bases={base.data}/>
+			modal = <UpdateSheet id={this.selectedSheet.ID} onCancel={this.hideModal.bind(this)} groups={groups.List} bases={bases.List} sources={sources.List} costs={costs.List} updating={updating} onSubmit={this.props.updateSheet}/>
 		}
 
 		return (
@@ -170,14 +161,14 @@ class Sheet extends Component {
 				<Row>
 					<TCol>
 						<TCard>
-							<SearchPanel onSearch={this.query} bases={base.data}/>
+							<SearchPanel onSearch={this.query} groups={groups.List} bases={bases.List} sources={sources.List} costs={costs.List} creating={creating} onSubmit={this.props.createSheet}/>
 							{modal}
 						</TCard>
 					</TCol>
 				</Row>
 				<Row>
 					<TCol>
-						<TTable key='sheets' bordered columns={columns} total={sheets.TotalCount} dataSource={sheets.List} loading={querying} onLoad={this.onTTableLoad}/>
+						<TTable key='sheets' bordered columns={columns} total={sheets.TotalCount} dataSource={sheets.List} loading={queryingSheets} onLoad={this.onTTableLoad}/>
 					</TCol>
 				</Row>
 			</TMainContainer>
@@ -186,7 +177,7 @@ class Sheet extends Component {
 }
 
 export default connect(state => state, {
-	querySheet,
+	querySheets,
 	createSheet,
 	updateSheet,
 	queryBases,
