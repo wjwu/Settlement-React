@@ -19,52 +19,57 @@ const TMainContainer = () => {
 			render() {
 				let user = JSON.parse(sessionStorage.getItem('user'))
 				let path = this.props.route.path.substr(1)
+
 				let openKeys = []
 				let selectedKeys = []
+				selectedKeys.push(path)
+
 				if (path === 'group' || path === 'dic') {
-					selectedKeys.push(path)
 					openKeys.push('sys')
-				} else if (path === 'sheet' || path === 'chart') {
-					selectedKeys.push(path)
+				} else if (path === 'sheet' || path === 'stats') {
+					openKeys.push('my')
+				}
+				let role
+				let sys
+				if (user.Role === 'Admin') {
+					role = '[系统管理员]'
+					sys = (
+						<SubMenu key='sys' title={<span><Icon type='desktop'/>系统管理</span>}>
+						 	<Menu.Item key='group'>
+						 		<Link to='/group'>部门与用户</Link>
+						 	</Menu.Item>
+						 	<Menu.Item key='dic'>
+						 		<Link to='/dic'>数据字典</Link>
+						 	</Menu.Item>
+						</SubMenu>
+					)
+				} else if (user.Role === 'DeptManager') {
+					role = '[部门主管]'
+				} else if (user.Role === 'Employee') {
+					role = '[普通员工]'
 				}
 				return (
 					<div className='ant-layout-aside'>
-						<aside className='ant-layout-sider'>
-						    <div className='ant-layout-logo'><h2>树虎团建结算系统</h2></div>
-			 				<Menu mode='inline' theme='dark' defaultOpenKeys={openKeys} selectedKeys={selectedKeys}>
-			 					<Menu.Item key='chart' >
-			 					{
-			 						<span><Icon type='pie-chart'/>统计中心</span>
-			 					}
-			 					</Menu.Item>
-								<Menu.Item key='sheet' >
-								{
-									<span><Link to='/sheet'><Icon type='calculator'/>我的结算表</Link></span>
-								}
-								</Menu.Item>
-						      	<SubMenu key='sys' title={<span><Icon type='desktop'/>系统管理</span>}>
-						        	<Menu.Item key='group'>
-						        		<Link to='/group'>部门与用户</Link>
-						        	</Menu.Item>
-						        	<Menu.Item key='dic'>
-						        		<Link to='/dic'>数据字典</Link>
-						        	</Menu.Item>
-						      	</SubMenu>
-						    </Menu>
-						</aside>
 						<div className='ant-layout-main'>
-						    <div className='ant-layout-header'>
-						    	<span>{user.Role}</span>
-						    	<span><a href='#'>{user.LoginID}</a></span>
-						    	<span>退出</span>
-						    </div>
-						    <div className='ant-layout-breadcrumb'>
-						      	<Breadcrumb>
-						        	<Breadcrumb.Item>首页</Breadcrumb.Item>
-						        	<Breadcrumb.Item>应用列表</Breadcrumb.Item>
-						        	<Breadcrumb.Item>某应用</Breadcrumb.Item>
-						      	</Breadcrumb>
-						    </div>
+							<div className='ant-layout-sider'>
+							    <div className='ant-layout-logo'><h2>树虎团建结算系统</h2></div>
+				 				<Menu mode='inline' theme='dark' defaultOpenKeys={openKeys} selectedKeys={selectedKeys}>
+				 					<SubMenu key='my' title={<span><Icon type='desktop'/>我的结算表</span>}>
+							        	<Menu.Item key='sheet'>
+							        		<Link to='/sheet'>我的结算表</Link>
+							        	</Menu.Item>
+							        	<Menu.Item key='stats'>
+							        		<Link to='/stats'>统计中心</Link>
+							        	</Menu.Item>
+				 					</SubMenu>
+				 					{sys}
+							    </Menu>
+							</div>
+							<div className='ant-layout-header'>
+								<span>{role}</span>
+								<span><a href='#'>{user.LoginID}</a></span>
+								<span><a className='normal-link'><Icon type='logout'/>&nbsp;退出</a></span>
+							</div>
 						    <div className='ant-layout-container'>
 						      	<div className='ant-layout-content'>
 						        	<div>
@@ -84,3 +89,11 @@ const TMainContainer = () => {
 }
 
 export default TMainContainer
+
+// <div className='ant-layout-breadcrumb'>
+//   	<Breadcrumb>
+//     	<Breadcrumb.Item>首页</Breadcrumb.Item>
+//     	<Breadcrumb.Item>应用列表</Breadcrumb.Item>
+//     	<Breadcrumb.Item>某应用</Breadcrumb.Item>
+//   	</Breadcrumb>
+// </div>

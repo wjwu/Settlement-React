@@ -186,9 +186,9 @@ class Group extends Component {
 				<Row>
 					<TCol>
 						<TCard>
-							<Button type='primary' className='button' onClick={this.showModal.bind(this,'createGroupVisible')}>新增部门</Button>
-							<Button type='primary' className='button' onClick={this.showModal.bind(this,'createUserVisible')}>新增用户</Button>
-							<Button type='ghost' className='button' onClick={this.doUpdateGroup.bind(this,'updateGroupVisible')}>修改部门</Button>
+							<Button type='primary' className='button' style={{marginRight:8}} onClick={this.showModal.bind(this,'createGroupVisible')}>新增部门</Button>
+							<Button type='primary' className='button' style={{marginRight:8}} onClick={this.showModal.bind(this,'createUserVisible')}>新增用户</Button>
+							<Button type='ghost' className='button' style={{marginRight:8}} onClick={this.doUpdateGroup.bind(this,'updateGroupVisible')}>修改部门</Button>
 							<Button type='ghost' onClick={this.doDeleteGroup.bind(this)}>删除部门</Button>
 							{modal}
 						</TCard>

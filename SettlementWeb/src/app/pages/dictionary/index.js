@@ -89,7 +89,7 @@ class Dictionary extends Component {
 	}
 
 	onTabChange(activeKey) {
-		this.selectedTab = activeKey.substr(2)
+		this.selectedTab = activeKey
 		if (this.selectedTab === DICTIONARY_SOURCE && !this.source.queryed) {
 			this.props.querySources(this.source.request)
 		} else if (this.selectedTab === DICTIONARY_COST && !this.cost.queryed) {

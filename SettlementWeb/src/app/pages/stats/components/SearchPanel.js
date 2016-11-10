@@ -14,7 +14,7 @@ import {
 import {
 	TTreeSelect
 } from '../../../../components'
-import CreateSheet from './CreateSheet'
+
 import {
 	tree,
 	EMPTY_GUID,
@@ -30,12 +30,6 @@ class SearchPanel extends Component {
 	constructor(props) {
 		super(props)
 		this.query = this.query.bind(this)
-		this.search = this.search.bind(this)
-		this.showModal = this.showModal.bind(this)
-		this.hideModal = this.hideModal.bind(this)
-		this.state = {
-			showCreate: false,
-		}
 	}
 
 	query() {
@@ -70,22 +64,6 @@ class SearchPanel extends Component {
 		})
 	}
 
-	search() {
-		this.props.onSearch()
-	}
-
-	showModal() {
-		this.setState({
-			showCreate: true
-		})
-	}
-
-	hideModal() {
-		this.setState({
-			showCreate: false
-		})
-	}
-
 	render() {
 		const getFieldDecorator = this.props.form.getFieldDecorator
 
@@ -110,11 +88,6 @@ class SearchPanel extends Component {
 			bases,
 			sources
 		} = this.props
-
-		let modal
-		if (this.state.showCreate) {
-			modal = <CreateSheet onCancel={this.hideModal} {...this.props}/>
-		}
 
 		return (
 			<Form horizontal>
@@ -192,6 +165,13 @@ class SearchPanel extends Component {
 						</FormItem>
 					</Col>
 					<Col {...colLayout}>
+						<FormItem {...formItemLayout} label='项目经理'>
+						{
+							getFieldDecorator('projectManager')(<Input />)
+						}
+						</FormItem>
+					</Col>
+					<Col {...colLayout}>
 						<FormItem {...formItemLayout} label='客户名称'>
 						{
 							getFieldDecorator('customName')(<Input />)
@@ -201,10 +181,7 @@ class SearchPanel extends Component {
 				</Row>
 				<Row>
 					<Col style={{ textAlign: 'right' }}>
-						<Button type='primary' icon='reload' style={{marginRight:8}} onClick={this.search}>刷新</Button>
 						<Button type='primary' icon='search' style={{marginRight:8}} onClick={this.query}>查询</Button>
-						<Button type='primary' icon='plus-circle-o' onClick={this.showModal}>新增结算表</Button>
-						{modal}
 					</Col>
 				</Row>
 			</Form>
@@ -212,18 +189,11 @@ class SearchPanel extends Component {
 	}
 }
 
-SearchPanel.defaultProps = {
-	creating: false
-}
-
 SearchPanel.propTypes = {
 	groups: PropTypes.array.isRequired,
 	bases: PropTypes.array.isRequired,
 	sources: PropTypes.array.isRequired,
-	costs: PropTypes.array.isRequired,
-	creating: PropTypes.bool.isRequired,
-	onSearch: PropTypes.func.isRequired,
-	onSubmit: PropTypes.func.isRequired
+	onSearch: PropTypes.func.isRequired
 }
 
 export default Form.create()(SearchPanel)

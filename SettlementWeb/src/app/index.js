@@ -20,7 +20,7 @@ import Home from './pages/home'
 import Group from './pages/group'
 import Dictionary from './pages/dictionary'
 import Sheet from './pages/sheet'
-
+import Stats from './pages/stats'
 
 const store = createStore(reducer, applyMiddleware(thunk))
 
@@ -43,6 +43,7 @@ ReactDOM.render(
 			<Route path='/group' component={Group} onEnter={enter}/>
 			<Route path='/dic' component={Dictionary} onEnter={enter}/>
 			<Route path='/sheet' component={Sheet} onEnter={enter}/>
+			<Route path='/stats' component={Stats} onEnter={enter}/>
 		</Router>
 	</Provider>,
 	document.getElementById('root')

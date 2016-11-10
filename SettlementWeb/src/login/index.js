@@ -48,7 +48,7 @@ class LoginForm extends React.Component {
 				actions.login(account, password, captcha, timeSpan).then(result => {
 					sessionStorage.setItem('token', result.Token)
 					sessionStorage.setItem('user', JSON.stringify(result.User))
-					window.location.href = '/app'
+					window.location.href = '/home'
 				}, error => {
 					this.refreshCaptcha()
 					setFields({
