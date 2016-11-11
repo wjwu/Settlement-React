@@ -8,11 +8,15 @@ namespace SettlementApi.Read.QueryCommand.SheetModule
 
         public Guid? Base { get; set; }
 
+        public Guid? Source { get; set; }
+
         public DateTime? TimeFrom{get;set;}
 
         public DateTime? TimeTo { get; set; }
 
         public string CustomName { get; set; }
+
+        public string ProjectManager { get; set; }
 
         public string AuditStatus { get; set; }
 

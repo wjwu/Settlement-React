@@ -1,15 +1,14 @@
 ﻿using SettlementApi.CommandBus;
-using SettlementApi.Read.Model;
 using SettlementApi.Read.QueryCommand;
 using SettlementApi.Read.QueryCommand.GroupModule;
 
 namespace SettlementApi.Read.Respository
 {
-    public class QueryGroup: BaseRRespository, ICommandBus<QueryGroupCommand, BasePagingCommandResult<RQueryGroup>>
+    public class QueryGroup: BaseRRespository, ICommandBus<QueryGroupCommand, BaseCommandResult<RQueryGroup>>
     {
-        public BasePagingCommandResult<RQueryGroup> Execute(QueryGroupCommand command)
+        public BaseCommandResult<RQueryGroup> Execute(QueryGroupCommand command)
         {
-            return QueryPaging<EQueryGroup, RQueryGroup, QueryGroupCommand>("Group.Query", command);
+            return this.Query<RQueryGroup, QueryGroupCommand>("Group.Query", command);
         }
 
         public void Receive(ICommand command)

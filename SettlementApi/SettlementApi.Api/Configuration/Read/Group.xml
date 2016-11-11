@@ -2,10 +2,21 @@
 <commands>
   <command name="Group.Query" type="text" connection="local">
     <![CDATA[
-SELECT [ID]
-      ,[Name]
-      ,[ParentID]
-  FROM [dbo].[Group] WHERE [Deleted]=0
+  WITH  temp ( [ID], [ParentID], Name )
+          AS ( SELECT   [ID] ,
+                        [ParentID] ,
+                        Name
+               FROM     [dbo].[Group]
+               WHERE    [ParentID] = @ID
+               UNION ALL
+               SELECT   G.[ID] ,
+                        G.[ParentID] ,
+                        G.Name
+               FROM     [dbo].[Group] AS G
+                        INNER JOIN temp ON G.[ParentID] = temp.[ID]
+             )
+    SELECT  *
+    FROM    temp
       ]]>
   </command>
 </commands>

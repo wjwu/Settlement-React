@@ -1,5 +1,6 @@
 import React, {
-	Component
+	Component,
+	PropTypes
 } from 'react'
 import {
 	TreeSelect,
@@ -7,7 +8,6 @@ import {
 } from 'antd'
 
 const TreeNode = Tree.TreeNode
-const EMPTY_GUID = '00000000-0000-0000-0000-000000000000'
 
 class TTreeSelect extends Component {
 	render() {
@@ -19,7 +19,7 @@ class TTreeSelect extends Component {
 				item.children = dataLoop(item.ID)
 				return item
 			})
-			let treeData = dataLoop(EMPTY_GUID)
+			let treeData = dataLoop(this.props.root)
 
 			const nodeLoop = dt => dt.map(item => {
 				if (item.children.length > 0) {
@@ -36,6 +36,14 @@ class TTreeSelect extends Component {
 			</TreeSelect>
 		)
 	}
+}
+
+TTreeSelect.defaultProps = {
+	root: '00000000-0000-0000-0000-000000000000'
+}
+
+TTreeSelect.propTypes = {
+	root: PropTypes.string
 }
 
 export default TTreeSelect

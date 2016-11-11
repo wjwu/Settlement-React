@@ -3,7 +3,7 @@
 <commands>
   <command name="User.Login" type="text" connection="local">
     <![CDATA[
-  SELECT TOP(1) [ID],[LoginID],[Role],[LastLoginIP],[LastLoginTime],[Enabled] FROM dbo.[User] WHERE LoginID=@LoginID AND Password=@Password AND [Deleted]=0
+  SELECT TOP(1) [ID],[LoginID],[Group],[Role],[LastLoginIP],[LastLoginTime],[Enabled] FROM dbo.[User] WHERE LoginID=@LoginID AND Password=@Password AND [Deleted]=0
   ]]>
   </command>
   <command name="User.LoginUpdate" type="text" connection="local">

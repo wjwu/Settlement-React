@@ -59,7 +59,9 @@ class Sheet extends Component {
 		this.props.queryBases(request)
 		this.props.querySources(request)
 		this.props.queryCosts(request)
-		this.props.queryGroups(request)
+		this.props.queryGroups({
+			ID: this.props.sys_user.ParentGroup
+		})
 	}
 
 	componentDidUpdate() {
@@ -140,7 +142,7 @@ class Sheet extends Component {
 		bases = bases || empty
 		sources = sources || empty
 		costs = costs || empty
-		groups = groups || empty
+		groups = groups || []
 
 		const columns = genColumns((raw, action) => {
 			if (action === 'update') {
@@ -153,7 +155,7 @@ class Sheet extends Component {
 
 		let modal
 		if (updateSheetVisble) {
-			modal = <UpdateSheet id={this.selectedSheet.ID} onCancel={this.hideModal.bind(this)} groups={groups.List} bases={bases.List} sources={sources.List} costs={costs.List} updating={updating} onSubmit={this.props.updateSheet}/>
+			modal = <UpdateSheet id={this.selectedSheet.ID} onCancel={this.hideModal.bind(this)} groups={groups} bases={bases.List} sources={sources.List} costs={costs.List} updating={updating} onSubmit={this.props.updateSheet}/>
 		}
 
 		return (
@@ -161,7 +163,7 @@ class Sheet extends Component {
 				<Row>
 					<TCol>
 						<TCard>
-							<SearchPanel onSearch={this.query} groups={groups.List} bases={bases.List} sources={sources.List} costs={costs.List} creating={creating} onSubmit={this.props.createSheet}/>
+							<SearchPanel onSearch={this.query} onSubmit={this.props.createSheet} {...this.props}/>
 							{modal}
 						</TCard>
 					</TCol>

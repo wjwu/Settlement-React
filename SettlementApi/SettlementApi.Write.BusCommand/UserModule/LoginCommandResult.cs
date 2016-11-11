@@ -11,6 +11,10 @@ namespace SettlementApi.Write.BusCommand.UserModule
 
         public string LoginID { get; set; }
 
+        public Guid Group { get; set; }
+
+        public Guid ParentGroup { get; set; }
+
         public string Role { get; set; }
         //private string _role { get; set; }
         //public string Role {

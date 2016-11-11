@@ -18,6 +18,13 @@ namespace SettlementApi.Read.Model
         public Guid? Base { get; set; }
 
         [TableQueryAlias("S")]
+        public Guid? Source { get; set; }
+
+        [TableQueryAlias("U")]
+        [LikeField]
+        public string ProjectManager { get; set; }
+
+        [TableQueryAlias("S")]
         [RangeField("TimeFrom", RangeEnum.GreaterThan)]
         public DateTime? TimeFrom { get; set; }
 

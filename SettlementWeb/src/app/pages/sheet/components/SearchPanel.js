@@ -45,7 +45,7 @@ class SearchPanel extends Component {
 		} = this.props.form
 		validateFields((errors, values) => {
 			let group = getFieldValue('group') || ''
-			let base = getFieldValue('base')
+			let base = getFieldValue('base') || ''
 			let times = getFieldValue('times')
 			let timeFrom = ''
 			let timeTo = ''
@@ -56,7 +56,7 @@ class SearchPanel extends Component {
 			let customName = getFieldValue('customName') || ''
 			let auditStatus = getFieldValue('auditStatus')
 			let payStatus = getFieldValue('payStatus')
-			let source = getFieldValue('source')
+			let source = getFieldValue('source') || ''
 			this.props.onSearch({
 				group,
 				base,
@@ -105,23 +105,37 @@ class SearchPanel extends Component {
 			lg: 6
 		}
 
-		const {
-			groups,
+		let {
 			bases,
 			sources
-		} = this.props
+		} = this.props.dictionary
+
+		let groups = this.props.group.groups
 
 		let modal
 		if (this.state.showCreate) {
 			modal = <CreateSheet onCancel={this.hideModal} {...this.props}/>
 		}
 
+		let basesOptions = bases ? bases.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>) : []
+		basesOptions.unshift(<Option key='all' value=''>全部</Option>)
+
+		let sourcesOptions = sources ? sources.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>) : []
+		sourcesOptions.unshift(<Option key='all' value=''>全部</Option>)
+
+		let parentGroup = this.props.sys_user.ParentGroup
+		let group = this.props.sys_user.Group
+
 		return (
 			<Form horizontal>
 				<Row gutter={24}>
 					<Col {...colLayout}>
 						<FormItem {...formItemLayout} label='部门'>
-							<TTreeSelect data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} treeDefaultExpandAll/>
+						{
+							getFieldDecorator('group',{initialValue:group})(
+								<TTreeSelect root={parentGroup} data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} treeDefaultExpandAll/>
+							)
+						}
 						</FormItem>
 					</Col>
 					<Col {...colLayout}>
@@ -138,7 +152,7 @@ class SearchPanel extends Component {
 							(
 								<Select>
 									{
-										bases.map(item=><Option key={item.ID} value={item.ID}>{item.Name}</Option>)
+										basesOptions
 									}
 								</Select>
 							)
@@ -148,11 +162,11 @@ class SearchPanel extends Component {
 					<Col {...colLayout}>
 						<FormItem {...formItemLayout} label='客户来源'>
 						{
-							getFieldDecorator('source')
+							getFieldDecorator('source',{initialValue:''})
 							(
 								<Select>
 									{
-										sources.map(item=><Option key={item.ID} value={item.ID}>{item.Name}</Option>)
+										sourcesOptions
 									}
 								</Select>
 							)
@@ -212,16 +226,16 @@ class SearchPanel extends Component {
 	}
 }
 
-SearchPanel.defaultProps = {
-	creating: false
-}
+// SearchPanel.defaultProps = {
+// 	creating: false
+// }
 
 SearchPanel.propTypes = {
-	groups: PropTypes.array.isRequired,
-	bases: PropTypes.array.isRequired,
-	sources: PropTypes.array.isRequired,
-	costs: PropTypes.array.isRequired,
-	creating: PropTypes.bool.isRequired,
+	// groups: PropTypes.array.isRequired,
+	// bases: PropTypes.array.isRequired,
+	// sources: PropTypes.array.isRequired,
+	// costs: PropTypes.array.isRequired,
+	// creating: PropTypes.bool.isRequired,
 	onSearch: PropTypes.func.isRequired,
 	onSubmit: PropTypes.func.isRequired
 }

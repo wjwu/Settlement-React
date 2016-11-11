@@ -73,7 +73,7 @@ const TMainContainer = () => {
 						    <div className='ant-layout-container'>
 						      	<div className='ant-layout-content'>
 						        	<div>
-						          		<Comp {...this.props}/>
+						          		<Comp {...this.props} sys_user={user}/>
 						        	</div>
 						      	</div>
 						    </div>

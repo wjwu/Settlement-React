@@ -14,6 +14,8 @@ namespace SettlementApi.Read.QueryCommand.SheetModule
 
         public string CustomName { get; set; }
 
+        public string Source { get; set; }
+
         public string Base { get; set; }
 
         public DateTime DTimeFrom { private get; set; }
@@ -21,6 +23,8 @@ namespace SettlementApi.Read.QueryCommand.SheetModule
         public string TimeFrom => DTimeFrom.ToString("yyyy-MM-dd");
 
         public string ProjectManager { get; set; }
+
+        public string Department { get; set; }
 
         public decimal TotalPrice { get; set; }
 

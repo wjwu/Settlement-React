@@ -9,17 +9,17 @@ const columns = (editFuc) => {
 		title: '签单人',
 		dataIndex: 'ProjectManager',
 		key: 'projectManager',
-		width: '8.333%'
+		width: '9%'
 	}, {
 		title: '所在部门',
 		dataIndex: 'Department',
 		key: 'department',
-		width: '5%'
+		width: '9%'
 	}, {
 		title: '客户名称',
 		dataIndex: 'CustomName',
 		key: 'customName',
-		width: '15%',
+		width: '13%',
 		render: (text, raw) => {
 			return <a href='javascript:;' onClick={editFuc.bind(null,raw)}>{text}</a>
 		}
@@ -27,11 +27,16 @@ const columns = (editFuc) => {
 		title: '培训地点',
 		dataIndex: 'Base',
 		key: 'base',
-		width: '15%',
+		width: '13%',
 	}, {
 		title: '培训时间',
 		dataIndex: 'TimeFrom',
 		key: 'timeFrom',
+		width: '8%'
+	}, {
+		title: '客户来源',
+		dataIndex: 'Source',
+		key: 'source',
 		width: '8%'
 	}, {
 		title: '总成交额',
@@ -66,15 +71,10 @@ const columns = (editFuc) => {
 			return <b>{`￥${text}`}</b>
 		}
 	}, {
-		title: '客户来源',
-		dataIndex: 'Source',
-		key: 'source',
-		width: '8.333%'
-	}, {
 		title: '付款状态',
 		dataIndex: 'PayStatus',
 		key: 'payStatus',
-		width: '8.333%',
+		width: '8%',
 		render: (text) => {
 			if (text === '已付清') {
 				return <Tag color='green'>{text}</Tag>

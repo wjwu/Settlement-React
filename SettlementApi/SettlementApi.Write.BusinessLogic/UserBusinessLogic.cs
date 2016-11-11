@@ -69,7 +69,13 @@ namespace SettlementApi.Write.BusinessLogic
             if (!loginUser.Enabled)
                 throw new BussinessException(UserRes.LoginFailDisabled);
             Update("User.LoginUpdate", new {LastLoginIP = ServiceContext.RequestIP, loginUser.ID});
-            return MapperHelper.Map<User, LoginCommandResult>(loginUser);
+            var result= MapperHelper.Map<User, LoginCommandResult>(loginUser);
+            var group=new GroupBusinessLogic().GetEntity(loginUser.Group);
+            if (group!=null)
+            {
+                result.ParentGroup = group.ParentID;
+            }
+            return result;
         }
 
         public void Execute(UpdateUserCommand command)
