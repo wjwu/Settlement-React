@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SettlementApi.Api.Dtos.Sign
 {
@@ -8,6 +9,7 @@ namespace SettlementApi.Api.Dtos.Sign
         public string LoginID { get; set; }
         public Guid Group { get; set; }
         public Guid ParentGroup { get; set; }
+        public List<string>Path { get; set; }
         public string Role { get; set; }
         public DateTime? LastLoginTime { get; set; }
         public string LastLoginIP { get; set; }

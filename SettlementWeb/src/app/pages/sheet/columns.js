@@ -3,7 +3,7 @@ import {
 	Icon,
 	Tag
 } from 'antd'
-import moment from 'moment'
+import * as colors from '../../colors'
 
 const columns = (editFuc) => {
 	return [{
@@ -77,14 +77,14 @@ const columns = (editFuc) => {
 		key: 'auditStatus',
 		width: '7%',
 		render: (text) => {
-			if (text === '未提交') {
-				return <Tag color='blue'>{text}</Tag>
-			} else if (text === '审核中') {
-				return <Tag color='yellow'>{text}</Tag>
-			} else if (text === '通过') {
-				return <Tag color='green'>{text}</Tag>
-			} else if (text === '未通过') {
-				return <Tag color='red'>{text}</Tag>
+			if (text === 'UnSubmit') {
+				return <Tag color={colors.blue}>未提交</Tag>
+			} else if (text === 'Auditing') {
+				return <Tag color={colors.yellow}>审核中</Tag>
+			} else if (text === 'Pass') {
+				return <Tag color={colors.green}>通过</Tag>
+			} else if (text === 'Fail') {
+				return <Tag color={colors.red}>未通过</Tag>
 			}
 		}
 	}, {
@@ -93,10 +93,10 @@ const columns = (editFuc) => {
 		key: 'payStatus',
 		width: '7%',
 		render: (text) => {
-			if (text === '已付清') {
-				return <Tag color='green'>{text}</Tag>
-			} else if (text === '未付清') {
-				return <Tag color='red'>{text}</Tag>
+			if (text === 'Paid') {
+				return <Tag color={colors.green}>已付清</Tag>
+			} else if (text === 'Unpaid') {
+				return <Tag color={colors.red}>未付清</Tag>
 			}
 		}
 	}, {
@@ -104,6 +104,9 @@ const columns = (editFuc) => {
 		key: 'operation',
 		width: '5%',
 		render: (text, raw) => {
+			if (raw.AuditStatus === 'Pass') {
+				return <a href='javascript:;' onClick={editFuc.bind(null,raw,'delete')}><Icon type='delete' /></a>
+			}
 			return (
 				<span>
 					<a href='javascript:;' onClick={editFuc.bind(null,raw,'update')}><Icon type='edit' /></a>&nbsp;&nbsp;

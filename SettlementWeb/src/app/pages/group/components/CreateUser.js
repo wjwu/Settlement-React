@@ -104,6 +104,7 @@ class CreateUser extends Component {
 								<Option key='admin' value='admin'>系统管理员</Option>
 								<Option key='deptmanager' value='deptmanager'>部门主管</Option>
 								<Option key='employee' value='employee'>普通员工</Option>
+								<Option key='financial' value='financial'>财务</Option>
 							</Select>
 						)
 					}

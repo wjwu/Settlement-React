@@ -3,9 +3,6 @@ import React, {
 	PropTypes
 } from 'react'
 import {
-	connect
-} from 'react-redux'
-import {
 	Modal,
 	Form,
 	Input,
@@ -35,11 +32,6 @@ import {
 	disabledTime,
 	disabledDate
 } from '../../../common'
-import {
-	getSheet
-} from '../../../actions/sheet'
-
-import * as apiClient from '../../../apiClient'
 
 const FormItem = Form.Item
 const RangePicker = DatePicker.RangePicker
@@ -83,7 +75,7 @@ class UpdateSheet extends Component {
 		}
 	}
 
-	submit() {
+	submit(type) {
 		const {
 			validateFields,
 			getFieldValue
@@ -107,7 +99,8 @@ class UpdateSheet extends Component {
 				let remark = getFieldValue('remark')
 				let costs = this.state.costs
 				let receiveds = this.state.receiveds
-				this.props.onSubmit({
+				let submit = type === 'submit'
+				this.props.updateSheet({
 					id: this.props.sheet.sheet.ID,
 					customName,
 					contacts,
@@ -123,7 +116,8 @@ class UpdateSheet extends Component {
 					totalPrice,
 					remark,
 					costs,
-					receiveds
+					receiveds,
+					submit
 				})
 			}
 		})
@@ -177,7 +171,10 @@ class UpdateSheet extends Component {
 	}
 
 	render() {
-		const sheet = this.props.sheet.sheet
+		const {
+			updating,
+			sheet
+		} = this.props.sheet
 
 		if (!sheet) {
 			return (
@@ -189,11 +186,10 @@ class UpdateSheet extends Component {
 		const getFieldDecorator = this.props.form.getFieldDecorator
 
 		const {
-			updating,
 			bases,
 			sources,
 			costs: costTypes
-		} = this.props
+		} = this.props.dictionary
 
 		const formItemLayout = {
 			labelCol: {
@@ -247,8 +243,21 @@ class UpdateSheet extends Component {
 			modal = <UpdateReceived onCancel = {this.hideModal.bind(this,updateReceived)} received={this.selectedReceived}/>
 		}
 
+
+		let footer =
+			[
+				<Button key='cancel' type='ghost' size='large' onClick={this.props.onCancel}>取消</Button>,
+				<Button key='save' type='primary' size='large' loading={updating} onClick={this.submit.bind(this,'save')}>保存</Button>
+
+			]
+
+		if (sheet.AuditStatus === 'UnSubmit' || sheet.AuditStatus === 'Fail') {
+			let btnSubmit = <Button key='submit' type='primary' size='large' loading={updating} onClick={this.submit.bind(this,'submit')}>保存并提交</Button>
+			footer.push(btnSubmit)
+		}
+
 		return (
-			<Modal title='修改结算表' visible={true} width={800} confirmLoading={updating} onOk={this.submit} onCancel={this.props.onCancel}>
+			<Modal title='修改结算表' visible={true} width={800} footer={footer} onCancel={this.props.onCancel}>
 				<Tabs tabPosition='left'>
 					<TabPane tab='基本信息' key='baseInfo'>
 						<Form>
@@ -466,21 +475,9 @@ class UpdateSheet extends Component {
 	}
 }
 
-UpdateSheet.defaultProps = {
-	updating: false
-}
-
 UpdateSheet.propTypes = {
 	id: PropTypes.string.isRequired,
-	updating: PropTypes.bool.isRequired,
-	groups: PropTypes.array.isRequired,
-	bases: PropTypes.array.isRequired,
-	sources: PropTypes.array.isRequired,
-	costs: PropTypes.array.isRequired,
-	onCancel: PropTypes.func.isRequired,
-	onSubmit: PropTypes.func.isRequired
+	onCancel: PropTypes.func.isRequired
 }
 
-export default connect(state => state, {
-	getSheet
-})(Form.create()(UpdateSheet))
+export default Form.create()(UpdateSheet)

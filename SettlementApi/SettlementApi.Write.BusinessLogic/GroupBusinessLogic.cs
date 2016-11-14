@@ -6,6 +6,7 @@ using SettlementApi.Write.BusCommand.GroupModule;
 using SettlementApi.Write.BusinessLogic.Event;
 using SettlementApi.Write.BusinessLogic.Resource;
 using SettlementApi.Write.Model;
+using System.Collections.Generic;
 
 namespace SettlementApi.Write.BusinessLogic
 {
@@ -59,6 +60,11 @@ namespace SettlementApi.Write.BusinessLogic
         public override Group GetEntity(Guid id)
         {
             return GetEntity("Group.GetByID", new {ID = id});
+        }
+
+        public List<Group> GetList(Guid id,Guid parentID)
+        {
+            return GetList("Group.Query", new { ID = id,ParentID= parentID });
         }
     }
 }

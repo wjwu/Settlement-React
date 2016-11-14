@@ -32,6 +32,8 @@ namespace SettlementApi.Write.BusCommand.SheetModule
 
         public string Remark { get; set; }
 
+        public bool Submit { get; set; }
+
         public List<CostEntity> Costs { get; set; }
 
         public List<ReceivedEntity> Receiveds { get; set; }

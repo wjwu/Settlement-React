@@ -489,11 +489,11 @@ namespace SettlementApi.DataAccess
                         continue;
                     }
 
-                    string propertyName = property.Name;
+                    string propertyName = "["+ property.Name + "]";
                     var aliasFieldAttribute = property.GetCustomAttribute<AliasFieldAttribute>();
                     if (aliasFieldAttribute != null)
                     {
-                        propertyName = aliasFieldAttribute.SqlFieldName;
+                        propertyName = "["+aliasFieldAttribute.SqlFieldName+"]";
                     }
 
                     string aliases = string.Empty;

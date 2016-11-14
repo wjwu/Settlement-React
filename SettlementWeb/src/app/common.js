@@ -15,6 +15,29 @@ const tree = (data, root) => {
 	}
 }
 
+const getGroup = (data, root) => {
+	//todo 引用问题
+	if (Array.isArray(data)) {
+		if (!root) {
+			return data.map(item => item.ID)
+		}
+		let groups = []
+		const loop = (parentId) => data.filter(item => item.ParentID === parentId).map(item => {
+			groups.push(item.ID)
+			if (item.children.length > 1) {
+				loop(item.ID)
+			}
+		})
+		loop(root)
+		for (let item of data) {
+			if (item.ID === root) {
+				groups.push(item.ID)
+			}
+		}
+		return groups
+	}
+}
+
 const disabledDate = current => {
 	return current && current.valueOf() > Date.now()
 }
@@ -48,6 +71,7 @@ const disabledTime = (time, type) => {
 export {
 	random,
 	tree,
+	getGroup,
 	EMPTY_GUID,
 	disabledDate,
 	disabledTime

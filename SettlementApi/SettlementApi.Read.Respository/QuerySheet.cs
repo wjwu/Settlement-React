@@ -27,6 +27,10 @@ namespace SettlementApi.Read.Respository
 
         public BasePagingCommandResult<RQuerySheet> Execute(QuerySheetCommand command)
         {
+            if (!string.IsNullOrEmpty(command.Groups))
+            {
+                command.Path = command.Groups.Split(',');
+            }
             return QueryPaging<EQuerySheet, RQuerySheet, QuerySheetCommand>("Sheet.Query", command);
         }
 

@@ -11,14 +11,15 @@ const TreeNode = Tree.TreeNode
 
 class TTreeSelect extends Component {
 	render() {
-		const data = this.props.data
 		let treeNodes = []
-
-		if (data) {
-			const dataLoop = parentId => data.filter(item => item.ParentID === parentId).map(item => {
-				item.children = dataLoop(item.ID)
-				return item
-			})
+		if (this.props.data) {
+			let data = this.props.data
+			const dataLoop = parentId => {
+				return data.filter(item => item.ParentID === parentId).map(item => {
+					item.children = dataLoop(item.ID)
+					return item
+				})
+			}
 			let treeData = dataLoop(this.props.root)
 
 			const nodeLoop = dt => dt.map(item => {

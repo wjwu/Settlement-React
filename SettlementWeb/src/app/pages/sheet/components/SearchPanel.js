@@ -14,10 +14,8 @@ import {
 import {
 	TTreeSelect
 } from '../../../../components'
-import CreateSheet from './CreateSheet'
 import {
-	tree,
-	EMPTY_GUID,
+	getGroup,
 	disabledTime,
 	disabledDate
 } from '../../../common'
@@ -31,11 +29,6 @@ class SearchPanel extends Component {
 		super(props)
 		this.query = this.query.bind(this)
 		this.search = this.search.bind(this)
-		this.showModal = this.showModal.bind(this)
-		this.hideModal = this.hideModal.bind(this)
-		this.state = {
-			showCreate: false,
-		}
 	}
 
 	query() {
@@ -43,8 +36,10 @@ class SearchPanel extends Component {
 			validateFields,
 			getFieldValue
 		} = this.props.form
+
 		validateFields((errors, values) => {
-			let group = getFieldValue('group') || ''
+			let group = getFieldValue('group')
+			let groups = getGroup(this.props.group.groups, group)
 			let base = getFieldValue('base') || ''
 			let times = getFieldValue('times')
 			let timeFrom = ''
@@ -58,7 +53,7 @@ class SearchPanel extends Component {
 			let payStatus = getFieldValue('payStatus')
 			let source = getFieldValue('source') || ''
 			this.props.onSearch({
-				group,
+				groups,
 				base,
 				timeFrom,
 				timeTo,
@@ -74,18 +69,6 @@ class SearchPanel extends Component {
 		this.props.onSearch()
 	}
 
-	showModal() {
-		this.setState({
-			showCreate: true
-		})
-	}
-
-	hideModal() {
-		this.setState({
-			showCreate: false
-		})
-	}
-
 	render() {
 		const getFieldDecorator = this.props.form.getFieldDecorator
 
@@ -95,7 +78,7 @@ class SearchPanel extends Component {
 			},
 			wrapperCol: {
 				span: 19
-			},
+			}
 		}
 
 		const colLayout = {
@@ -111,11 +94,6 @@ class SearchPanel extends Component {
 		} = this.props.dictionary
 
 		let groups = this.props.group.groups
-
-		let modal
-		if (this.state.showCreate) {
-			modal = <CreateSheet onCancel={this.hideModal} {...this.props}/>
-		}
 
 		let basesOptions = bases ? bases.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>) : []
 		basesOptions.unshift(<Option key='all' value=''>全部</Option>)
@@ -217,8 +195,6 @@ class SearchPanel extends Component {
 					<Col style={{ textAlign: 'right' }}>
 						<Button type='primary' icon='reload' style={{marginRight:8}} onClick={this.search}>刷新</Button>
 						<Button type='primary' icon='search' style={{marginRight:8}} onClick={this.query}>查询</Button>
-						<Button type='primary' icon='plus-circle-o' onClick={this.showModal}>新增结算表</Button>
-						{modal}
 					</Col>
 				</Row>
 			</Form>
@@ -226,18 +202,9 @@ class SearchPanel extends Component {
 	}
 }
 
-// SearchPanel.defaultProps = {
-// 	creating: false
-// }
 
 SearchPanel.propTypes = {
-	// groups: PropTypes.array.isRequired,
-	// bases: PropTypes.array.isRequired,
-	// sources: PropTypes.array.isRequired,
-	// costs: PropTypes.array.isRequired,
-	// creating: PropTypes.bool.isRequired,
-	onSearch: PropTypes.func.isRequired,
-	onSubmit: PropTypes.func.isRequired
+	onSearch: PropTypes.func.isRequired
 }
 
 export default Form.create()(SearchPanel)

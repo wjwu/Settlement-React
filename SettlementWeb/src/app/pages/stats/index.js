@@ -39,7 +39,8 @@ class Stats extends Component {
 		this.query = this.query.bind(this)
 		this.onTTableLoad = this.onTTableLoad.bind(this)
 		this.request = {
-			pageIndex: 1
+			pageIndex: 1,
+			groups: this.props.sys_user.Path
 		}
 	}
 
@@ -53,7 +54,10 @@ class Stats extends Component {
 		this.props.queryBases(request)
 		this.props.querySources(request)
 		this.props.queryCosts(request)
-		this.props.queryGroups(request)
+		this.props.queryGroups({
+			ID: this.props.sys_user.Group,
+			ParentID: this.props.sys_user.ParentGroup
+		})
 	}
 
 	onTTableLoad(pageIndex) {
@@ -74,23 +78,11 @@ class Stats extends Component {
 			sheets
 		} = this.props.sheet
 
-		let {
-			bases,
-			sources,
-			costs
-		} = this.props.dictionary
-
-		let groups = this.props.group.groups
-
 		let empty = {
 			List: [],
 			TotalCount: 0
 		}
 		sheets = sheets || empty
-		bases = bases || empty
-		sources = sources || empty
-		costs = costs || empty
-		groups = groups || empty
 
 		const columns = genColumns((raw, action) => {
 			if (action === 'update') {
@@ -106,7 +98,7 @@ class Stats extends Component {
 				<Row>
 					<TCol>
 						<TCard>
-							<SearchPanel onSearch={this.query} groups={groups.List} bases={bases.List} sources={sources.List}/>
+							<SearchPanel onSearch={this.query} {...this.props}/>
 						</TCard>
 					</TCol>
 				</Row>

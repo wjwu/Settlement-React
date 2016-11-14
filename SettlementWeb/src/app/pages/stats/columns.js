@@ -3,6 +3,7 @@ import {
 	Icon,
 	Tag
 } from 'antd'
+import * as colors from '../../colors'
 
 const columns = (editFuc) => {
 	return [{
@@ -76,10 +77,10 @@ const columns = (editFuc) => {
 		key: 'payStatus',
 		width: '8%',
 		render: (text) => {
-			if (text === '已付清') {
-				return <Tag color='green'>{text}</Tag>
-			} else if (text === '未付清') {
-				return <Tag color='red'>{text}</Tag>
+			if (text === 'Paid') {
+				return <Tag color={colors.green}>已付清</Tag>
+			} else if (text === 'Unpaid') {
+				return <Tag color={colors.red}>未付清</Tag>
 			}
 		}
 	}]

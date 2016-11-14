@@ -12,7 +12,9 @@ namespace SettlementApi.Read.Model
     public class EQuerySheet : BaseQueryEntity
     {
         [TableQueryAlias("U")]
-        public Guid? Group { get; set; }
+        [AliasField("Group")]
+        [InField]
+        public string[] Path { get; set; }
 
         [TableQueryAlias("S")]
         public Guid? Base { get; set; }
@@ -21,6 +23,7 @@ namespace SettlementApi.Read.Model
         public Guid? Source { get; set; }
 
         [TableQueryAlias("U")]
+        [AliasField("Name")]
         [LikeField]
         public string ProjectManager { get; set; }
 

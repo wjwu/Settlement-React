@@ -34,16 +34,8 @@ namespace SettlementApi.Read.QueryCommand.SheetModule
 
         public decimal RemainingMoney { get; set; }
 
-        public string AuditStatus
-        {
-            get { return EnumUtity.GetDescription(typeof(AuditStatus), _auditStatus); }
-            set { _auditStatus = value; }
-        }
+        public string AuditStatus { get; set; }
 
-        public string PayStatus
-        {
-            get { return EnumUtity.GetDescription(typeof(PayStatus), _payStatus); }
-            set { _payStatus = value; }
-        }
+        public string PayStatus { get; set; }
     }
 }

@@ -4,7 +4,9 @@ namespace SettlementApi.Read.QueryCommand.SheetModule
 {
     public class QuerySheetCommand : BasePagingCommand
     {
-        public Guid? Group { get; set; }
+        public string Groups { get; set; }
+
+        public string[] Path { get; set; }
 
         public Guid? Base { get; set; }
 

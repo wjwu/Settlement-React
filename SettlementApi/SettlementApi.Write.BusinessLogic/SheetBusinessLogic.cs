@@ -28,7 +28,14 @@ namespace SettlementApi.Write.BusinessLogic
             var receiveds = MapperHelper.Map<List<ReceivedEntity>, List<Received>>(command.Receiveds);
             sheet.ID=Guid.NewGuid();
             sheet.ProjectManager= ServiceContext.OperatorID;
-            sheet.AuditStatus = Enum.GetName(typeof(AuditStatus), AuditStatus.UnSubmit);
+            if (command.Submit)
+            {
+                sheet.AuditStatus = Enum.GetName(typeof(AuditStatus), AuditStatus.Auditing);
+            }
+            else
+            {
+                sheet.AuditStatus = Enum.GetName(typeof(AuditStatus), AuditStatus.UnSubmit);
+            }
             sheet.PayStatus= Enum.GetName(typeof(PayStatus), PayStatus.Unpaid);
             sheet.Days = sheet.TimeTo.Subtract(sheet.TimeFrom).Days;
             sheet.UnitPrice = Math.Round(sheet.TotalPrice/sheet.People);
@@ -69,6 +76,16 @@ namespace SettlementApi.Write.BusinessLogic
 
             newSheet.Days = newSheet.TimeTo.Subtract(newSheet.TimeFrom).Days;
             newSheet.UnitPrice = Math.Round(newSheet.TotalPrice / newSheet.People);
+
+            if ((oldSheet.AuditStatus == Enum.GetName(typeof(AuditStatus), AuditStatus.UnSubmit)
+                || oldSheet.AuditStatus == Enum.GetName(typeof(AuditStatus), AuditStatus.Fail)) && command.Submit)
+            {
+                newSheet.AuditStatus = Enum.GetName(typeof(AuditStatus), AuditStatus.Auditing);
+            }
+            else
+            {
+                newSheet.AuditStatus = oldSheet.AuditStatus;
+            }
 
             if (costs != null)
             {

@@ -16,7 +16,7 @@ import {
 } from '../../../../components'
 
 import {
-	tree,
+	getGroup,
 	EMPTY_GUID,
 	disabledTime,
 	disabledDate
@@ -38,7 +38,8 @@ class SearchPanel extends Component {
 			getFieldValue
 		} = this.props.form
 		validateFields((errors, values) => {
-			let group = getFieldValue('group') || ''
+			let group = getFieldValue('group')
+			let groups = getGroup(this.props.group.groups, group)
 			let base = getFieldValue('base')
 			let times = getFieldValue('times')
 			let timeFrom = ''
@@ -47,19 +48,21 @@ class SearchPanel extends Component {
 				timeFrom = times[0].format('YYYY-MM-DD')
 				timeTo = times[1].format('YYYY-MM-DD')
 			}
-			let customName = getFieldValue('customName') || ''
 			let auditStatus = getFieldValue('auditStatus')
 			let payStatus = getFieldValue('payStatus')
 			let source = getFieldValue('source')
+			let projectManager = getFieldValue('projectManager') || ''
+			let customName = getFieldValue('customName') || ''
 			this.props.onSearch({
-				group,
+				groups,
 				base,
 				timeFrom,
 				timeTo,
-				customName,
 				auditStatus,
 				payStatus,
-				source
+				source,
+				projectManager,
+				customName,
 			})
 		})
 	}
@@ -73,7 +76,7 @@ class SearchPanel extends Component {
 			},
 			wrapperCol: {
 				span: 19
-			},
+			}
 		}
 
 		const colLayout = {
@@ -84,17 +87,31 @@ class SearchPanel extends Component {
 		}
 
 		const {
-			groups,
 			bases,
 			sources
-		} = this.props
+		} = this.props.dictionary
+
+		let groups = this.props.group.groups
+
+		let basesOptions = bases ? bases.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>) : []
+		basesOptions.unshift(<Option key='all' value=''>全部</Option>)
+
+		let sourcesOptions = sources ? sources.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>) : []
+		sourcesOptions.unshift(<Option key='all' value=''>全部</Option>)
+
+		let parentGroup = this.props.sys_user.ParentGroup
+		let group = this.props.sys_user.Group
 
 		return (
 			<Form horizontal>
 				<Row gutter={24}>
 					<Col {...colLayout}>
 						<FormItem {...formItemLayout} label='部门'>
-							<TTreeSelect data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} treeDefaultExpandAll/>
+						{
+							getFieldDecorator('group',{initialValue:group})(
+								<TTreeSelect root={parentGroup} data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} treeDefaultExpandAll/>
+							)
+						}
 						</FormItem>
 					</Col>
 					<Col {...colLayout}>
@@ -111,7 +128,7 @@ class SearchPanel extends Component {
 							(
 								<Select>
 									{
-										bases.map(item=><Option key={item.ID} value={item.ID}>{item.Name}</Option>)
+										basesOptions
 									}
 								</Select>
 							)
@@ -121,11 +138,11 @@ class SearchPanel extends Component {
 					<Col {...colLayout}>
 						<FormItem {...formItemLayout} label='客户来源'>
 						{
-							getFieldDecorator('source')
+							getFieldDecorator('source',{initialValue:''})
 							(
 								<Select>
 									{
-										sources.map(item=><Option key={item.ID} value={item.ID}>{item.Name}</Option>)
+										sourcesOptions
 									}
 								</Select>
 							)
@@ -165,7 +182,7 @@ class SearchPanel extends Component {
 						</FormItem>
 					</Col>
 					<Col {...colLayout}>
-						<FormItem {...formItemLayout} label='项目经理'>
+						<FormItem {...formItemLayout} label='签单人'>
 						{
 							getFieldDecorator('projectManager')(<Input />)
 						}
@@ -190,9 +207,6 @@ class SearchPanel extends Component {
 }
 
 SearchPanel.propTypes = {
-	groups: PropTypes.array.isRequired,
-	bases: PropTypes.array.isRequired,
-	sources: PropTypes.array.isRequired,
 	onSearch: PropTypes.func.isRequired
 }
 

@@ -46,6 +46,8 @@ const genColumns = (editFuc) => {
 				return '部门主管'
 			} else if (text.toLowerCase() === 'employee') {
 				return '普通员工'
+			} else if (text.toLowerCase() === 'financial') {
+				return '财务'
 			}
 		}
 	}, {

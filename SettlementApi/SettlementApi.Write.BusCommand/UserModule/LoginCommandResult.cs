@@ -2,6 +2,7 @@
 using SettlementApi.CommandBus;
 using SettlementApi.Common;
 using SettlementApi.Write.Model.Enums;
+using System.Collections.Generic;
 
 namespace SettlementApi.Write.BusCommand.UserModule
 {
@@ -14,6 +15,8 @@ namespace SettlementApi.Write.BusCommand.UserModule
         public Guid Group { get; set; }
 
         public Guid ParentGroup { get; set; }
+
+        public List<string> Path { get; set; }
 
         public string Role { get; set; }
         //private string _role { get; set; }

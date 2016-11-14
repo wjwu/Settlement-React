@@ -9,6 +9,7 @@ using SettlementApi.Write.BusinessLogic.Utility;
 using SettlementApi.Write.Model;
 using SettlementApi.Write.Model.Enums;
 using SettlementApi.Common;
+using System.Linq;
 
 namespace SettlementApi.Write.BusinessLogic
 {
@@ -70,10 +71,16 @@ namespace SettlementApi.Write.BusinessLogic
                 throw new BussinessException(UserRes.LoginFailDisabled);
             Update("User.LoginUpdate", new {LastLoginIP = ServiceContext.RequestIP, loginUser.ID});
             var result= MapperHelper.Map<User, LoginCommandResult>(loginUser);
-            var group=new GroupBusinessLogic().GetEntity(loginUser.Group);
+            var groupBus = new GroupBusinessLogic();
+            var group= groupBus.GetEntity(loginUser.Group);
             if (group!=null)
             {
                 result.ParentGroup = group.ParentID;
+            }
+            var groups = groupBus.GetList(group.ID,group.ParentID);
+            if (groups!=null)
+            {
+                result.Path =groups.Select(p=>p.ID.ToString()).ToList();
             }
             return result;
         }

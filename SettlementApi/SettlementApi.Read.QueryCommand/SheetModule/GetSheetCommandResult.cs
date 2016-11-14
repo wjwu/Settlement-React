@@ -44,6 +44,8 @@ namespace SettlementApi.Read.QueryCommand.SheetModule
 
         public string Remark { get; set; }
 
+        public string AuditStatus { get; set; }
+
         public List<RQueryCost> Costs { get; set; }
 
         public List<RQueryReceived> Receiveds { get; set; }

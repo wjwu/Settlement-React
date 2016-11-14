@@ -7,7 +7,7 @@
                         [ParentID] ,
                         Name
                FROM     [dbo].[Group]
-               WHERE    [ParentID] = @ID
+               WHERE    [ParentID] = @ParentID AND ID=@ID
                UNION ALL
                SELECT   G.[ID] ,
                         G.[ParentID] ,

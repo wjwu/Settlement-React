@@ -6,6 +6,7 @@ import {
 } from 'react-redux'
 import {
 	Row,
+	Col,
 	Button,
 	Modal
 } from 'antd'
@@ -17,8 +18,10 @@ import {
 	TTable
 } from '../../../components'
 import UpdateSheet from './components/UpdateSheet'
+import CreateSheet from './components/CreateSheet'
 import SearchPanel from './components/SearchPanel'
 import {
+	getSheet,
 	querySheets,
 	createSheet,
 	updateSheet
@@ -41,11 +44,14 @@ class Sheet extends Component {
 		super(prop)
 		this.query = this.query.bind(this)
 		this.onTTableLoad = this.onTTableLoad.bind(this)
+
 		this.request = {
-			pageIndex: 1
+			pageIndex: 1,
+			groups: this.props.sys_user.Path
 		}
 		this.state = {
-			updateSheetVisble: false
+			updateSheetVisble: false,
+			createSheetVisble: false
 		}
 	}
 
@@ -60,12 +66,17 @@ class Sheet extends Component {
 		this.props.querySources(request)
 		this.props.queryCosts(request)
 		this.props.queryGroups({
-			ID: this.props.sys_user.ParentGroup
+			ID: this.props.sys_user.Group,
+			ParentID: this.props.sys_user.ParentGroup
 		})
 	}
 
 	componentDidUpdate() {
-		if (this.props.sheet.created || this.props.sheet.updated) {
+		if (this.props.sheet.created) {
+			this.hideModal('createSheetVisble')
+			this.props.querySheets(this.request)
+		} else if (this.props.sheet.updated) {
+			this.hideModal('updateSheetVisble')
 			this.props.querySheets(this.request)
 		}
 	}
@@ -82,15 +93,15 @@ class Sheet extends Component {
 		this.props.querySheets(this.request)
 	}
 
-	showModal() {
+	showModal(type) {
 		this.setState({
-			updateSheetVisble: true
+			[type]: true
 		})
 	}
 
 	hideModal(type) {
 		this.setState({
-			updateSheetVisble: false
+			[type]: false
 		})
 	}
 
@@ -116,46 +127,44 @@ class Sheet extends Component {
 
 	render() {
 		let {
-			updateSheetVisble
+			updateSheetVisble,
+			createSheetVisble
 		} = this.state
 
 		let {
 			queryingSheets,
-			sheets,
-			creating,
-			updating
+			sheets
 		} = this.props.sheet
 
-		let {
-			bases,
-			sources,
-			costs
-		} = this.props.dictionary
-
-		let groups = this.props.group.groups
 
 		let empty = {
 			List: [],
 			TotalCount: 0
 		}
 		sheets = sheets || empty
-		bases = bases || empty
-		sources = sources || empty
-		costs = costs || empty
-		groups = groups || []
 
 		const columns = genColumns((raw, action) => {
 			if (action === 'update') {
 				this.selectedSheet = raw
-				this.showModal()
+				this.showModal('updateSheetVisble')
 			} else if (action === 'delete') {
 				this.doDeleteSheet(raw.ID)
 			}
 		})
 
 		let modal
-		if (updateSheetVisble) {
-			modal = <UpdateSheet id={this.selectedSheet.ID} onCancel={this.hideModal.bind(this)} groups={groups} bases={bases.List} sources={sources.List} costs={costs.List} updating={updating} onSubmit={this.props.updateSheet}/>
+		if (createSheetVisble) {
+			modal = <CreateSheet onCancel={this.hideModal.bind(this,'createSheetVisble')} {...this.props}/>
+		} else if (updateSheetVisble) {
+			modal = <UpdateSheet id={this.selectedSheet.ID} onCancel={this.hideModal.bind(this,'updateSheetVisble')} {...this.props}/>
+		}
+
+		let title = () => {
+			return (
+				<div style={{textAlign:'right'}}>
+					<Button type='primary' icon='plus-circle-o' onClick={this.showModal.bind(this,'createSheetVisble')}>新增结算表</Button>
+				</div>
+			)
 		}
 
 		return (
@@ -163,22 +172,23 @@ class Sheet extends Component {
 				<Row>
 					<TCol>
 						<TCard>
-							<SearchPanel onSearch={this.query} onSubmit={this.props.createSheet} {...this.props}/>
-							{modal}
+							<SearchPanel onSearch={this.query} {...this.props}/>
 						</TCard>
 					</TCol>
 				</Row>
 				<Row>
 					<TCol>
-						<TTable key='sheets' bordered columns={columns} total={sheets.TotalCount} dataSource={sheets.List} loading={queryingSheets} onLoad={this.onTTableLoad}/>
+						<TTable title={title} key='sheets' bordered columns={columns} total={sheets.TotalCount} dataSource={sheets.List} loading={queryingSheets} onLoad={this.onTTableLoad}/>
 					</TCol>
 				</Row>
+				{modal}
 			</div>
 		)
 	}
 }
 
 export default TMainContainer()(connect(state => state, {
+	getSheet,
 	querySheets,
 	createSheet,
 	updateSheet,

@@ -5,6 +5,7 @@ namespace SettlementApi.Read.QueryCommand.GroupModule
 {
     public class QueryGroupCommand : ICommand
     {
-        public Guid? ID { get; set; }
+        public Guid ParentID {get;set;}
+        public Guid ID { get; set; }
     }
 }

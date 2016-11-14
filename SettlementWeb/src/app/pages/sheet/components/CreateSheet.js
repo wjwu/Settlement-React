@@ -45,7 +45,6 @@ const updateReceived = 'updateReceived'
 class CreateSheet extends Component {
 	constructor(prop) {
 		super(prop)
-		this.submit = this.submit.bind(this)
 		this.calcUnitPrice = this.calcUnitPrice.bind(this)
 		this.state = {
 			[createCost]: false,
@@ -57,7 +56,7 @@ class CreateSheet extends Component {
 		}
 	}
 
-	submit() {
+	submit(type) {
 		const {
 			validateFields,
 			getFieldValue
@@ -81,7 +80,8 @@ class CreateSheet extends Component {
 				let remark = getFieldValue('remark')
 				let costs = this.state.costs
 				let receiveds = this.state.receiveds
-				this.props.onSubmit({
+				let submit = type === 'submit'
+				this.props.createSheet({
 					customName,
 					contacts,
 					phone,
@@ -96,7 +96,8 @@ class CreateSheet extends Component {
 					totalPrice,
 					remark,
 					costs,
-					receiveds
+					receiveds,
+					submit
 				})
 			}
 		})
@@ -152,12 +153,12 @@ class CreateSheet extends Component {
 
 	render() {
 		const getFieldDecorator = this.props.form.getFieldDecorator
+		const creating = this.props.sheet.creating
 		const {
-			creating,
 			bases,
 			sources,
 			costs: costTypes
-		} = this.props
+		} = this.props.dictionary
 
 		const formItemLayout = {
 			labelCol: {
@@ -208,8 +209,16 @@ class CreateSheet extends Component {
 		} else if (this.state[updateReceived]) {
 			modal = <UpdateReceived onCancel = {this.hideModal.bind(this,updateReceived)} received={this.selectedReceived}/>
 		}
+
+		let footer =
+			[
+				<Button key='cancel' type='ghost' size='large' onClick={this.props.onCancel}>取消</Button>,
+				<Button key='save' type='primary' size='large' loading={creating} onClick={this.submit.bind(this,'save')}>保存</Button>,
+				<Button key='submit' type='primary' size='large' loading={creating} onClick={this.submit.bind(this,'submit')}>保存并提交</Button>
+			]
+
 		return (
-			<Modal title='新增结算表' visible={true} width={900} confirmLoading={creating} onOk={this.submit} onCancel={this.props.onCancel}>
+			<Modal title='新增结算表' visible={true} width={900} footer={footer} onCancel={this.props.onCancel}>
 				<Tabs tabPosition='left'>
 					<TabPane tab='基本信息' key='baseInfo'> 
 						<Form>
@@ -413,17 +422,9 @@ class CreateSheet extends Component {
 		)
 	}
 }
-CreateSheet.defaultProps = {
-	creating: false
-}
 
 CreateSheet.propTypes = {
-	creating: PropTypes.bool.isRequired,
-	bases: PropTypes.array.isRequired,
-	sources: PropTypes.array.isRequired,
-	costs: PropTypes.array.isRequired,
-	onCancel: PropTypes.func.isRequired,
-	onSubmit: PropTypes.func.isRequired
+	onCancel: PropTypes.func.isRequired
 }
 
 export default Form.create()(CreateSheet)

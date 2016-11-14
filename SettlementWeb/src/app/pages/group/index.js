@@ -48,7 +48,9 @@ class Group extends Component {
 		this.onTTreeSelect = this.onTTreeSelect.bind(this)
 		this.onTTableLoad = this.onTTableLoad.bind(this)
 		this.queryGroupRequest = {
-			pageIndex: 1
+			pageIndex: 1,
+			ID: this.props.sys_user.Group,
+			ParentID: this.props.sys_user.ParentGroup
 		}
 		this.queryUserRequset = {
 			pageIndex: 1
