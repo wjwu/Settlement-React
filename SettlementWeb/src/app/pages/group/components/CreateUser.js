@@ -40,7 +40,7 @@ class CreateUser extends Component {
 				let phone = getFieldValue('phone')
 				let name = getFieldValue('name')
 				let enabled = getFieldValue('enabled')
-				this.props.onSubmit({
+				this.props.createUser({
 					loginId,
 					password,
 					phone,
@@ -59,10 +59,8 @@ class CreateUser extends Component {
 
 	render() {
 		const getFieldDecorator = this.props.form.getFieldDecorator
-		const {
-			groups,
-			creating
-		} = this.props
+		const groups = this.props.group.groups
+		const creating = this.props.user.creating
 
 		let reset = <Button key='reset' type='ghost' size='large' onClick={this.reset}>重置</Button>
 		let cancel = <Button key='cancel' type='ghost' size='large' onClick={this.props.onCancel}>取消</Button>
@@ -198,15 +196,8 @@ class CreateUser extends Component {
 	}
 }
 
-CreateUser.defaultProps = {
-	creating: false
-}
-
 CreateUser.propTypes = {
-	groups: PropTypes.array.isRequired,
-	creating: PropTypes.bool.isRequired,
-	onCancel: PropTypes.func.isRequired,
-	onSubmit: PropTypes.func.isRequired
+	onCancel: PropTypes.func.isRequired
 }
 
 export default Form.create()(CreateUser)

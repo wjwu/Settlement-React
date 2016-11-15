@@ -47,6 +47,8 @@ const TMainContainer = () => {
 					role = '[部门主管]'
 				} else if (user.Role === 'Employee') {
 					role = '[普通员工]'
+				} else if (user.Role === 'Financial') {
+					role = '[财务人员]'
 				}
 				return (
 					<div className='ant-layout-aside'>

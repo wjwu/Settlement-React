@@ -14,7 +14,8 @@ namespace SettlementApi.Write.BusinessLogic
     public class SheetBusinessLogic: BusinessLogicBase<Sheet>, IEventPublishObject,
         ICommandBus<CreateSheetCommand>,
         ICommandBus<UpdateSheetCommand>,
-         ICommandBus<DeleteSheetCommand>
+         ICommandBus<DeleteSheetCommand>,
+         ICommandBus<UpdateAuditStatusCommand>
     {
         public override Sheet GetEntity(Guid id)
         {
@@ -53,6 +54,16 @@ namespace SettlementApi.Write.BusinessLogic
                 });
             }
             sheet.RemainingMoney = sheet.TotalPrice - sheet.ReceivedMoney;
+
+            var projectManager = new UserBusinessLogic().GetEntity(ServiceContext.OperatorID);
+            if (projectManager==null)
+            {
+                throw new BussinessException(CommonRes.InvalidOperation);
+            }
+            var group = new GroupBusinessLogic().GetEntity(projectManager.Group);
+            sheet.Percent = group.Percent;
+            sheet.Commission = (sheet.TotalPrice - sheet.CostPrice) * sheet.Percent;
+
             sheet.LastModifyUser = ServiceContext.OperatorID;
             Create("Sheet.Create",sheet);
            
@@ -101,6 +112,16 @@ namespace SettlementApi.Write.BusinessLogic
                 });
             }
             newSheet.RemainingMoney = newSheet.TotalPrice - newSheet.ReceivedMoney;
+
+            var projectManager = new UserBusinessLogic().GetEntity(ServiceContext.OperatorID);
+            if (projectManager == null)
+            {
+                throw new BussinessException(CommonRes.InvalidOperation);
+            }
+            var group = new GroupBusinessLogic().GetEntity(projectManager.Group);
+
+            newSheet.Commission = (newSheet.TotalPrice - newSheet.CostPrice) * oldSheet.Percent;
+
             newSheet.LastModifyUser = ServiceContext.OperatorID;
             Update("Sheet.Update", newSheet);
 
@@ -112,6 +133,23 @@ namespace SettlementApi.Write.BusinessLogic
             });
         }
 
+        public void Execute(UpdateAuditStatusCommand command)
+        {
+            //var opertor = new UserBusinessLogic().GetEntity(ServiceContext.OperatorID);
+            //if (ServiceContext.OperatorID)
+            //{
+
+            //}
+
+            //todo
+            var sheet = GetEntity(command.ID);
+            if (sheet.AuditStatus!= Enum.GetName(typeof(AuditStatus), AuditStatus.Auditing))
+            {
+                throw new BussinessException(CommonRes.InvalidOperation);
+            }
+            string auditStatus= command.Pass? Enum.GetName(typeof(AuditStatus), AuditStatus.Pass) : Enum.GetName(typeof(AuditStatus), AuditStatus.Fail);
+            Update("Sheet.UpdateAuditStatus", new { ID = command.ID, AuditStatus = auditStatus, LastModifyUser=ServiceContext.OperatorID });
+        }
 
         public void Execute(DeleteSheetCommand command)
         {
@@ -131,6 +169,10 @@ namespace SettlementApi.Write.BusinessLogic
             else if (command.GetType() == typeof(DeleteSheetCommand))
             {
                 Execute((DeleteSheetCommand)command);
+            }
+            else if (command.GetType() == typeof(UpdateAuditStatusCommand))
+            {
+                Execute((UpdateAuditStatusCommand)command);
             }
         }
 

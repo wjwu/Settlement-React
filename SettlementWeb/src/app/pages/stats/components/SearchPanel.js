@@ -48,7 +48,6 @@ class SearchPanel extends Component {
 				timeFrom = times[0].format('YYYY-MM-DD')
 				timeTo = times[1].format('YYYY-MM-DD')
 			}
-			let auditStatus = getFieldValue('auditStatus')
 			let payStatus = getFieldValue('payStatus')
 			let source = getFieldValue('source')
 			let projectManager = getFieldValue('projectManager') || ''
@@ -58,7 +57,6 @@ class SearchPanel extends Component {
 				base,
 				timeFrom,
 				timeTo,
-				auditStatus,
 				payStatus,
 				source,
 				projectManager,
@@ -151,22 +149,6 @@ class SearchPanel extends Component {
 					</Col>
 				</Row>
 				<Row gutter={24}>
-					<Col {...colLayout}>
-						<FormItem {...formItemLayout} label='审核状态'>
-						{
-							getFieldDecorator('auditStatus',{initialValue:''})
-							(
-								<Select>
-									<Option value=''>全部</Option>
-									<Option value='UnSubmit'>未提交</Option>
-									<Option value='Auditing'>审核中</Option>
-									<Option value='Pass'>通过</Option>
-									<Option value='Fail'>未通过</Option>
-								</Select>
-							)
-						}
-						</FormItem>
-					</Col>
 					<Col {...colLayout}>
 						<FormItem {...formItemLayout} label='付款状态'>
 							{

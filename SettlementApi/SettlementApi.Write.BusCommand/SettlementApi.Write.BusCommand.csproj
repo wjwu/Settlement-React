@@ -43,6 +43,7 @@
     <Compile Include="SheetModule\CreateSheetCommand.cs" />
     <Compile Include="SheetModule\DeleteSheetCommand.cs" />
     <Compile Include="SheetModule\ReceivedEntity.cs" />
+    <Compile Include="SheetModule\UpdateAuditStatusCommand.cs" />
     <Compile Include="SheetModule\UpdateSheetCommand.cs" />
     <Compile Include="UserModule\ChangePasswordCommand.cs" />
     <Compile Include="UserModule\CreateUserCommand.cs" />

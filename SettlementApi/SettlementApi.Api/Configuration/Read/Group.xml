@@ -5,18 +5,27 @@
   WITH  temp ( [ID], [ParentID], Name )
           AS ( SELECT   [ID] ,
                         [ParentID] ,
-                        Name
+                        Name 
                FROM     [dbo].[Group]
-               WHERE    [ParentID] = @ParentID AND ID=@ID
+               WHERE [Deleted]=0 AND  [ParentID] = @ParentID AND ID=@ID
                UNION ALL
                SELECT   G.[ID] ,
                         G.[ParentID] ,
-                        G.Name
+                        G.Name 
                FROM     [dbo].[Group] AS G
-                        INNER JOIN temp ON G.[ParentID] = temp.[ID]
+                        INNER JOIN temp ON G.[ParentID] = temp.[ID] WHERE G.[Deleted]=0
              )
     SELECT  *
     FROM    temp
+      ]]>
+  </command>
+  <command name="Group.GetByID" type="text" connection="local">
+    <![CDATA[
+SELECT TOP 1 [ID]
+      ,[Name]
+      ,[ParentID]
+      ,[Percent]
+  FROM [dbo].[Group] WHERE [Deleted]=0 AND ID=@ID
       ]]>
   </command>
 </commands>

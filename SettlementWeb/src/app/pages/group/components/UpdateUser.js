@@ -37,8 +37,8 @@ class UpdateUser extends Component {
 				let phone = getFieldValue('phone')
 				let name = getFieldValue('name')
 				let enabled = getFieldValue('enabled')
-				this.props.onSubmit({
-					id: this.props.user.ID,
+				this.props.updateUser({
+					id: this.props.data.ID,
 					phone,
 					name,
 					enabled,
@@ -55,11 +55,9 @@ class UpdateUser extends Component {
 
 	render() {
 		const getFieldDecorator = this.props.form.getFieldDecorator
-		const {
-			user,
-			groups,
-			updating
-		} = this.props
+		const groups = this.props.group.groups
+		const updating = this.props.user.updating
+		const user = this.props.data
 
 		let reset = <Button key='reset' type='ghost' size='large' onClick={this.reset}>重置</Button>
 		let cancel = <Button key='cancel' type='ghost' size='large' onClick={this.props.onCancel}>取消</Button>
@@ -73,6 +71,7 @@ class UpdateUser extends Component {
 				span: 15
 			},
 		}
+
 		return (
 			<Modal title='修改用户' visible={true} width={500} footer={[cancel,reset,ok]} onCancel={this.props.onCancel}>
 				<Form>
@@ -156,16 +155,10 @@ class UpdateUser extends Component {
 		)
 	}
 }
-UpdateUser.defaultProps = {
-	updating: false
-}
 
 UpdateUser.propTypes = {
-	user: PropTypes.object.isRequired,
-	groups: PropTypes.array.isRequired,
-	updating: PropTypes.bool.isRequired,
-	onCancel: PropTypes.func.isRequired,
-	onSubmit: PropTypes.func.isRequired
+	data: PropTypes.object.isRequired,
+	onCancel: PropTypes.func.isRequired
 }
 
 export default Form.create()(UpdateUser)

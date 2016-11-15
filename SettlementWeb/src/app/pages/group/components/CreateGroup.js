@@ -5,7 +5,8 @@ import React, {
 import {
 	Modal,
 	Form,
-	Input
+	Input,
+	InputNumber
 } from 'antd'
 import {
 	TTreeSelect
@@ -29,9 +30,11 @@ class CreateGroup extends Component {
 			if (!errors) {
 				let parentId = getFieldValue('parent')
 				let name = getFieldValue('name')
-				this.props.onSubmit({
+				let percent = getFieldValue('percent')
+				this.props.createGroup({
 					parentId,
-					name
+					name,
+					percent
 				})
 			}
 		})
@@ -42,7 +45,7 @@ class CreateGroup extends Component {
 		const {
 			groups,
 			creating
-		} = this.props
+		} = this.props.group
 
 		const formItemLayout = {
 			labelCol: {
@@ -84,21 +87,30 @@ class CreateGroup extends Component {
 						)
 					}
 					</FormItem>
+					<FormItem {...formItemLayout} label='提成比例'>
+					{
+						getFieldDecorator('percent',{
+							initialValue:0,
+							rules:[{
+								required:true
+							},{
+								range:true,
+								min:0.001,
+								type:'float',
+								message:'提成比例必须大于0！'
+							}]
+						})(<InputNumber min={0} step={0.01}/>)
+					}
+					</FormItem>
 				</Form>
 			</Modal>
 		)
 	}
 }
 
-CreateGroup.defaultProps = {
-	creating: false
-}
 
 CreateGroup.propTypes = {
-	creating: PropTypes.bool.isRequired,
-	groups: PropTypes.array.isRequired,
-	onCancel: PropTypes.func.isRequired,
-	onSubmit: PropTypes.func.isRequired
+	onCancel: PropTypes.func.isRequired
 }
 
 export default Form.create()(CreateGroup)

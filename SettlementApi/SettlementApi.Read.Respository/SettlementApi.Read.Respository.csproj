@@ -62,6 +62,7 @@
     <Compile Include="QueryGroup.cs" />
     <Compile Include="QueryReceived.cs" />
     <Compile Include="QuerySheet.cs" />
+    <Compile Include="QueryStatistics.cs" />
     <Compile Include="QueryUser.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -87,6 +88,10 @@
     <ProjectReference Include="..\SettlementApi.Read.QueryCommand\SettlementApi.Read.QueryCommand.csproj">
       <Project>{EEC30A96-F19C-41E2-958A-C37D7C19CC40}</Project>
       <Name>SettlementApi.Read.QueryCommand</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SettlementApi.Write.Model\SettlementApi.Write.Model.csproj">
+      <Project>{343D4D15-9973-4219-B0E5-829CA24F0FC0}</Project>
+      <Name>SettlementApi.Write.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

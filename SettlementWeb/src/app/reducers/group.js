@@ -1,4 +1,7 @@
 import {
+	BEGIN_GET_GROUP,
+	END_GET_GROUP,
+	ERROR_GET_GROUP,
 	BEGIN_QUERY_GROUPS,
 	END_QUERY_GROUPS,
 	ERROR_QUERY_GROUPS,
@@ -18,19 +21,35 @@ export default (state = {}, action) => {
 		delete state.updated
 	}
 	switch (action.type) {
+		case BEGIN_GET_GROUP:
+			return {
+				...state,
+				getting: true
+			}
+		case END_GET_GROUP:
+			delete state.getting
+			return {
+				...state,
+				group: action.result
+			}
+		case ERROR_GET_GROUP:
+			delete state.getting
+			return {
+				...state
+			}
 		case BEGIN_QUERY_GROUPS:
 			return {
 				...state,
-				queryingGroups: true
+				querying: true
 			}
 		case END_QUERY_GROUPS:
-			delete state.queryingGroups
+			delete state.querying
 			return {
 				...state,
 				groups: action.result
 			}
 		case ERROR_QUERY_GROUPS:
-			delete state.queryingGroups
+			delete state.querying
 			return {
 				...state
 			}

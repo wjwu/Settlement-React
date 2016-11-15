@@ -24,6 +24,8 @@
             CostPrice ,
             ReceivedMoney ,
             RemainingMoney ,
+            Commission,
+            [Percent],
             Remark ,
             CreateTime ,
             LastModifyTime ,
@@ -50,6 +52,8 @@
             @CostPrice , 
             @ReceivedMoney ,
             @RemainingMoney ,
+            @Commission,
+            @Percent,
             @Remark,
             GETDATE(),
             GETDATE(),
@@ -79,6 +83,7 @@
             [CostPrice] = @CostPrice ,
             [ReceivedMoney] = @ReceivedMoney ,
             [RemainingMoney] = @RemainingMoney ,
+            [Commission]=@Commission,
             [Remark] = @Remark ,
             [LastModifyTime] = GETDATE() ,
             [LastModifyUser] = @LastModifyUser
@@ -90,4 +95,9 @@
 UPDATE TOP(1) dbo.Sheet SET [Deleted]=1,[LastModifyTime]=GETDATE(),[LastModifyUser]=@LastModifyUser WHERE [ID]=@ID
   ]]>
 </command>
+  <command name="Sheet.UpdateAuditStatus" type="text" connection="local">
+    <![CDATA[
+UPDATE TOP(1) dbo.Sheet SET [AuditStatus]=@AuditStatus,[LastModifyTime]=GETDATE(),[LastModifyUser]=@LastModifyUser WHERE [ID]=@ID
+  ]]>
+  </command>
 </commands>

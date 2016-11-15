@@ -3,6 +3,9 @@ import {
 	SHOW_MESSAGE
 } from '../constants/message'
 import {
+	BEGIN_GET_GROUP,
+	END_GET_GROUP,
+	ERROR_GET_GROUP,
 	BEGIN_QUERY_GROUPS,
 	END_QUERY_GROUPS,
 	ERROR_QUERY_GROUPS,
@@ -13,6 +16,30 @@ import {
 	END_UPDATE_GROUP,
 	ERROR_UPDATE_GROUP
 } from '../constants/group'
+
+export const getGroup = id => {
+	return dispatch => {
+		dispatch({
+			type: BEGIN_GET_GROUP
+		})
+		apiClient.get(`group/${id}`).then(result => {
+			dispatch({
+				type: END_GET_GROUP,
+				result: result
+			})
+		}, error => {
+			dispatch({
+				type: ERROR_GET_GROUP
+			})
+			dispatch({
+				type: SHOW_MESSAGE,
+				msgType: 'error',
+				msg: error
+			})
+		})
+	}
+}
+
 
 export const queryGroups = (request) => {
 	return dispatch => {

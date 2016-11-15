@@ -7,7 +7,7 @@ namespace SettlementApi.Read.Model
 {
     [DefaultPageIndex(1)]
     [DefaultPageSize(10)]
-    [DefaultSortField("DTimeFrom")]
+    [DefaultSortField("CreateTime")]
     [DefaultSortType(SortTypeEnum.DESC)]
     public class EQuerySheet : BaseQueryEntity
     {

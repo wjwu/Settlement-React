@@ -8,7 +8,8 @@ using SettlementApi.Read.QueryCommand.ReceivedModule;
 
 namespace SettlementApi.Read.Respository
 {
-    public class QuerySheet : BaseRRespository, ICommandBus<QuerySheetCommand, BasePagingCommandResult<RQuerySheet>>,
+    public class QuerySheet : BaseRRespository, 
+        ICommandBus<QuerySheetCommand, BasePagingCommandResult<RQuerySheet>>,
         ICommandBus<GetByIDCommand,GetSheetCommandResult>
     {
         public GetSheetCommandResult Execute(GetByIDCommand command)

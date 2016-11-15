@@ -42,6 +42,7 @@
     <Compile Include="DictionaryModule\QueryDictionaryCommand.cs" />
     <Compile Include="DictionaryModule\RQueryDictionary.cs" />
     <Compile Include="GetByIDCommand.cs" />
+    <Compile Include="GroupModule\GetGroupCommandResult.cs" />
     <Compile Include="GroupModule\QueryGroupCommand.cs" />
     <Compile Include="GroupModule\RQueryGroup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -50,6 +51,8 @@
     <Compile Include="SheetModule\GetSheetCommandResult.cs" />
     <Compile Include="SheetModule\QuerySheetCommand.cs" />
     <Compile Include="SheetModule\RQuerySheet.cs" />
+    <Compile Include="StatisticsModule\QueryStatisticsCommand.cs" />
+    <Compile Include="StatisticsModule\QueryStatisticsCommandResult.cs" />
     <Compile Include="UserModule\QueryUserCommand.cs" />
     <Compile Include="UserModule\RQueryUser.cs" />
   </ItemGroup>

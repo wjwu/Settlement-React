@@ -118,3 +118,31 @@ export const updateSheet = request => {
 		})
 	}
 }
+
+export const updateSheetAuditStatus = request => {
+	return dispatch => {
+		dispatch({
+			type: BEGIN_UPDATE_SHEET,
+		})
+		apiClient.patch('sheet', request).then(result => {
+			dispatch({
+				type: END_UPDATE_SHEET,
+				result: result
+			})
+			dispatch({
+				type: SHOW_MESSAGE,
+				msgType: 'success',
+				msg: '修改成功！'
+			})
+		}, error => {
+			dispatch({
+				type: ERROR_UPDATE_SHEET
+			})
+			dispatch({
+				type: SHOW_MESSAGE,
+				msgType: 'error',
+				msg: error
+			})
+		})
+	}
+}

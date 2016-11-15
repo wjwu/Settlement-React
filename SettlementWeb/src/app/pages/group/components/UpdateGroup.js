@@ -5,7 +5,9 @@ import React, {
 import {
 	Modal,
 	Form,
-	Input
+	Input,
+	InputNumber,
+	Spin
 } from 'antd'
 
 const FormItem = Form.Item
@@ -16,6 +18,11 @@ class UpdateGroup extends Component {
 		this.submit = this.submit.bind(this)
 	}
 
+	componentDidMount() {
+		this.props.getGroup(this.props.id)
+	}
+
+
 	submit() {
 		const {
 			validateFields,
@@ -25,9 +32,11 @@ class UpdateGroup extends Component {
 		validateFields((errors, values) => {
 			if (!errors) {
 				let name = getFieldValue('name')
-				this.props.onSubmit({
-					id: this.props.group.key,
-					name
+				let percent = getFieldValue('percent')
+				this.props.updateGroup({
+					id: this.props.group.group.ID,
+					name,
+					percent
 				})
 			}
 		})
@@ -38,7 +47,15 @@ class UpdateGroup extends Component {
 		const {
 			updating,
 			group
-		} = this.props
+		} = this.props.group
+
+		if (!group) {
+			return (
+				<Modal title='修改部门' visible={true} width={500} onCancel={this.props.onCancel}>
+					<Spin tip='Loading...'/>
+				</Modal>
+			)
+		}
 
 		const formItemLayout = {
 			labelCol: {
@@ -55,7 +72,7 @@ class UpdateGroup extends Component {
 					<FormItem hasFeedback {...formItemLayout} label='部门名称'>
 					{
 						getFieldDecorator('name',{
-							initialValue:group.title,
+							initialValue:group.Name,
 							rules:[{
 								required:true,
 								whitespace:true,
@@ -70,21 +87,31 @@ class UpdateGroup extends Component {
 						)
 					}
 					</FormItem>
+					<FormItem {...formItemLayout} label='提成比例'>
+					{
+						getFieldDecorator('percent',{
+							initialValue:group.Percent,
+							rules:[{
+								required:true
+							},{
+								range:true,
+								min:0.001,
+								type:'float',
+								message:'提成比例必须大于0！'
+							}]
+						})(<InputNumber min={0} step={0.01}/>)
+					}
+					</FormItem>
 				</Form>
 			</Modal>
 		)
 	}
 }
 
-UpdateGroup.defaultProps = {
-	updating: false
-}
 
 UpdateGroup.propTypes = {
-	group: PropTypes.object.isRequired,
-	updating: PropTypes.bool.isRequired,
-	onCancel: PropTypes.func.isRequired,
-	onSubmit: PropTypes.func.isRequired,
+	id: PropTypes.string.isRequired,
+	onCancel: PropTypes.func.isRequired
 }
 
 export default Form.create()(UpdateGroup)

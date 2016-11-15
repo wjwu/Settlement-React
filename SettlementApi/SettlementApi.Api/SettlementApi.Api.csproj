@@ -141,6 +141,7 @@
     <Compile Include="Apis\GroupController.cs" />
     <Compile Include="Apis\SheetController.cs" />
     <Compile Include="Apis\SignController.cs" />
+    <Compile Include="Apis\StatisticsController.cs" />
     <Compile Include="Apis\UserController.cs" />
     <Compile Include="Bootstrap.cs" />
     <Compile Include="Dtos\CheckCaptchaRequest.cs" />

@@ -6,5 +6,6 @@ namespace SettlementApi.Write.BusCommand.GroupModule
     {
         public string Name { get; set; }
         public string ParentID { get; set; }
+        public decimal Percent { get; set; }
     }
 }

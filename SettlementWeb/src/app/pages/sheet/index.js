@@ -24,7 +24,8 @@ import {
 	getSheet,
 	querySheets,
 	createSheet,
-	updateSheet
+	updateSheet,
+	updateSheetAuditStatus
 } from '../../actions/sheet'
 import {
 	queryBases,
@@ -132,7 +133,7 @@ class Sheet extends Component {
 		} = this.state
 
 		let {
-			queryingSheets,
+			querying,
 			sheets
 		} = this.props.sheet
 
@@ -159,12 +160,16 @@ class Sheet extends Component {
 			modal = <UpdateSheet id={this.selectedSheet.ID} onCancel={this.hideModal.bind(this,'updateSheetVisble')} {...this.props}/>
 		}
 
-		let title = () => {
-			return (
-				<div style={{textAlign:'right'}}>
+		let role = this.props.sys_user.Role
+		let title
+		if (role !== 'Admin' && role !== 'Financial') {
+			title = () => {
+				return (
+					<div style={{textAlign:'right'}}>
 					<Button type='primary' icon='plus-circle-o' onClick={this.showModal.bind(this,'createSheetVisble')}>新增结算表</Button>
 				</div>
-			)
+				)
+			}
 		}
 
 		return (
@@ -178,7 +183,7 @@ class Sheet extends Component {
 				</Row>
 				<Row>
 					<TCol>
-						<TTable title={title} key='sheets' bordered columns={columns} total={sheets.TotalCount} dataSource={sheets.List} loading={queryingSheets} onLoad={this.onTTableLoad}/>
+						<TTable title={title} key='sheets' bordered columns={columns} total={sheets.TotalCount} dataSource={sheets.List} loading={querying} onLoad={this.onTTableLoad}/>
 					</TCol>
 				</Row>
 				{modal}
@@ -192,6 +197,7 @@ export default TMainContainer()(connect(state => state, {
 	querySheets,
 	createSheet,
 	updateSheet,
+	updateSheetAuditStatus,
 	queryBases,
 	querySources,
 	queryCosts,

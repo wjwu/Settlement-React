@@ -108,6 +108,16 @@ namespace SettlementApi.Write.Model
         public decimal RemainingMoney { get; set; }
 
         /// <summary>
+        /// 个人提成
+        /// </summary>
+        public decimal Commission { get; set; }
+
+        /// <summary>
+        /// 提成比例
+        /// </summary>
+        public decimal Percent { get; set; }
+
+        /// <summary>
         /// 备注
         /// </summary>
         public string Remark { get; set; }

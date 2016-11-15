@@ -34,6 +34,8 @@ namespace SettlementApi.Read.QueryCommand.SheetModule
 
         public decimal RemainingMoney { get; set; }
 
+        public decimal Commission { get; set; }
+
         public string AuditStatus { get; set; }
 
         public string PayStatus { get; set; }

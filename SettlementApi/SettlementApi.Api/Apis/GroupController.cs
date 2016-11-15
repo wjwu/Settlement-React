@@ -8,6 +8,7 @@ using SettlementApi.Api.Resource;
 using SettlementApi.CommandBus;
 using SettlementApi.Read.QueryCommand.GroupModule;
 using SettlementApi.Write.BusCommand.GroupModule;
+using SettlementApi.Read.QueryCommand;
 
 namespace SettlementApi.Api.Apis
 {
@@ -15,6 +16,16 @@ namespace SettlementApi.Api.Apis
     {
         private const string BusName = "GroupBusinessLogic";
         private const string ReadName = "QueryGroup";
+
+        [HttpGet]
+        [Route("api/group/{id:guid}")]
+        public ICommandResult Query(Guid id)
+        {
+            return CommandService.SendEx(new GetByIDCommand
+            {
+                ID = id
+            }, ReadName);
+        }
 
         [HttpGet]
         [Route("api/group")]

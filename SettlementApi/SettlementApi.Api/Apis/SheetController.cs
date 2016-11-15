@@ -9,7 +9,6 @@ using SettlementApi.Read.QueryCommand.SheetModule;
 using SettlementApi.Write.BusCommand.SheetModule;
 using System;
 using SettlementApi.Read.QueryCommand;
-using System.Threading;
 
 namespace SettlementApi.Api.Apis
 {
@@ -49,6 +48,17 @@ namespace SettlementApi.Api.Apis
         [HttpPut]
         [Route("api/sheet")]
         public HttpResponseMessage Update([FromBody] UpdateSheetCommand request)
+        {
+            CommandService.Send(request, BusName);
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(new ResponseMessage(CommonRes.Success).ToJson())
+            };
+        }
+
+        [HttpPatch]
+        [Route("api/sheet")]
+        public HttpResponseMessage UpdateAuditStatus([FromBody] UpdateAuditStatusCommand request)
         {
             CommandService.Send(request, BusName);
             return new HttpResponseMessage(HttpStatusCode.OK)

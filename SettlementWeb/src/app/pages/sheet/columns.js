@@ -10,15 +10,15 @@ const columns = (editFuc) => {
 		title: '客户名称',
 		dataIndex: 'CustomName',
 		key: 'customName',
-		width: '12.5%',
+		width: '9%',
 		render: (text, raw) => {
-			return <a href='javascript:;' onClick={editFuc.bind(null,raw)}>{text}</a>
+			return <a href='javascript:;' onClick={editFuc.bind(null,raw,'update')}>{text}</a>
 		}
 	}, {
 		title: '培训地点',
 		dataIndex: 'Base',
 		key: 'base',
-		width: '12.5%',
+		width: '9%',
 	}, {
 		title: '培训时间',
 		dataIndex: 'TimeFrom',
@@ -72,6 +72,14 @@ const columns = (editFuc) => {
 			return <b>{`￥${text}`}</b>
 		}
 	}, {
+		title: '个人提成',
+		dataIndex: 'Commission',
+		key: 'commission',
+		width: '7%',
+		render: (text) => {
+			return <b>{`￥${text}`}</b>
+		}
+	}, {
 		title: '审核状态',
 		dataIndex: 'AuditStatus',
 		key: 'auditStatus',
@@ -104,9 +112,6 @@ const columns = (editFuc) => {
 		key: 'operation',
 		width: '5%',
 		render: (text, raw) => {
-			if (raw.AuditStatus === 'Pass') {
-				return <a href='javascript:;' onClick={editFuc.bind(null,raw,'delete')}><Icon type='delete' /></a>
-			}
 			return (
 				<span>
 					<a href='javascript:;' onClick={editFuc.bind(null,raw,'update')}><Icon type='edit' /></a>&nbsp;&nbsp;

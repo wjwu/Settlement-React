@@ -9,7 +9,7 @@ namespace SettlementApi.Write.Model.Enums
         Admin = 1,
         [Description("部门主管")]
         DeptManager = 2,
-        [Description("财务")]
+        [Description("财务人员")]
         Financial = 3,
         [Description("普通员工")]
         Employee = 4,

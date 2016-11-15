@@ -24,16 +24,16 @@ export default (state = {}, action) => {
 		case BEGIN_QUERY_SHEETS:
 			return {
 				...state,
-				queryingSheets: true
+				querying: true
 			}
 		case END_QUERY_SHEETS:
-			delete state.queryingSheets
+			delete state.querying
 			return {
 				...state,
 				sheets: action.result
 			}
 		case ERROR_QUERY_SHEETS:
-			delete state.queryingSheets
+			delete state.querying
 			return {
 				...state
 			}

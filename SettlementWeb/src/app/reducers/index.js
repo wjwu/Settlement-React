@@ -7,11 +7,13 @@ import dictionary from './dictionary'
 import group from './group'
 import user from './user'
 import sheet from './sheet'
+import stats from './statistics'
 
 export default combineReducers({
 	message,
 	dictionary,
 	group,
 	user,
-	sheet
+	sheet,
+	stats
 })

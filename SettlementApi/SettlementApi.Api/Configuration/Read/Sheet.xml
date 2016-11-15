@@ -4,7 +4,7 @@
     <![CDATA[
 SELECT  S.[ID] ,
         U.Name AS [ProjectManager] ,
-		G.Name AS Department,
+		    G.Name AS Department,
         S.[AuditStatus] ,
         S.[PayStatus] ,
         S.[CustomName] ,
@@ -14,7 +14,9 @@ SELECT  S.[ID] ,
         S.[TotalPrice] ,
         S.[CostPrice] ,
         S.[ReceivedMoney] ,
-        S.[RemainingMoney]
+        S.[RemainingMoney],
+        S.[Commission],
+        S.[CreateTime]
 FROM    [dbo].[Sheet] AS S
         LEFT JOIN dbo.[User] AS U ON S.ProjectManager = U.ID
         LEFT JOIN dbo.[Dictionary] AS D ON S.Base = D.ID 
@@ -57,6 +59,7 @@ SELECT TOP 1 [ID]
       ,[TotalPrice]
       ,[UnitPrice]
       ,[CostPrice]
+      ,[Percent]
       ,[ReceivedMoney]
   FROM [dbo].[Sheet] WHERE [ID]=@ID
   ]]>

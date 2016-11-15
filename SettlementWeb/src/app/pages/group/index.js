@@ -24,6 +24,7 @@ import CreateUser from './components/CreateUser'
 import UpdateUser from './components/UpdateUser'
 
 import {
+	getGroup,
 	queryGroups,
 	createGroup,
 	updateGroup,
@@ -36,10 +37,7 @@ import {
 } from '../../actions/user'
 
 import genColumns from './columns'
-import {
-	tree,
-	EMPTY_GUID
-} from '../../common'
+
 const confirm = Modal.confirm
 
 class Group extends Component {
@@ -77,7 +75,7 @@ class Group extends Component {
 	}
 
 	onTTreeSelect(node) {
-		this.selectedNode = node
+		this.selectedGroup = node.key
 		this.queryUserRequset.group = node.key
 		this.queryUserRequset.pageIndex = 1
 		this.props.queryUsers(this.queryUserRequset)
@@ -142,10 +140,9 @@ class Group extends Component {
 	render() {
 		let {
 			groups,
-			queryingGroups,
-			creatingGroup,
-			updatingGroup
+			querying
 		} = this.props.group
+
 		let {
 			users,
 			queryingUsers,
@@ -175,13 +172,13 @@ class Group extends Component {
 
 		let modal
 		if (createGroupVisible) {
-			modal = <CreateGroup onCancel={this.hideModal.bind(this,'createGroupVisible')} onSubmit={this.props.createGroup} groups={groups} creating={creatingGroup}/>
+			modal = <CreateGroup onCancel={this.hideModal.bind(this,'createGroupVisible')} {...this.props}/>
 		} else if (createUserVisible) {
-			modal = <CreateUser onCancel={this.hideModal.bind(this,'createUserVisible')} onSubmit={this.props.createUser} groups={groups} creating={creatingUser}/>
+			modal = <CreateUser onCancel={this.hideModal.bind(this,'createUserVisible')} {...this.props}/>
 		} else if (updateGroupVisible) {
-			modal = <UpdateGroup onCancel={this.hideModal.bind(this,'updateGroupVisible')} onSubmit={this.props.updateGroup} group={this.selectedNode} updating={updatingGroup}/>
+			modal = <UpdateGroup onCancel={this.hideModal.bind(this,'updateGroupVisible')} {...this.props} id={this.selectedGroup}/>
 		} else if (updateUserVisible) {
-			modal = <UpdateUser onCancel={this.hideModal.bind(this,'updateUserVisible')} onSubmit={this.props.updateUser} groups={groups} user={selectedUser} updating={updatingUser}/>
+			modal = <UpdateUser onCancel={this.hideModal.bind(this,'updateUserVisible')} {...this.props} data={selectedUser}/>
 		}
 		return (
 			<div>
@@ -198,7 +195,7 @@ class Group extends Component {
 				</Row>
 				<Row gutter={24}>
 					<TCol xs={24} sm={7} md={7} lg={6}>
-						<TTree title='部门结构' loading={queryingGroups} data={groups} onSelect={this.onTTreeSelect}/>
+						<TTree title='部门结构' loading={querying} data={groups} onSelect={this.onTTreeSelect}/>
 					</TCol>
 					<TCol xs={24} sm={17} md={17} lg={18}>
 						<TCard title='用户数据'>
@@ -212,6 +209,7 @@ class Group extends Component {
 }
 
 export default TMainContainer()(connect(state => state, {
+	getGroup,
 	queryGroups,
 	createGroup,
 	updateGroup,
