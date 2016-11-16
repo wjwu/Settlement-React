@@ -41,9 +41,21 @@ namespace SettlementApi.Read.Respository
 
         public BaseCommandResult<TResult> Query<TResult, TCommand>(string commandName, TCommand command)
             where TResult : class
-            where TCommand : ICommand
+            where TCommand : class, ICommand
         {
             var cmd = CommandManager.GetCommand(commandName);
+            var result = cmd.ExecuteToList<TResult>(command);
+            return MapperHelper.Map<List<TResult>, BaseCommandResult<TResult>>(result);
+        }
+
+        public BaseCommandResult<TResult> QueryDynamic<TQuery, TResult, TCommand>(string commandName, TCommand command)
+            where TQuery : BaseQueryEntity
+            where TResult : class
+            where TCommand : class, ICommand
+        {
+            var cmd = CommandManager.GetCommand(commandName);
+            var entity = MapperHelper.Map<TCommand, TQuery>(command);
+            cmd.AppendCondition(entity);
             var result = cmd.ExecuteToList<TResult>(command);
             return MapperHelper.Map<List<TResult>, BaseCommandResult<TResult>>(result);
         }

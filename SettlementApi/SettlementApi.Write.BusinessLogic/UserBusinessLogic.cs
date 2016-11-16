@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using SettlementApi.CommandBus;
+using SettlementApi.Common;
 using SettlementApi.Common.Mapper;
 using SettlementApi.EventBus;
 using SettlementApi.Write.BusCommand.UserModule;
@@ -8,8 +10,6 @@ using SettlementApi.Write.BusinessLogic.Resource;
 using SettlementApi.Write.BusinessLogic.Utility;
 using SettlementApi.Write.Model;
 using SettlementApi.Write.Model.Enums;
-using SettlementApi.Common;
-using System.Linq;
 
 namespace SettlementApi.Write.BusinessLogic
 {
@@ -50,14 +50,12 @@ namespace SettlementApi.Write.BusinessLogic
 
         public void Execute(CreateUserCommand command)
         {
-            var chkUser=GetEntity("User.CheckLoginID", new {command.LoginID});
-            if (chkUser!=null)
-            {
+            var chkUser = GetEntity("User.CheckLoginID", new {command.LoginID});
+            if (chkUser != null)
                 throw new BussinessException(UserRes.LoginIDExists);
-            }
             var user = MapperHelper.Map<CreateUserCommand, User>(command);
             user.Password = Security.Md5Encrypt(Security.Encrypt(user.Password));
-            user.Role = Enum.GetName(typeof(RoleType),EnumUtity.ToEnum(command.Role, RoleType.None));
+            user.Role = Enum.GetName(typeof(RoleType), EnumUtity.ToEnum(command.Role, RoleType.None));
             Create("User.Create", user);
         }
 
@@ -70,18 +68,14 @@ namespace SettlementApi.Write.BusinessLogic
             if (!loginUser.Enabled)
                 throw new BussinessException(UserRes.LoginFailDisabled);
             Update("User.LoginUpdate", new {LastLoginIP = ServiceContext.RequestIP, loginUser.ID});
-            var result= MapperHelper.Map<User, LoginCommandResult>(loginUser);
+            var result = MapperHelper.Map<User, LoginCommandResult>(loginUser);
             var groupBus = new GroupBusinessLogic();
-            var group= groupBus.GetEntity(loginUser.Group);
-            if (group!=null)
-            {
+            var group = groupBus.GetEntity(loginUser.Group);
+            if (group != null)
                 result.ParentGroup = group.ParentID;
-            }
-            var groups = groupBus.GetList(group.ID,group.ParentID);
-            if (groups!=null)
-            {
-                result.Path =groups.Select(p=>p.ID.ToString()).ToList();
-            }
+            var groups = groupBus.GetList(group.ID, group.ParentID);
+            if (groups != null)
+                result.Path = groups.Select(p => p.ID.ToString()).ToList();
             return result;
         }
 

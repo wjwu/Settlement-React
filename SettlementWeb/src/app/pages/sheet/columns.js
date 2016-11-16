@@ -26,8 +26,8 @@ const columns = (editFuc) => {
 		width: '7%'
 	}, {
 		title: '签单人',
-		dataIndex: 'ProjectManager',
-		key: 'projectManager',
+		dataIndex: 'UserName',
+		key: 'userName',
 		width: '7%'
 	}, {
 		title: '所在部门',

@@ -12,11 +12,13 @@ import {
 } from 'antd'
 import {
 	TMainContainer,
-	TMsgContainer,
+	TMsgContainer
+} from '../../containers'
+import {
 	TCol,
 	TCard,
 	TTable
-} from '../../../components'
+} from '../../components'
 import UpdateSheet from './components/UpdateSheet'
 import CreateSheet from './components/CreateSheet'
 import SearchPanel from './components/SearchPanel'

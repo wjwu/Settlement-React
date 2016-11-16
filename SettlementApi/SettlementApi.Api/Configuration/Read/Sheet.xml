@@ -3,24 +3,25 @@
   <command name="Sheet.Query" type="text" connection="local">
     <![CDATA[
 SELECT  S.[ID] ,
-        U.Name AS [ProjectManager] ,
-		    G.Name AS Department,
+        U.[ID] AS [UserID] ,
+        U.[Name] AS [UserName] ,
+        G.[Name] AS [Department] ,
         S.[AuditStatus] ,
         S.[PayStatus] ,
         S.[CustomName] ,
-		    DD.[Name] AS [Source],
+        DD.[Name] AS [Source] ,
         S.[TimeFrom] AS DTimeFrom ,
         D.[Name] AS Base ,
-        S.[TotalPrice] ,
-        S.[CostPrice] ,
-        S.[ReceivedMoney] ,
-        S.[RemainingMoney],
-        S.[Commission],
+        S.[Total] ,
+        S.[Cost] ,
+        S.[Received] ,
+        S.[Remaining] ,
+        S.[Commission] ,
         S.[CreateTime]
 FROM    [dbo].[Sheet] AS S
-        LEFT JOIN dbo.[User] AS U ON S.ProjectManager = U.ID
-        LEFT JOIN dbo.[Dictionary] AS D ON S.Base = D.ID 
-		LEFT JOIN dbo.[Dictionary] AS DD ON S.[Source] = DD.ID
+        LEFT JOIN dbo.[User] AS U ON S.UserID = U.ID
+        LEFT JOIN dbo.[Dictionary] AS D ON S.Base = D.ID
+        LEFT JOIN dbo.[Dictionary] AS DD ON S.[Source] = DD.ID
         LEFT JOIN dbo.[Group] AS G ON G.ID = U.[Group]
 WHERE   S.[Deleted] = 0 
   ]]>
@@ -40,9 +41,9 @@ SELECT TOP 1 [ID]
       ,[Base]
       ,[People]
       ,[Source]
-      ,[TotalPrice]
-      ,[UnitPrice]
-      ,[CostPrice]
+      ,[Total]
+      ,[Unit]
+      ,[Cost]
       ,[Remark]
   FROM [dbo].[Sheet] WHERE [ID]=@ID
   ]]>
@@ -56,11 +57,11 @@ SELECT TOP 1 [ID]
       ,[Base]
       ,[People]
       ,[Source]
-      ,[TotalPrice]
-      ,[UnitPrice]
-      ,[CostPrice]
+      ,[Total]
+      ,[Unit]
+      ,[Cost]
       ,[Percent]
-      ,[ReceivedMoney]
+      ,[Received]
   FROM [dbo].[Sheet] WHERE [ID]=@ID
   ]]>
   </command>

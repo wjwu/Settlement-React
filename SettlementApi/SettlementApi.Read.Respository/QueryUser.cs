@@ -10,6 +10,8 @@ namespace SettlementApi.Read.Respository
     {
         public BasePagingCommandResult<RQueryUser> Execute(QueryUserCommand command)
         {
+            if (!string.IsNullOrEmpty(command.Groups))
+                command.Path = command.Groups.Split(',');
             return QueryPaging<EQueryUser, RQueryUser, QueryUserCommand>("User.Query", command);
         }
 
@@ -21,9 +23,7 @@ namespace SettlementApi.Read.Respository
         public ICommandResult ReceiveEx(ICommand command)
         {
             if (command.GetType() == typeof(QueryUserCommand))
-            {
-                return Execute((QueryUserCommand)command);
-            }
+                return Execute((QueryUserCommand) command);
             return null;
         }
     }

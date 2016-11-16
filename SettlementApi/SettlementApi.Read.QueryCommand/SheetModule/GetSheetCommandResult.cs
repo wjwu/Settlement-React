@@ -1,12 +1,12 @@
-﻿using SettlementApi.CommandBus;
+﻿using System;
+using System.Collections.Generic;
+using SettlementApi.CommandBus;
 using SettlementApi.Read.QueryCommand.CostModule;
 using SettlementApi.Read.QueryCommand.ReceivedModule;
-using System;
-using System.Collections.Generic;
 
 namespace SettlementApi.Read.QueryCommand.SheetModule
 {
-    public class GetSheetCommandResult: ICommandResult
+    public class GetSheetCommandResult : ICommandResult
     {
         public Guid ID { get; set; }
 

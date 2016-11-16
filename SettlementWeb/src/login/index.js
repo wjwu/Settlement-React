@@ -8,7 +8,7 @@ import {
 	Col
 } from 'antd'
 
-import Captcha from '../components/Captcha'
+import Captcha from './Captcha'
 
 import * as constants from './constants'
 import * as actions from './action'
@@ -94,7 +94,7 @@ class LoginForm extends React.Component {
 		const url = `${API_URL}captcha?t=${timeSpan}`
 
 		return (
-			<Form>
+			<Form onSubmit={this.submit.bind(this)}>
 				<FormItem>
 					<h1>结算系统</h1>
 				</FormItem>
@@ -146,7 +146,7 @@ class LoginForm extends React.Component {
 						<Captcha url={url} OnRefresh={this.refreshCaptcha.bind(this)}/>
 					</Col>
 				</Row>
-				<Button type='primary' size='large' htmlType='button' onClick={this.submit.bind(this)}>登录</Button>
+				<Button type='primary' size='large' htmlType='submit'>登录</Button>
 			</Form>
 		)
 	}

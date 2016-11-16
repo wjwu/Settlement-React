@@ -1,8 +1,6 @@
 ﻿using System;
-using SettlementApi.CommandBus;
-using SettlementApi.Common;
-using SettlementApi.Write.Model.Enums;
 using System.Collections.Generic;
+using SettlementApi.CommandBus;
 
 namespace SettlementApi.Write.BusCommand.UserModule
 {

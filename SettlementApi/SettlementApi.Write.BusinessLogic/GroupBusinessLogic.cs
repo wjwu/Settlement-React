@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SettlementApi.CommandBus;
 using SettlementApi.Common.Mapper;
 using SettlementApi.EventBus;
@@ -6,7 +7,6 @@ using SettlementApi.Write.BusCommand.GroupModule;
 using SettlementApi.Write.BusinessLogic.Event;
 using SettlementApi.Write.BusinessLogic.Resource;
 using SettlementApi.Write.Model;
-using System.Collections.Generic;
 
 namespace SettlementApi.Write.BusinessLogic
 {
@@ -27,8 +27,8 @@ namespace SettlementApi.Write.BusinessLogic
                 Execute((CreateGroupCommand) command);
             else if (command.GetType() == typeof(DeleteGroupCommand))
                 Execute((DeleteGroupCommand) command);
-            else if(command.GetType() == typeof(UpdateGroupCommand))
-                Execute((UpdateGroupCommand)command);
+            else if (command.GetType() == typeof(UpdateGroupCommand))
+                Execute((UpdateGroupCommand) command);
         }
 
         public ICommandResult ReceiveEx(ICommand command)
@@ -54,7 +54,7 @@ namespace SettlementApi.Write.BusinessLogic
 
         public void Execute(UpdateGroupCommand command)
         {
-            Update("Group.Update",command);
+            Update("Group.Update", command);
         }
 
         public override Group GetEntity(Guid id)
@@ -62,9 +62,9 @@ namespace SettlementApi.Write.BusinessLogic
             return GetEntity("Group.GetByID", new {ID = id});
         }
 
-        public List<Group> GetList(Guid id,Guid parentID)
+        public List<Group> GetList(Guid id, Guid parentID)
         {
-            return GetList("Group.Query", new { ID = id,ParentID= parentID });
+            return GetList("Group.Query", new {ID = id, ParentID = parentID});
         }
     }
 }

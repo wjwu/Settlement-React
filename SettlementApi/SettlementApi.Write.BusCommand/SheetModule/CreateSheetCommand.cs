@@ -1,6 +1,6 @@
 ﻿using System;
-using SettlementApi.CommandBus;
 using System.Collections.Generic;
+using SettlementApi.CommandBus;
 
 namespace SettlementApi.Write.BusCommand.SheetModule
 {
@@ -24,7 +24,7 @@ namespace SettlementApi.Write.BusCommand.SheetModule
 
         public Guid Base { get; set; }
 
-        public int People { get;set;}
+        public int People { get; set; }
 
         public Guid Source { get; set; }
 

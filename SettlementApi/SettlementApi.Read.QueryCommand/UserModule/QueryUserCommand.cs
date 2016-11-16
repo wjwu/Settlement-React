@@ -1,9 +1,9 @@
-﻿using System;
-
-namespace SettlementApi.Read.QueryCommand.UserModule
+﻿namespace SettlementApi.Read.QueryCommand.UserModule
 {
     public class QueryUserCommand : BasePagingCommand
     {
-        public Guid? Group { get; set; }
+        public string Groups { get; set; }
+
+        public string[] Path { get; set; }
     }
 }

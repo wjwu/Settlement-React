@@ -6,10 +6,13 @@ import {
 } from 'antd'
 import ReactEcharts from 'echarts-for-react'
 import {
-	TMainContainer,
+	TMainContainer
+} from '../../containers'
+import {
 	TCol,
 	TCard
-} from '../../../components'
+} from '../../components'
+
 import styles from './index.scss'
 
 const TabPane = Tabs.TabPane

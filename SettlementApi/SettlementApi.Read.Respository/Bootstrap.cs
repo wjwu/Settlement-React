@@ -8,7 +8,7 @@ namespace SettlementApi.Read.Respository
     {
         public static void Start()
         {
-            UnityContainer container = AppUnity.Container;
+            var container = AppUnity.Container;
             container.RegisterType<ICommandBus, QueryGroup>("QueryGroup");
             container.RegisterType<ICommandBus, QueryUser>("QueryUser");
             container.RegisterType<ICommandBus, QueryDictionary>("QueryDictionary");

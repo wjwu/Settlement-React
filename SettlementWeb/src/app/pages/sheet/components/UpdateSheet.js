@@ -19,7 +19,7 @@ import {
 import moment from 'moment'
 import {
 	TTable
-} from '../../../../components'
+} from '../../../components'
 import CreateCost from './CreateCost'
 import UpdateCost from './UpdateCost'
 import CreateReceived from './CreateReceived'

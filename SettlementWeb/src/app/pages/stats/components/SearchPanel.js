@@ -13,7 +13,7 @@ import {
 } from 'antd'
 import {
 	TTreeSelect
-} from '../../../../components'
+} from '../../../components'
 
 import {
 	getGroup,
@@ -51,7 +51,6 @@ class SearchPanel extends Component {
 			let payStatus = getFieldValue('payStatus')
 			let source = getFieldValue('source')
 			let projectManager = getFieldValue('projectManager') || ''
-			let customName = getFieldValue('customName') || ''
 			this.props.onSearch({
 				groups,
 				base,
@@ -59,8 +58,7 @@ class SearchPanel extends Component {
 				timeTo,
 				payStatus,
 				source,
-				projectManager,
-				customName,
+				projectManager
 			})
 		})
 	}
@@ -167,13 +165,6 @@ class SearchPanel extends Component {
 						<FormItem {...formItemLayout} label='签单人'>
 						{
 							getFieldDecorator('projectManager')(<Input />)
-						}
-						</FormItem>
-					</Col>
-					<Col {...colLayout}>
-						<FormItem {...formItemLayout} label='客户名称'>
-						{
-							getFieldDecorator('customName')(<Input />)
 						}
 						</FormItem>
 					</Col>

@@ -1,8 +1,9 @@
 ﻿using System;
+using SettlementApi.CommandBus;
 
-namespace SettlementApi.Read.QueryCommand.StatisticsModule
+namespace SettlementApi.Read.QueryCommand.SheetModule
 {
-    public class QueryStatisticsCommand : BasePagingCommand
+    public class QuerySheetNoPagingCommand : ICommand
     {
         public string Groups { get; set; }
 

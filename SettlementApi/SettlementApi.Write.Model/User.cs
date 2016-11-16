@@ -1,5 +1,4 @@
-﻿using SettlementApi.Write.Model.Enums;
-using System;
+﻿using System;
 
 namespace SettlementApi.Write.Model
 {
@@ -31,12 +30,12 @@ namespace SettlementApi.Write.Model
         public string Name { get; set; }
 
         /// <summary>
-        /// 部门
+        ///     部门
         /// </summary>
         public Guid Group { get; set; }
 
         /// <summary>
-        /// 角色
+        ///     角色
         /// </summary>
         public string Role { get; set; }
 

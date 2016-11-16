@@ -1,15 +1,9 @@
 ﻿using System;
-using SettlementApi.Common;
-using SettlementApi.Write.Model.Enums;
 
 namespace SettlementApi.Read.QueryCommand.SheetModule
 {
     public class RQuerySheet
     {
-        private string _auditStatus;
-
-        private string _payStatus;
-
         public Guid ID { get; set; }
 
         public string CustomName { get; set; }
@@ -22,7 +16,9 @@ namespace SettlementApi.Read.QueryCommand.SheetModule
 
         public string TimeFrom => DTimeFrom.ToString("yyyy-MM-dd");
 
-        public string ProjectManager { get; set; }
+        public Guid UserID { get; set; }
+
+        public string UserName { get; set; }
 
         public string Department { get; set; }
 

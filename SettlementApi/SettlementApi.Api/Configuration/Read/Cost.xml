@@ -6,7 +6,7 @@ SELECT  C.[ID] ,
         C.[Type] ,
         D.[Name] AS [TypeName] ,
         C.[Amount] ,
-        C.[UnitPrice] ,
+        C.[Unit] ,
         C.[Total] ,
         C.[Status] ,
         C.[Remark]

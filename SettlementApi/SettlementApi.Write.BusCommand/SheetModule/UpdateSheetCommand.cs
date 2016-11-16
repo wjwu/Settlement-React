@@ -1,10 +1,10 @@
-﻿using SettlementApi.CommandBus;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using SettlementApi.CommandBus;
 
 namespace SettlementApi.Write.BusCommand.SheetModule
 {
-    public class UpdateSheetCommand: ICommand
+    public class UpdateSheetCommand : ICommand
     {
         public Guid ID { get; set; }
 

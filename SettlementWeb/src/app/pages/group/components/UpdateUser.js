@@ -12,7 +12,7 @@ import {
 } from 'antd'
 import {
 	TTreeSelect
-} from '../../../../components'
+} from '../../../components'
 
 const FormItem = Form.Item
 const RadioGroup = Radio.Group

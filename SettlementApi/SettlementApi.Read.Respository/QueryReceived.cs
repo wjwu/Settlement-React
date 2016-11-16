@@ -1,12 +1,12 @@
-﻿using SettlementApi.CommandBus;
+﻿using System;
+using SettlementApi.CommandBus;
 using SettlementApi.Read.QueryCommand;
 using SettlementApi.Read.QueryCommand.ReceivedModule;
-using System;
 
 namespace SettlementApi.Read.Respository
 {
     public class QueryReceived : BaseRRespository,
-         ICommandBus<QueryReceivedCommand, BaseCommandResult<RQueryReceived>>
+        ICommandBus<QueryReceivedCommand, BaseCommandResult<RQueryReceived>>
     {
         public BaseCommandResult<RQueryReceived> Execute(QueryReceivedCommand command)
         {
@@ -21,9 +21,7 @@ namespace SettlementApi.Read.Respository
         public ICommandResult ReceiveEx(ICommand command)
         {
             if (command.GetType() == typeof(QueryReceivedCommand))
-            {
-                return Execute((QueryReceivedCommand)command);
-            }
+                return Execute((QueryReceivedCommand) command);
             return null;
         }
     }

@@ -13,7 +13,7 @@ import {
 } from 'antd'
 import {
 	TTreeSelect
-} from '../../../../components'
+} from '../../../components'
 import {
 	getGroup,
 	disabledTime,

@@ -1,7 +1,7 @@
-﻿using SettlementApi.CommandBus;
+﻿using System;
+using SettlementApi.CommandBus;
 using SettlementApi.Read.QueryCommand;
 using SettlementApi.Read.QueryCommand.CostModule;
-using System;
 
 namespace SettlementApi.Read.Respository
 {
@@ -21,9 +21,7 @@ namespace SettlementApi.Read.Respository
         public ICommandResult ReceiveEx(ICommand command)
         {
             if (command.GetType() == typeof(QueryCostCommand))
-            {
-                return Execute((QueryCostCommand)command);
-            }
+                return Execute((QueryCostCommand) command);
             return null;
         }
     }

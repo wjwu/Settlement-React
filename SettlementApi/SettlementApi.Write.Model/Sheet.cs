@@ -7,9 +7,9 @@ namespace SettlementApi.Write.Model
         public Guid ID { get; set; }
 
         /// <summary>
-        /// 项目经理
+        /// 签单人
         /// </summary>
-        public Guid ProjectManager { get; set; }
+        public Guid UserID { get; set; }
 
         /// <summary>
         /// 审核状态
@@ -85,12 +85,12 @@ namespace SettlementApi.Write.Model
         /// <summary>
         /// 总价
         /// </summary>
-        public decimal TotalPrice { get; set; }
+        public decimal Total { get; set; }
 
         /// <summary>
         /// 单价
         /// </summary>
-        public decimal UnitPrice { get; set; }
+        public decimal Unit { get; set; }
 
         /// <summary>
         /// 总成本
@@ -100,12 +100,12 @@ namespace SettlementApi.Write.Model
         /// <summary>
         /// 已收金额
         /// </summary>
-        public decimal ReceivedMoney { get; set; }
+        public decimal Received { get; set; }
 
         /// <summary>
         /// 待收金额
         /// </summary>
-        public decimal RemainingMoney { get; set; }
+        public decimal Remaining { get; set; }
 
         /// <summary>
         /// 个人提成

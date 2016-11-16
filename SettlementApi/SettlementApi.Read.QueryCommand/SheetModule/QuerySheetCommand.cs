@@ -12,7 +12,7 @@ namespace SettlementApi.Read.QueryCommand.SheetModule
 
         public Guid? Source { get; set; }
 
-        public DateTime? TimeFrom{get;set;}
+        public DateTime? TimeFrom { get; set; }
 
         public DateTime? TimeTo { get; set; }
 

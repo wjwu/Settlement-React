@@ -11,11 +11,13 @@ import {
 } from 'antd'
 import {
 	TMainContainer,
-	TMsgContainer,
+	TMsgContainer
+} from '../../containers'
+import {
 	TCol,
 	TCard,
 	TTable
-} from '../../../components'
+} from '../../components'
 import ReactEcharts from 'echarts-for-react'
 import SearchPanel from './components/SearchPanel'
 import {
@@ -35,57 +37,17 @@ import {
 
 import styles from './index.scss'
 
-import genColumns from './columns'
+import {
+	sheetColumns,
+	selfColumns,
+	deptColumns
+} from './columns'
+import {
+	sourceOption,
+	deptOption
+} from './options'
 
 const TabPane = Tabs.TabPane
-
-const getOtion = () => {
-	const option = {
-		title: {
-			text: '客户来源统计',
-			x: 'center'
-		},
-		tooltip: {
-			trigger: 'item',
-			formatter: '{a} <br/>{b} : {c} ({d}%)'
-		},
-		legend: {
-			orient: 'vertical',
-			left: 'left',
-			data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
-		},
-		series: [{
-			name: '客户来源',
-			type: 'pie',
-			radius: '55%',
-			center: ['50%', '60%'],
-			data: [{
-				value: 335,
-				name: '直接访问'
-			}, {
-				value: 310,
-				name: '邮件营销'
-			}, {
-				value: 234,
-				name: '联盟广告'
-			}, {
-				value: 135,
-				name: '视频广告'
-			}, {
-				value: 1548,
-				name: '搜索引擎'
-			}],
-			itemStyle: {
-				emphasis: {
-					shadowBlur: 10,
-					shadowOffsetX: 0,
-					shadowColor: 'rgba(0, 0, 0, 0.5)'
-				}
-			}
-		}]
-	};
-	return option
-}
 
 class Stats extends Component {
 	constructor(prop) {
@@ -134,21 +96,13 @@ class Stats extends Component {
 			sheets
 		} = this.props.sheet
 		let stats = this.props.stats.stats || {}
-
+		let userProfits = stats.UserProfits || []
+		let deptProfits = stats.DepartmentProfits || []
 		let empty = {
 			List: [],
 			TotalCount: 0
 		}
 		sheets = sheets || empty
-
-		const columns = genColumns((raw, action) => {
-			if (action === 'update') {
-				this.selectedSheet = raw
-				this.showModal()
-			} else if (action === 'delete') {
-				this.doDeleteSheet(raw.ID)
-			}
-		})
 
 		return (
 			<div>
@@ -208,12 +162,12 @@ class Stats extends Component {
 				<Row gutter={24}>
 					<TCol xs={24} sm={24} md={12} lg={12}>
 						<TCard>
-		                    <ReactEcharts option={getOtion()} style={{height: 300}}/>
+		                    <ReactEcharts option={sourceOption(stats.Sources)} style={{height: 300}}/>
 						</TCard>
 					</TCol>
 					<TCol xs={24} sm={24} md={12} lg={12}>
-						<TCard title='部门占比'>
-
+						<TCard>
+							<ReactEcharts option={deptOption(stats.Departments)} style={{height: 300}}/>
 						</TCard>
 					</TCol>
 				</Row>
@@ -221,13 +175,13 @@ class Stats extends Component {
 					<TCol>
 						<Tabs>
 							<TabPane tab='签单统计' key='amount'>
-								<TTable key='tamount' bordered columns={columns} total={sheets.TotalCount} dataSource={sheets.List} loading={querying} onLoad={this.onTTableLoad}/>
+								<TTable key='tamount' bordered columns={sheetColumns()} total={sheets.TotalCount} dataSource={sheets.List} loading={querying} onLoad={this.onTTableLoad}/>
 							</TabPane>
 							<TabPane tab='个人提成/业绩' key='self'>
-								<TTable key='tself' bordered columns={columns} total={sheets.TotalCount} dataSource={sheets.List} loading={querying} onLoad={this.onTTableLoad}/>
+								<TTable key='tself' bordered pagination={false} columns={selfColumns()} total={userProfits.length} dataSource={userProfits} onLoad={()=>{}}/>
 							</TabPane>
 							<TabPane tab='部门提成/业绩' key='dept'>
-								<TTable key='tdept' bordered columns={columns} total={sheets.TotalCount} dataSource={sheets.List} loading={querying} onLoad={this.onTTableLoad}/>
+								<TTable key='tdept' bordered pagination={false} columns={deptColumns()} total={deptProfits.length} dataSource={deptProfits} onLoad={()=>{}}/>
 							</TabPane>
 						</Tabs>
 					</TCol>

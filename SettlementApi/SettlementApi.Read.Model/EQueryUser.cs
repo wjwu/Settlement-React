@@ -1,6 +1,7 @@
 ﻿using System;
 using SettlementApi.DataAccess;
 using SettlementApi.DataAccess.DefaultPageSetting;
+using SettlementApi.DataAccess.QueryAttribute;
 
 namespace SettlementApi.Read.Model
 {
@@ -10,6 +11,8 @@ namespace SettlementApi.Read.Model
     [DefaultSortType(SortTypeEnum.ASC)]
     public class EQueryUser : BaseQueryEntity
     {
-        public Guid? Group { get; set; }
+        [AliasField("Group")]
+        [InField]
+        public string[] Path { get; set; }
     }
 }

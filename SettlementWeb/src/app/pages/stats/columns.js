@@ -5,11 +5,11 @@ import {
 } from 'antd'
 import * as colors from '../../colors'
 
-const columns = (editFuc) => {
+export const sheetColumns = () => {
 	return [{
 		title: '签单人',
-		dataIndex: 'ProjectManager',
-		key: 'projectManager',
+		dataIndex: 'UserName',
+		key: 'userName',
 		width: '9%'
 	}, {
 		title: '所在部门',
@@ -92,4 +92,75 @@ const columns = (editFuc) => {
 }
 
 
-export default columns
+export const selfColumns = () => {
+	return [{
+		title: '姓名',
+		dataIndex: 'Name',
+		key: 'name',
+		width: '9%'
+	}, {
+		title: '所在部门',
+		dataIndex: 'Department',
+		key: 'department',
+		width: '9%'
+	}, {
+		title: '提成比例',
+		dataIndex: 'Percent',
+		key: 'percent',
+		width: '9%'
+	}, {
+		title: '签单数量',
+		dataIndex: 'Amount',
+		key: 'amount',
+		width: '9%'
+	}, {
+		title: '成交合计',
+		dataIndex: 'Total',
+		key: 'total',
+		width: '9%'
+	}, {
+		title: '成本合计',
+		dataIndex: 'Cost',
+		key: 'cost',
+		width: '9%'
+	}, {
+		title: '个人提成',
+		dataIndex: 'Commission',
+		key: 'commission',
+		width: '9%'
+	}]
+}
+
+export const deptColumns = () => {
+	return [{
+		title: '所在部门',
+		dataIndex: 'Name',
+		key: 'name',
+		width: '9%'
+	}, {
+		title: '提成比例',
+		dataIndex: 'Percent',
+		key: 'percent',
+		width: '9%'
+	}, {
+		title: '签单数量',
+		dataIndex: 'Amount',
+		key: 'amount',
+		width: '9%'
+	}, {
+		title: '成交合计',
+		dataIndex: 'Total',
+		key: 'total',
+		width: '9%'
+	}, {
+		title: '成本合计',
+		dataIndex: 'Cost',
+		key: 'cost',
+		width: '9%'
+	}, {
+		title: '部门提成',
+		dataIndex: 'Commission',
+		key: 'commission',
+		width: '9%'
+	}]
+}

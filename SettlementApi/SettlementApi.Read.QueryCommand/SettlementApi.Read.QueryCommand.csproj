@@ -50,6 +50,7 @@
     <Compile Include="ReceivedModule\RQueryReceived.cs" />
     <Compile Include="SheetModule\GetSheetCommandResult.cs" />
     <Compile Include="SheetModule\QuerySheetCommand.cs" />
+    <Compile Include="SheetModule\QuerySheetNoPagingCommand.cs" />
     <Compile Include="SheetModule\RQuerySheet.cs" />
     <Compile Include="StatisticsModule\QueryStatisticsCommand.cs" />
     <Compile Include="StatisticsModule\QueryStatisticsCommandResult.cs" />

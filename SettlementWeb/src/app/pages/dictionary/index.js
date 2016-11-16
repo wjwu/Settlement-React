@@ -11,11 +11,13 @@ import {
 } from 'antd'
 import {
 	TMainContainer,
-	TMsgContainer,
+	TMsgContainer
+} from '../../containers'
+import {
 	TCol,
 	TCard,
 	TTable
-} from '../../../components'
+} from '../../components'
 import CreateDictionary from './components/CreateDictionary'
 import UpdateDictionary from './components/UpdateDictionary'
 import {

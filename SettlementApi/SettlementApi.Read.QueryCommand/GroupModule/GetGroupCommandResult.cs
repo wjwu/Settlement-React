@@ -1,9 +1,9 @@
-﻿using SettlementApi.CommandBus;
-using System;
+﻿using System;
+using SettlementApi.CommandBus;
 
 namespace SettlementApi.Read.QueryCommand.GroupModule
 {
-    public class GetGroupCommandResult: ICommandResult
+    public class GetGroupCommandResult : ICommandResult
     {
         public Guid ID { get; set; }
         public string Name { get; set; }

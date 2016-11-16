@@ -11,12 +11,14 @@ import {
 } from 'antd'
 import {
 	TMainContainer,
-	TMsgContainer,
+	TMsgContainer
+} from '../../containers'
+import {
 	TCol,
 	TTree,
 	TTable,
 	TCard
-} from '../../../components'
+} from '../../components'
 
 import CreateGroup from './components/CreateGroup'
 import UpdateGroup from './components/UpdateGroup'
@@ -35,6 +37,7 @@ import {
 	createUser,
 	updateUser
 } from '../../actions/user'
+import * as common from '../../common'
 
 import genColumns from './columns'
 
@@ -76,7 +79,8 @@ class Group extends Component {
 
 	onTTreeSelect(node) {
 		this.selectedGroup = node.key
-		this.queryUserRequset.group = node.key
+		let groups = common.getGroup(this.props.group.groups, this.selectedGroup)
+		this.queryUserRequset.groups = groups
 		this.queryUserRequset.pageIndex = 1
 		this.props.queryUsers(this.queryUserRequset)
 	}
@@ -99,7 +103,7 @@ class Group extends Component {
 	}
 
 	doDeleteGroup() {
-		let group = this.queryUserRequset.group
+		let group = this.selectedGroup
 		if (!group) {
 			this.props.showGlobleMsg('error', '请选择一个部门！')
 		} else {
@@ -116,7 +120,7 @@ class Group extends Component {
 				onOk() {
 					return deleteGroup(group).then(result => {
 						showGlobleMsg('success', '删除成功！')
-						that.queryUserRequset.group = '00000000-0000-0000-0000-000000000000'
+						that.queryUserRequset.groups = []
 						queryGroups(that.queryGroupRequest)
 						queryUsers(that.queryUserRequset)
 					}, error => {
@@ -128,7 +132,7 @@ class Group extends Component {
 	}
 
 	doUpdateGroup(type) {
-		if (!this.queryUserRequset.group) {
+		if (!this.selectedGroup.group) {
 			this.props.showGlobleMsg('error', '请选择一个部门！')
 		} else {
 			this.setState({

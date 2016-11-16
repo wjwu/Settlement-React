@@ -10,6 +10,9 @@ namespace SettlementApi.Read.QueryCommand.ReceivedModule
 
         public DateTime DTime { private get; set; }
 
-        public string Time { get { return DTime.ToString("yyyy-MM-dd");} }
+        public string Time
+        {
+            get { return DTime.ToString("yyyy-MM-dd"); }
+        }
     }
 }
