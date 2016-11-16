@@ -5,17 +5,67 @@ import {
 	Link
 } from 'react-router'
 import {
+	message,
 	Menu,
 	Breadcrumb,
-	Icon
+	Icon,
+	Modal
 } from 'antd'
+import {
+	signOut
+} from '../../auth'
+
+const showGlobleMsg = (type, msg) => {
+	if (type === 'success') {
+		message.success(msg, 5)
+	} else if (type === 'error') {
+		message.error(msg, 5)
+	} else if (type === 'info') {
+		message.info(msg, 5)
+	} else if (type === 'warning') {
+		message.warning(msg, 5)
+	} else if (type === 'warn') {
+		message.warn(msg, 5)
+	}
+}
+
 
 const SubMenu = Menu.SubMenu
 const MenuItemGroup = Menu.ItemGroup
+const confirm = Modal.confirm
 
 const TMainContainer = () => {
 	return Comp => {
 		return class extends Component {
+			componentDidUpdate() {
+				const {
+					type,
+					msg
+				} = this.props.message
+
+				showGlobleMsg(type, msg)
+			}
+
+			doSignOut() {
+				const {
+					showGlobleMsg
+				} = this.props
+				confirm({
+					title: '退出系统',
+					content: '确定要退出结算系统？',
+					onOk() {
+						return signOut().then(result => {
+							showGlobleMsg('success', '退出成功！')
+							setTimeout(() => {
+								window.location.href = '/'
+							}, 1500)
+						}, error => {
+							showGlobleMsg('error', result.Message)
+						})
+					},
+				})
+			}
+
 			render() {
 				let user = JSON.parse(sessionStorage.getItem('user'))
 				let path = this.props.route.path.substr(1)
@@ -70,12 +120,12 @@ const TMainContainer = () => {
 							<div className='ant-layout-header'>
 								<span>{role}</span>
 								<span><a href='#'>{user.LoginID}</a></span>
-								<span><a className='normal-link'><Icon type='logout'/>&nbsp;退出</a></span>
+								<span><a className='normal-link' href='javascript:;' onClick={this.doSignOut.bind(this)}><Icon type='logout'/>&nbsp;退出</a></span>
 							</div>
 						    <div className='ant-layout-container'>
 						      	<div className='ant-layout-content'>
 						        	<div>
-						          		<Comp {...this.props} sys_user={user}/>
+						          		<Comp {...this.props} sys_user={user} showGlobleMsg={showGlobleMsg}/>
 						        	</div>
 						      	</div>
 						    </div>

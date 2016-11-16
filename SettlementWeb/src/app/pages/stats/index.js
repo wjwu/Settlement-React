@@ -10,8 +10,7 @@ import {
 	Tabs
 } from 'antd'
 import {
-	TMainContainer,
-	TMsgContainer
+	TMainContainer
 } from '../../containers'
 import {
 	TCol,
@@ -198,4 +197,4 @@ export default TMainContainer()(connect(state => state, {
 	queryCosts,
 	queryGroups,
 	queryStats
-})(TMsgContainer()(Stats)))
+})(Stats))

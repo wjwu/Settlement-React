@@ -1,7 +1,9 @@
 import * as apiClient from './apiClient'
 
-const auth = () => {
+export const expired = () => {
 	return apiClient.get('sign/expired')
 }
 
-export default auth
+export const signOut = () => {
+	return apiClient.get('sign/out')
+}

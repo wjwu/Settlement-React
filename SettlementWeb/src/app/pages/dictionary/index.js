@@ -10,8 +10,7 @@ import {
 	Button
 } from 'antd'
 import {
-	TMainContainer,
-	TMsgContainer
+	TMainContainer
 } from '../../containers'
 import {
 	TCol,
@@ -186,4 +185,4 @@ export default TMainContainer()(connect(state => state, {
 	queryCosts,
 	createDictionary,
 	updateDictionary
-})(TMsgContainer()(Dictionary)))
+})(Dictionary))

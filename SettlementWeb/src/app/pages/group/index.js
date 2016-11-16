@@ -10,8 +10,7 @@ import {
 	Modal
 } from 'antd'
 import {
-	TMainContainer,
-	TMsgContainer
+	TMainContainer
 } from '../../containers'
 import {
 	TCol,
@@ -221,4 +220,4 @@ export default TMainContainer()(connect(state => state, {
 	queryUsers,
 	createUser,
 	updateUser
-})(TMsgContainer()(Group)))
+})(Group))

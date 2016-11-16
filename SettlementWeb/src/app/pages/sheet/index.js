@@ -11,8 +11,7 @@ import {
 	Modal
 } from 'antd'
 import {
-	TMainContainer,
-	TMsgContainer
+	TMainContainer
 } from '../../containers'
 import {
 	TCol,
@@ -204,4 +203,4 @@ export default TMainContainer()(connect(state => state, {
 	querySources,
 	queryCosts,
 	queryGroups
-})(TMsgContainer()(Sheet)))
+})(Sheet))

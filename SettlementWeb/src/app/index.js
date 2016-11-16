@@ -14,7 +14,9 @@ import {
 } from 'react-router'
 import thunk from 'redux-thunk'
 import reducer from './reducers'
-import auth from './auth'
+import {
+	expired
+} from './auth'
 
 import Home from './pages/home'
 import Group from './pages/group'
@@ -25,7 +27,7 @@ import Stats from './pages/stats'
 const store = createStore(reducer, applyMiddleware(thunk))
 
 const enter = (nextState, replace, callback) => {
-	auth().then(result => {
+	expired().then(result => {
 		callback()
 	}, error => {
 		if (window.top == window.self) {
