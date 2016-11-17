@@ -95,10 +95,10 @@ class SearchPanel extends Component {
 
 		let groups = this.props.group.groups
 
-		let basesOptions = bases ? bases.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>) : []
+		let basesOptions = bases ? bases.List.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>) : []
 		basesOptions.unshift(<Option key='all' value=''>全部</Option>)
 
-		let sourcesOptions = sources ? sources.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>) : []
+		let sourcesOptions = sources ? sources.List.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>) : []
 		sourcesOptions.unshift(<Option key='all' value=''>全部</Option>)
 
 		let parentGroup = this.props.sys_user.ParentGroup

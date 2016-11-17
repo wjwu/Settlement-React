@@ -32,24 +32,5 @@ namespace SettlementApi.Api.Apis
             }
             return new HttpResponseMessage(HttpStatusCode.NoContent);
         }
-
-        [HttpPost]
-        [Route("api/captcha/check")]
-        public HttpResponseMessage Post([FromBody]CheckCaptchaRequest request)
-        {
-            Thread.Sleep(1000);
-            string captch=CaptchaPool.Get(request.TimeSpan);
-            if (string.IsNullOrWhiteSpace(captch)||captch.ToLower()!=request.Captcha.ToLower())
-            {
-                return new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent(new ResponseMessage(CommonRes.CaptchaError,true).ToJson())
-                };
-            }
-            return new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StringContent(new ResponseMessage(CommonRes.Success).ToJson())
-            };
-        }
     }
 }

@@ -29,6 +29,7 @@ WHERE   S.[Deleted] = 0
   <command name="Sheet.Query.GetByID" type="text" connection="local">
     <![CDATA[
 SELECT TOP 1 [ID]
+      ,[UserID]
       ,[AuditStatus]
       ,[CustomName]
       ,[Contacts]

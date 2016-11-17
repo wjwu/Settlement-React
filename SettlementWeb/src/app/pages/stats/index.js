@@ -190,11 +190,11 @@ class Stats extends Component {
 	}
 }
 
-export default TMainContainer()(connect(state => state, {
+export default connect(state => state, {
 	querySheets,
 	queryBases,
 	querySources,
 	queryCosts,
 	queryGroups,
 	queryStats
-})(Stats))
+})(TMainContainer()(Stats))

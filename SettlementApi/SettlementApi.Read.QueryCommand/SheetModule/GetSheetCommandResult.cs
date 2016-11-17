@@ -10,6 +10,8 @@ namespace SettlementApi.Read.QueryCommand.SheetModule
     {
         public Guid ID { get; set; }
 
+        public Guid UserID { get; set; }
+
         public string CustomName { get; set; }
 
         public string Contacts { get; set; }
@@ -36,11 +38,11 @@ namespace SettlementApi.Read.QueryCommand.SheetModule
 
         public Guid Source { get; set; }
 
-        public decimal TotalPrice { get; set; }
+        public decimal Total { get; set; }
 
-        public decimal UnitPrice { get; set; }
+        public decimal Unit { get; set; }
 
-        public decimal CostPrice { get; set; }
+        public decimal Cost { get; set; }
 
         public string Remark { get; set; }
 

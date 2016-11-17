@@ -31,7 +31,7 @@ export const queryBases = request => {
 		apiClient.get('dictionary', request).then(result => {
 			dispatch({
 				type: END_QUERY_BASES,
-				result: result.List || []
+				result: result
 			})
 		}, error => {
 			dispatch({
@@ -57,7 +57,7 @@ export const querySources = request => {
 		apiClient.get('dictionary', request).then(result => {
 			dispatch({
 				type: END_QUERY_SOURCES,
-				result: result.List || []
+				result: result
 			})
 		}, error => {
 			dispatch({
@@ -83,7 +83,7 @@ export const queryCosts = request => {
 		apiClient.get('dictionary', request).then(result => {
 			dispatch({
 				type: END_QUERY_COSTS,
-				result: result.List || []
+				result: result
 			})
 		}, error => {
 			dispatch({

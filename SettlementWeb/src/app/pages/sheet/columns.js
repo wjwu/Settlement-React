@@ -41,7 +41,7 @@ const columns = (editFuc) => {
 		width: '7%'
 	}, {
 		title: '总成交额',
-		dataIndex: 'TotalPrice',
+		dataIndex: 'Total',
 		key: 'totalPrice',
 		width: '7%',
 		render: (text) => {
@@ -49,7 +49,7 @@ const columns = (editFuc) => {
 		}
 	}, {
 		title: '总成本',
-		dataIndex: 'CostPrice',
+		dataIndex: 'Cost',
 		key: 'costPrice',
 		width: '7%',
 		render: (text) => {
@@ -57,7 +57,7 @@ const columns = (editFuc) => {
 		}
 	}, {
 		title: '已付',
-		dataIndex: 'ReceivedMoney',
+		dataIndex: 'Received',
 		key: 'receivedMoney',
 		width: '7%',
 		render: (text) => {
@@ -65,7 +65,7 @@ const columns = (editFuc) => {
 		}
 	}, {
 		title: '待付',
-		dataIndex: 'RemainingMoney',
+		dataIndex: 'Remaining',
 		key: 'remainingMoney',
 		width: '7%',
 		render: (text) => {

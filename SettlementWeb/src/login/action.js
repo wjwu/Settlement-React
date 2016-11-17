@@ -4,13 +4,6 @@ import {
 
 const md5 = require('md5')
 
-const checkCaptcha = (captcha, timeSpan) => {
-	return post('captcha/check', {
-		captcha: captcha,
-		timeSpan: timeSpan
-	})
-}
-
 const login = (loginID, password, captcha, timeSpan) => {
 	return post('sign/in', {
 		loginID: loginID,
@@ -22,6 +15,5 @@ const login = (loginID, password, captcha, timeSpan) => {
 
 
 export {
-	checkCaptcha,
 	login
 }

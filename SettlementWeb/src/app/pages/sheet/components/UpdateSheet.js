@@ -48,7 +48,7 @@ class UpdateSheet extends Component {
 	constructor(prop) {
 		super(prop)
 		this.submit = this.submit.bind(this)
-		this.calcUnitPrice = this.calcUnitPrice.bind(this)
+		this.calcUnit = this.calcUnit.bind(this)
 		this.state = {
 			[createCost]: false,
 			[updateCost]: false,
@@ -101,7 +101,7 @@ class UpdateSheet extends Component {
 					let timeFrom = times[0].format('YYYY-MM-DD HH:mm:ss')
 					let timeTo = times[1].format('YYYY-MM-DD HH:mm:ss')
 					let people = getFieldValue('people')
-					let totalPrice = getFieldValue('totalPrice')
+					let total = getFieldValue('total')
 					let remark = getFieldValue('remark')
 					let costs = this.state.costs
 					let receiveds = this.state.receiveds
@@ -119,7 +119,7 @@ class UpdateSheet extends Component {
 						timeFrom,
 						timeTo,
 						people,
-						totalPrice,
+						total,
 						remark,
 						costs,
 						receiveds,
@@ -130,17 +130,17 @@ class UpdateSheet extends Component {
 		}
 	}
 
-	calcUnitPrice() {
+	calcUnit() {
 		const {
 			getFieldValue,
 			setFieldsValue
 		} = this.props.form
 		let people = getFieldValue('people')
-		let totalPrice = getFieldValue('totalPrice')
-		if (people > 0 && totalPrice > 0) {
-			let unitPrice = totalPrice / people
+		let total = getFieldValue('total')
+		if (people > 0 && total > 0) {
+			let unit = total / people
 			setFieldsValue({
-				'unitPrice': unitPrice
+				'unit': unit
 			})
 		}
 	}
@@ -207,43 +207,14 @@ class UpdateSheet extends Component {
 			},
 		}
 
-		const costColumns = genCostColumns((raw, action) => {
-			this.selectedCost = raw
-			if (action === 'update') {
-				this.showModal(updateCost)
-			} else {
-				let costs = this.state.costs
-				let idx = costs.indexOf(raw)
-				costs.splice(idx, 1)
-				this.state.costs = costs
-				this.setState({
-					...this.state
-				})
-			}
-		})
-		const receivedColumns = genReceivedColumns((raw, action) => {
-			this.selectedReceived = raw
-			if (action === 'update') {
-				this.showModal(updateReceived)
-			} else {
-				let receiveds = this.state.receiveds
-				let idx = receiveds.indexOf(raw)
-				receiveds.splice(idx, 1)
-				this.state.receiveds = receiveds
-				this.setState({
-					...this.state
-				})
-			}
-		})
-
 		let costs = this.state.costs
 		let receiveds = this.state.receiveds
 
 		let modal
 		if (this.state[createCost]) {
-			modal = <CreateCost onCancel = {this.hideModal.bind(this,createCost)} costs={costTypes}/>
+			modal = <CreateCost onCancel = {this.hideModal.bind(this,createCost)} costs={costTypes.List}/>
 		} else if (this.state[updateCost]) {
-			modal = <UpdateCost onCancel = {this.hideModal.bind(this,updateCost)} costs={costTypes} cost={this.selectedCost}/>
+			modal = <UpdateCost onCancel = {this.hideModal.bind(this,updateCost)} costs={costTypes.List} cost={this.selectedCost}/>
 		} else if (this.state[createReceived]) {
 			modal = <CreateReceived onCancel = {this.hideModal.bind(this,createReceived)}/>
 		} else if (this.state[updateReceived]) {
@@ -261,7 +232,7 @@ class UpdateSheet extends Component {
 		let role = this.props.sys_user.Role
 		let disabled = false
 		if (role === 'Employee' || role === 'DeptManager') {
-			if (sheet.AuditStatus === 'UnSubmit' || sheet.AuditStatus === 'Fail') {
+			if ((sheet.AuditStatus === 'UnSubmit' || sheet.AuditStatus === 'Fail') && sheet.UserID.toLowerCase() === this.props.sys_user.ID.toLowerCase()) {
 				footer.push(btnSave)
 				footer.push(btnSubmit)
 			} else if (sheet.AuditStatus === 'Auditing') {
@@ -278,6 +249,35 @@ class UpdateSheet extends Component {
 		} else if (role === 'Admin') {
 			footer.push(btnSave)
 		}
+
+		const costColumns = genCostColumns((raw, action) => {
+			this.selectedCost = raw
+			if (action === 'update') {
+				this.showModal(updateCost)
+			} else {
+				let costs = this.state.costs
+				let idx = costs.indexOf(raw)
+				costs.splice(idx, 1)
+				this.state.costs = costs
+				this.setState({
+					...this.state
+				})
+			}
+		}, disabled)
+		const receivedColumns = genReceivedColumns((raw, action) => {
+			this.selectedReceived = raw
+			if (action === 'update') {
+				this.showModal(updateReceived)
+			} else {
+				let receiveds = this.state.receiveds
+				let idx = receiveds.indexOf(raw)
+				receiveds.splice(idx, 1)
+				this.state.receiveds = receiveds
+				this.setState({
+					...this.state
+				})
+			}
+		}, disabled)
 
 		return (
 			<Modal title='修改结算表' visible={true} width={800} footer={footer} onCancel={this.props.onCancel}>
@@ -315,7 +315,7 @@ class UpdateSheet extends Component {
 										})(
 								 			<Select placeholder='请选择培训基地' disabled={disabled}>
 								 			{
-								 				bases.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>)
+								 				bases.List.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>)
 								 			}
 								 			</Select>
 										)
@@ -389,7 +389,7 @@ class UpdateSheet extends Component {
 														type:'integer',
 														message:'请输入培训人数！'
 													}]
-												})(<InputNumber min={0} onChange={this.calcUnitPrice} onBlur={this.calcUnitPrice} disabled={disabled}/>)
+												})(<InputNumber min={0} onChange={this.calcUnit} onBlur={this.calcUnit} disabled={disabled}/>)
 										}
 									</FormItem>
 								</Col>
@@ -407,15 +407,15 @@ class UpdateSheet extends Component {
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='总成交额'>
 										{
-											getFieldDecorator('totalPrice',{
-												initialValue:sheet.TotalPrice,
+											getFieldDecorator('total',{
+												initialValue:sheet.Total,
 												rules:[{required:true},{
 														range:true,
 														min:1,
 														type:'number',
 														message:'请输入总成交额！'
 													}]
-												})(<InputNumber min={0} onChange={this.calcUnitPrice} onBlur={this.calcUnitPrice} disabled={disabled}/>)
+												})(<InputNumber min={0} onChange={this.calcUnit} onBlur={this.calcUnit} disabled={disabled}/>)
 										}
 									</FormItem>
 								</Col>
@@ -433,8 +433,8 @@ class UpdateSheet extends Component {
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='均价'>
 										{
-											getFieldDecorator('unitPrice',{
-												initialValue:sheet.UnitPrice
+											getFieldDecorator('unit',{
+												initialValue:sheet.Unit
 											})(<InputNumber disabled min={0} disabled={disabled}/>)
 										}
 									</FormItem>
@@ -459,7 +459,7 @@ class UpdateSheet extends Component {
 											(
 												<RadioGroup disabled={disabled}>
 													{
-														sources.map(item=><Radio key={item.ID} value={item.ID}>{item.Name}</Radio>)	
+														sources.List.map(item=><Radio key={item.ID} value={item.ID}>{item.Name}</Radio>)	
 													}
 												</RadioGroup>
 											)

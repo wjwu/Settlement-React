@@ -18,7 +18,7 @@ namespace SettlementApi.Read.QueryCommand.StatisticsModule
 
         public string CustomName { get; set; }
 
-        public string ProjectManager { get; set; }
+        public string UserName { get; set; }
 
         public string AuditStatus { get; set; }
 

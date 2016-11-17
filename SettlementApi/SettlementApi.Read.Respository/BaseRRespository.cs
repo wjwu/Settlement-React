@@ -35,6 +35,15 @@ namespace SettlementApi.Read.Respository
                 result.TotalCount = count;
                 result.List = cmd.ExecuteToList<TResult>(entity);
             }
+            else
+            {
+                result.PageIndex = entity.PageIndex;
+                result.PageSize = entity.PageSize;
+                result.SortField = entity.SortField;
+                result.SortType = entity.SortType;
+                result.TotalCount = count;
+                result.List = new List<TResult>();
+            }
 
             return result;
         }

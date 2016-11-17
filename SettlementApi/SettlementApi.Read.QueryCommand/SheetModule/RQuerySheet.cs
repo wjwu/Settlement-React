@@ -22,13 +22,13 @@ namespace SettlementApi.Read.QueryCommand.SheetModule
 
         public string Department { get; set; }
 
-        public decimal TotalPrice { get; set; }
+        public decimal Total { get; set; }
 
-        public decimal CostPrice { get; set; }
+        public decimal Cost { get; set; }
 
-        public decimal ReceivedMoney { get; set; }
+        public decimal Received { get; set; }
 
-        public decimal RemainingMoney { get; set; }
+        public decimal Remaining { get; set; }
 
         public decimal Commission { get; set; }
 

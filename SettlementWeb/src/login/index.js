@@ -10,7 +10,6 @@ import {
 
 import Captcha from './Captcha'
 
-import * as constants from './constants'
 import * as actions from './action'
 
 import {
@@ -60,22 +59,13 @@ class LoginForm extends React.Component {
 						},
 						captcha: {
 							errors: [{
-								message: constants.CAPTCHA_REREQUIRED
+								message: '请重新输入验证码！'
 							}]
 						}
 					})
 				})
 			}
 		})
-	}
-
-	checkCaptcha(rule, value, callback) {
-		if (value) {
-			const timeSpan = this.state.timeSpan
-			actions.checkCaptcha(value, timeSpan).then(() => callback(), error => callback([new Error(error)]))
-		} else {
-			callback()
-		}
 	}
 
 	refreshCaptcha() {
@@ -104,7 +94,7 @@ class LoginForm extends React.Component {
 						rules:[{
 							required:true,
 							whitespace:true,
-							message:constants.ACCOUNT_REQUIRED
+							message:'用户名不能为空！'
 						}]
 					})(
 						<Input placeholder='用户名'/>
@@ -117,7 +107,7 @@ class LoginForm extends React.Component {
 						rules:[{
 							required:true,
 							whitespace:true,
-							message:constants.PASSWORD_REQUIRED
+							message:'密码不能为空！'
 						}]
 					})(
 						<Input type='password' placeholder='密码' />
@@ -126,15 +116,17 @@ class LoginForm extends React.Component {
 				</FormItem>
 				<Row>
 					<Col span='15'>
-						<FormItem hasFeedback>
+						<FormItem>
 						{
 							getFieldDecorator('captcha',{
 								rules:[{
 									required:true,
 									whitespace:true,
-									message:constants.CAPTCHA_REQUIRED
+									message:'验证码不能为空！'
 								},{
-									validator:this.checkCaptcha.bind(this)
+									length:true,
+									max:4,
+									message:'验证码长度不超过4位！'
 								}]
 							})(
 								<Input placeholder='验证码'/>

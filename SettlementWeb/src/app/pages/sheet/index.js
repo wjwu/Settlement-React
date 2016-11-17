@@ -193,7 +193,7 @@ class Sheet extends Component {
 	}
 }
 
-export default TMainContainer()(connect(state => state, {
+export default connect(state => state, {
 	getSheet,
 	querySheets,
 	createSheet,
@@ -203,4 +203,4 @@ export default TMainContainer()(connect(state => state, {
 	querySources,
 	queryCosts,
 	queryGroups
-})(Sheet))
+})(TMainContainer()(Sheet))

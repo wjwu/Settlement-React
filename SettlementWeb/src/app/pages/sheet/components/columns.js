@@ -5,7 +5,7 @@ import {
 } from 'antd'
 import * as colors from '../../../colors'
 
-const genCostColumns = (editFuc) => {
+const genCostColumns = (editFuc, disabled) => {
 	return [{
 		title: '名目',
 		dataIndex: 'TypeName',
@@ -13,8 +13,8 @@ const genCostColumns = (editFuc) => {
 		width: '20%'
 	}, {
 		title: '单价',
-		dataIndex: 'UnitPrice',
-		key: 'unitPrice',
+		dataIndex: 'Unit',
+		key: 'unit',
 		width: '10%',
 	}, {
 		title: '数量',
@@ -53,15 +53,15 @@ const genCostColumns = (editFuc) => {
 		render: (text, raw) => {
 			return (
 				<span>
-					<a href='javascript:;' onClick={editFuc.bind(null,raw,'update')}><Icon type='edit' /></a>&nbsp;&nbsp;
-					<a href='javascript:;' onClick={editFuc.bind(null,raw,'delete')}><Icon type='delete' /></a>
+					<a href='javascript:;' onClick={editFuc.bind(null,raw,'update')} disabled={disabled}><Icon type='edit' /></a>&nbsp;&nbsp;
+					<a href='javascript:;' onClick={editFuc.bind(null,raw,'delete')} disabled={disabled}><Icon type='delete' /></a>
 				</span>
 			)
 		}
 	}]
 }
 
-const genReceivedColumns = (editFuc) => {
+const genReceivedColumns = (editFuc, disabled) => {
 	return [{
 		title: '收款金额',
 		dataIndex: 'Money',
@@ -84,8 +84,8 @@ const genReceivedColumns = (editFuc) => {
 		render: (text, raw) => {
 			return (
 				<span>
-					<a href='javascript:;' onClick={editFuc.bind(null,raw,'update')}><Icon type='edit' /></a>&nbsp;&nbsp;
-					<a href='javascript:;' onClick={editFuc.bind(null,raw,'delete')}><Icon type='delete' /></a>
+					<a href='javascript:;' onClick={editFuc.bind(null,raw,'update')} disabled={disabled}><Icon type='edit' /></a>&nbsp;&nbsp;
+					<a href='javascript:;' onClick={editFuc.bind(null,raw,'delete')} disabled={disabled}><Icon type='delete' /></a>
 				</span>
 			)
 		}

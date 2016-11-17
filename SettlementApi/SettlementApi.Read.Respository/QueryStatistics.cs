@@ -60,17 +60,17 @@ namespace SettlementApi.Read.Respository
             if (sheets != null)
             {
                 result.Amount = sheets.Count;
-                var total = sheets.Sum(p => p.TotalPrice);
+                var total = sheets.Sum(p => p.Total);
                 result.Total = total.ToString("N");
-                var cost = sheets.Sum(p => p.CostPrice);
+                var cost = sheets.Sum(p => p.Cost);
                 result.Cost = cost.ToString("N");
                 result.Profits = $"{total - cost:N}";
                 var commission = sheets.Sum(p => p.Commission);
                 result.Commission = commission.ToString("N");
                 result.AfterProfits = $"{total - cost - commission:N}";
-                var received = sheets.Sum(p => p.ReceivedMoney);
+                var received = sheets.Sum(p => p.Received);
                 result.Received = received.ToString("N");
-                var remaining = sheets.Sum(p => p.RemainingMoney);
+                var remaining = sheets.Sum(p => p.Remaining);
                 result.Remaining = remaining.ToString("N");
                 decimal amount = result.Amount;
                 result.Sources =
@@ -86,8 +86,8 @@ namespace SettlementApi.Read.Respository
                                 {
                                     UserID = p.Key,
                                     Amount = p.Count(),
-                                    Total = p.Sum(s => s.TotalPrice),
-                                    Cost = p.Sum(s => s.CostPrice),
+                                    Total = p.Sum(s => s.Total),
+                                    Cost = p.Sum(s => s.Cost),
                                     Commission = p.Sum(s => s.Commission)
                                 });
 
@@ -151,9 +151,9 @@ namespace SettlementApi.Read.Respository
                             Name = group.Name,
                             Amount = d.Value.Count,
                             Commission = d.Value.Sum(p => p.Commission),
-                            Cost = d.Value.Sum(p => p.CostPrice),
+                            Cost = d.Value.Sum(p => p.Cost),
                             Percent = group.Percent,
-                            Total = d.Value.Sum(p => p.TotalPrice)
+                            Total = d.Value.Sum(p => p.Total)
                         };
                         result.DepartmentProfits.Add(deptProfits);
                     }

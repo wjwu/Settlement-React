@@ -131,7 +131,7 @@ class Group extends Component {
 	}
 
 	doUpdateGroup(type) {
-		if (!this.selectedGroup.group) {
+		if (!this.selectedGroup) {
 			this.props.showGlobleMsg('error', '请选择一个部门！')
 		} else {
 			this.setState({
@@ -211,7 +211,7 @@ class Group extends Component {
 	}
 }
 
-export default TMainContainer()(connect(state => state, {
+export default connect(state => state, {
 	getGroup,
 	queryGroups,
 	createGroup,
@@ -220,4 +220,4 @@ export default TMainContainer()(connect(state => state, {
 	queryUsers,
 	createUser,
 	updateUser
-})(Group))
+})(TMainContainer()(Group))

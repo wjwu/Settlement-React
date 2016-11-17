@@ -76,7 +76,7 @@ class CreateSheet extends Component {
 				let timeFrom = times[0].format('YYYY-MM-DD HH:mm:ss')
 				let timeTo = times[1].format('YYYY-MM-DD HH:mm:ss')
 				let people = getFieldValue('people')
-				let totalPrice = getFieldValue('totalPrice')
+				let total = getFieldValue('total')
 				let remark = getFieldValue('remark')
 				let costs = this.state.costs
 				let receiveds = this.state.receiveds
@@ -93,7 +93,7 @@ class CreateSheet extends Component {
 					timeFrom,
 					timeTo,
 					people,
-					totalPrice,
+					total,
 					remark,
 					costs,
 					receiveds,
@@ -110,9 +110,9 @@ class CreateSheet extends Component {
 		} = this.props.form
 
 		let people = getFieldValue('people')
-		let totalPrice = getFieldValue('totalPrice')
-		if (people > 0 && totalPrice > 0) {
-			let unitPrice = totalPrice / people
+		let total = getFieldValue('total')
+		if (people > 0 && total > 0) {
+			let unitPrice = total / people
 			setFieldsValue({
 				'unitPrice': unitPrice
 			})
@@ -154,7 +154,7 @@ class CreateSheet extends Component {
 	render() {
 		const getFieldDecorator = this.props.form.getFieldDecorator
 		const creating = this.props.sheet.creating
-		const {
+		let {
 			bases,
 			sources,
 			costs: costTypes
@@ -182,7 +182,7 @@ class CreateSheet extends Component {
 					...this.state
 				})
 			}
-		})
+		}, false)
 		const receivedColumns = genReceivedColumns((raw, action) => {
 			this.selectedReceived = raw
 			if (action === 'update') {
@@ -196,14 +196,14 @@ class CreateSheet extends Component {
 					...this.state
 				})
 			}
-		})
+		}, false)
 		let costs = this.state.costs
 		let receiveds = this.state.receiveds
 		let modal
 		if (this.state[createCost]) {
-			modal = <CreateCost onCancel = {this.hideModal.bind(this,createCost)} costs={costTypes}/>
+			modal = <CreateCost onCancel = {this.hideModal.bind(this,createCost)} costs={costTypes.List}/>
 		} else if (this.state[updateCost]) {
-			modal = <UpdateCost onCancel = {this.hideModal.bind(this,updateCost)} costs={costTypes} cost={this.selectedCost}/>
+			modal = <UpdateCost onCancel = {this.hideModal.bind(this,updateCost)} costs={costTypes.List} cost={this.selectedCost}/>
 		} else if (this.state[createReceived]) {
 			modal = <CreateReceived onCancel = {this.hideModal.bind(this,createReceived)}/>
 		} else if (this.state[updateReceived]) {
@@ -251,7 +251,7 @@ class CreateSheet extends Component {
 										})(
 								 			<Select placeholder='请选择培训基地'>
 								 			{
-								 				bases.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>)
+								 				bases.List.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>)
 								 			}
 								 			</Select>
 							          	)
@@ -335,7 +335,7 @@ class CreateSheet extends Component {
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='总成交额'>
 										{
-											getFieldDecorator('totalPrice',{
+											getFieldDecorator('total',{
 												initialValue:0,
 												rules:[{required:true},{
 														range:true,
@@ -386,7 +386,7 @@ class CreateSheet extends Component {
 											(
 												<RadioGroup>
 													{
-														sources.map(item=><Radio key={item.ID} value={item.ID}>{item.Name}</Radio>)	
+														sources.List.map(item=><Radio key={item.ID} value={item.ID}>{item.Name}</Radio>)	
 													}
 												</RadioGroup>
 											)

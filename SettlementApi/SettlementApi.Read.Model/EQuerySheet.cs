@@ -25,7 +25,7 @@ namespace SettlementApi.Read.Model
         [TableQueryAlias("U")]
         [AliasField("Name")]
         [LikeField]
-        public string ProjectManager { get; set; }
+        public string UserName { get; set; }
 
         [TableQueryAlias("S")]
         [RangeField("TimeFrom", RangeEnum.GreaterThan)]

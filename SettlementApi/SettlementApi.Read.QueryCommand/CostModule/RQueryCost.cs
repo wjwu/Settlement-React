@@ -12,7 +12,7 @@ namespace SettlementApi.Read.QueryCommand.CostModule
 
         public int Amount { get; set; }
 
-        public decimal UnitPrice { get; set; }
+        public decimal Unit { get; set; }
 
         public decimal Total { get; set; }
 

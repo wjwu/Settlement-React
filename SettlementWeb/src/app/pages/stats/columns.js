@@ -38,32 +38,32 @@ export const sheetColumns = () => {
 		width: '7%'
 	}, {
 		title: '总成交额',
-		dataIndex: 'TotalPrice',
-		key: 'totalPrice',
+		dataIndex: 'Total',
+		key: 'total',
 		width: '7%',
 		render: (text) => {
 			return <b>{`￥${text}`}</b>
 		}
 	}, {
 		title: '总成本',
-		dataIndex: 'CostPrice',
-		key: 'costPrice',
+		dataIndex: 'Cost',
+		key: 'cost',
 		width: '7%',
 		render: (text) => {
 			return <b>{`￥${text}`}</b>
 		}
 	}, {
 		title: '已付',
-		dataIndex: 'ReceivedMoney',
-		key: 'receivedMoney',
+		dataIndex: 'Received',
+		key: 'received',
 		width: '7%',
 		render: (text) => {
 			return <b>{`￥${text}`}</b>
 		}
 	}, {
 		title: '待付',
-		dataIndex: 'RemainingMoney',
-		key: 'remainingMoney',
+		dataIndex: 'Remaining',
+		key: 'remaining',
 		width: '7%',
 		render: (text) => {
 			return <b>{`￥${text}`}</b>
@@ -117,17 +117,26 @@ export const selfColumns = () => {
 		title: '成交合计',
 		dataIndex: 'Total',
 		key: 'total',
-		width: '9%'
+		width: '9%',
+		render: (text) => {
+			return <b>{`￥${text}`}</b>
+		}
 	}, {
 		title: '成本合计',
 		dataIndex: 'Cost',
 		key: 'cost',
-		width: '9%'
+		width: '9%',
+		render: (text) => {
+			return <b>{`￥${text}`}</b>
+		}
 	}, {
 		title: '个人提成',
 		dataIndex: 'Commission',
 		key: 'commission',
-		width: '9%'
+		width: '9%',
+		render: (text) => {
+			return <b>{`￥${text}`}</b>
+		}
 	}]
 }
 

@@ -50,7 +50,7 @@ class SearchPanel extends Component {
 			}
 			let payStatus = getFieldValue('payStatus')
 			let source = getFieldValue('source')
-			let projectManager = getFieldValue('projectManager') || ''
+			let userName = getFieldValue('userName') || ''
 			this.props.onSearch({
 				groups,
 				base,
@@ -58,7 +58,7 @@ class SearchPanel extends Component {
 				timeTo,
 				payStatus,
 				source,
-				projectManager
+				userName
 			})
 		})
 	}
@@ -89,10 +89,10 @@ class SearchPanel extends Component {
 
 		let groups = this.props.group.groups
 
-		let basesOptions = bases ? bases.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>) : []
+		let basesOptions = bases ? bases.List.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>) : []
 		basesOptions.unshift(<Option key='all' value=''>全部</Option>)
 
-		let sourcesOptions = sources ? sources.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>) : []
+		let sourcesOptions = sources ? sources.List.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>) : []
 		sourcesOptions.unshift(<Option key='all' value=''>全部</Option>)
 
 		let parentGroup = this.props.sys_user.ParentGroup
@@ -164,7 +164,7 @@ class SearchPanel extends Component {
 					<Col {...colLayout}>
 						<FormItem {...formItemLayout} label='签单人'>
 						{
-							getFieldDecorator('projectManager')(<Input />)
+							getFieldDecorator('userName')(<Input />)
 						}
 						</FormItem>
 					</Col>

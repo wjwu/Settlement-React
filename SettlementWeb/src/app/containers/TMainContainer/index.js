@@ -42,19 +42,18 @@ const TMainContainer = () => {
 					type,
 					msg
 				} = this.props.message
-
-				showGlobleMsg(type, msg)
+				if (type && msg) {
+					showGlobleMsg(type, msg)
+				}
 			}
 
 			doSignOut() {
-				const {
-					showGlobleMsg
-				} = this.props
 				confirm({
 					title: '退出系统',
 					content: '确定要退出结算系统？',
 					onOk() {
 						return signOut().then(result => {
+							sessionStorage.clear()
 							showGlobleMsg('success', '退出成功！')
 							setTimeout(() => {
 								window.location.href = '/'

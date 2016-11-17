@@ -122,6 +122,7 @@ class Dictionary extends Component {
 			sources,
 			costs
 		} = this.props.dictionary
+
 		let empty = {
 			List: [],
 			TotalCount: 0
@@ -179,10 +180,10 @@ class Dictionary extends Component {
 	}
 }
 
-export default TMainContainer()(connect(state => state, {
+export default connect(state => state, {
 	queryBases,
 	querySources,
 	queryCosts,
 	createDictionary,
 	updateDictionary
-})(Dictionary))
+})(TMainContainer()(Dictionary))
