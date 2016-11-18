@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SettlementApi.CommandBus;
+using SettlementApi.Common;
 using SettlementApi.Common.Mapper;
 using SettlementApi.EventBus;
 using SettlementApi.Write.BusCommand.SheetModule;
@@ -28,17 +29,26 @@ namespace SettlementApi.Write.BusinessLogic
                 command.Submit ? AuditStatus.Auditing : AuditStatus.UnSubmit);
             sheet.PayStatus = Enum.GetName(typeof(PayStatus), PayStatus.Unpaid);
             sheet.Days = sheet.TimeTo.Subtract(sheet.TimeFrom).Days;
+            //单价
             sheet.Unit = Math.Round(sheet.Total/sheet.People);
-            costs?.ForEach(cost => { sheet.CostPrice += cost.Amount*cost.Unit; });
+            //成本
+            costs?.ForEach(cost => { sheet.Cost += cost.Amount*cost.Unit; });
+            //收款
             receiveds?.ForEach(received => { sheet.Received += received.Money; });
+            //尾款
             sheet.Remaining = sheet.Total - sheet.Received;
-
             var projectManager = new UserBusinessLogic().GetEntity(ServiceContext.OperatorID);
             if (projectManager == null)
                 throw new BussinessException(CommonRes.InvalidOperation);
             var group = new GroupBusinessLogic().GetEntity(projectManager.Group);
+            //提成比例
             sheet.Percent = group.Percent;
-            sheet.Commission = (sheet.Total - sheet.CostPrice)*sheet.Percent;
+            //税费
+            sheet.Tax = sheet.Total*sheet.TaxRate;
+            //业绩
+            sheet.Achievement = sheet.Total - sheet.Cost - sheet.Tax;
+            //提成
+            sheet.Commission = sheet.Achievement * sheet.Percent;
 
             sheet.LastModifyUser = ServiceContext.OperatorID;
             Create("Sheet.Create", sheet);
@@ -90,6 +100,16 @@ namespace SettlementApi.Write.BusinessLogic
                 : Enum.GetName(typeof(AuditStatus), AuditStatus.Fail);
             Update("Sheet.UpdateAuditStatus",
                 new {command.ID, AuditStatus = auditStatus, LastModifyUser = ServiceContext.OperatorID});
+            if (command.Pass)
+            {
+                this.Publish(new UpdateSheetEvent
+                {
+                    UserID = sheet.UserID,
+                    AuditStatus = AuditStatus.Pass,
+                    SheetID = command.ID,
+                    Profit = sheet.Total-sheet.Cost
+                });
+            }
         }
 
         public void Execute(UpdateSheetCommand command)
@@ -109,25 +129,29 @@ namespace SettlementApi.Write.BusinessLogic
                 newSheet.AuditStatus = Enum.GetName(typeof(AuditStatus), AuditStatus.Auditing);
             else
                 newSheet.AuditStatus = oldSheet.AuditStatus;
-
-            costs?.ForEach(cost => { newSheet.CostPrice += cost.Amount*cost.Unit; });
+            //成本
+            costs?.ForEach(cost => { newSheet.Cost += cost.Amount*cost.Unit; });
+            //收款
             receiveds?.ForEach(received => { newSheet.Received += received.Money; });
+            //尾款
             newSheet.Remaining = newSheet.Total - newSheet.Received;
-
-            var user = new UserBusinessLogic().GetEntity(ServiceContext.OperatorID);
-            if (user == null)
-                throw new BussinessException(CommonRes.InvalidOperation);
-
-            newSheet.Commission = (newSheet.Total - newSheet.CostPrice)*oldSheet.Percent;
-
+            //税费
+            newSheet.Tax = newSheet.Total * newSheet.TaxRate;
+            //业绩
+            newSheet.Achievement = newSheet.Total - newSheet.Cost - newSheet.Tax;
+            //提成
+            newSheet.Commission = newSheet.Achievement * oldSheet.Percent;
             newSheet.LastModifyUser = ServiceContext.OperatorID;
             Update("Sheet.Update", newSheet);
 
             this.Publish(new UpdateSheetEvent
             {
                 SheetID = command.ID,
+                UserID = oldSheet.UserID,
                 Costs = costs,
-                Receiveds = receiveds
+                Receiveds = receiveds,
+                Profit = newSheet.Total - newSheet.Cost,
+                AuditStatus = EnumUtity.ToEnum(oldSheet.AuditStatus, AuditStatus.None)
             });
         }
 

@@ -49,6 +49,7 @@ class UpdateSheet extends Component {
 		super(prop)
 		this.submit = this.submit.bind(this)
 		this.calcUnit = this.calcUnit.bind(this)
+		this.calcTax = this.calcTax.bind(this)
 		this.state = {
 			[createCost]: false,
 			[updateCost]: false,
@@ -102,6 +103,7 @@ class UpdateSheet extends Component {
 					let timeTo = times[1].format('YYYY-MM-DD HH:mm:ss')
 					let people = getFieldValue('people')
 					let total = getFieldValue('total')
+					let taxRate = getFieldValue('taxRate')
 					let remark = getFieldValue('remark')
 					let costs = this.state.costs
 					let receiveds = this.state.receiveds
@@ -123,6 +125,7 @@ class UpdateSheet extends Component {
 						remark,
 						costs,
 						receiveds,
+						taxRate,
 						submit
 					})
 				}
@@ -141,6 +144,22 @@ class UpdateSheet extends Component {
 			let unit = total / people
 			setFieldsValue({
 				'unit': unit
+			})
+		}
+	}
+
+	calcTax() {
+		const {
+			getFieldValue,
+			setFieldsValue
+		} = this.props.form
+
+		let taxRate = getFieldValue('taxRate')
+		let total = getFieldValue('total')
+		if (taxRate > 0 && total > 0) {
+			let tax = total * taxRate
+			setFieldsValue({
+				'tax': tax
 			})
 		}
 	}
@@ -435,7 +454,7 @@ class UpdateSheet extends Component {
 										{
 											getFieldDecorator('unit',{
 												initialValue:sheet.Unit
-											})(<InputNumber disabled min={0} disabled={disabled}/>)
+											})(<InputNumber disabled min={0}/>)
 										}
 									</FormItem>
 								</Col>
@@ -447,6 +466,29 @@ class UpdateSheet extends Component {
 											getFieldDecorator('address',{
 												initialValue:sheet.Address
 											})(<Input disabled={disabled}/>)
+										}
+									</FormItem>
+								</Col>
+								<Col xs={12}>
+									<FormItem {...formItemLayout} label='税率'>
+										{
+											getFieldDecorator('taxRate',{
+												initialValue:sheet.TaxRate,
+												rules:[{
+													required:true
+												}]
+											})(<InputNumber disabled={disabled} step={0.01} min={0} onChange={this.calcTax} onBlur={this.calcTax}/>)
+										}
+									</FormItem>
+								</Col>
+							</Row>
+							<Row>
+								<Col xs={12}>
+								</Col>
+								<Col xs={12}>
+									<FormItem {...formItemLayout} label='税费'>
+										{
+											getFieldDecorator('tax',{initialValue:sheet.Tax})(<InputNumber disabled min={0}/>)
 										}
 									</FormItem>
 								</Col>

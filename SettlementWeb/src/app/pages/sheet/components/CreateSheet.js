@@ -45,7 +45,8 @@ const updateReceived = 'updateReceived'
 class CreateSheet extends Component {
 	constructor(prop) {
 		super(prop)
-		this.calcUnitPrice = this.calcUnitPrice.bind(this)
+		this.calcUnit = this.calcUnit.bind(this)
+		this.calcTax = this.calcTax.bind(this)
 		this.state = {
 			[createCost]: false,
 			[updateCost]: false,
@@ -77,6 +78,7 @@ class CreateSheet extends Component {
 				let timeTo = times[1].format('YYYY-MM-DD HH:mm:ss')
 				let people = getFieldValue('people')
 				let total = getFieldValue('total')
+				let taxRate = getFieldValue('taxRate')
 				let remark = getFieldValue('remark')
 				let costs = this.state.costs
 				let receiveds = this.state.receiveds
@@ -95,6 +97,7 @@ class CreateSheet extends Component {
 					people,
 					total,
 					remark,
+					taxRate,
 					costs,
 					receiveds,
 					submit
@@ -103,7 +106,7 @@ class CreateSheet extends Component {
 		})
 	}
 
-	calcUnitPrice() {
+	calcUnit() {
 		const {
 			getFieldValue,
 			setFieldsValue
@@ -112,9 +115,26 @@ class CreateSheet extends Component {
 		let people = getFieldValue('people')
 		let total = getFieldValue('total')
 		if (people > 0 && total > 0) {
-			let unitPrice = total / people
+			let unit = total / people
 			setFieldsValue({
-				'unitPrice': unitPrice
+				'unit': unit
+			})
+		}
+		this.calcTax()
+	}
+
+	calcTax() {
+		const {
+			getFieldValue,
+			setFieldsValue
+		} = this.props.form
+
+		let taxRate = getFieldValue('taxRate')
+		let total = getFieldValue('total')
+		if (taxRate > 0 && total > 0) {
+			let tax = total * taxRate
+			setFieldsValue({
+				'tax': tax
 			})
 		}
 	}
@@ -319,7 +339,7 @@ class CreateSheet extends Component {
 														type:'integer',
 														message:'请输入培训人数！'
 													}]
-												})(<InputNumber min={0} onChange={this.calcUnitPrice} onBlur={this.calcUnitPrice}/>)
+												})(<InputNumber min={0} onChange={this.calcUnit} onBlur={this.calcUnit}/>)
 										}
 									</FormItem>
 								</Col>
@@ -343,7 +363,7 @@ class CreateSheet extends Component {
 														type:'number',
 														message:'请输入总成交额！'
 													}]
-												})(<InputNumber min={0} onChange={this.calcUnitPrice} onBlur={this.calcUnitPrice}/>)
+												})(<InputNumber min={0} onChange={this.calcUnit} onBlur={this.calcUnit}/>)
 										}
 									</FormItem>
 								</Col>
@@ -359,7 +379,7 @@ class CreateSheet extends Component {
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='均价'>
 										{
-											getFieldDecorator('unitPrice',{initialValue:0})(<InputNumber disabled min={0}/>)
+											getFieldDecorator('unit',{initialValue:0})(<InputNumber disabled min={0}/>)
 										}
 									</FormItem>
 								</Col>
@@ -369,6 +389,29 @@ class CreateSheet extends Component {
 									<FormItem {...formItemLayout} label='客户地址'>
 										{
 											getFieldDecorator('address')(<Input/>)
+										}
+									</FormItem>
+								</Col>
+								<Col xs={12}>
+									<FormItem {...formItemLayout} label='税率'>
+										{
+											getFieldDecorator('taxRate',{
+												initialValue:0,
+												rules:[{
+													required:true
+												}]
+											})(<InputNumber step={0.01} min={0} onChange={this.calcTax} onBlur={this.calcTax}/>)
+										}
+									</FormItem>
+								</Col>
+							</Row>
+							<Row>
+								<Col xs={12}>
+								</Col>
+								<Col xs={12}>
+									<FormItem {...formItemLayout} label='税费'>
+										{
+											getFieldDecorator('tax',{initialValue:0})(<InputNumber disabled min={0}/>)
 										}
 									</FormItem>
 								</Col>

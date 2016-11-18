@@ -95,7 +95,7 @@ namespace SettlementApi.Write.Model
         /// <summary>
         /// 总成本
         /// </summary>
-        public decimal CostPrice { get; set; }
+        public decimal Cost { get; set; }
 
         /// <summary>
         /// 已收金额
@@ -116,6 +116,21 @@ namespace SettlementApi.Write.Model
         /// 提成比例
         /// </summary>
         public decimal Percent { get; set; }
+
+        /// <summary>
+        /// 税率
+        /// </summary>
+        public decimal TaxRate { get; set; }
+
+        /// <summary>
+        /// 税费
+        /// </summary>
+        public decimal Tax { get; set; }
+
+        /// <summary>
+        /// 业绩
+        /// </summary>
+        public decimal Achievement { get; set; }
 
         /// <summary>
         /// 备注

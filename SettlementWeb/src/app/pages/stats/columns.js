@@ -10,22 +10,22 @@ export const sheetColumns = () => {
 		title: '签单人',
 		dataIndex: 'UserName',
 		key: 'userName',
-		width: '9%'
+		width: '7%'
 	}, {
 		title: '所在部门',
 		dataIndex: 'Department',
 		key: 'department',
-		width: '9%'
+		width: '7%'
 	}, {
 		title: '客户名称',
 		dataIndex: 'CustomName',
 		key: 'customName',
-		width: '13%'
+		width: '11.5%'
 	}, {
 		title: '培训地点',
 		dataIndex: 'Base',
 		key: 'base',
-		width: '13%',
+		width: '11.5%',
 	}, {
 		title: '培训时间',
 		dataIndex: 'TimeFrom',
@@ -69,6 +69,14 @@ export const sheetColumns = () => {
 			return <b>{`￥${text}`}</b>
 		}
 	}, {
+		title: '税费',
+		dataIndex: 'Tax',
+		key: 'tax',
+		width: '7%',
+		render: (text) => {
+			return <b>{`￥${text}`}</b>
+		}
+	}, {
 		title: '个人提成',
 		dataIndex: 'Commission',
 		key: 'commission',
@@ -97,27 +105,39 @@ export const selfColumns = () => {
 		title: '姓名',
 		dataIndex: 'Name',
 		key: 'name',
-		width: '9%'
+		width: '12.5%'
 	}, {
 		title: '所在部门',
 		dataIndex: 'Department',
 		key: 'department',
-		width: '9%'
+		width: '12.5%'
 	}, {
 		title: '提成比例',
 		dataIndex: 'Percent',
 		key: 'percent',
-		width: '9%'
+		width: '12.5%',
+		render: (text) => {
+			return <b>{`${text*100}%`}</b>
+		}
 	}, {
 		title: '签单数量',
 		dataIndex: 'Amount',
 		key: 'amount',
-		width: '9%'
+		width: '12.5%',
+		sorter: (a, b) => {
+			return a.Amount - b.Amount
+		},
+		render: (text) => {
+			return <b>{text}</b>
+		}
 	}, {
 		title: '成交合计',
 		dataIndex: 'Total',
 		key: 'total',
-		width: '9%',
+		width: '12.5%',
+		sorter: (a, b) => {
+			return a.Total - b.Total
+		},
 		render: (text) => {
 			return <b>{`￥${text}`}</b>
 		}
@@ -125,7 +145,10 @@ export const selfColumns = () => {
 		title: '成本合计',
 		dataIndex: 'Cost',
 		key: 'cost',
-		width: '9%',
+		width: '12.5%',
+		sorter: (a, b) => {
+			return a.Cost - b.Cost
+		},
 		render: (text) => {
 			return <b>{`￥${text}`}</b>
 		}
@@ -133,7 +156,21 @@ export const selfColumns = () => {
 		title: '个人提成',
 		dataIndex: 'Commission',
 		key: 'commission',
-		width: '9%',
+		width: '12.5%',
+		sorter: (a, b) => {
+			return a.Commission - b.Commission
+		},
+		render: (text) => {
+			return <b>{`￥${text}`}</b>
+		}
+	}, {
+		title: '个人业绩',
+		dataIndex: 'Achievement',
+		key: 'achievement',
+		width: '12.5%',
+		sorter: (a, b) => {
+			return a.Achievement - b.Achievement
+		},
 		render: (text) => {
 			return <b>{`￥${text}`}</b>
 		}
@@ -145,31 +182,69 @@ export const deptColumns = () => {
 		title: '所在部门',
 		dataIndex: 'Name',
 		key: 'name',
-		width: '9%'
+		width: '14.28%'
 	}, {
 		title: '提成比例',
 		dataIndex: 'Percent',
 		key: 'percent',
-		width: '9%'
+		width: '14.28%',
+		render: (text) => {
+			return <b>{`${text*100}%`}</b>
+		}
 	}, {
 		title: '签单数量',
 		dataIndex: 'Amount',
 		key: 'amount',
-		width: '9%'
+		width: '14.28%',
+		sorter: (a, b) => {
+			return a.Amount - b.Amount
+		},
+		render: (text) => {
+			return <b>{`￥${text}`}</b>
+		}
 	}, {
 		title: '成交合计',
 		dataIndex: 'Total',
 		key: 'total',
-		width: '9%'
+		width: '14.28%',
+		sorter: (a, b) => {
+			return a.Total - b.Total
+		},
+		render: (text) => {
+			return <b>{`￥${text}`}</b>
+		}
 	}, {
 		title: '成本合计',
 		dataIndex: 'Cost',
 		key: 'cost',
-		width: '9%'
+		width: '14.28%',
+		sorter: (a, b) => {
+			return a.Cost - b.Cost
+		},
+		render: (text) => {
+			return <b>{`￥${text}`}</b>
+		}
 	}, {
 		title: '部门提成',
 		dataIndex: 'Commission',
 		key: 'commission',
-		width: '9%'
+		width: '14.28%',
+		sorter: (a, b) => {
+			return a.Commission - b.Commission
+		},
+		render: (text) => {
+			return <b>{`￥${text}`}</b>
+		}
+	}, {
+		title: '部门业绩',
+		dataIndex: 'Achievement',
+		key: 'achievement',
+		width: '14.28%',
+		sorter: (a, b) => {
+			return a.Achievement - b.Achievement
+		},
+		render: (text) => {
+			return <b>{`￥${text}`}</b>
+		}
 	}]
 }

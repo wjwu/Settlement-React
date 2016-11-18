@@ -9,9 +9,9 @@ namespace SettlementApi.Read.QueryCommand.StatisticsModule
         public int Amount { get; set; }
         public string Total { get; set; }
         public string Cost { get; set; }
-        public string Profits { get; set; }
+        public string Profit { get; set; }
         public string Commission { get; set; }
-        public string AfterProfits { get; set; }
+        public string AfterProfit { get; set; }
         public string Received { get; set; }
         public string Remaining { get; set; }
 
@@ -34,6 +34,7 @@ namespace SettlementApi.Read.QueryCommand.StatisticsModule
         public decimal Total { get; set; }
         public decimal Cost { get; set; }
         public decimal Commission { get; set; }
+        public decimal Achievement { get; set; }
     }
 
     public class DepartmentProfits
@@ -45,5 +46,6 @@ namespace SettlementApi.Read.QueryCommand.StatisticsModule
         public decimal Total { get; set; }
         public decimal Cost { get; set; }
         public decimal Commission { get; set; }
+        public decimal Achievement { get; set; }
     }
 }

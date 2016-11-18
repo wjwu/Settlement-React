@@ -17,6 +17,8 @@ SELECT  S.[ID] ,
         S.[Received] ,
         S.[Remaining] ,
         S.[Commission] ,
+        S.[Tax],
+        S.[Achievement],
         S.[CreateTime]
 FROM    [dbo].[Sheet] AS S
         LEFT JOIN dbo.[User] AS U ON S.UserID = U.ID
@@ -45,6 +47,8 @@ SELECT TOP 1 [ID]
       ,[Total]
       ,[Unit]
       ,[Cost]
+      ,[TaxRate]
+      ,[Tax]
       ,[Remark]
   FROM [dbo].[Sheet] WHERE [ID]=@ID
   ]]>
@@ -52,6 +56,7 @@ SELECT TOP 1 [ID]
   <command name="Sheet.GetByID" type="text" connection="local">
     <![CDATA[
 SELECT TOP 1 [ID]
+      ,[UserID]
       ,[AuditStatus]
       ,[TimeFrom]
       ,[TimeTo]

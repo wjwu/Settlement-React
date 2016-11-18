@@ -33,7 +33,7 @@ class UpdateCost extends Component {
 			if (!errors) {
 				const type = getFieldValue('type')
 				const name = this.selectName || this.props.cost.TypeName
-				const unitPrice = getFieldValue('unitPrice')
+				const unit = getFieldValue('unit')
 				const amount = getFieldValue('amount')
 				const status = getFieldValue('status')
 				const remark = getFieldValue('remark')
@@ -41,11 +41,11 @@ class UpdateCost extends Component {
 					ID: this.props.cost.ID,
 					Type: type,
 					TypeName: name,
-					UnitPrice: unitPrice,
+					Unit: unit,
 					Amount: amount,
 					Status: status,
 					Remark: remark,
-					Total: unitPrice * amount
+					Total: unit * amount
 				}, 'update')
 			}
 		})
@@ -94,8 +94,8 @@ class UpdateCost extends Component {
 					</FormItem>
 					<FormItem {...formItemLayout} label='单价'>
 					{
-						getFieldDecorator('unitPrice',{
-							initialValue:cost.UnitPrice,
+						getFieldDecorator('unit',{
+							initialValue:cost.Unit,
 							rules:[{
 								required:true
 							},{

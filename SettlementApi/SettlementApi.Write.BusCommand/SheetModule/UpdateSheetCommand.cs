@@ -30,9 +30,9 @@ namespace SettlementApi.Write.BusCommand.SheetModule
 
         public Guid Source { get; set; }
 
-        public decimal TotalPrice { get; set; }
+        public decimal Total { get; set; }
 
-        public decimal CostPrice { get; set; }
+        public decimal TaxRate { get; set; }
 
         public string Remark { get; set; }
 

@@ -8,7 +8,7 @@ namespace SettlementApi.Write.BusCommand.SheetModule
 
         public int Amount { get; set; }
 
-        public decimal UnitPrice { get; set; }
+        public decimal Unit { get; set; }
 
         public string Status { get; set; }
 

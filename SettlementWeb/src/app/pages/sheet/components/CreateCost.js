@@ -35,7 +35,7 @@ class CreateCost extends Component {
 			if (!errors) {
 				const type = getFieldValue('type')
 				const name = this.selectName
-				const unitPrice = getFieldValue('unitPrice')
+				const unit = getFieldValue('unit')
 				const amount = getFieldValue('amount')
 				const status = getFieldValue('status')
 				const remark = getFieldValue('remark')
@@ -43,11 +43,11 @@ class CreateCost extends Component {
 					ID: random(),
 					Type: type,
 					TypeName: name,
-					UnitPrice: unitPrice,
+					Unit: unit,
 					Amount: amount,
 					Status: status,
 					Remark: remark,
-					Total: unitPrice * amount
+					Total: unit * amount
 				}, 'create')
 			}
 		})
@@ -94,7 +94,7 @@ class CreateCost extends Component {
 					</FormItem>
 					<FormItem {...formItemLayout} label='单价'>
 					{
-						getFieldDecorator('unitPrice',{
+						getFieldDecorator('unit',{
 							initialValue:0,
 							rules:[{
 								required:true

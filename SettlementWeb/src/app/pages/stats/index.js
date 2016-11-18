@@ -132,7 +132,7 @@ class Stats extends Component {
 					<TCol xs={24} sm={24} md={8} lg={8}>
 						<TCard title='提成信息'>
 							<dl className={styles.stats}>
-								<dt><h1>{stats.Profits}</h1></dt>
+								<dt><h1>{stats.Profit}</h1></dt>
 								<dd>总利润</dd>
 							</dl>
 							<dl className={styles.stats}>
@@ -140,7 +140,7 @@ class Stats extends Component {
 								<dd>总提成</dd>
 							</dl>
 							<dl className={styles.stats}>
-								<dt><h1>{stats.AfterProfits}</h1></dt>
+								<dt><h1>{stats.AfterProfit}</h1></dt>
 								<dd>提成后利润</dd>
 							</dl>
 						</TCard>
