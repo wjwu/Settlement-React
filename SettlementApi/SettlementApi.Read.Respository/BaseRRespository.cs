@@ -6,7 +6,7 @@ using SettlementApi.Read.QueryCommand;
 
 namespace SettlementApi.Read.Respository
 {
-    public class BaseRRespository
+    public class BaseRRespository : Context.Context
     {
         public BasePagingCommandResult<TResult> QueryPaging<TQuery, TResult, TCommand>(string commandName,
             TCommand command)

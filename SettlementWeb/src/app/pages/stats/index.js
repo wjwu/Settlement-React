@@ -95,8 +95,8 @@ class Stats extends Component {
 			sheets
 		} = this.props.sheet
 		let stats = this.props.stats.stats || {}
-		let userProfits = stats.UserProfits || []
-		let deptProfits = stats.DepartmentProfits || []
+		let userProfit = stats.UserProfit || []
+		let deptProfit = stats.DepartmentProfit || []
 		let empty = {
 			List: [],
 			TotalCount: 0
@@ -161,12 +161,12 @@ class Stats extends Component {
 				<Row gutter={24}>
 					<TCol xs={24} sm={24} md={12} lg={12}>
 						<TCard>
-		                    <ReactEcharts option={sourceOption(stats.Sources)} style={{height: 300}}/>
+		                    <ReactEcharts option={sourceOption(stats.Source)} style={{height: 300}}/>
 						</TCard>
 					</TCol>
 					<TCol xs={24} sm={24} md={12} lg={12}>
 						<TCard>
-							<ReactEcharts option={deptOption(stats.Departments)} style={{height: 300}}/>
+							<ReactEcharts option={deptOption(stats.Department)} style={{height: 300}}/>
 						</TCard>
 					</TCol>
 				</Row>
@@ -177,10 +177,10 @@ class Stats extends Component {
 								<TTable key='tamount' bordered columns={sheetColumns()} total={sheets.TotalCount} dataSource={sheets.List} loading={querying} onLoad={this.onTTableLoad}/>
 							</TabPane>
 							<TabPane tab='个人提成/业绩' key='self'>
-								<TTable key='tself' bordered pagination={false} columns={selfColumns()} total={userProfits.length} dataSource={userProfits} onLoad={()=>{}}/>
+								<TTable key='tself' bordered pagination={false} columns={selfColumns()} total={userProfit.length} dataSource={userProfit} onLoad={()=>{}}/>
 							</TabPane>
 							<TabPane tab='部门提成/业绩' key='dept'>
-								<TTable key='tdept' bordered pagination={false} columns={deptColumns()} total={deptProfits.length} dataSource={deptProfits} onLoad={()=>{}}/>
+								<TTable key='tdept' bordered pagination={false} columns={deptColumns()} total={deptProfit.length} dataSource={deptProfit} onLoad={()=>{}}/>
 							</TabPane>
 						</Tabs>
 					</TCol>

@@ -17,6 +17,9 @@ namespace SettlementApi.Read.Model
         public string[] Path { get; set; }
 
         [TableQueryAlias("S")]
+        public Guid UserID { get; set; }
+
+        [TableQueryAlias("S")]
         public Guid? Base { get; set; }
 
         [TableQueryAlias("S")]

@@ -15,16 +15,16 @@ namespace SettlementApi.Read.QueryCommand.StatisticsModule
         public string Received { get; set; }
         public string Remaining { get; set; }
 
-        public Dictionary<string, decimal> Sources { get; set; }
+        public Dictionary<string, decimal> Source { get; set; }
 
-        public Dictionary<string, decimal> Departments { get; set; }
+        public Dictionary<string, decimal> Department { get; set; }
 
-        public List<UserProfits> UserProfits { get; set; }
+        public List<UserProfit> UserProfit { get; set; }
 
-        public List<DepartmentProfits> DepartmentProfits { get; set; }
+        public List<DepartmentProfit> DepartmentProfit { get; set; }
     }
 
-    public class UserProfits
+    public class UserProfit
     {
         public Guid ID { get; set; }
         public string Name { get; set; }
@@ -37,7 +37,7 @@ namespace SettlementApi.Read.QueryCommand.StatisticsModule
         public decimal Achievement { get; set; }
     }
 
-    public class DepartmentProfits
+    public class DepartmentProfit
     {
         public Guid ID { get; set; }
         public string Name { get; set; }

@@ -1,5 +1,4 @@
-﻿using System;
-using SettlementApi.DataAccess;
+﻿using SettlementApi.DataAccess;
 using SettlementApi.DataAccess.DefaultPageSetting;
 using SettlementApi.DataAccess.QueryAttribute;
 

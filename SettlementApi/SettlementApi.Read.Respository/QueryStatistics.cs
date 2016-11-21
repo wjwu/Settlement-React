@@ -9,6 +9,7 @@ using SettlementApi.Read.QueryCommand.GroupModule;
 using SettlementApi.Read.QueryCommand.SheetModule;
 using SettlementApi.Read.QueryCommand.StatisticsModule;
 using SettlementApi.Read.QueryCommand.UserModule;
+using SettlementApi.Write.Model.Enums;
 
 namespace SettlementApi.Read.Respository
 {
@@ -41,7 +42,8 @@ namespace SettlementApi.Read.Respository
 //    }
 
     public class QueryStatistics : BaseRRespository,
-        ICommandBus<QueryStatisticsCommand, QueryStatisticsCommandResult>
+        ICommandBus<QueryStatisticsCommand, QueryStatisticsCommandResult>,
+        ICommandBus<QueryUserStatisticsCommand, QueryUserStatisticsCommandResult>
     {
         public QueryStatisticsCommandResult Execute(QueryStatisticsCommand command)
         {
@@ -74,11 +76,13 @@ namespace SettlementApi.Read.Respository
                 var remaining = sheets.Sum(p => p.Remaining);
                 result.Remaining = remaining.ToString("N");
                 decimal amount = result.Amount;
-                result.Sources =
+                //来源统计
+                result.Source =
                     sheets.GroupBy(p => p.Source)
                         .Select(p => new {Name = p.Key, Value = p.Count()/amount})
                         .ToDictionary(p => p.Name, p => decimal.Round(p.Value, 2));
 
+                //根据签单人分组结算表
                 var sheetStats =
                     sheets.GroupBy(p => p.UserID)
                         .Select(
@@ -90,12 +94,13 @@ namespace SettlementApi.Read.Respository
                                     Total = p.Sum(s => s.Total),
                                     Cost = p.Sum(s => s.Cost),
                                     Commission = p.Sum(s => s.Commission),
-                                    Achievement = p.Sum(s=>s.Achievement)
+                                    Achievement = p.Sum(s => s.Achievement)
                                 });
-
+                //根据部门ID查询部门下所有用户
                 var users =
                     new QueryUser().Execute(new QueryUserCommand {Groups = command.Groups, PageSize = int.MaxValue});
 
+                //根据用户查询部门信息
                 var queryGroup = new QueryGroup();
                 var groups = new List<GetGroupCommandResult>();
                 users.List.ForEach(user =>
@@ -104,7 +109,7 @@ namespace SettlementApi.Read.Respository
                         groups.Add(queryGroup.Execute(new GetByIDCommand {ID = user.Group}));
                 });
 
-
+                //合并部门和提成信息
                 var userStats =
                     users.List.Join(groups, user => user.Group, group => group.ID,
                         (user, group) =>
@@ -116,9 +121,10 @@ namespace SettlementApi.Read.Respository
                                 Percent = group.Percent
                             });
 
-                result.UserProfits = userStats.GroupJoin(sheetStats, user => user.ID, sheet => sheet.UserID,
+                //用户签单统计
+                result.UserProfit = userStats.GroupJoin(sheetStats, user => user.ID, sheet => sheet.UserID,
                         (user, sheet) => new {user, sheet})
-                    .SelectMany(t => t.sheet.DefaultIfEmpty(), (t, sheet) => new UserProfits
+                    .SelectMany(t => t.sheet.DefaultIfEmpty(), (t, sheet) => new UserProfit
                     {
                         ID = t.user.ID,
                         Name = t.user.Name,
@@ -131,42 +137,50 @@ namespace SettlementApi.Read.Respository
                         Commission = sheet?.Commission ?? 0
                     }).ToList();
 
-                var dic = new Dictionary<Guid, List<RQuerySheet>>();
-                foreach (var group in groups)
+                //根据部门分组结算表
+                var groupSheets = new Dictionary<Guid, List<RQuerySheet>>();
+                groups.ForEach(group =>
                 {
-                    if (!dic.ContainsKey(group.ID))
-                        dic.Add(group.ID, new List<RQuerySheet>());
-                    foreach (var user in users.List)
+                    if (!groupSheets.ContainsKey(group.ID))
+                        groupSheets.Add(group.ID, new List<RQuerySheet>());
+                    users.List.ForEach(user =>
+                    {
                         if (user.Group == group.ID)
                         {
                             var sts = sheets.Where(s => s.UserID == user.ID).ToList();
-                            dic[group.ID].AddRange(sts);
+                            groupSheets[group.ID].AddRange(sts);
                         }
-                }
-                result.DepartmentProfits = new BaseCommandResult<DepartmentProfits>();
-                decimal deptTotal=0;
-                dic.ForEach(d => deptTotal += d.Value.Sum(p => p.Total));
-                result.Departments = new Dictionary<string, decimal>();
-                foreach (var d in dic)
+                    });
+                });
+
+                result.DepartmentProfit = new BaseCommandResult<DepartmentProfit>();
+
+                //计算总成交
+                decimal deptTotal = 0;
+                groupSheets.ForEach(sheet => deptTotal += sheet.Value.Sum(p => p.Total));
+                result.Department = new Dictionary<string, decimal>();
+
+                //统计部门占比
+                groupSheets.ForEach(sheet =>
                 {
-                    var group = groups.FirstOrDefault(p => p.ID == d.Key);
+                    var group = groups.FirstOrDefault(p => p.ID == sheet.Key);
                     if (group != null)
                     {
-                        var deptProfits = new DepartmentProfits
+                        var deptProfits = new DepartmentProfit
                         {
                             ID = group.ID,
                             Name = group.Name,
-                            Amount = d.Value.Count,
-                            Commission = d.Value.Sum(p => p.Commission),
-                            Cost = d.Value.Sum(p => p.Cost),
+                            Amount = sheet.Value.Count,
+                            Commission = sheet.Value.Sum(p => p.Commission),
+                            Cost = sheet.Value.Sum(p => p.Cost),
                             Percent = group.Percent,
-                            Total = d.Value.Sum(p => p.Total),
-                            Achievement = d.Value.Sum(p => p.Achievement)
+                            Total = sheet.Value.Sum(p => p.Total),
+                            Achievement = sheet.Value.Sum(p => p.Achievement)
                         };
-                        result.Departments.Add(group.Name,decimal.Round(deptProfits.Total/ deptTotal,2));
-                        result.DepartmentProfits.Add(deptProfits);
+                        result.Department.Add(group.Name, decimal.Round(deptProfits.Total/deptTotal, 2));
+                        result.DepartmentProfit.Add(deptProfits);
                     }
-                }
+                });
             }
             return result;
         }
@@ -180,7 +194,133 @@ namespace SettlementApi.Read.Respository
         {
             if (command.GetType() == typeof(QueryStatisticsCommand))
                 return Execute((QueryStatisticsCommand) command);
+            if (command.GetType() == typeof(QueryUserStatisticsCommand))
+                return Execute((QueryUserStatisticsCommand) command);
             return null;
+        }
+
+        public QueryUserStatisticsCommandResult Execute(QueryUserStatisticsCommand command)
+        {
+            var result = new QueryUserStatisticsCommandResult();
+            var userID = ServiceContext.OperatorID;
+            var auditStatus = Enum.GetName(typeof(AuditStatus), AuditStatus.Pass);
+            var querySheet = new QuerySheet();
+            var now = DateTime.Now;
+            var yFrom = new DateTime(now.Year, 1, 1);
+            var yTo = yFrom.AddYears(1).AddSeconds(-1);
+            var ySheets =
+                querySheet.Execute(new QuerySheetNoPagingCommand
+                {
+                    AuditStatus = auditStatus,
+                    UserID = userID,
+                    TimeFrom = yFrom,
+                    TimeTo = yTo
+                });
+
+            var mFrom = new DateTime(now.Year, now.Month, 1);
+            var mTo = mFrom.AddMonths(1).AddSeconds(-1);
+            var mSheets =
+                querySheet.Execute(new QuerySheetNoPagingCommand
+                {
+                    AuditStatus = auditStatus,
+                    UserID = userID,
+                    TimeFrom = mFrom,
+                    TimeTo = mTo
+                });
+
+            var lastMFrom= new DateTime(now.Year, now.AddMonths(-1).Month, 1);
+            var lastMTo = lastMFrom.AddMonths(1).AddSeconds(-1);
+            var lastMSheets =
+                querySheet.Execute(new QuerySheetNoPagingCommand
+                {
+                    AuditStatus = auditStatus,
+                    UserID = userID,
+                    TimeFrom = lastMFrom,
+                    TimeTo = lastMTo
+                });
+            //成交额
+            result.Total = ySheets.Sum(p => p.Total);
+            result.MonthTotal = mSheets.Sum(p => p.Total);
+            var lastMTotal = lastMSheets.Sum(p => p.Total);
+            if (lastMTotal == 0)
+            {
+                result.TotalPercent = result.MonthTotal;
+            }
+            else
+            {
+                result.TotalPercent = (result.MonthTotal - lastMTotal) / lastMTotal;
+            }
+
+            //提成
+            result.Commission = ySheets.Sum(p => p.Commission);
+            result.MonthCommission = mSheets.Sum(p => p.Commission);
+            var lastMCommission = lastMSheets.Sum(p => p.Commission);
+            if (lastMCommission == 0)
+            {
+                result.CommissionPercent = result.MonthCommission;
+            }
+            else
+            {
+                result.CommissionPercent = (result.MonthCommission - lastMCommission) / lastMCommission;
+            }
+
+            //业绩
+            result.Achievement = ySheets.Sum(p => p.Achievement);
+            result.MonthAchievement = mSheets.Sum(p => p.Achievement);
+            var lastMAchievement = lastMSheets.Sum(p => p.Achievement);
+            if (lastMAchievement == 0)
+            {
+                result.AchievementPercent = result.MonthAchievement;
+            }
+            else
+            {
+                result.AchievementPercent = (result.MonthAchievement - lastMAchievement) / lastMAchievement;
+            }
+            //统计时间段
+            result.Date=new List<string>();
+
+            //签单数量统计
+            result.ChartAmount =new List<int>();
+
+            //成交额统计
+            result.ChartTotal = new List<decimal>();
+
+            //当月周数处理
+            //当前月第一天是星期几
+            int dayOfWeek = Convert.ToInt32(mFrom.DayOfWeek.ToString("d"));
+            //该月第一周结束日期
+            DateTime weekEnd = dayOfWeek == 0 ? mFrom : mFrom.AddDays(7 - dayOfWeek);
+
+            result.Date.Add(mFrom.ToString("yyyy-MM-dd"));
+
+            //当日期小于或等于该月的最后一天
+            while (weekEnd.AddDays(1) <= mTo)
+            {
+                //该周的开始时间
+                mFrom = weekEnd.AddDays(1);
+                result.Date.Add(mFrom.ToString("yyyy-MM-dd"));
+                //该周结束时间
+                weekEnd = weekEnd.AddDays(7) > mTo ? mTo : weekEnd.AddDays(7);
+            }
+
+            result.Date.Add(weekEnd.ToString("yyyy-MM-dd"));
+
+            for (int i = 0; i < result.Date.Count; i++)
+            {
+                var from = result.Date[i];
+                var to = result.Date[i + 1];
+               // mSheets.Where(p => p.TimeFrom > date && p.TimeFrom < date);
+            }
+//            result.Date.ForEach(date =>
+//            {
+//                mSheets.Where(p => p.TimeFrom > date&& p.TimeFrom < date);
+//            });
+//            mSheets.ForEach(sheet =>
+//            {
+//
+//            });
+
+            return result;
         }
 
         public class TmpSheet
@@ -199,7 +339,6 @@ namespace SettlementApi.Read.Respository
             public string Name { get; set; }
             public string Department { get; set; }
             public decimal Percent { get; set; }
-            
         }
     }
 }

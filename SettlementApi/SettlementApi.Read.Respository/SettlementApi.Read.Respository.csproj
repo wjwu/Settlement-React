@@ -73,6 +73,10 @@
       <Project>{18ECF9B2-B05E-4B16-BA91-E63A0D31DBBF}</Project>
       <Name>SettlementApi.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SettlementApi.Context\SettlementApi.Context.csproj">
+      <Project>{A1392550-9420-4DAD-9635-20FA2DCE1897}</Project>
+      <Name>SettlementApi.Context</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SettlementApi.DataAccess\SettlementApi.DataAccess.csproj">
       <Project>{33310B42-62C3-4873-AEC4-4B5B95FC6DAF}</Project>
       <Name>SettlementApi.DataAccess</Name>

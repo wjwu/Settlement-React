@@ -14,5 +14,12 @@ namespace SettlementApi.Api.Apis
         {
             return CommandService.SendEx(request, ReadName);
         }
+
+        [HttpGet]
+        [Route("api/user/statistics")]
+        public ICommandResult Query()
+        {
+            return CommandService.SendEx(new QueryUserStatisticsCommand(), ReadName);
+        }
     }
 }
