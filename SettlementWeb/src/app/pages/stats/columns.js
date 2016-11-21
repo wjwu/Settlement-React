@@ -200,7 +200,7 @@ export const deptColumns = () => {
 			return a.Amount - b.Amount
 		},
 		render: (text) => {
-			return <b>{`￥${text}`}</b>
+			return <b>{`${text}`}</b>
 		}
 	}, {
 		title: '成交合计',

@@ -7,7 +7,10 @@ import {
 	ERROR_CREATE_USER,
 	BEGIN_UPDATE_USER,
 	END_UPDATE_USER,
-	ERROR_UPDATE_USER
+	ERROR_UPDATE_USER,
+	BEGIN_UPDATE_USER_PWD,
+	END_UPDATE_USER_PWD,
+	ERROR_UPDATE_USER_PWD
 } from '../constants/user'
 
 export default (state = {}, action) => {
@@ -63,6 +66,21 @@ export default (state = {}, action) => {
 			}
 		case ERROR_UPDATE_USER:
 			delete state.updating
+			return {
+				...state
+			}
+		case BEGIN_UPDATE_USER_PWD:
+			return {
+				...state,
+				updatingPwd: true
+			}
+		case END_UPDATE_USER_PWD:
+			delete state.updatingPwd
+			return {
+				...state
+			}
+		case ERROR_UPDATE_USER_PWD:
+			delete state.updatingPwd
 			return {
 				...state
 			}

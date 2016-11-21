@@ -11,7 +11,10 @@ import {
 	ERROR_CREATE_USER,
 	BEGIN_UPDATE_USER,
 	END_UPDATE_USER,
-	ERROR_UPDATE_USER
+	ERROR_UPDATE_USER,
+	BEGIN_UPDATE_USER_PWD,
+	END_UPDATE_USER_PWD,
+	ERROR_UPDATE_USER_PWD
 } from '../constants/user'
 const md5 = require('md5')
 
@@ -91,6 +94,38 @@ export const updateUser = request => {
 				msgType: 'error',
 				msg: error
 			})
+		})
+	}
+}
+
+export const updateUserPwd = (request, success, error) => {
+	return dispatch => {
+		dispatch({
+			type: BEGIN_UPDATE_USER_PWD,
+		})
+		request.oldPassword = md5(request.oldPassword)
+		request.newPassword = md5(request.newPassword)
+		apiClient.patch('user/password', request).then(result => {
+			dispatch({
+				type: END_UPDATE_USER_PWD,
+				result: result
+			})
+			success()
+				// dispatch({
+				// 	type: SHOW_MESSAGE,
+				// 	msgType: 'success',
+				// 	msg: '修改成功！'
+				// })
+		}, error => {
+			// dispatch({
+			// 	type: ERROR_UPDATE_USER_PWD
+			// })
+			// dispatch({
+			// 	type: SHOW_MESSAGE,
+			// 	msgType: 'error',
+			// 	msg: error
+			// })
+			error(error)
 		})
 	}
 }

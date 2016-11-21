@@ -14,6 +14,7 @@ import {
 import {
 	signOut
 } from '../../auth'
+import UserPanel from './UserPanel'
 
 const showGlobleMsg = (type, msg) => {
 	if (type === 'success') {
@@ -37,14 +38,35 @@ const confirm = Modal.confirm
 const TMainContainer = () => {
 	return Comp => {
 		return class extends Component {
-			componentDidUpdate() {
-				const {
-					type,
-					msg
-				} = this.props.message
-				if (type && msg) {
-					showGlobleMsg(type, msg)
+			constructor(prop) {
+				super(prop)
+				this.state = {
+					userPanelVisible: false
 				}
+			}
+
+			componentDidUpdate() {
+				if (this.props.message) {
+					const {
+						type,
+						msg
+					} = this.props.message
+					if (type && msg) {
+						showGlobleMsg(type, msg)
+					}
+				}
+			}
+
+			hide() {
+				this.setState({
+					userPanelVisible: false
+				})
+			}
+
+			show() {
+				this.setState({
+					userPanelVisible: true
+				})
 			}
 
 			doSignOut() {
@@ -66,22 +88,26 @@ const TMainContainer = () => {
 			}
 
 			render() {
-				let user = JSON.parse(sessionStorage.getItem('user'))
-				let path = this.props.route.path.substr(1)
+				const user = JSON.parse(sessionStorage.getItem('user'))
+				const path = this.props.route.path.substr(1)
 
 				let openKeys = []
 				let selectedKeys = []
+				let openMenu
+				let openSubMenu
 				selectedKeys.push(path)
 
 				if (path === 'group' || path === 'dic') {
 					openKeys.push('sys')
+					openMenu = '系统管理'
+					openSubMenu = path === 'group' ? '部门与用户' : '数据字典'
 				} else if (path === 'sheet' || path === 'stats') {
 					openKeys.push('my')
+					openMenu = '我的结算表'
+					openSubMenu = path === 'sheet' ? '我的结算表' : '统计中心'
 				}
-				let role
 				let sys
 				if (user.Role === 'Admin') {
-					role = '[系统管理员]'
 					sys = (
 						<SubMenu key='sys' title={<span><Icon type='desktop'/>系统管理</span>}>
 						 	<Menu.Item key='group'>
@@ -92,13 +118,21 @@ const TMainContainer = () => {
 						 	</Menu.Item>
 						</SubMenu>
 					)
-				} else if (user.Role === 'DeptManager') {
-					role = '[部门主管]'
-				} else if (user.Role === 'Employee') {
-					role = '[普通员工]'
-				} else if (user.Role === 'Financial') {
-					role = '[财务人员]'
 				}
+				let breadcrumbItem = []
+				if (path !== 'home') {
+					breadcrumbItem = [
+						<Breadcrumb.Item key='menu'>{openMenu}</Breadcrumb.Item>,
+						<Breadcrumb.Item key='subMenu'>{openSubMenu}</Breadcrumb.Item>
+					]
+				}
+
+				const userPanelVisible = this.state.userPanelVisible
+				let userPanel
+				if (userPanelVisible) {
+					userPanel = <UserPanel onCancel={this.hide.bind(this)} sys_user={user} showGlobleMsg={showGlobleMsg}/>
+				}
+
 				return (
 					<div className='ant-layout-aside'>
 						<div className='ant-layout-main'>
@@ -117,9 +151,16 @@ const TMainContainer = () => {
 							    </Menu>
 							</div>
 							<div className='ant-layout-header'>
-								<span>{role}</span>
-								<span><a href='#'>{user.LoginID}</a></span>
+								<span>{user.RoleName}</span>
+								<span><a href='javascript:;' onClick={this.show.bind(this)}>{user.LoginID}</a></span>
+								{userPanel}
 								<span><a className='normal-link' href='javascript:;' onClick={this.doSignOut.bind(this)}><Icon type='logout'/>&nbsp;退出</a></span>
+							</div>
+							<div className='ant-layout-breadcrumb'>
+							  	<Breadcrumb>
+							    	<Breadcrumb.Item><Link to='/home'>首页</Link></Breadcrumb.Item>
+							    	{breadcrumbItem}
+							  	</Breadcrumb>
 							</div>
 						    <div className='ant-layout-container'>
 						      	<div className='ant-layout-content'>
@@ -140,11 +181,3 @@ const TMainContainer = () => {
 }
 
 export default TMainContainer
-
-// <div className='ant-layout-breadcrumb'>
-//   	<Breadcrumb>
-//     	<Breadcrumb.Item>首页</Breadcrumb.Item>
-//     	<Breadcrumb.Item>应用列表</Breadcrumb.Item>
-//     	<Breadcrumb.Item>某应用</Breadcrumb.Item>
-//   	</Breadcrumb>
-// </div>

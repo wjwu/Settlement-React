@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Practices.ObjectBuilder2;
 using SettlementApi.CommandBus;
 using SettlementApi.Common.Mapper;
 using SettlementApi.Read.QueryCommand;
@@ -143,6 +144,9 @@ namespace SettlementApi.Read.Respository
                         }
                 }
                 result.DepartmentProfits = new BaseCommandResult<DepartmentProfits>();
+                decimal deptTotal=0;
+                dic.ForEach(d => deptTotal += d.Value.Sum(p => p.Total));
+                result.Departments = new Dictionary<string, decimal>();
                 foreach (var d in dic)
                 {
                     var group = groups.FirstOrDefault(p => p.ID == d.Key);
@@ -159,6 +163,7 @@ namespace SettlementApi.Read.Respository
                             Total = d.Value.Sum(p => p.Total),
                             Achievement = d.Value.Sum(p => p.Achievement)
                         };
+                        result.Departments.Add(group.Name,decimal.Round(deptProfits.Total/ deptTotal,2));
                         result.DepartmentProfits.Add(deptProfits);
                     }
                 }

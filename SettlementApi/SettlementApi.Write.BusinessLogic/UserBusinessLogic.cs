@@ -21,6 +21,15 @@ namespace SettlementApi.Write.BusinessLogic
     {
         public void Execute(ChangePasswordCommand command)
         {
+            command.OldPassword = Security.Md5Encrypt(Security.Encrypt(command.OldPassword));
+            var user = GetEntity(ServiceContext.OperatorID);
+            var chkUser = GetEntity("User.Login", new
+            {
+                user.LoginID,
+                Password = command.OldPassword
+            });
+            if (chkUser == null)
+                throw new BussinessException(UserRes.OldPasswordError);
             command.NewPassword = Security.Md5Encrypt(Security.Encrypt(command.NewPassword));
             Update("User.ChangePassword", new
             {
@@ -72,10 +81,17 @@ namespace SettlementApi.Write.BusinessLogic
             var groupBus = new GroupBusinessLogic();
             var group = groupBus.GetEntity(loginUser.Group);
             if (group != null)
+            {
                 result.ParentGroup = group.ParentID;
-            var groups = groupBus.GetList(group.ID, group.ParentID);
-            if (groups != null)
-                result.Path = groups.Select(p => p.ID.ToString()).ToList();
+                result.GroupName = group.Name;
+
+                var groups = groupBus.GetList(group.ID, group.ParentID);
+                if (groups != null)
+                    result.Path = groups.Select(p => p.ID.ToString()).ToList();
+            }
+
+            result.RoleName = EnumUtity.GetDescription(typeof(RoleType), result.Role);
+            result.LastLoginTime = DateTime.Parse(result.LastLoginTime).ToString("yyyy-MM-dd HH:mm:ss");
             return result;
         }
 

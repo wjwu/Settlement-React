@@ -10,22 +10,23 @@ namespace SettlementApi.Write.BusCommand.UserModule
 
         public string LoginID { get; set; }
 
+        public string Name { get; set; }
+
+        public string Phone { get; set; }
+
         public Guid Group { get; set; }
+
+        public string GroupName { get; set; }
 
         public Guid ParentGroup { get; set; }
 
         public List<string> Path { get; set; }
 
         public string Role { get; set; }
-        //private string _role { get; set; }
-        //public string Role {
-        //    get {
-        //        return EnumUtity.GetDescription(typeof(RoleType), _role);
-        //    } set {
-        //        _role = value;
-        //    } }
 
-        public DateTime? LastLoginTime { get; set; }
+        public string RoleName { get; set; }
+
+        public string LastLoginTime { get; set; }
 
         public string LastLoginIP { get; set; }
     }
