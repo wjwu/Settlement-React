@@ -59,5 +59,41 @@ namespace SettlementApi.Write.BusinessLogic.Resource {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   查找类似 [{0}] 审核打回了结算表。 的本地化字符串。
+        /// </summary>
+        internal static string AuditSheetFail {
+            get {
+                return ResourceManager.GetString("AuditSheetFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 [{0}] 审核通过了结算表。 的本地化字符串。
+        /// </summary>
+        internal static string AuditSheetPass {
+            get {
+                return ResourceManager.GetString("AuditSheetPass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 [{0}] 创建结算表。 的本地化字符串。
+        /// </summary>
+        internal static string CreateSheet {
+            get {
+                return ResourceManager.GetString("CreateSheet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 [{0}] 修改了结算表。 的本地化字符串。
+        /// </summary>
+        internal static string UpdateSheet {
+            get {
+                return ResourceManager.GetString("UpdateSheet", resourceCulture);
+            }
+        }
     }
 }

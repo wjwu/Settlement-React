@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<commands>
+  <command name="SheetLog.Query" type="text" connection="local">
+    <![CDATA[
+SELECT  U.[Name] AS [Operator] ,
+        SL.[Text] ,
+        SL.[CreateTime] AS DCreateTime 
+FROM    [dbo].[SheetLog] AS SL 
+        LEFT JOIN [dbo].[User] AS U ON SL.OperatorID = U.ID 
+WHERE   SL.SheetID = @SheetID ORDER BY SL.[CreateTime] DESC
+  ]]>
+  </command>
+</commands>

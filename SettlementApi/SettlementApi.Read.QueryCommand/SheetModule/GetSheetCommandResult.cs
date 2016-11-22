@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using SettlementApi.CommandBus;
 using SettlementApi.Read.QueryCommand.CostModule;
 using SettlementApi.Read.QueryCommand.ReceivedModule;
+using SettlementApi.Read.QueryCommand.SheetLogModule;
 
 namespace SettlementApi.Read.QueryCommand.SheetModule
 {
@@ -55,5 +56,7 @@ namespace SettlementApi.Read.QueryCommand.SheetModule
         public List<RQueryCost> Costs { get; set; }
 
         public List<RQueryReceived> Receiveds { get; set; }
+
+        public List<RQuerySheetLog> Logs { get; set; }
     }
 }

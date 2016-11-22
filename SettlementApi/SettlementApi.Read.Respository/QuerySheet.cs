@@ -4,6 +4,7 @@ using SettlementApi.Read.Model;
 using SettlementApi.Read.QueryCommand;
 using SettlementApi.Read.QueryCommand.CostModule;
 using SettlementApi.Read.QueryCommand.ReceivedModule;
+using SettlementApi.Read.QueryCommand.SheetLogModule;
 using SettlementApi.Read.QueryCommand.SheetModule;
 
 namespace SettlementApi.Read.Respository
@@ -23,6 +24,7 @@ namespace SettlementApi.Read.Respository
             {
                 result.Costs = new QueryCost().Execute(new QueryCostCommand {SheetID = result.ID});
                 result.Receiveds = new QueryReceived().Execute(new QueryReceivedCommand {SheetID = result.ID});
+                result.Logs = new QuerySheetLog().Execute(new QuerySheetLogCommand {SheetID = result.ID});
             }
             return result;
         }

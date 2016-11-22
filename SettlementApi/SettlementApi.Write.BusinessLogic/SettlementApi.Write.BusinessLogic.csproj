@@ -65,6 +65,7 @@
     <Compile Include="DictionaryBusinessLogic.cs" />
     <Compile Include="Event\CreateSheetEvent.cs" />
     <Compile Include="Event\DeleteGroupEvent.cs" />
+    <Compile Include="Event\DeleteSheetEvent.cs" />
     <Compile Include="Event\UpdateSheetEvent.cs" />
     <Compile Include="GroupBusinessLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

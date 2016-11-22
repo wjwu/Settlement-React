@@ -48,6 +48,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReceivedModule\QueryReceivedCommand.cs" />
     <Compile Include="ReceivedModule\RQueryReceived.cs" />
+    <Compile Include="SheetLogModule\QuerySheetLogCommand.cs" />
+    <Compile Include="SheetLogModule\RQuerySheetLog.cs" />
     <Compile Include="SheetModule\GetSheetCommandResult.cs" />
     <Compile Include="SheetModule\QuerySheetCommand.cs" />
     <Compile Include="SheetModule\QuerySheetNoPagingCommand.cs" />

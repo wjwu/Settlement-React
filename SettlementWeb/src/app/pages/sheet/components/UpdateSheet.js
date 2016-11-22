@@ -536,7 +536,7 @@ class UpdateSheet extends Component {
 						<TTable key='received' bordered columns={receivedColumns} total={receiveds.length} dataSource={receiveds} pagination={false} onLoad={()=>{}}/>
 					</TabPane> 
 					<TabPane tab='操作记录' key='logInfo'>
-						<TTable key='log' bordered columns={genLogColumns()} total={0} dataSource={[]} onLoad={()=>{}}/>
+						<TTable key='log' bordered columns={genLogColumns()} total={sheet.Logs.length} dataSource={sheet.Logs} pagination={false} onLoad={()=>{}}/>
 					</TabPane> 
 				</Tabs>
 			</Modal>

@@ -58,6 +58,7 @@
     <Compile Include="QueryGroup.cs" />
     <Compile Include="QueryReceived.cs" />
     <Compile Include="QuerySheet.cs" />
+    <Compile Include="QuerySheetLog.cs" />
     <Compile Include="QueryStatistics.cs" />
     <Compile Include="QueryUser.cs" />
   </ItemGroup>
