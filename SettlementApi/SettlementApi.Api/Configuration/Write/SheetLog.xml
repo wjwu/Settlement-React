@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<commands>
+  <command name="SheetLog.Create" type="text" connection="local">
+    <![CDATA[
+INSERT INTO dbo.SheetLog
+        ( ID ,
+          SheetID ,
+          OperatorID ,
+          Text ,
+          CreateTime 
+        )
+VALUES  ( NEWID() ,
+          @SheetID , 
+          @OperatorID , 
+          @Text ,
+          GETDATE()
+        )
+  ]]>
+  </command>
+  <command name="SheetLog.Delete" type="text" connection="local">
+    <![CDATA[
+  UPDATE dbo.SheetLog SET [Deleted]=1 WHERE [SheetID]=@SheetID
+    ]]>
+  </command>
+</commands>

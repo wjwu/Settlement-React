@@ -119,6 +119,7 @@
     <Content Include="Configuration\Write\Group.xml" />
     <Content Include="Configuration\Write\Received.xml" />
     <Content Include="Configuration\Write\Sheet.xml" />
+    <Content Include="Configuration\Write\SheetLog.xml" />
     <Content Include="Configuration\Write\User.xml" />
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">

@@ -8,6 +8,8 @@ namespace SettlementApi.Write.Model
 
         public Guid SheetID { get; set; }
 
+        public Guid OperatorID { get; set; }
+
         public string Text { get; set; }
 
         public DateTime CreateTime { get; set; }

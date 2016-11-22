@@ -228,7 +228,7 @@ namespace SettlementApi.Read.Respository
                     TimeTo = mTo
                 });
 
-            var lastMFrom= new DateTime(now.Year, now.AddMonths(-1).Month, 1);
+            var lastMFrom = new DateTime(now.Year, now.AddMonths(-1).Month, 1);
             var lastMTo = lastMFrom.AddMonths(1).AddSeconds(-1);
             var lastMSheets =
                 querySheet.Execute(new QuerySheetNoPagingCommand
@@ -239,87 +239,104 @@ namespace SettlementApi.Read.Respository
                     TimeTo = lastMTo
                 });
             //成交额
-            result.Total = ySheets.Sum(p => p.Total);
-            result.MonthTotal = mSheets.Sum(p => p.Total);
+            decimal total = ySheets.Sum(p => p.Total);
+            decimal monthTotal = mSheets.Sum(p => p.Total);
+            result.Total = total.ToString("N");
+            result.MonthTotal = monthTotal.ToString("N");
             var lastMTotal = lastMSheets.Sum(p => p.Total);
             if (lastMTotal == 0)
-            {
-                result.TotalPercent = result.MonthTotal;
-            }
+                result.TotalPercent = monthTotal;
             else
-            {
-                result.TotalPercent = (result.MonthTotal - lastMTotal) / lastMTotal;
-            }
+                result.TotalPercent = (monthTotal - lastMTotal)/lastMTotal;
 
             //提成
-            result.Commission = ySheets.Sum(p => p.Commission);
-            result.MonthCommission = mSheets.Sum(p => p.Commission);
+            decimal commission = ySheets.Sum(p => p.Commission);
+            decimal monthCommission = mSheets.Sum(p => p.Commission);
+            result.Commission = commission.ToString("N");
+            result.MonthCommission = monthCommission.ToString("N");
             var lastMCommission = lastMSheets.Sum(p => p.Commission);
             if (lastMCommission == 0)
-            {
-                result.CommissionPercent = result.MonthCommission;
-            }
+                result.CommissionPercent = monthCommission;
             else
-            {
-                result.CommissionPercent = (result.MonthCommission - lastMCommission) / lastMCommission;
-            }
+                result.CommissionPercent = (monthCommission - lastMCommission)/lastMCommission;
 
             //业绩
-            result.Achievement = ySheets.Sum(p => p.Achievement);
-            result.MonthAchievement = mSheets.Sum(p => p.Achievement);
+            decimal achievement = ySheets.Sum(p => p.Achievement);
+            decimal monthAchievement = mSheets.Sum(p => p.Achievement);
+            result.Achievement = achievement.ToString("N");
+            result.MonthAchievement = monthAchievement.ToString("N");
             var lastMAchievement = lastMSheets.Sum(p => p.Achievement);
             if (lastMAchievement == 0)
-            {
-                result.AchievementPercent = result.MonthAchievement;
-            }
+                result.AchievementPercent = monthAchievement;
             else
-            {
-                result.AchievementPercent = (result.MonthAchievement - lastMAchievement) / lastMAchievement;
-            }
+                result.AchievementPercent = (monthAchievement - lastMAchievement)/lastMAchievement;
             //统计时间段
-            result.Date=new List<string>();
+            result.Date = new List<string>();
 
             //签单数量统计
-            result.ChartAmount =new List<int>();
+            result.ChartAmount = new List<int>();
 
             //成交额统计
             result.ChartTotal = new List<decimal>();
 
-            //当月周数处理
-            //当前月第一天是星期几
-            int dayOfWeek = Convert.ToInt32(mFrom.DayOfWeek.ToString("d"));
-            //该月第一周结束日期
-            DateTime weekEnd = dayOfWeek == 0 ? mFrom : mFrom.AddDays(7 - dayOfWeek);
+            var totalDays = DateTime.DaysInMonth(now.Year, now.Month);
+            for (var i = 1; i <= totalDays; i++)
+                result.Date.Add(i.ToString());
 
-            result.Date.Add(mFrom.ToString("yyyy-MM-dd"));
-
-            //当日期小于或等于该月的最后一天
-            while (weekEnd.AddDays(1) <= mTo)
+            //签单量和成交额统计
+            result.Date.ForEach(day =>
             {
-                //该周的开始时间
-                mFrom = weekEnd.AddDays(1);
-                result.Date.Add(mFrom.ToString("yyyy-MM-dd"));
-                //该周结束时间
-                weekEnd = weekEnd.AddDays(7) > mTo ? mTo : weekEnd.AddDays(7);
-            }
+                var currentDate = new DateTime(now.Year, now.Month, int.Parse(day));
+                var sheets = mSheets.Where(p => DateTime.Parse(p.TimeFrom) == currentDate).ToList();
+                result.ChartTotal.Add(sheets.Sum(p => p.Total));
+                result.ChartAmount.Add(sheets.Count);
+            });
 
-            result.Date.Add(weekEnd.ToString("yyyy-MM-dd"));
+            //排行榜
+            var queryUser = new QueryUser();
+            var currentUser = queryUser.Execute(new GetByIDCommand {ID = userID});
+            var queryGroup = new QueryGroup();
+            var group = queryGroup.Execute(new GetByIDCommand {ID = currentUser.Group});
+            var groups = queryGroup.Execute(new QueryGroupCommand {ID = group.ID, ParentID = group.ParentID});
 
-            for (int i = 0; i < result.Date.Count; i++)
+            var cSheets =
+                querySheet.Execute(new QuerySheetNoPagingCommand
+                {
+                    AuditStatus = auditStatus,
+                    Groups = string.Join(",", groups.Select(p => p.ID.ToString()).ToArray()),
+                    TimeFrom = mFrom,
+                    TimeTo = mTo
+                });
+
+            var statsSheets = cSheets.GroupBy(p => p.UserID).Select(p => new TmpSheet
             {
-                var from = result.Date[i];
-                var to = result.Date[i + 1];
-               // mSheets.Where(p => p.TimeFrom > date && p.TimeFrom < date);
-            }
-//            result.Date.ForEach(date =>
-//            {
-//                mSheets.Where(p => p.TimeFrom > date&& p.TimeFrom < date);
-//            });
-//            mSheets.ForEach(sheet =>
-//            {
-//
-//            });
-
+                UserID = p.Key,
+                Amount = p.Count(),
+                Total = p.Sum(s => s.Total),
+                Cost = p.Sum(s => s.Cost),
+                Commission = p.Sum(s => s.Commission),
+                Achievement = p.Sum(s => s.Achievement)
+            });
+            result.RankAmount = new List<RankAmount>();
+            result.RankTotal = new List<RankTotal>();
+            statsSheets.OrderByDescending(p => p.Amount).ForEach(sheet =>
+            {
+                var user = queryUser.Execute(new GetByIDCommand {ID = sheet.UserID});
+                result.RankAmount.Add(new RankAmount
+                {
+                    Name = user.Name,
+                    Amount = sheet.Amount
+                });
+            });
+            statsSheets.OrderByDescending(p => p.Total).ForEach(sheet =>
+            {
+                var user = queryUser.Execute(new GetByIDCommand {ID = sheet.UserID});
+                result.RankTotal.Add(new RankTotal
+                {
+                    Name = user.Name,
+                    Total = sheet.Total.ToString("N")
+                });
+            });
             return result;
         }
 

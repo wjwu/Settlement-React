@@ -15,9 +15,20 @@ SELECT [ID]
   FROM [dbo].[User] WHERE [Deleted]=0 
       ]]>
   </command>
+  <command name="User.Query.GetByID" type="text" connection="local">
+    <![CDATA[
+SELECT [ID]
+      ,[LoginID]
+      ,[Phone]
+      ,[Name]
+      ,[Group]
+      ,[Role]
+  FROM [dbo].[User] WHERE [Deleted]=0  AND ID=@ID
+      ]]>
+  </command>
   <command name="User.GetByID" type="text" connection="local">
     <![CDATA[
-SELECT TOP(1) [ID]
+SELECT [ID]
       ,[LoginID]
       ,[Phone]
       ,[Name]

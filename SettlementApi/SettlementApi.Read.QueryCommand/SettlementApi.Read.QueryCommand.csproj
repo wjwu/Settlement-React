@@ -56,6 +56,7 @@
     <Compile Include="StatisticsModule\QueryStatisticsCommandResult.cs" />
     <Compile Include="StatisticsModule\QueryUserStatisticsCommand.cs" />
     <Compile Include="StatisticsModule\QueryUserStatisticsCommandResult.cs" />
+    <Compile Include="UserModule\GetUserCommandResult.cs" />
     <Compile Include="UserModule\QueryUserCommand.cs" />
     <Compile Include="UserModule\RQueryUser.cs" />
   </ItemGroup>
