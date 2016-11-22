@@ -3,6 +3,7 @@ import {
 	Icon,
 	Tag
 } from 'antd'
+import numeral from 'numeral'
 import * as colors from '../../../colors'
 
 const genCostColumns = (editFuc, disabled) => {
@@ -27,7 +28,7 @@ const genCostColumns = (editFuc, disabled) => {
 		key: 'total',
 		width: '15%',
 		render: (text) => {
-			return <b>{`￥${text}`}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>
 		}
 	}, {
 		title: '付款状态',
@@ -66,7 +67,10 @@ const genReceivedColumns = (editFuc, disabled) => {
 		title: '收款金额',
 		dataIndex: 'Money',
 		key: 'money',
-		width: '25%'
+		width: '25%',
+		render: (text) => {
+			return <b>{numeral(text).format('0,0.00')}</b>
+		}
 	}, {
 		title: '收款时间',
 		dataIndex: 'Time',
@@ -92,7 +96,27 @@ const genReceivedColumns = (editFuc, disabled) => {
 	}]
 }
 
+const genLogColumns = () => {
+	return [{
+		title: '时间',
+		dataIndex: 'CreateTime',
+		key: 'createTime',
+		width: '20%'
+	}, {
+		title: '操作人',
+		dataIndex: 'Operator',
+		key: 'operator',
+		width: '20%'
+	}, {
+		title: '操作详情',
+		dataIndex: 'Text',
+		key: 'text',
+		width: '60%'
+	}]
+}
+
 export {
 	genCostColumns,
-	genReceivedColumns
+	genReceivedColumns,
+	genLogColumns
 }

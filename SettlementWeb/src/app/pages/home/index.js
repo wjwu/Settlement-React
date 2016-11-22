@@ -51,7 +51,7 @@ class Home extends React.Component {
 								</dt>
 								<dd >
 									<span>本月</span>
-									<span className={styles.compare}>{stats.TotalPercent}%<Icon type='arrow-up'/></span>
+									<span className={stats.TotalPercent>0?styles.compare_up:styles.compare_down}>{stats.TotalPercent}%<Icon type='arrow-up'/></span>
 								</dd>
 							</dl>
 						</TCard>
@@ -72,7 +72,7 @@ class Home extends React.Component {
 								</dt>
 								<dd>
 									<span>本月</span>
-									<span className={styles.compare}>{stats.CommissionPercent}%<Icon type='arrow-up'/></span>
+									<span className={stats.CommissionPercent>0?styles.compare_up:styles.compare_down}>{stats.CommissionPercent}%<Icon type='arrow-up'/></span>
 								</dd>
 							</dl>
 						</TCard>
@@ -93,7 +93,7 @@ class Home extends React.Component {
 								</dt>
 								<dd>
 									<span>本月</span>
-									<span className={styles.compare}>{stats.AchievementPercent}%<Icon type='arrow-up'/></span>
+									<span className={stats.AchievementPercent>0?styles.compare_up:styles.compare_down}>{stats.AchievementPercent}%<Icon type='arrow-up'/></span>
 								</dd>
 							</dl>
 						</TCard>
@@ -102,7 +102,7 @@ class Home extends React.Component {
 				<Row>
 					<TCol>
 						<TCard>
-		                    <ReactEcharts option={option()}  style={{height: '350px', width: '100%'}}  />
+		                    <ReactEcharts option={option(stats.Date,stats.ChartTotal)}  style={{height: '350px', width: '100%'}}  />
 						</TCard>
 					</TCol>
 				</Row>
@@ -111,40 +111,37 @@ class Home extends React.Component {
 						<TCard title='排行榜'>
 							<Tabs tabPosition='left'>
 								 <TabPane tab='成交额' key='total'>
-								 	<dl className={styles.rank}>
-								 		<dt className={styles.rank_title}>
-								 			任翼
-								 		</dt>
-								 		<dd className={styles.rank_cnt}>
-								 			36,891.00
-								 		</dd>
-								 	</dl>
-								 	<dl className={styles.rank}>
-								 		<dt className={styles.rank_title}>
-								 			任翼
-								 		</dt>
-								 		<dd className={styles.rank_cnt}>
-								 			36,891.00
-								 		</dd>
-								 	</dl>
-								 	<dl className={styles.rank}>
-								 		<dt className={styles.rank_title}>
-								 			任翼
-								 		</dt>
-								 		<dd className={styles.rank_cnt}>
-								 			36,891.00
-								 		</dd>
-								 	</dl>
-								 	<dl className={styles.rank}>
-								 		<dt className={styles.rank_title}>
-								 			任翼
-								 		</dt>
-								 		<dd className={styles.rank_cnt}>
-								 			36,891.00
-								 		</dd>
-								 	</dl>
+								 {
+								 	!stats.RankTotal?[]:stats.RankTotal.map(item=>{
+								 		return (
+										 	<dl className={styles.rank} key={`${item.Name}${item.Total}`}>
+										 		<dt className={styles.rank_title}>
+										 			{item.Name}
+										 		</dt>
+										 		<dd className={styles.rank_cnt}>
+										 			<b>{item.Total}</b>
+										 		</dd>
+										 	</dl>
+								 		)
+								 	})
+								 }
 								 </TabPane>
-								 <TabPane tab='签单量' key='amount'>Content of Tab 1</TabPane>
+								 <TabPane tab='签单量' key='amount'>
+								 {
+								 	!stats.RankAmount?[]:stats.RankAmount.map(item=>{
+								 		return (
+										 	<dl className={styles.rank} key={`${item.Name}${item.Amount}`}>
+										 		<dt className={styles.rank_title}>
+										 			{item.Name}
+										 		</dt>
+										 		<dd className={styles.rank_cnt}>
+										 			<b>{item.Amount}</b>
+										 		</dd>
+										 	</dl>
+								 		)
+								 	})
+								 }
+								 </TabPane>
 							</Tabs>
 						</TCard>
 					</TCol>

@@ -49,6 +49,7 @@ class SearchPanel extends Component {
 				timeTo = times[1].format('YYYY-MM-DD')
 			}
 			let customName = getFieldValue('customName') || ''
+			let userName = getFieldValue('userName') || ''
 			let auditStatus = getFieldValue('auditStatus')
 			let payStatus = getFieldValue('payStatus')
 			let source = getFieldValue('source') || ''
@@ -58,6 +59,7 @@ class SearchPanel extends Component {
 				timeFrom,
 				timeTo,
 				customName,
+				userName,
 				auditStatus,
 				payStatus,
 				source
@@ -181,6 +183,13 @@ class SearchPanel extends Component {
 									</Select>
 								)
 							}
+						</FormItem>
+					</Col>
+					<Col {...colLayout}>
+						<FormItem {...formItemLayout} label='签单人'>
+						{
+							getFieldDecorator('userName')(<Input />)
+						}
 						</FormItem>
 					</Col>
 					<Col {...colLayout}>

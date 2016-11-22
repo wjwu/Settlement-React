@@ -3,6 +3,7 @@ import {
 	Icon,
 	Tag
 } from 'antd'
+import numeral from 'numeral'
 import * as colors from '../../colors'
 
 const columns = (editFuc) => {
@@ -45,7 +46,7 @@ const columns = (editFuc) => {
 		key: 'totalPrice',
 		width: '7%',
 		render: (text) => {
-			return <b>{`￥${text}`}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>
 		}
 	}, {
 		title: '总成本',
@@ -53,7 +54,7 @@ const columns = (editFuc) => {
 		key: 'costPrice',
 		width: '7%',
 		render: (text) => {
-			return <b>{`￥${text}`}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>
 		}
 	}, {
 		title: '已付',
@@ -61,7 +62,7 @@ const columns = (editFuc) => {
 		key: 'receivedMoney',
 		width: '7%',
 		render: (text) => {
-			return <b>{`￥${text}`}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>
 		}
 	}, {
 		title: '待付',
@@ -69,7 +70,7 @@ const columns = (editFuc) => {
 		key: 'remainingMoney',
 		width: '7%',
 		render: (text) => {
-			return <b>{`￥${text}`}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>
 		}
 	}, {
 		title: '个人提成',
@@ -77,7 +78,7 @@ const columns = (editFuc) => {
 		key: 'commission',
 		width: '7%',
 		render: (text) => {
-			return <b>{`￥${text}`}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>
 		}
 	}, {
 		title: '审核状态',

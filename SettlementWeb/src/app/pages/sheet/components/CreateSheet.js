@@ -239,7 +239,7 @@ class CreateSheet extends Component {
 
 		return (
 			<Modal title='新增结算表' visible={true} width={900} footer={footer} onCancel={this.props.onCancel}>
-				<Tabs tabPosition='left'>
+				<Tabs>
 					<TabPane tab='基本信息' key='baseInfo'> 
 						<Form>
 							<Row>

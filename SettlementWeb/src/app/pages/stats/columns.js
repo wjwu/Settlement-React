@@ -3,6 +3,7 @@ import {
 	Icon,
 	Tag
 } from 'antd'
+import numeral from 'numeral'
 import * as colors from '../../colors'
 
 export const sheetColumns = () => {
@@ -42,7 +43,7 @@ export const sheetColumns = () => {
 		key: 'total',
 		width: '7%',
 		render: (text) => {
-			return <b>{`￥${text}`}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>
 		}
 	}, {
 		title: '总成本',
@@ -50,7 +51,7 @@ export const sheetColumns = () => {
 		key: 'cost',
 		width: '7%',
 		render: (text) => {
-			return <b>{`￥${text}`}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>
 		}
 	}, {
 		title: '已付',
@@ -58,7 +59,7 @@ export const sheetColumns = () => {
 		key: 'received',
 		width: '7%',
 		render: (text) => {
-			return <b>{`￥${text}`}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>
 		}
 	}, {
 		title: '待付',
@@ -66,7 +67,7 @@ export const sheetColumns = () => {
 		key: 'remaining',
 		width: '7%',
 		render: (text) => {
-			return <b>{`￥${text}`}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>
 		}
 	}, {
 		title: '税费',
@@ -74,7 +75,7 @@ export const sheetColumns = () => {
 		key: 'tax',
 		width: '7%',
 		render: (text) => {
-			return <b>{`￥${text}`}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>
 		}
 	}, {
 		title: '个人提成',
@@ -82,7 +83,7 @@ export const sheetColumns = () => {
 		key: 'commission',
 		width: '7%',
 		render: (text) => {
-			return <b>{`￥${text}`}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>
 		}
 	}, {
 		title: '付款状态',
@@ -139,7 +140,7 @@ export const selfColumns = () => {
 			return a.Total - b.Total
 		},
 		render: (text) => {
-			return <b>{`￥${text}`}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>
 		}
 	}, {
 		title: '成本合计',
@@ -150,7 +151,7 @@ export const selfColumns = () => {
 			return a.Cost - b.Cost
 		},
 		render: (text) => {
-			return <b>{`￥${text}`}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>
 		}
 	}, {
 		title: '个人提成',
@@ -161,7 +162,7 @@ export const selfColumns = () => {
 			return a.Commission - b.Commission
 		},
 		render: (text) => {
-			return <b>{`￥${text}`}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>
 		}
 	}, {
 		title: '个人业绩',
@@ -172,7 +173,7 @@ export const selfColumns = () => {
 			return a.Achievement - b.Achievement
 		},
 		render: (text) => {
-			return <b>{`￥${text}`}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>
 		}
 	}]
 }
@@ -211,7 +212,7 @@ export const deptColumns = () => {
 			return a.Total - b.Total
 		},
 		render: (text) => {
-			return <b>{`￥${text}`}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>
 		}
 	}, {
 		title: '成本合计',
@@ -222,7 +223,7 @@ export const deptColumns = () => {
 			return a.Cost - b.Cost
 		},
 		render: (text) => {
-			return <b>{`￥${text}`}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>
 		}
 	}, {
 		title: '部门提成',
@@ -233,7 +234,7 @@ export const deptColumns = () => {
 			return a.Commission - b.Commission
 		},
 		render: (text) => {
-			return <b>{`￥${text}`}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>
 		}
 	}, {
 		title: '部门业绩',
@@ -244,7 +245,7 @@ export const deptColumns = () => {
 			return a.Achievement - b.Achievement
 		},
 		render: (text) => {
-			return <b>{`￥${text}`}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>
 		}
 	}]
 }

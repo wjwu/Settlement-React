@@ -26,7 +26,8 @@ import CreateReceived from './CreateReceived'
 import UpdateReceived from './UpdateReceived'
 import {
 	genCostColumns,
-	genReceivedColumns
+	genReceivedColumns,
+	genLogColumns
 } from './columns'
 import {
 	disabledTime,
@@ -300,7 +301,7 @@ class UpdateSheet extends Component {
 
 		return (
 			<Modal title='修改结算表' visible={true} width={800} footer={footer} onCancel={this.props.onCancel}>
-				<Tabs tabPosition='left'>
+				<Tabs>
 					<TabPane tab='基本信息' key='baseInfo'>
 						<Form>
 							<Row>
@@ -533,6 +534,9 @@ class UpdateSheet extends Component {
 							{modal}
 						</div>
 						<TTable key='received' bordered columns={receivedColumns} total={receiveds.length} dataSource={receiveds} pagination={false} onLoad={()=>{}}/>
+					</TabPane> 
+					<TabPane tab='操作记录' key='logInfo'>
+						<TTable key='log' bordered columns={genLogColumns()} total={0} dataSource={[]} onLoad={()=>{}}/>
 					</TabPane> 
 				</Tabs>
 			</Modal>
