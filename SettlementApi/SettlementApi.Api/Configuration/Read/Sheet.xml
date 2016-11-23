@@ -17,6 +17,7 @@ SELECT  S.[ID] ,
         S.[Received] ,
         S.[Remaining] ,
         S.[Commission] ,
+        S.[TaxRate],
         S.[Tax],
         S.[Achievement],
         S.[CreateTime]

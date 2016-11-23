@@ -9,6 +9,7 @@ import {
 	Button,
 	Tabs
 } from 'antd'
+import moment from 'moment'
 import {
 	TMainContainer
 } from '../../containers'
@@ -46,6 +47,7 @@ import {
 	deptOption
 } from './options'
 
+
 const TabPane = Tabs.TabPane
 
 class Stats extends Component {
@@ -56,7 +58,8 @@ class Stats extends Component {
 		this.request = {
 			pageIndex: 1,
 			groups: this.props.sys_user.Path,
-			auditStatus: 'pass'
+			auditStatus: 'pass',
+			timeFrom: moment().set('date', 1).format('YYYY-MM-DD')
 		}
 	}
 
@@ -177,10 +180,10 @@ class Stats extends Component {
 								<TTable key='tamount' bordered columns={sheetColumns()} total={sheets.TotalCount} dataSource={sheets.List} loading={querying} onLoad={this.onTTableLoad}/>
 							</TabPane>
 							<TabPane tab='个人提成/业绩' key='self'>
-								<TTable key='tself' bordered pagination={false} columns={selfColumns()} total={userProfit.length} dataSource={userProfit} onLoad={()=>{}}/>
+								<TTable key='tself' bordered pagination={false} columns={selfColumns()} dataSource={userProfit}/>
 							</TabPane>
 							<TabPane tab='部门提成/业绩' key='dept'>
-								<TTable key='tdept' bordered pagination={false} columns={deptColumns()} total={deptProfit.length} dataSource={deptProfit} onLoad={()=>{}}/>
+								<TTable key='tdept' bordered pagination={false} columns={deptColumns()} dataSource={deptProfit}/>
 							</TabPane>
 						</Tabs>
 					</TCol>

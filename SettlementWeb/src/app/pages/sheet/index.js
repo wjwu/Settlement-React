@@ -4,6 +4,7 @@ import React, {
 import {
 	connect
 } from 'react-redux'
+import moment from 'moment'
 import {
 	Row,
 	Col,
@@ -49,7 +50,8 @@ class Sheet extends Component {
 
 		this.request = {
 			pageIndex: 1,
-			groups: this.props.sys_user.Path
+			groups: this.props.sys_user.Path,
+			timeFrom: moment().set('date', 1).format('YYYY-MM-DD')
 		}
 		this.state = {
 			updateSheetVisble: false,
@@ -75,10 +77,10 @@ class Sheet extends Component {
 
 	componentDidUpdate() {
 		if (this.props.sheet.created) {
-			this.hideModal('createSheetVisble')
+			//this.hideModal('createSheetVisble')
 			this.props.querySheets(this.request)
 		} else if (this.props.sheet.updated) {
-			this.hideModal('updateSheetVisble')
+			//this.hideModal('updateSheetVisble')
 			this.props.querySheets(this.request)
 		}
 	}
@@ -172,7 +174,14 @@ class Sheet extends Component {
 				)
 			}
 		}
-
+		let expandedRowRender = record => {
+			return (
+				<p>
+					<span style={{marginRight:20}}>{`所在部门：${record.Department}`}</span>
+					<span>{`客户来源：${record.Source}`}</span>
+				</p>
+			)
+		}
 		return (
 			<div>
 				<Row>
@@ -184,7 +193,7 @@ class Sheet extends Component {
 				</Row>
 				<Row>
 					<TCol>
-						<TTable title={title} key='sheets' bordered columns={columns} total={sheets.TotalCount} dataSource={sheets.List} loading={querying} onLoad={this.onTTableLoad}/>
+						<TTable rowKey={record => record.ID} expandedRowRender={expandedRowRender} title={title} key='sheets' bordered columns={columns} total={sheets.TotalCount} dataSource={sheets.List} loading={querying} onLoad={this.onTTableLoad}/>
 					</TCol>
 				</Row>
 				{modal}

@@ -15,29 +15,35 @@ namespace SettlementApi.Write.BusinessLogic
             {
                 var evt = e as CreateSheetEvent;
                 var user = new UserBusinessLogic().GetEntity(ServiceContext.OperatorID);
+                string text;
+                if (evt.AuditStatus == AuditStatus.Auditing)
+                    text = string.Format(SheetRes.SubmitSheet, user.Name);
+                else
+                    text = string.Format(SheetRes.CreateSheet, user.Name);
                 Create("SheetLog.Create", new SheetLog
                 {
                     OperatorID = ServiceContext.OperatorID,
                     SheetID = evt.SheetID,
-                    Text = string.Format(SheetRes.CreateSheet, user.Name)
+                    Text = text
                 });
             });
             this.Subscribe<UpdateSheetEvent>(e =>
             {
                 var evt = e as UpdateSheetEvent;
                 var user = new UserBusinessLogic().GetEntity(ServiceContext.OperatorID);
-                string text;
-                if (evt.AuditStatus==AuditStatus.Pass)
+                var text = string.Empty;
+                if (evt.OldAuditStatus == evt.NewAuditStatus)
                 {
-                    text = string.Format(SheetRes.AuditSheetPass, user.Name);
-                }
-                else if (evt.AuditStatus == AuditStatus.Fail)
-                {
-                    text = string.Format(SheetRes.AuditSheetFail, user.Name);
+                    text = string.Format(SheetRes.UpdateSheet, user.Name);
                 }
                 else
                 {
-                    text = string.Format(SheetRes.UpdateSheet, user.Name);
+                    if (evt.NewAuditStatus == AuditStatus.Pass)
+                        text = string.Format(SheetRes.AuditSheetPass, user.Name);
+                    else if (evt.NewAuditStatus == AuditStatus.Fail)
+                        text = string.Format(SheetRes.AuditSheetFail, user.Name);
+                    else if (evt.NewAuditStatus == AuditStatus.Auditing)
+                        text = string.Format(SheetRes.SubmitSheet, user.Name);
                 }
                 Create("SheetLog.Create", new SheetLog
                 {

@@ -14,7 +14,9 @@ namespace SettlementApi.Write.BusinessLogic.Event
 
         public decimal Profit { get; set; }
 
-        public AuditStatus AuditStatus { get; set; }
+        public AuditStatus OldAuditStatus { get; set; }
+
+        public AuditStatus NewAuditStatus { get; set; }
 
         public List<Cost> Costs { get; set; }
 

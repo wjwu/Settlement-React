@@ -251,6 +251,7 @@ class UpdateSheet extends Component {
 		let btnFail = <Button key='fail' type='primary' size='large' loading={updating} onClick={this.submit.bind(this,'fail')}>打回</Button>
 		let role = this.props.sys_user.Role
 		let disabled = false
+		let receivedDisabled = false
 		if (role === 'Employee' || role === 'DeptManager') {
 			if ((sheet.AuditStatus === 'UnSubmit' || sheet.AuditStatus === 'Fail') && sheet.UserID.toLowerCase() === this.props.sys_user.ID.toLowerCase()) {
 				footer.push(btnSave)
@@ -258,10 +259,16 @@ class UpdateSheet extends Component {
 			} else if (sheet.AuditStatus === 'Auditing') {
 				footer.push(btnSave)
 			} else {
+				if (sheet.UserID.toLowerCase() !== this.props.sys_user.ID.toLowerCase()) {
+					receivedDisabled = true
+				} else {
+					footer.push(btnSave)
+				}
 				disabled = true
 			}
 		} else if (role === 'Financial') {
 			disabled = true
+			receivedDisabled = true
 			if (sheet.AuditStatus === 'Auditing') {
 				footer.push(btnFail)
 				footer.push(btnPass)
@@ -297,7 +304,7 @@ class UpdateSheet extends Component {
 					...this.state
 				})
 			}
-		}, disabled)
+		}, receivedDisabled)
 
 		return (
 			<Modal title='修改结算表' visible={true} width={800} footer={footer} onCancel={this.props.onCancel}>
@@ -526,17 +533,17 @@ class UpdateSheet extends Component {
 							<Button type='primary' disabled={disabled} icon='plus-circle-o' onClick={this.showModal.bind(this,createCost)}>新增明细</Button>
 							{modal}
 						</div>
-						<TTable key='cost' bordered columns={costColumns} total={costs.length} dataSource={costs} pagination={false} onLoad={()=>{}}/>
+						<TTable key='cost'  scroll={{ y: 300 }} bordered columns={costColumns} total={costs.length} dataSource={costs} pagination={false} onLoad={()=>{}}/>
 					</TabPane> 
 					<TabPane tab='收款明细' key='receivedInfo'>
 						<div style={{marginBottom:16,textAlign:'right'}}>
-							<Button type='primary' disabled={disabled} icon='plus-circle-o' onClick={this.showModal.bind(this,createReceived)}>新增明细</Button>
+							<Button type='primary' disabled={receivedDisabled} icon='plus-circle-o' onClick={this.showModal.bind(this,createReceived)}>新增明细</Button>
 							{modal}
 						</div>
-						<TTable key='received' bordered columns={receivedColumns} total={receiveds.length} dataSource={receiveds} pagination={false} onLoad={()=>{}}/>
+						<TTable key='received' bordered columns={receivedColumns} dataSource={receiveds} pagination={false}/>
 					</TabPane> 
 					<TabPane tab='操作记录' key='logInfo'>
-						<TTable key='log' bordered columns={genLogColumns()} total={sheet.Logs.length} dataSource={sheet.Logs} pagination={false} onLoad={()=>{}}/>
+						<TTable key='log' bordered columns={genLogColumns()} dataSource={sheet.Logs} pagination={false}/>
 					</TabPane> 
 				</Tabs>
 			</Modal>

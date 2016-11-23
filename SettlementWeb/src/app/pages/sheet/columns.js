@@ -31,19 +31,9 @@ const columns = (editFuc) => {
 		key: 'userName',
 		width: '7%'
 	}, {
-		title: '所在部门',
-		dataIndex: 'Department',
-		key: 'department',
-		width: '7%'
-	}, {
-		title: '客户来源',
-		dataIndex: 'Source',
-		key: 'source',
-		width: '7%'
-	}, {
 		title: '总成交额',
 		dataIndex: 'Total',
-		key: 'totalPrice',
+		key: 'total',
 		width: '7%',
 		render: (text) => {
 			return <b>{numeral(text).format('0,0.00')}</b>
@@ -51,7 +41,23 @@ const columns = (editFuc) => {
 	}, {
 		title: '总成本',
 		dataIndex: 'Cost',
-		key: 'costPrice',
+		key: 'cost',
+		width: '7%',
+		render: (text) => {
+			return <b>{numeral(text).format('0,0.00')}</b>
+		}
+	}, {
+		title: '税率',
+		dataIndex: 'TaxRate',
+		key: 'taxRate',
+		width: '7%',
+		render: (text) => {
+			return <b>{`${text*100}%`}</b>
+		}
+	}, {
+		title: '税费',
+		dataIndex: 'Tax',
+		key: 'tax',
 		width: '7%',
 		render: (text) => {
 			return <b>{numeral(text).format('0,0.00')}</b>
@@ -59,7 +65,7 @@ const columns = (editFuc) => {
 	}, {
 		title: '已付',
 		dataIndex: 'Received',
-		key: 'receivedMoney',
+		key: 'received',
 		width: '7%',
 		render: (text) => {
 			return <b>{numeral(text).format('0,0.00')}</b>
@@ -67,7 +73,7 @@ const columns = (editFuc) => {
 	}, {
 		title: '待付',
 		dataIndex: 'Remaining',
-		key: 'remainingMoney',
+		key: 'remaining',
 		width: '7%',
 		render: (text) => {
 			return <b>{numeral(text).format('0,0.00')}</b>

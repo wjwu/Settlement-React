@@ -73,6 +73,7 @@
             dbo.Sheet
     SET     [CustomName] = @CustomName ,
             [AuditStatus] = @AuditStatus ,
+            [PayStatus]=@PayStatus,
             [Contacts] = @Contacts ,
             [Phone] = @Phone ,
             [QQ] = @QQ ,

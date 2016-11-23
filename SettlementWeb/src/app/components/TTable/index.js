@@ -18,14 +18,15 @@ class TTable extends Component {
 			onLoad
 		} = this.props
 
-		pagination.total = total
-		pagination.onChange = current => {
-			onLoad(current)
-		}
 		if (this.props.pagination === false) {
 			return (
 				<Table {...this.props}/>
 			)
+		}
+
+		pagination.total = total
+		pagination.onChange = current => {
+			onLoad(current)
 		}
 		return (
 			<Table pagination={pagination} {...this.props}/>
@@ -34,8 +35,8 @@ class TTable extends Component {
 }
 
 TTable.propTypes = {
-	total: PropTypes.number.isRequired,
-	onLoad: PropTypes.func.isRequired
+	total: PropTypes.number,
+	onLoad: PropTypes.func
 }
 
 export default TTable

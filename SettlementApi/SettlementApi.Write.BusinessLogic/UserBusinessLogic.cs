@@ -91,7 +91,10 @@ namespace SettlementApi.Write.BusinessLogic
             }
 
             result.RoleName = EnumUtity.GetDescription(typeof(RoleType), result.Role);
-            result.LastLoginTime = DateTime.Parse(result.LastLoginTime).ToString("yyyy-MM-dd HH:mm:ss");
+            if (!string.IsNullOrWhiteSpace(result.LastLoginTime))
+            {
+                result.LastLoginTime = DateTime.Parse(result.LastLoginTime).ToString("yyyy-MM-dd HH:mm:ss");
+            }
             return result;
         }
 

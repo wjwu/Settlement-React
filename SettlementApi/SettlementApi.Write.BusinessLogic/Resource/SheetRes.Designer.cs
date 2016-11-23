@@ -88,6 +88,15 @@ namespace SettlementApi.Write.BusinessLogic.Resource {
         }
         
         /// <summary>
+        ///   查找类似 [{0}] 提交了结算表。 的本地化字符串。
+        /// </summary>
+        internal static string SubmitSheet {
+            get {
+                return ResourceManager.GetString("SubmitSheet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 [{0}] 修改了结算表。 的本地化字符串。
         /// </summary>
         internal static string UpdateSheet {

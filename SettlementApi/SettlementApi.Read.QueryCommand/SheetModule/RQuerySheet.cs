@@ -34,6 +34,8 @@ namespace SettlementApi.Read.QueryCommand.SheetModule
 
         public decimal Tax { get; set; }
 
+        public decimal TaxRate { get; set; }
+
         public decimal Achievement { get; set; }
 
         public string AuditStatus { get; set; }

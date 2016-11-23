@@ -5,7 +5,8 @@ import {
 import {
 	Row,
 	Tabs,
-	Icon
+	Icon,
+	Spin
 } from 'antd'
 import ReactEcharts from 'echarts-for-react'
 import {
@@ -32,6 +33,38 @@ class Home extends React.Component {
 
 	render() {
 		const stats = this.props.stats.stats || {}
+		let chart
+		if (stats.Date) {
+			chart = <ReactEcharts option={option(stats.Date,stats.ChartTotal)}  style={{height: '350px', width: '100%'}}  />
+		} else {
+			chart = <Spin tip='Loading...'/>
+		}
+
+		let totalPercent
+		if (stats.TotalPercent === 0) {
+			totalPercent = <span className={styles.compare}>{stats.TotalPercent}%</span>
+		} else if (stats.TotalPercent > 0) {
+			totalPercent = <span className={styles.compare_up}>{stats.TotalPercent}%<Icon type='arrow-up'/></span>
+		} else {
+			totalPercent = <span className={styles.compare_down}>{stats.TotalPercent}%<Icon type='arrow-down'/></span>
+		}
+
+		let commissionPercent
+		if (stats.CommissionPercent === 0) {
+			commissionPercent = <span className={styles.compare}>{stats.CommissionPercent}%</span>
+		} else if (stats.CommissionPercent > 0) {
+			commissionPercent = <span className={styles.compare_up}>{stats.CommissionPercent}%<Icon type='arrow-up'/></span>
+		} else {
+			commissionPercent = <span className={styles.compare_down}>{stats.CommissionPercent}%<Icon type='arrow-down'/></span>
+		}
+		let achievementPercent
+		if (stats.AchievementPercent === 0) {
+			achievementPercent = <span className={styles.compare}>{stats.AchievementPercent}%</span>
+		} else if (stats.AchievementPercent > 0) {
+			achievementPercent = <span className={styles.compare_up}>{stats.AchievementPercent}%<Icon type='arrow-up'/></span>
+		} else {
+			achievementPercent = <span className={styles.compare_down}>{stats.AchievementPercent}%<Icon type='arrow-down'/></span>
+		}
 		return (
 			<div>
 				<Row gutter={24}>
@@ -51,7 +84,7 @@ class Home extends React.Component {
 								</dt>
 								<dd >
 									<span>本月</span>
-									<span className={stats.TotalPercent>0?styles.compare_up:styles.compare_down}>{stats.TotalPercent}%<Icon type='arrow-up'/></span>
+									{totalPercent}
 								</dd>
 							</dl>
 						</TCard>
@@ -72,7 +105,7 @@ class Home extends React.Component {
 								</dt>
 								<dd>
 									<span>本月</span>
-									<span className={stats.CommissionPercent>0?styles.compare_up:styles.compare_down}>{stats.CommissionPercent}%<Icon type='arrow-up'/></span>
+									{commissionPercent}
 								</dd>
 							</dl>
 						</TCard>
@@ -93,7 +126,7 @@ class Home extends React.Component {
 								</dt>
 								<dd>
 									<span>本月</span>
-									<span className={stats.AchievementPercent>0?styles.compare_up:styles.compare_down}>{stats.AchievementPercent}%<Icon type='arrow-up'/></span>
+									{achievementPercent}
 								</dd>
 							</dl>
 						</TCard>
@@ -102,7 +135,7 @@ class Home extends React.Component {
 				<Row>
 					<TCol>
 						<TCard>
-		                    <ReactEcharts option={option(stats.Date,stats.ChartTotal)}  style={{height: '350px', width: '100%'}}  />
+		                    {chart}
 						</TCard>
 					</TCol>
 				</Row>

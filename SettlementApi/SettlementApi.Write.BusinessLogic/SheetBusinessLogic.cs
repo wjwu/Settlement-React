@@ -27,7 +27,6 @@ namespace SettlementApi.Write.BusinessLogic
             sheet.UserID = ServiceContext.OperatorID;
             sheet.AuditStatus = Enum.GetName(typeof(AuditStatus),
                 command.Submit ? AuditStatus.Auditing : AuditStatus.UnSubmit);
-            sheet.PayStatus = Enum.GetName(typeof(PayStatus), PayStatus.Unpaid);
             sheet.Days = sheet.TimeTo.Subtract(sheet.TimeFrom).Days;
             //单价
             sheet.Unit = Math.Round(sheet.Total/sheet.People);
@@ -35,6 +34,8 @@ namespace SettlementApi.Write.BusinessLogic
             costs?.ForEach(cost => { sheet.Cost += cost.Amount*cost.Unit; });
             //收款
             receiveds?.ForEach(received => { sheet.Received += received.Money; });
+            sheet.PayStatus = Enum.GetName(typeof(PayStatus),
+                sheet.Received >= sheet.Total ? PayStatus.Paid : PayStatus.Unpaid);
             //尾款
             sheet.Remaining = sheet.Total - sheet.Received;
             var projectManager = new UserBusinessLogic().GetEntity(ServiceContext.OperatorID);
@@ -48,7 +49,7 @@ namespace SettlementApi.Write.BusinessLogic
             //业绩
             sheet.Achievement = sheet.Total - sheet.Cost - sheet.Tax;
             //提成
-            sheet.Commission = sheet.Achievement * sheet.Percent;
+            sheet.Commission = sheet.Achievement*sheet.Percent;
 
             sheet.LastModifyUser = ServiceContext.OperatorID;
             Create("Sheet.Create", sheet);
@@ -57,7 +58,8 @@ namespace SettlementApi.Write.BusinessLogic
             {
                 SheetID = sheet.ID,
                 Costs = costs,
-                Receiveds = receiveds
+                Receiveds = receiveds,
+                AuditStatus = EnumUtity.ToEnum(sheet.AuditStatus, AuditStatus.None)
             });
         }
 
@@ -85,13 +87,9 @@ namespace SettlementApi.Write.BusinessLogic
 
         public void Execute(UpdateAuditStatusCommand command)
         {
-            //var opertor = new UserBusinessLogic().GetEntity(ServiceContext.OperatorID);
-            //if (ServiceContext.OperatorID)
-            //{
-
-            //}
-
-            //todo
+            var opertor = new UserBusinessLogic().GetEntity(ServiceContext.OperatorID);
+            if (opertor.Role != Enum.GetName(typeof(RoleType), RoleType.Financial))
+                throw new BussinessException(CommonRes.InvalidOperation);
             var sheet = GetEntity(command.ID);
             if (sheet.AuditStatus != Enum.GetName(typeof(AuditStatus), AuditStatus.Auditing))
                 throw new BussinessException(CommonRes.InvalidOperation);
@@ -100,16 +98,15 @@ namespace SettlementApi.Write.BusinessLogic
                 : Enum.GetName(typeof(AuditStatus), AuditStatus.Fail);
             Update("Sheet.UpdateAuditStatus",
                 new {command.ID, AuditStatus = auditStatus, LastModifyUser = ServiceContext.OperatorID});
-            if (command.Pass)
+
+            this.Publish(new UpdateSheetEvent
             {
-                this.Publish(new UpdateSheetEvent
-                {
-                    UserID = sheet.UserID,
-                    AuditStatus = AuditStatus.Pass,
-                    SheetID = command.ID,
-                    Profit = sheet.Total-sheet.Cost
-                });
-            }
+                UserID = sheet.UserID,
+                OldAuditStatus = AuditStatus.Auditing,
+                NewAuditStatus = EnumUtity.ToEnum(auditStatus, AuditStatus.None),
+                SheetID = command.ID,
+                Profit = sheet.Total - sheet.Cost
+            });
         }
 
         public void Execute(UpdateSheetCommand command)
@@ -133,14 +130,16 @@ namespace SettlementApi.Write.BusinessLogic
             costs?.ForEach(cost => { newSheet.Cost += cost.Amount*cost.Unit; });
             //收款
             receiveds?.ForEach(received => { newSheet.Received += received.Money; });
+            newSheet.PayStatus = Enum.GetName(typeof(PayStatus),
+                newSheet.Received >= newSheet.Total ? PayStatus.Paid : PayStatus.Unpaid);
             //尾款
             newSheet.Remaining = newSheet.Total - newSheet.Received;
             //税费
-            newSheet.Tax = newSheet.Total * newSheet.TaxRate;
+            newSheet.Tax = newSheet.Total*newSheet.TaxRate;
             //业绩
             newSheet.Achievement = newSheet.Total - newSheet.Cost - newSheet.Tax;
             //提成
-            newSheet.Commission = newSheet.Achievement * oldSheet.Percent;
+            newSheet.Commission = newSheet.Achievement*oldSheet.Percent;
             newSheet.LastModifyUser = ServiceContext.OperatorID;
             Update("Sheet.Update", newSheet);
 
@@ -151,7 +150,8 @@ namespace SettlementApi.Write.BusinessLogic
                 Costs = costs,
                 Receiveds = receiveds,
                 Profit = newSheet.Total - newSheet.Cost,
-                AuditStatus = EnumUtity.ToEnum(oldSheet.AuditStatus, AuditStatus.None)
+                OldAuditStatus = EnumUtity.ToEnum(oldSheet.AuditStatus,AuditStatus.None),
+                NewAuditStatus = EnumUtity.ToEnum(newSheet.AuditStatus, AuditStatus.None),
             });
         }
 

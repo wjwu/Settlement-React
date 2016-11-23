@@ -126,6 +126,9 @@
   <data name="CreateSheet" xml:space="preserve">
     <value>[{0}] 创建结算表。</value>
   </data>
+  <data name="SubmitSheet" xml:space="preserve">
+    <value>[{0}] 提交了结算表。</value>
+  </data>
   <data name="UpdateSheet" xml:space="preserve">
     <value>[{0}] 修改了结算表。</value>
   </data>

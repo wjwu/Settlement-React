@@ -11,6 +11,7 @@ import {
 	DatePicker,
 	Button
 } from 'antd'
+import moment from 'moment'
 import {
 	TTreeSelect
 } from '../../../components'
@@ -113,7 +114,12 @@ class SearchPanel extends Component {
 					<Col {...colLayout}>
 						<FormItem {...formItemLayout}  label='培训时间'>
 						{
-							getFieldDecorator('times')(<RangePicker format='YYYY-MM-DD' disabledDate={disabledDate} disabledTime={disabledTime} allowClear/>)
+							getFieldDecorator('times',{
+								initialValue:[
+									moment().set('date', 1),
+									moment()
+								]
+							})(<RangePicker format='YYYY-MM-DD' disabledDate={disabledDate} disabledTime={disabledTime} allowClear/>)
 						}
 						</FormItem>
 					</Col>

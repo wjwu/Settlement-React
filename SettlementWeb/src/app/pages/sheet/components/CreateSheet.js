@@ -451,14 +451,14 @@ class CreateSheet extends Component {
 							<Button type='primary' icon='plus-circle-o' onClick={this.showModal.bind(this,createCost)}>新增明细</Button>
 							{modal}
 						</div>
-						<TTable key='cost' bordered columns={costColumns} total={costs.length} dataSource={costs} pagination={false} onLoad={()=>{}}/>
+						<TTable key='cost' scroll={{ y: 300 }} bordered columns={costColumns} dataSource={costs} pagination={false}/>
 					</TabPane> 
 					<TabPane tab='收款明细' key='receivedInfo'>
 						<div style={{marginBottom:16,textAlign:'right'}}>
 							<Button type='primary' icon='plus-circle-o' onClick={this.showModal.bind(this,createReceived)}>新增明细</Button>
 							{modal}
 						</div>
-						<TTable key='received' bordered columns={receivedColumns} total={receiveds.length} dataSource={receiveds} pagination={false} onLoad={()=>{}}/>
+						<TTable key='received' bordered columns={receivedColumns} dataSource={receiveds} pagination={false}/>
 					</TabPane> 
 				</Tabs>
 			</Modal>

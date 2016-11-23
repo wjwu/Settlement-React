@@ -158,29 +158,32 @@ namespace SettlementApi.Read.Respository
                 //计算总成交
                 decimal deptTotal = 0;
                 groupSheets.ForEach(sheet => deptTotal += sheet.Value.Sum(p => p.Total));
-                result.Department = new Dictionary<string, decimal>();
 
-                //统计部门占比
-                groupSheets.ForEach(sheet =>
+                if (deptTotal > 0)
                 {
-                    var group = groups.FirstOrDefault(p => p.ID == sheet.Key);
-                    if (group != null)
+                    result.Department = new Dictionary<string, decimal>();
+                    //统计部门占比
+                    groupSheets.ForEach(sheet =>
                     {
-                        var deptProfits = new DepartmentProfit
+                        var group = groups.FirstOrDefault(p => p.ID == sheet.Key);
+                        if (group != null)
                         {
-                            ID = group.ID,
-                            Name = group.Name,
-                            Amount = sheet.Value.Count,
-                            Commission = sheet.Value.Sum(p => p.Commission),
-                            Cost = sheet.Value.Sum(p => p.Cost),
-                            Percent = group.Percent,
-                            Total = sheet.Value.Sum(p => p.Total),
-                            Achievement = sheet.Value.Sum(p => p.Achievement)
-                        };
-                        result.Department.Add(group.Name, decimal.Round(deptProfits.Total/deptTotal, 2));
-                        result.DepartmentProfit.Add(deptProfits);
-                    }
-                });
+                            var deptProfits = new DepartmentProfit
+                            {
+                                ID = group.ID,
+                                Name = group.Name,
+                                Amount = sheet.Value.Count,
+                                Commission = sheet.Value.Sum(p => p.Commission),
+                                Cost = sheet.Value.Sum(p => p.Cost),
+                                Percent = group.Percent,
+                                Total = sheet.Value.Sum(p => p.Total),
+                                Achievement = sheet.Value.Sum(p => p.Achievement)
+                            };
+                            result.Department.Add(group.Name, decimal.Round(deptProfits.Total/deptTotal, 2));
+                            result.DepartmentProfit.Add(deptProfits);
+                        }
+                    });
+                }
             }
             return result;
         }
@@ -239,37 +242,43 @@ namespace SettlementApi.Read.Respository
                     TimeTo = lastMTo
                 });
             //成交额
-            decimal total = ySheets.Sum(p => p.Total);
-            decimal monthTotal = mSheets.Sum(p => p.Total);
+            var total = ySheets.Sum(p => p.Total);
+            var monthTotal = mSheets.Sum(p => p.Total);
             result.Total = total.ToString("N");
             result.MonthTotal = monthTotal.ToString("N");
             var lastMTotal = lastMSheets.Sum(p => p.Total);
             if (lastMTotal == 0)
                 result.TotalPercent = monthTotal;
+            else if (monthTotal == 0)
+                result.TotalPercent = monthTotal - lastMTotal;
             else
-                result.TotalPercent = (monthTotal - lastMTotal)/lastMTotal;
+                result.TotalPercent = decimal.Round((monthTotal - lastMTotal)/lastMTotal*100);
 
             //提成
-            decimal commission = ySheets.Sum(p => p.Commission);
-            decimal monthCommission = mSheets.Sum(p => p.Commission);
+            var commission = ySheets.Sum(p => p.Commission);
+            var monthCommission = mSheets.Sum(p => p.Commission);
             result.Commission = commission.ToString("N");
             result.MonthCommission = monthCommission.ToString("N");
             var lastMCommission = lastMSheets.Sum(p => p.Commission);
             if (lastMCommission == 0)
                 result.CommissionPercent = monthCommission;
+            else if (monthCommission == 0)
+                result.CommissionPercent = monthCommission - lastMCommission;
             else
-                result.CommissionPercent = (monthCommission - lastMCommission)/lastMCommission;
+                result.CommissionPercent = decimal.Round((monthCommission - lastMCommission)/lastMCommission*100);
 
             //业绩
-            decimal achievement = ySheets.Sum(p => p.Achievement);
-            decimal monthAchievement = mSheets.Sum(p => p.Achievement);
+            var achievement = ySheets.Sum(p => p.Achievement);
+            var monthAchievement = mSheets.Sum(p => p.Achievement);
             result.Achievement = achievement.ToString("N");
             result.MonthAchievement = monthAchievement.ToString("N");
             var lastMAchievement = lastMSheets.Sum(p => p.Achievement);
             if (lastMAchievement == 0)
                 result.AchievementPercent = monthAchievement;
+            else if (monthAchievement == 0)
+                result.AchievementPercent = monthAchievement - lastMAchievement;
             else
-                result.AchievementPercent = (monthAchievement - lastMAchievement)/lastMAchievement;
+                result.AchievementPercent = decimal.Round((monthAchievement - lastMAchievement)/lastMAchievement*100, 2);
             //统计时间段
             result.Date = new List<string>();
 
