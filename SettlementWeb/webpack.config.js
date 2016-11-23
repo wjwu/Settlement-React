@@ -40,6 +40,11 @@ if (process.env.NODE_ENV === 'prd') {
 
 
 module.exports = {
+	// externals: {
+	// 	'react': 'React',
+	// 	'react-dom': 'ReactDOM',
+	// 	'moment': 'moment'
+	// },
 	entry: entry,
 	output: {
 		path: __dirname + '/dist',

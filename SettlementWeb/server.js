@@ -12,10 +12,6 @@ app.get('/', function(req, res) {
 	res.sendFile(path.join(__dirname, '/src/login/index.html'))
 })
 
-app.get('/test', function(req, res) {
-	res.sendFile(path.join(__dirname, '/src/test.html'))
-})
-
 app.use(express.static(__dirname + '/libs/'))
 
 app.use(webpackDevMiddleware(compiler, {
