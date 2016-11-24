@@ -1,6 +1,6 @@
 import 'whatwg-fetch'
+import config from './config'
 
-const API_URL = 'http://localhost:10011/api/'
 const headers = {
 	'Accept': 'application/json',
 	'Content-Type': 'application/json'
@@ -14,7 +14,7 @@ const processError = (reject, error) => reject(error)
 
 const post = (url, request) => {
 	return new Promise((resolve, reject) => {
-		fetch(`${API_URL}${url}`, {
+		fetch(`${config.apiHost}${url}`, {
 				method: 'POST',
 				headers: headers,
 				body: JSON.stringify(request)
@@ -25,6 +25,5 @@ const post = (url, request) => {
 }
 
 export {
-	API_URL,
-	post,
+	post
 }

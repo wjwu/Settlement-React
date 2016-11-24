@@ -139,7 +139,7 @@ const TMainContainer = () => {
 							<div className='ant-layout-sider'>
 							    <div className='ant-layout-logo'><h2>树虎团建结算系统</h2></div>
 				 				<Menu mode='inline' theme='dark' defaultOpenKeys={openKeys} selectedKeys={selectedKeys}>
-				 					<SubMenu key='my' title={<span><Icon type='desktop'/>我的结算表</span>}>
+				 					<SubMenu key='my' title={<span><Icon type='file'/>我的结算表</span>}>
 							        	<Menu.Item key='sheet'>
 							        		<Link to='/sheet'>我的结算表</Link>
 							        	</Menu.Item>

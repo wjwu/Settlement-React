@@ -1,3 +1,4 @@
+import 'babel-polyfill'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {
@@ -5,16 +6,12 @@ import {
 	Input,
 	Button,
 	Row,
-	Col
+	Col,
+	Alert
 } from 'antd'
-
+import config from './config'
 import Captcha from './Captcha'
-
 import * as actions from './action'
-
-import {
-	API_URL
-} from './apiClient'
 
 const FormItem = Form.Item
 
@@ -81,12 +78,12 @@ class LoginForm extends React.Component {
 
 		const timeSpan = this.state.timeSpan
 
-		const url = `${API_URL}captcha?t=${timeSpan}`
+		const url = `${config.apiHost}captcha?t=${timeSpan}`
 
 		return (
 			<Form onSubmit={this.submit.bind(this)}>
 				<FormItem>
-					<h1>结算系统</h1>
+					<h1>树虎团建结算系统</h1>
 				</FormItem>
 				<FormItem hasFeedback>
 				{
@@ -138,7 +135,12 @@ class LoginForm extends React.Component {
 						<Captcha url={url} OnRefresh={this.refreshCaptcha.bind(this)}/>
 					</Col>
 				</Row>
-				<Button type='primary' size='large' htmlType='submit'>登录</Button>
+				<Row>
+					<FormItem>
+						<Button type='primary' size='large' htmlType='submit'>登录</Button>
+					</FormItem>
+				</Row>
+				<Alert message='请使用谷歌、火狐浏览器，或极速模式的浏览器' type='info'/>
 			</Form>
 		)
 	}

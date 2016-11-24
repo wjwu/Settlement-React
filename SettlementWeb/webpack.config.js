@@ -6,10 +6,17 @@ var devtool;
 var compress;
 var mangle;
 var entry;
-if (process.env.NODE_ENV === 'prd') {
+var config = {
+	'API_HOST': process.env.API_HOST,
+	'NODE_ENV': process.env.NODE_ENV
+}
+
+if (process.env.NODE_ENV === 'production') {
 	devtool = false;
-	compress = false;
-	mangle = false;
+	compress = true;
+	mangle = {
+		except: ['$', 'exports', 'require']
+	};
 	entry = {
 		'app/app': [
 			'./src/app/index.js',
@@ -40,11 +47,11 @@ if (process.env.NODE_ENV === 'prd') {
 
 
 module.exports = {
-	// externals: {
-	// 	'react': 'React',
-	// 	'react-dom': 'ReactDOM',
-	// 	'moment': 'moment'
-	// },
+	externals: {
+		'react': 'React',
+		'react-dom': 'ReactDOM',
+		'moment': 'moment'
+	},
 	entry: entry,
 	output: {
 		path: __dirname + '/dist',
@@ -91,6 +98,9 @@ module.exports = {
 		new ExtractTextPlugin('[name].css', {
 			allChunks: true
 		}),
+		new webpack.DefinePlugin({
+			'process.env': JSON.stringify(config)
+		})
 		//new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
 		// new webpack.ProvidePlugin({
 		// 	$: 'jquery',

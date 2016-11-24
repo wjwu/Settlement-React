@@ -1,6 +1,6 @@
 import 'whatwg-fetch'
+import config from './config'
 
-const API_URL = 'http://localhost:10011/api/'
 const headers = {
 	'Accept': 'application/json',
 	'Content-Type': 'application/json',
@@ -25,9 +25,9 @@ const get = (url, request) => {
 		let query = Object.keys(request)
 			.map(key => encodeURIComponent(key) + '=' + encodeURIComponent(request[key]))
 			.join('&')
-		requestUrl = `${API_URL}${url}?${query}`
+		requestUrl = `${config.apiHost}${url}?${query}`
 	} else {
-		requestUrl = `${API_URL}${url}`
+		requestUrl = `${config.apiHost}${url}`
 	}
 
 	return new Promise((resolve, reject) => {
@@ -42,7 +42,7 @@ const get = (url, request) => {
 
 const post = (url, request) => {
 	return new Promise((resolve, reject) => {
-		fetch(`${API_URL}${url}`, {
+		fetch(`${config.apiHost}${url}`, {
 				method: 'POST',
 				headers: headers,
 				body: JSON.stringify(request)
@@ -54,7 +54,7 @@ const post = (url, request) => {
 
 const del = (url) => {
 	return new Promise((resolve, reject) => {
-		fetch(`${API_URL}${url}`, {
+		fetch(`${config.apiHost}${url}`, {
 				method: 'DELETE',
 				headers: headers,
 			}).then(processResponse)
@@ -65,7 +65,7 @@ const del = (url) => {
 
 const put = (url, request) => {
 	return new Promise((resolve, reject) => {
-		fetch(`${API_URL}${url}`, {
+		fetch(`${config.apiHost}${url}`, {
 				method: 'PUT',
 				headers: headers,
 				body: JSON.stringify(request)
@@ -77,7 +77,7 @@ const put = (url, request) => {
 
 const patch = (url, request) => {
 	return new Promise((resolve, reject) => {
-		fetch(`${API_URL}${url}`, {
+		fetch(`${config.apiHost}${url}`, {
 				method: 'patch',
 				headers: headers,
 				body: JSON.stringify(request)

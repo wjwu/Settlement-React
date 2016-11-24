@@ -111,7 +111,7 @@ namespace SettlementApi.Read.Respository
 
                 //合并部门和提成信息
                 var userStats =
-                    users.List.Join(groups, user => user.Group, group => group.ID,
+                    users.List.Where(p=>p.Role!="Admin"&&p.Role!= "Financial").Join(groups, user => user.Group, group => group.ID,
                         (user, group) =>
                             new TmpUser
                             {

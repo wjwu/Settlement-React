@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+您 Web 项目的发布/打包进程将使用此文件。您可以通过编辑此 MSBuild 文件
+来自定义该进程的行为。若要了解与此相关的详细信息，请访问 http://go.microsoft.com/fwlink/?LinkID=208121。
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>E:\Settlement-React</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="bin/CsQuery.dll">
+      <publishTime>02/05/2013 06:41:36</publishTime>
+    </File>
+    <File Include="bin/EmitMapper.dll">
+      <publishTime>05/10/2011 13:28:12</publishTime>
+    </File>
+    <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
+      <publishTime>06/15/2015 02:06:24</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.ServiceLocation.dll">
+      <publishTime>05/05/2014 11:25:44</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.Unity.Configuration.dll">
+      <publishTime>10/05/2015 09:37:20</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.Unity.dll">
+      <publishTime>10/05/2015 09:37:20</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.Unity.RegistrationByConvention.dll">
+      <publishTime>10/05/2015 09:37:20</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.dll">
+      <publishTime>08/03/2014 20:33:56</publishTime>
+    </File>
+    <File Include="bin/roslyn/csc.exe">
+      <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.Build.Tasks.CodeAnalysis.dll">
+      <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.CSharp.dll">
+      <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.dll">
+      <publishTime>06/18/2015 20:19:44</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.VisualBasic.dll">
+      <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CSharp.Core.targets">
+      <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.VisualBasic.Core.targets">
+      <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Collections.Immutable.dll">
+      <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Reflection.Metadata.dll">
+      <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/roslyn/vbc.exe">
+      <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/roslyn/VBCSCompiler.exe">
+      <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/roslyn/VBCSCompiler.exe.config">
+      <publishTime>06/18/2015 20:19:46</publishTime>
+    </File>
+    <File Include="bin/ServiceStack.Text.dll">
+      <publishTime>08/20/2016 04:06:28</publishTime>
+    </File>
+    <File Include="bin/SettlementApi.Api.dll">
+      <publishTime>11/24/2016 10:26:19</publishTime>
+    </File>
+    <File Include="bin/SettlementApi.CommandBus.dll">
+      <publishTime>11/24/2016 10:26:14</publishTime>
+    </File>
+    <File Include="bin/SettlementApi.Common.dll">
+      <publishTime>11/24/2016 10:26:13</publishTime>
+    </File>
+    <File Include="bin/SettlementApi.Context.dll">
+      <publishTime>11/24/2016 10:26:14</publishTime>
+    </File>
+    <File Include="bin/SettlementApi.DataAccess.dll">
+      <publishTime>11/24/2016 10:26:13</publishTime>
+    </File>
+    <File Include="bin/SettlementApi.EventBus.dll">
+      <publishTime>11/24/2016 10:26:14</publishTime>
+    </File>
+    <File Include="bin/SettlementApi.Read.Model.dll">
+      <publishTime>11/24/2016 10:26:14</publishTime>
+    </File>
+    <File Include="bin/SettlementApi.Read.QueryCommand.dll">
+      <publishTime>11/24/2016 10:26:14</publishTime>
+    </File>
+    <File Include="bin/SettlementApi.Read.Respository.dll">
+      <publishTime>11/24/2016 10:26:15</publishTime>
+    </File>
+    <File Include="bin/SettlementApi.Respository.dll">
+      <publishTime>11/24/2016 10:26:14</publishTime>
+    </File>
+    <File Include="bin/SettlementApi.Write.BusCommand.dll">
+      <publishTime>11/24/2016 10:26:14</publishTime>
+    </File>
+    <File Include="bin/SettlementApi.Write.BusinessLogic.dll">
+      <publishTime>11/24/2016 10:26:15</publishTime>
+    </File>
+    <File Include="bin/SettlementApi.Write.Model.dll">
+      <publishTime>11/24/2016 10:26:13</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.Formatting.dll">
+      <publishTime>01/28/2015 04:02:42</publishTime>
+    </File>
+    <File Include="bin/System.Web.Cors.dll">
+      <publishTime>01/28/2015 04:01:46</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.Cors.dll">
+      <publishTime>01/28/2015 04:03:04</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.dll">
+      <publishTime>01/28/2015 04:02:54</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.WebHost.dll">
+      <publishTime>01/28/2015 04:03:46</publishTime>
+    </File>
+    <File Include="bin/WebApi.Validation.dll">
+      <publishTime>08/10/2016 14:44:47</publishTime>
+    </File>
+    <File Include="Configuration/Connection.xml">
+      <publishTime>10/17/2016 10:17:08</publishTime>
+    </File>
+    <File Include="Configuration/Read/Cost.xml">
+      <publishTime>11/16/2016 18:10:51</publishTime>
+    </File>
+    <File Include="Configuration/Read/Dictionary.xml">
+      <publishTime>10/28/2016 17:31:53</publishTime>
+    </File>
+    <File Include="Configuration/Read/Group.xml">
+      <publishTime>11/15/2016 14:56:32</publishTime>
+    </File>
+    <File Include="Configuration/Read/Received.xml">
+      <publishTime>11/04/2016 10:03:42</publishTime>
+    </File>
+    <File Include="Configuration/Read/Sheet.xml">
+      <publishTime>11/23/2016 16:35:40</publishTime>
+    </File>
+    <File Include="Configuration/Read/SheetLog.xml">
+      <publishTime>11/22/2016 18:29:40</publishTime>
+    </File>
+    <File Include="Configuration/Read/User.xml">
+      <publishTime>11/22/2016 15:18:34</publishTime>
+    </File>
+    <File Include="Configuration/Write/Cost.xml">
+      <publishTime>11/16/2016 18:11:01</publishTime>
+    </File>
+    <File Include="Configuration/Write/Dictionary.xml">
+      <publishTime>10/27/2016 09:54:19</publishTime>
+    </File>
+    <File Include="Configuration/Write/Group.xml">
+      <publishTime>11/15/2016 14:27:55</publishTime>
+    </File>
+    <File Include="Configuration/Write/Received.xml">
+      <publishTime>11/03/2016 18:30:28</publishTime>
+    </File>
+    <File Include="Configuration/Write/Sheet.xml">
+      <publishTime>11/23/2016 11:37:56</publishTime>
+    </File>
+    <File Include="Configuration/Write/SheetLog.xml">
+      <publishTime>11/22/2016 17:10:51</publishTime>
+    </File>
+    <File Include="Configuration/Write/User.xml">
+      <publishTime>11/21/2016 15:28:09</publishTime>
+    </File>
+    <File Include="Global.asax">
+      <publishTime>10/14/2016 13:49:59</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>10/17/2016 11:53:44</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>11/24/2016 10:26:20</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

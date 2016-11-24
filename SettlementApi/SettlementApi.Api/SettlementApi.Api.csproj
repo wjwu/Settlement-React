@@ -123,6 +123,7 @@
     <Content Include="Configuration\Write\SheetLog.xml" />
     <Content Include="Configuration\Write\User.xml" />
     <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
