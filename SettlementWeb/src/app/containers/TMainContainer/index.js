@@ -1,6 +1,7 @@
 import React, {
 	Component
 } from 'react'
+import classNames from 'classnames'
 import {
 	Link
 } from 'react-router'
@@ -42,7 +43,8 @@ const TMainContainer = () => {
 			constructor(prop) {
 				super(prop)
 				this.state = {
-					userPanelVisible: false
+					userPanelVisible: false,
+					hideMenu: false
 				}
 			}
 
@@ -70,8 +72,10 @@ const TMainContainer = () => {
 				})
 			}
 
-			showMenu() {
-
+			showHideMenu() {
+				this.setState({
+					hideMenu: !this.state.hideMenu
+				})
 			}
 
 			doSignOut() {
@@ -138,11 +142,13 @@ const TMainContainer = () => {
 					userPanel = <UserPanel onCancel={this.hide.bind(this)} sys_user={user} showGlobleMsg={showGlobleMsg}/>
 				}
 
+				const hideMenu = this.state.hideMenu
+
 				return (
-					<div className='ant-layout-aside'>
-						<div className='ant-layout-main'>
-							<div className='ant-layout-sider'>
-							    <div className='ant-layout-logo'><h2>树虎团建结算系统</h2></div>
+					<div className={styles.layout}>
+						<div className={styles.main}>
+							<div className={classNames({[styles.sider]:true,[styles.hide]:hideMenu})}>
+							    <div className={styles.logo}><h2>树虎团建结算系统</h2></div>
 				 				<Menu mode='inline' theme='dark' defaultOpenKeys={openKeys} selectedKeys={selectedKeys}>
 				 					<SubMenu key='my' title={<span><Icon type='file'/>我的结算表</span>}>
 							        	<Menu.Item key='sheet'>
@@ -155,27 +161,28 @@ const TMainContainer = () => {
 				 					{sys}
 							    </Menu>
 							</div>
-							<div className='ant-layout-header'>
+							<div className={classNames({[styles.header]:true,[styles.expandHF]:hideMenu})}>
+								<a className={styles.showMenuIcon} href='javascript:;' onClick={this.showHideMenu.bind(this)}><Icon type={hideMenu?'menu-unfold':'menu-fold'}/></a>
 								<span>{user.RoleName}</span>
 								<span><a href='javascript:;' onClick={this.show.bind(this)}>{user.LoginID}</a></span>
 								{userPanel}
-								<span><a className='normal-link' href='javascript:;' onClick={this.doSignOut.bind(this)}><Icon type='logout'/>&nbsp;退出</a></span>
+								<span><a className={styles.normal} href='javascript:;' onClick={this.doSignOut.bind(this)}><Icon type='logout'/>&nbsp;退出</a></span>
 							</div>
-							<div className='ant-layout-breadcrumb'>
+							<div className={classNames({[styles.breadcrumb]:true,[styles.expandBC]:hideMenu})}>
 							  	<Breadcrumb>
 							    	<Breadcrumb.Item><Link to='/home'>首页</Link></Breadcrumb.Item>
 							    	{breadcrumbItem}
 							  	</Breadcrumb>
 							</div>
-						    <div className='ant-layout-container'>
-						      	<div className='ant-layout-content'>
+						    <div className={classNames({[styles.container]:true,[styles.expandBC]:hideMenu})}>
+						      	<div className={styles.content}>
 						        	<div>
 						          		<Comp {...this.props} sys_user={user} showGlobleMsg={showGlobleMsg}/>
 						        	</div>
 						      	</div>
 						    </div>
-						    <div className='ant-layout-footer'>
-						    树虎团建 版权所有 © 2016 
+						    <div className={classNames({[styles.footer]:true,[styles.expandHF]:hideMenu})}>
+						    	<span>树虎团建 版权所有 © 2016 </span>
 						    </div>
 						</div>
 					</div>

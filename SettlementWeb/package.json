@@ -37,6 +37,7 @@
   "dependencies": {
     "antd": "^2.4.3",
     "babel-polyfill": "^6.16.0",
+    "classnames": "^2.2.5",
     "echarts-for-react": "^1.1.6",
     "immutable": "^3.8.1",
     "md5": "^2.2.1",
