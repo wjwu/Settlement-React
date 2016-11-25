@@ -14,6 +14,7 @@ import {
 import {
 	signOut
 } from '../../auth'
+import styles from './index.scss'
 import UserPanel from './UserPanel'
 
 const showGlobleMsg = (type, msg) => {
@@ -67,6 +68,10 @@ const TMainContainer = () => {
 				this.setState({
 					userPanelVisible: true
 				})
+			}
+
+			showMenu() {
+
 			}
 
 			doSignOut() {
