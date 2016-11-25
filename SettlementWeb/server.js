@@ -14,6 +14,10 @@ app.get('/', function(req, res) {
 
 app.use(express.static(__dirname + '/libs/'))
 
+app.get('/test', function(req, res) {
+	res.sendFile(path.join(__dirname, '/src/test.html'))
+})
+
 app.use(webpackDevMiddleware(compiler, {
 	publicPath: config.output.publicPath,
 	noInfo: true,

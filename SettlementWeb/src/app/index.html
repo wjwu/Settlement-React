@@ -46,6 +46,16 @@
     .ant-layout-aside .ant-layout-sider > .ant-menu {
         margin-bottom: 20px;
     }
+
+    .ant-layout-aside .ant-layout-main {
+        position: relative;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        box-orient:vertical;
+        flex-direction: column;
+        min-height: 100%;
+    }
     
     .ant-layout-aside .ant-layout-header {
         margin-left: 224px;
@@ -70,17 +80,8 @@
         margin: 7px 0 -17px 240px;
     }
     
-    .ant-layout-aside .ant-layout-main {
-        position: relative;
-        display: flex;
-        display: -ms-flexbox;
-        flex-direction: column;
-        min-height: 100%;
-    }
-    
     .ant-layout-aside .ant-layout-container {
-        -ms-flex: 1;
-        flex: 1;
+        flex: 1 1 auto;
         margin: 24px 16px 24px 240px;
     }
     

@@ -37,5 +37,5 @@ export const option = (days = [], amount = []) => {
 			},
 			data: amount
 		}]
-	};
+	}
 }

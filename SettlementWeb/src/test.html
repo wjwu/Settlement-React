@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <title>div + css宽度自适应（液态布局）</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+    <style type="text/css">
+        /*左边栏，设定宽度*/
+      html,body{
+         width: 100%;
+         height: 100%;
+        margin: 0;
+      }
+      #wrap{
+            display: flex;
+            width: 100%;
+            height: 100%;
+            /*css3 的盒模型设置垂直排序 新老方法 box-orient老方法  flex-direction新方法*/
+            box-orient:vertical;
+            flex-direction:column;
+        }
+        .wrap_l
+        {
+            height: 150px;
+            width: 150px;
+            background: yellow;
+        }
+        /*中间栏，宽度auto,*/
+        .wrap_m
+        {
+          flex:1;
+          background: blue;
+        }
+        </style>
+</head>
+<body>
+    <div id="wrap">
+         <div class="wrap_l">
+            这是上边部分<br />
+            这是上边部分<br />
+            这是上边部分
+        </div>
+        <div class="wrap_m">
+            这是下部分
+        </div>
+</div>
+</body>
+</html> 
