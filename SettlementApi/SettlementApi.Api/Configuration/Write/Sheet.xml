@@ -110,4 +110,9 @@ UPDATE TOP(1) dbo.Sheet SET [Deleted]=1,[LastModifyTime]=GETDATE(),[LastModifyUs
 UPDATE TOP(1) dbo.Sheet SET [AuditStatus]=@AuditStatus,[LastModifyTime]=GETDATE(),[LastModifyUser]=@LastModifyUser WHERE [ID]=@ID
   ]]>
   </command>
+  <command name="Sheet.Check" type="text" connection="local">
+    <![CDATA[
+SELECT TOP(1) ID FROM dbo.Sheet WHERE CustomName=@CustomName AND Total=@Total AND People=@People AND Base=@Base AND Deleted=0
+  ]]>
+  </command>
 </commands>

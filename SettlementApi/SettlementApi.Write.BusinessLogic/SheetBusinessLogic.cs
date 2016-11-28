@@ -20,6 +20,17 @@ namespace SettlementApi.Write.BusinessLogic
     {
         public void Execute(CreateSheetCommand command)
         {
+            var chk = GetEntity("Sheet.Check", new
+            {
+                command.CustomName,
+                command.Total,
+                command.People,
+                command.Base
+            });
+            if (chk != null)
+            {
+                throw new BussinessException(SheetRes.SheetRepeat);
+            }
             var sheet = MapperHelper.Map<CreateSheetCommand, Sheet>(command);
             var costs = MapperHelper.Map<List<CostEntity>, List<Cost>>(command.Costs);
             var receiveds = MapperHelper.Map<List<ReceivedEntity>, List<Received>>(command.Receiveds);
@@ -150,8 +161,8 @@ namespace SettlementApi.Write.BusinessLogic
                 Costs = costs,
                 Receiveds = receiveds,
                 Profit = newSheet.Total - newSheet.Cost,
-                OldAuditStatus = EnumUtity.ToEnum(oldSheet.AuditStatus,AuditStatus.None),
-                NewAuditStatus = EnumUtity.ToEnum(newSheet.AuditStatus, AuditStatus.None),
+                OldAuditStatus = EnumUtity.ToEnum(oldSheet.AuditStatus, AuditStatus.None),
+                NewAuditStatus = EnumUtity.ToEnum(newSheet.AuditStatus, AuditStatus.None)
             });
         }
 

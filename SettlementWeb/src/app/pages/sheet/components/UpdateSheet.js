@@ -66,12 +66,13 @@ class UpdateSheet extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		let sheet = nextProps.sheet.sheet
-		if (sheet && !this.state.loaded) {
+		const current = this.props.sheet.sheet
+		const next = nextProps.sheet.sheet
+		if ((current && next && current.ID !== next.ID) || (!current && next)) {
 			this.setState({
 				...this.state,
-				costs: sheet.Costs || [],
-				receiveds: sheet.Receiveds || [],
+				costs: next.Costs || [],
+				receiveds: next.Receiveds || [],
 				loaded: true
 			})
 		}
@@ -243,7 +244,7 @@ class UpdateSheet extends Component {
 
 		let footer =
 			[
-				<Button key='cancel' type='ghost' size='large' onClick={this.props.onCancel}>取消</Button>,
+				<Button key='cancel' type='ghost' size='large' onClick={this.props.onCancel}>取消</Button>
 			]
 		let btnSave = <Button key='save' type='primary' size='large' loading={updating} onClick={this.submit.bind(this,'save')}>保存</Button>
 		let btnSubmit = <Button key='submit' type='primary' size='large' loading={updating} onClick={this.submit.bind(this,'submit')}>保存并提交</Button>

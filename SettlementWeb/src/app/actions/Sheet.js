@@ -119,6 +119,12 @@ export const updateSheet = request => {
 	}
 }
 
+export const deleteSheet = (id) => {
+	return () => {
+		return apiClient.del(`sheet/${id}`)
+	}
+}
+
 export const updateSheetAuditStatus = request => {
 	return dispatch => {
 		dispatch({

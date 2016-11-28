@@ -73,7 +73,7 @@
       <publishTime>08/20/2016 04:06:28</publishTime>
     </File>
     <File Include="bin/SettlementApi.Api.dll">
-      <publishTime>11/25/2016 14:55:21</publishTime>
+      <publishTime>11/28/2016 15:16:25</publishTime>
     </File>
     <File Include="bin/SettlementApi.CommandBus.dll">
       <publishTime>11/24/2016 10:26:14</publishTime>
@@ -106,7 +106,7 @@
       <publishTime>11/24/2016 10:26:14</publishTime>
     </File>
     <File Include="bin/SettlementApi.Write.BusinessLogic.dll">
-      <publishTime>11/24/2016 10:26:15</publishTime>
+      <publishTime>11/28/2016 15:16:14</publishTime>
     </File>
     <File Include="bin/SettlementApi.Write.Model.dll">
       <publishTime>11/24/2016 10:26:13</publishTime>
@@ -166,7 +166,7 @@
       <publishTime>11/03/2016 18:30:28</publishTime>
     </File>
     <File Include="Configuration/Write/Sheet.xml">
-      <publishTime>11/23/2016 11:37:56</publishTime>
+      <publishTime>11/28/2016 14:57:31</publishTime>
     </File>
     <File Include="Configuration/Write/SheetLog.xml">
       <publishTime>11/22/2016 17:10:51</publishTime>

@@ -88,6 +88,15 @@ namespace SettlementApi.Write.BusinessLogic.Resource {
         }
         
         /// <summary>
+        ///   查找类似 结算表已保存，请勿重复添加。 的本地化字符串。
+        /// </summary>
+        internal static string SheetRepeat {
+            get {
+                return ResourceManager.GetString("SheetRepeat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 [{0}] 提交了结算表。 的本地化字符串。
         /// </summary>
         internal static string SubmitSheet {

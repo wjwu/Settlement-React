@@ -27,6 +27,7 @@ import {
 	querySheets,
 	createSheet,
 	updateSheet,
+	deleteSheet,
 	updateSheetAuditStatus
 } from '../../actions/sheet'
 import {
@@ -207,6 +208,7 @@ export default connect(state => state, {
 	querySheets,
 	createSheet,
 	updateSheet,
+	deleteSheet,
 	updateSheetAuditStatus,
 	queryBases,
 	querySources,
