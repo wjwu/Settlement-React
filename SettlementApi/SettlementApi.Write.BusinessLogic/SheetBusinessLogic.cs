@@ -28,9 +28,7 @@ namespace SettlementApi.Write.BusinessLogic
                 command.Base
             });
             if (chk != null)
-            {
                 throw new BussinessException(SheetRes.SheetRepeat);
-            }
             var sheet = MapperHelper.Map<CreateSheetCommand, Sheet>(command);
             var costs = MapperHelper.Map<List<CostEntity>, List<Cost>>(command.Costs);
             var receiveds = MapperHelper.Map<List<ReceivedEntity>, List<Received>>(command.Receiveds);
@@ -93,6 +91,15 @@ namespace SettlementApi.Write.BusinessLogic
 
         public void Execute(DeleteSheetCommand command)
         {
+            var chk = GetEntity(command.ID);
+            if (chk == null)
+                throw new BussinessException(CommonRes.InvalidOperation);
+            var user = new UserBusinessLogic().GetEntity(chk.UserID);
+            if (user == null)
+                throw new BussinessException(CommonRes.InvalidOperation);
+            if ((user.Role != Enum.GetName(typeof(RoleType), RoleType.Admin)) &&
+                (chk.UserID != ServiceContext.OperatorID))
+                throw new BussinessException(CommonRes.InvalidOperation);
             Update("Sheet.Delete", new {command.ID, LastModifyUser = ServiceContext.OperatorID});
         }
 

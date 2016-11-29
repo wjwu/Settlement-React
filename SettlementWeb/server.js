@@ -18,6 +18,10 @@ app.get('/test', function(req, res) {
 	res.sendFile(path.join(__dirname, '/src/test.html'))
 })
 
+app.get('/print', function(req, res) {
+	res.sendFile(path.join(__dirname, '/src/print/index.html'))
+})
+
 app.use(webpackDevMiddleware(compiler, {
 	publicPath: config.output.publicPath,
 	noInfo: true,

@@ -13,6 +13,8 @@ namespace SettlementApi.Read.QueryCommand.SheetModule
 
         public Guid UserID { get; set; }
 
+        public string UserName { get; set; }
+
         public string CustomName { get; set; }
 
         public string Contacts { get; set; }
@@ -35,9 +37,13 @@ namespace SettlementApi.Read.QueryCommand.SheetModule
 
         public Guid Base { get; set; }
 
+        public string BaseName { get; set; }
+
         public int People { get; set; }
 
         public Guid Source { get; set; }
+
+        public string SourceName { get; set; }
 
         public decimal Total { get; set; }
 
@@ -48,6 +54,10 @@ namespace SettlementApi.Read.QueryCommand.SheetModule
         public decimal TaxRate { get; set; }
 
         public decimal Tax { get; set; }
+
+        public decimal Received { get; set; }
+
+        public decimal Remaining { get; set; }
 
         public string Remark { get; set; }
 

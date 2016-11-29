@@ -31,27 +31,36 @@ WHERE   S.[Deleted] = 0
   </command>
   <command name="Sheet.Query.GetByID" type="text" connection="local">
     <![CDATA[
-SELECT TOP 1 [ID]
-      ,[UserID]
-      ,[AuditStatus]
-      ,[CustomName]
-      ,[Contacts]
-      ,[Phone]
-      ,[QQ]
-      ,[WeiXin]
-      ,[Address]
-      ,[TimeFrom] AS DTimeFrom
-      ,[TimeTo] AS DTimeTo
-      ,[Base]
-      ,[People]
-      ,[Source]
-      ,[Total]
-      ,[Unit]
-      ,[Cost]
-      ,[TaxRate]
-      ,[Tax]
-      ,[Remark]
-  FROM [dbo].[Sheet] WHERE [ID]=@ID
+SELECT S.[ID]
+      ,S.[UserID]
+      ,U.[Name] AS UserName
+      ,S.[AuditStatus]
+      ,S.[CustomName]
+      ,S.[Contacts]
+      ,S.[Phone]
+      ,S.[QQ]
+      ,S.[WeiXin]
+      ,S.[Address]
+      ,S.[TimeFrom] AS DTimeFrom
+      ,S.[TimeTo] AS DTimeTo
+      ,S.[Base]
+      ,D.[Name] AS BaseName
+      ,S.[People]
+      ,S.[Source]
+      ,DD.[Name] AS SourceName
+      ,S.[Total]
+      ,S.[Unit]
+      ,S.[Cost]
+      ,S.[TaxRate]
+      ,S.[Tax]
+      ,S.[Received]
+      ,S.[Remaining]
+      ,S.[Remark]
+  FROM [dbo].[Sheet] AS S 
+        LEFT JOIN dbo.[User] AS U ON S.UserID = U.ID 
+        LEFT JOIN dbo.[Dictionary] AS D ON S.Base = D.ID 
+        LEFT JOIN dbo.[Dictionary] AS DD ON S.[Source] = DD.ID 
+  WHERE S.[ID]=@ID
   ]]>
   </command>
   <command name="Sheet.GetByID" type="text" connection="local">

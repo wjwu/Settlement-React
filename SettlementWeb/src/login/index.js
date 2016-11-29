@@ -81,7 +81,7 @@ class LoginForm extends React.Component {
 		const url = `${config.apiHost}captcha?t=${timeSpan}`
 
 		return (
-			<Form onSubmit={this.submit.bind(this)}>
+			<Form onSubmit={this.submit.bind(this)} style={{margin:'0 auto',marginTop:100,padding:'40px 50px'}}>
 				<FormItem>
 					<h1>树虎团建结算系统</h1>
 				</FormItem>

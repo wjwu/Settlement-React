@@ -124,7 +124,7 @@ class Sheet extends Component {
 					showGlobleMsg('success', '删除成功！')
 					that.query()
 				}, error => {
-					showGlobleMsg('error', result.Message)
+					showGlobleMsg('error', error)
 				})
 			},
 		})

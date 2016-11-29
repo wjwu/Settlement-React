@@ -129,5 +129,4 @@ const columns = (editFuc) => {
 	}]
 }
 
-
 export default columns

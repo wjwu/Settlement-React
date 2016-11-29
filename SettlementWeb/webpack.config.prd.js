@@ -1,5 +1,11 @@
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+
+var config = {
+	'API_HOST': 'http://120.24.244.98:9001/api/',
+	'NODE_ENV': process.env.NODE_ENV
+}
 
 module.exports = {
 	externals: {
@@ -9,25 +15,22 @@ module.exports = {
 	},
 	entry: {
 		'app': [
-			'webpack-hot-middleware/client?reload=true',
 			'./src/app/index.js',
 			'whatwg-fetch'
 		],
 		'login': [
-			'webpack-hot-middleware/client?reload=true',
 			'./src/login/index.js',
 			'whatwg-fetch'
 		],
 		'print': [
-			'webpack-hot-middleware/client?reload=true',
 			'./src/print/index.js',
 			'whatwg-fetch'
 		]
 	},
 	output: {
 		path: __dirname + '/dist',
-		filename: '[name].js',
-		publicPath: 'http://localhost:10010/'
+		filename: '[name].[hash].js',
+		publicPath: '/'
 	},
 	resolve: {
 		extensions: ['', '.js'],
@@ -54,23 +57,52 @@ module.exports = {
 			loader: 'html'
 		}]
 	},
-	devtool: 'eval-source-map',
+	devtool: false,
 	plugins: [
+		new HtmlWebpackPlugin({
+			filename: __dirname + '/dist/login.html',
+			template: __dirname + '/src/login/index.tpl.html',
+			minify: false,
+			inject: 'body',
+			hash: false,
+			chunks: ['login', 'common']
+		}),
+		new HtmlWebpackPlugin({
+			filename: __dirname + '/dist/index.html',
+			template: __dirname + '/src/app/index.tpl.html',
+			minify: false,
+			inject: 'body',
+			hash: false,
+			chunks: ['app', 'common']
+		}),
+		new HtmlWebpackPlugin({
+			filename: __dirname + '/dist/print.html',
+			template: __dirname + '/src/print/index.tpl.html',
+			minify: false,
+			inject: 'body',
+			hash: false,
+			chunks: ['print', 'common']
+		}),
 		new webpack.optimize.UglifyJsPlugin({
-			compress: false,
-			mangle: false,
+			compress: true,
+			mangle: {
+				except: ['$', 'exports', 'require']
+			},
 			comments: false
 		}),
 		new webpack.optimize.CommonsChunkPlugin({
 			name: 'common',
-			filename: '[name].js',
+			filename: '[name].[hash].js',
 			chunks: ['app', 'login', 'print']
 		}),
 		new webpack.optimize.OccurenceOrderPlugin(),
 		new webpack.HotModuleReplacementPlugin(),
 		new webpack.NoErrorsPlugin(),
-		new ExtractTextPlugin('[name].css', {
+		new ExtractTextPlugin('[name].[hash].css', {
 			allChunks: true
+		}),
+		new webpack.DefinePlugin({
+			'process.env': JSON.stringify(config)
 		})
 	]
 };
