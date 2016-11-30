@@ -101,10 +101,10 @@ class CreateCost extends Component {
 							},{
 								range:true,
 								min:1,
-								type:'integer',
+								type:'float',
 								message:'单价必须大于0！'
 							}]
-						})(<InputNumber min={0}/>)
+						})(<InputNumber min={0} step={0.1}/>)
 					}
 					</FormItem>
 					<FormItem {...formItemLayout} label='数量'>

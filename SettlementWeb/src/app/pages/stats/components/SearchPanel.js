@@ -52,6 +52,7 @@ class SearchPanel extends Component {
 			let payStatus = getFieldValue('payStatus')
 			let source = getFieldValue('source')
 			let userName = getFieldValue('userName') || ''
+			let pageIndex = 1
 			this.props.onSearch({
 				groups,
 				base,
@@ -59,7 +60,8 @@ class SearchPanel extends Component {
 				timeTo,
 				payStatus,
 				source,
-				userName
+				userName,
+				pageIndex
 			})
 		})
 	}

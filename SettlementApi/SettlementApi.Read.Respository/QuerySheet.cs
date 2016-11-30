@@ -1,11 +1,13 @@
 ﻿using System;
 using SettlementApi.CommandBus;
+using SettlementApi.Common;
 using SettlementApi.Read.Model;
 using SettlementApi.Read.QueryCommand;
 using SettlementApi.Read.QueryCommand.CostModule;
 using SettlementApi.Read.QueryCommand.ReceivedModule;
 using SettlementApi.Read.QueryCommand.SheetLogModule;
 using SettlementApi.Read.QueryCommand.SheetModule;
+using SettlementApi.Write.Model.Enums;
 
 namespace SettlementApi.Read.Respository
 {
@@ -33,6 +35,10 @@ namespace SettlementApi.Read.Respository
         {
             if (!string.IsNullOrEmpty(command.Groups))
                 command.Path = command.Groups.Split(',');
+            var user = new QueryUser().Execute(new GetByIDCommand {ID = ServiceContext.OperatorID});
+            var userRole = EnumUtity.ToEnum(user.Role, RoleType.None);
+            if (userRole == RoleType.Employee)
+                command.UserID = ServiceContext.OperatorID;
             return QueryPaging<EQuerySheet, RQuerySheet, QuerySheetCommand>("Sheet.Query", command);
         }
 

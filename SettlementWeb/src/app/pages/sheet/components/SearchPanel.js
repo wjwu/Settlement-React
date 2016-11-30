@@ -29,7 +29,6 @@ class SearchPanel extends Component {
 	constructor(props) {
 		super(props)
 		this.query = this.query.bind(this)
-		this.search = this.search.bind(this)
 	}
 
 	query() {
@@ -54,6 +53,7 @@ class SearchPanel extends Component {
 			let auditStatus = getFieldValue('auditStatus')
 			let payStatus = getFieldValue('payStatus')
 			let source = getFieldValue('source') || ''
+			let pageIndex = 1
 			this.props.onSearch({
 				groups,
 				base,
@@ -63,13 +63,10 @@ class SearchPanel extends Component {
 				userName,
 				auditStatus,
 				payStatus,
-				source
+				source,
+				pageIndex
 			})
 		})
-	}
-
-	search() {
-		this.props.onSearch()
 	}
 
 	render() {
@@ -208,7 +205,6 @@ class SearchPanel extends Component {
 				</Row>
 				<Row>
 					<Col style={{ textAlign: 'right' }}>
-						<Button type='primary' icon='reload' style={{marginRight:8}} onClick={this.search}>刷新</Button>
 						<Button type='primary' icon='search' style={{marginRight:8}} onClick={this.query}>查询</Button>
 					</Col>
 				</Row>

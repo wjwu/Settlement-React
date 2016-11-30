@@ -128,6 +128,18 @@ const TMainContainer = () => {
 						</SubMenu>
 					)
 				}
+				let my = [
+					<Menu.Item key='sheet'>
+						<Link to='/sheet'>我的结算表</Link>
+					</Menu.Item>
+				]
+				if (user.Role !== 'Employee') {
+					my.push(
+						<Menu.Item key='stats'>
+							<Link to='/stats'>统计中心</Link>
+						</Menu.Item>
+					)
+				}
 				let breadcrumbItem = []
 				if (path !== 'home') {
 					breadcrumbItem = [
@@ -151,12 +163,7 @@ const TMainContainer = () => {
 							    <div className={styles.logo}><h2>树虎团建结算系统</h2></div>
 				 				<Menu mode='inline' theme='dark' defaultOpenKeys={openKeys} selectedKeys={selectedKeys}>
 				 					<SubMenu key='my' title={<span><Icon type='file'/>我的结算表</span>}>
-							        	<Menu.Item key='sheet'>
-							        		<Link to='/sheet'>我的结算表</Link>
-							        	</Menu.Item>
-							        	<Menu.Item key='stats'>
-							        		<Link to='/stats'>统计中心</Link>
-							        	</Menu.Item>
+							        	{my}
 				 					</SubMenu>
 				 					{sys}
 							    </Menu>

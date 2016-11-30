@@ -8,6 +8,8 @@ namespace SettlementApi.Read.QueryCommand.SheetModule
 
         public string[] Path { get; set; }
 
+        public Guid? UserID { get; set; }
+
         public Guid? Base { get; set; }
 
         public Guid? Source { get; set; }

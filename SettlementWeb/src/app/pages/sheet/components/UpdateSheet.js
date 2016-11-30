@@ -446,7 +446,7 @@ class UpdateSheet extends Component {
 														type:'number',
 														message:'请输入总成交额！'
 													}]
-												})(<InputNumber min={0} onChange={this.calcUnit} onBlur={this.calcUnit} disabled={disabled}/>)
+												})(<InputNumber min={0} step={0.1} onChange={this.calcUnit} onBlur={this.calcUnit} disabled={disabled}/>)
 										}
 									</FormItem>
 								</Col>

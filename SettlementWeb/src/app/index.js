@@ -28,6 +28,11 @@ import Stats from './pages/stats'
 const store = createStore(reducer, applyMiddleware(thunk))
 
 const enter = (nextState, replace, callback) => {
+	// const user = JSON.parse(sessionStorage.getItem('user'))
+	// if (user.Role === 'Employee') {
+	// 	replace('/home')
+	// }
+	// console.log(nextState.location.pathname)
 	expired().then(result => {
 		callback()
 	}, error => {
