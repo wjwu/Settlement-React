@@ -73,7 +73,7 @@
       <publishTime>08/20/2016 04:06:28</publishTime>
     </File>
     <File Include="bin/SettlementApi.Api.dll">
-      <publishTime>11/30/2016 10:56:05</publishTime>
+      <publishTime>12/01/2016 17:48:13</publishTime>
     </File>
     <File Include="bin/SettlementApi.CommandBus.dll">
       <publishTime>11/24/2016 10:26:14</publishTime>
@@ -94,10 +94,10 @@
       <publishTime>11/30/2016 10:52:23</publishTime>
     </File>
     <File Include="bin/SettlementApi.Read.QueryCommand.dll">
-      <publishTime>11/30/2016 10:56:01</publishTime>
+      <publishTime>12/01/2016 17:48:08</publishTime>
     </File>
     <File Include="bin/SettlementApi.Read.Respository.dll">
-      <publishTime>11/30/2016 10:56:01</publishTime>
+      <publishTime>12/01/2016 17:48:09</publishTime>
     </File>
     <File Include="bin/SettlementApi.Respository.dll">
       <publishTime>11/24/2016 10:26:14</publishTime>
@@ -145,7 +145,7 @@
       <publishTime>11/04/2016 10:03:42</publishTime>
     </File>
     <File Include="Configuration/Read/Sheet.xml">
-      <publishTime>11/29/2016 16:06:10</publishTime>
+      <publishTime>12/01/2016 17:46:44</publishTime>
     </File>
     <File Include="Configuration/Read/SheetLog.xml">
       <publishTime>11/22/2016 18:29:40</publishTime>

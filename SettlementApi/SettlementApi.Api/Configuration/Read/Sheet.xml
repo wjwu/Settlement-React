@@ -55,6 +55,7 @@ SELECT S.[ID]
       ,S.[Tax]
       ,S.[Received]
       ,S.[Remaining]
+      ,S.[Achievement]
       ,S.[Remark]
   FROM [dbo].[Sheet] AS S 
         LEFT JOIN dbo.[User] AS U ON S.UserID = U.ID 

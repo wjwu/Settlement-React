@@ -90,10 +90,10 @@ class Print extends React.Component {
 			                <td>{`￥${numeral(sheet.Tax).format('0,0.00')}`}</td>
 			            </tr>
 			            <tr>
+			                <td>利润：</td>
+			                <td>{`￥${numeral(sheet.Achievement).format('0,0.00')}`}</td>
 			                <td>单价：</td>
 			                <td>{`￥${numeral(sheet.Unit).format('0,0.00')}`}</td>
-			                <td></td>
-			                <td></td>
 			            </tr>
 			            <tr>
 			                <td>已付金额：</td>

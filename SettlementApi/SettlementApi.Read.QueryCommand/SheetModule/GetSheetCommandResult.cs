@@ -59,6 +59,8 @@ namespace SettlementApi.Read.QueryCommand.SheetModule
 
         public decimal Remaining { get; set; }
 
+        public decimal Achievement { get; set; }
+
         public string Remark { get; set; }
 
         public string AuditStatus { get; set; }
