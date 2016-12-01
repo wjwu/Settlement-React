@@ -11,15 +11,10 @@ const columns = (editFuc) => {
 		title: '客户名称',
 		dataIndex: 'CustomName',
 		key: 'customName',
-		width: '9%',
+		width: '11%',
 		render: (text, raw) => {
 			return <a href='javascript:;' onClick={editFuc.bind(null,raw,'update')}>{text}</a>
 		}
-	}, {
-		title: '培训地点',
-		dataIndex: 'Base',
-		key: 'base',
-		width: '9%',
 	}, {
 		title: '培训时间',
 		dataIndex: 'TimeFrom',
@@ -82,6 +77,14 @@ const columns = (editFuc) => {
 		title: '个人提成',
 		dataIndex: 'Commission',
 		key: 'commission',
+		width: '7%',
+		render: (text) => {
+			return <b>{numeral(text).format('0,0.00')}</b>
+		}
+	}, {
+		title: '业绩',
+		dataIndex: 'Achievement',
+		key: 'achievement',
 		width: '7%',
 		render: (text) => {
 			return <b>{numeral(text).format('0,0.00')}</b>

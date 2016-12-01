@@ -101,7 +101,7 @@ class UpdateCost extends Component {
 							},{
 								range:true,
 								min:1,
-								type:'float',
+								type:'number',
 								message:'单价必须大于0！'
 							}]
 						})(<InputNumber min={0} step={0.1}/>)

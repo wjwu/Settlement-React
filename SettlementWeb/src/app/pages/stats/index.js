@@ -106,6 +106,16 @@ class Stats extends Component {
 		}
 		sheets = sheets || empty
 
+		let expandedRowRender = record => {
+			return (
+				<p>
+					<span style={{marginRight:20}}>{`所在部门：${record.Department}`}</span>
+					<span style={{marginRight:20}}>{`客户来源：${record.Source}`}</span>
+					<span>{`培训地点：${record.Base}`}</span>
+				</p>
+			)
+		}
+
 		return (
 			<div>
 				<Row>
@@ -177,7 +187,7 @@ class Stats extends Component {
 					<TCol>
 						<Tabs>
 							<TabPane tab='签单统计' key='amount'>
-								<TTable key='tamount' bordered columns={sheetColumns()} total={sheets.TotalCount} dataSource={sheets.List} loading={querying} onLoad={this.onTTableLoad}/>
+								<TTable key='tamount' rowKey={record => record.ID} expandedRowRender={expandedRowRender} bordered columns={sheetColumns()} total={sheets.TotalCount} dataSource={sheets.List} loading={querying} onLoad={this.onTTableLoad}/>
 							</TabPane>
 							<TabPane tab='个人提成/业绩' key='self'>
 								<TTable key='tself' bordered pagination={false} columns={selfColumns()} dataSource={userProfit}/>

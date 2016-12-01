@@ -11,37 +11,22 @@ export const sheetColumns = () => {
 		title: '签单人',
 		dataIndex: 'UserName',
 		key: 'userName',
-		width: '7%'
-	}, {
-		title: '所在部门',
-		dataIndex: 'Department',
-		key: 'department',
-		width: '7%'
+		width: '8%'
 	}, {
 		title: '客户名称',
 		dataIndex: 'CustomName',
 		key: 'customName',
-		width: '11.5%'
-	}, {
-		title: '培训地点',
-		dataIndex: 'Base',
-		key: 'base',
-		width: '11.5%',
+		width: '13%'
 	}, {
 		title: '培训时间',
 		dataIndex: 'TimeFrom',
 		key: 'timeFrom',
-		width: '7%'
-	}, {
-		title: '客户来源',
-		dataIndex: 'Source',
-		key: 'source',
-		width: '7%'
+		width: '8%'
 	}, {
 		title: '总成交额',
 		dataIndex: 'Total',
 		key: 'total',
-		width: '7%',
+		width: '8%',
 		render: (text) => {
 			return <b>{numeral(text).format('0,0.00')}</b>
 		}
@@ -49,7 +34,7 @@ export const sheetColumns = () => {
 		title: '总成本',
 		dataIndex: 'Cost',
 		key: 'cost',
-		width: '7%',
+		width: '8%',
 		render: (text) => {
 			return <b>{numeral(text).format('0,0.00')}</b>
 		}
@@ -57,7 +42,7 @@ export const sheetColumns = () => {
 		title: '已付',
 		dataIndex: 'Received',
 		key: 'received',
-		width: '7%',
+		width: '8%',
 		render: (text) => {
 			return <b>{numeral(text).format('0,0.00')}</b>
 		}
@@ -65,15 +50,23 @@ export const sheetColumns = () => {
 		title: '待付',
 		dataIndex: 'Remaining',
 		key: 'remaining',
-		width: '7%',
+		width: '8%',
 		render: (text) => {
 			return <b>{numeral(text).format('0,0.00')}</b>
+		}
+	}, {
+		title: '税率',
+		dataIndex: 'TaxRate',
+		key: 'taxRate',
+		width: '8%',
+		render: (text) => {
+			return <b>{`${text*100}%`}</b>
 		}
 	}, {
 		title: '税费',
 		dataIndex: 'Tax',
 		key: 'tax',
-		width: '7%',
+		width: '8%',
 		render: (text) => {
 			return <b>{numeral(text).format('0,0.00')}</b>
 		}
@@ -81,7 +74,15 @@ export const sheetColumns = () => {
 		title: '个人提成',
 		dataIndex: 'Commission',
 		key: 'commission',
-		width: '7%',
+		width: '8%',
+		render: (text) => {
+			return <b>{numeral(text).format('0,0.00')}</b>
+		}
+	}, {
+		title: '业绩',
+		dataIndex: 'Achievement',
+		key: 'achievement',
+		width: '8%',
 		render: (text) => {
 			return <b>{numeral(text).format('0,0.00')}</b>
 		}

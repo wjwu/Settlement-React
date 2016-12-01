@@ -179,7 +179,8 @@ class Sheet extends Component {
 			return (
 				<p>
 					<span style={{marginRight:20}}>{`所在部门：${record.Department}`}</span>
-					<span>{`客户来源：${record.Source}`}</span>
+					<span style={{marginRight:20}}>{`客户来源：${record.Source}`}</span>
+					<span>{`培训地点：${record.Base}`}</span>
 				</p>
 			)
 		}
