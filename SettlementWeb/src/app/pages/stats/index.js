@@ -126,7 +126,7 @@ class Stats extends Component {
 					</TCol>
 				</Row>
 				<Row gutter={24}>
-					<TCol xs={24} sm={24} md={8} lg={8}>
+					<TCol xs={24} sm={24} md={24} lg={8}>
 						<TCard title='成交信息'>
 							<dl className={styles.stats}>
 								<dt><h1>{stats.Amount}</h1></dt>
@@ -142,7 +142,7 @@ class Stats extends Component {
 							</dl>
 						</TCard>
 					</TCol>
-					<TCol xs={24} sm={24} md={8} lg={8}>
+					<TCol xs={24} sm={24} md={24} lg={8}>
 						<TCard title='提成信息'>
 							<dl className={styles.stats}>
 								<dt><h1>{stats.Profit}</h1></dt>
@@ -158,7 +158,7 @@ class Stats extends Component {
 							</dl>
 						</TCard>
 					</TCol>
-					<TCol xs={24} sm={24} md={8} lg={8}>
+					<TCol xs={24} sm={24} md={24} lg={8}>
 						<TCard title='收款信息'>
 							<dl className={styles.stats}>
 								<dt><h1>{stats.Received}</h1></dt>

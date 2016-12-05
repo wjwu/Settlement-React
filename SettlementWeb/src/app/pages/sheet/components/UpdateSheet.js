@@ -16,6 +16,7 @@ import {
 	Tabs,
 	Spin
 } from 'antd'
+import numeral from 'numeral'
 import moment from 'moment'
 import {
 	TTable
@@ -232,7 +233,10 @@ class UpdateSheet extends Component {
 
 		let costs = this.state.costs
 		let receiveds = this.state.receiveds
-
+		let cost = 0
+		for (let i = costs.length - 1; i >= 0; i--) {
+			cost += costs[i].Total
+		}
 		let modal
 		if (this.state[createCost]) {
 			modal = <CreateCost onCancel = {this.hideModal.bind(this,createCost)} costs={costTypes.List}/>
@@ -534,10 +538,11 @@ class UpdateSheet extends Component {
 					</TabPane>
 					<TabPane tab='结算明细' key='costInfo'>
 						<div style={{marginBottom:16,textAlign:'right'}}>
+							<span style={{float:'left',margin:'4px 0 0 2px'}}><b>成本总计：{numeral(cost).format('0,0.00')}</b></span>
 							<Button type='primary' disabled={disabled} icon='plus-circle-o' onClick={this.showModal.bind(this,createCost)}>新增明细</Button>
 							{modal}
 						</div>
-						<TTable key='cost'  scroll={{ y: 300 }} bordered columns={costColumns} total={costs.length} dataSource={costs} pagination={false} onLoad={()=>{}}/>
+						<TTable key='cost' scroll={{ y: 300 }} bordered columns={costColumns} total={costs.length} dataSource={costs} pagination={false} onLoad={()=>{}}/>
 					</TabPane> 
 					<TabPane tab='收款明细' key='receivedInfo'>
 						<div style={{marginBottom:16,textAlign:'right'}}>

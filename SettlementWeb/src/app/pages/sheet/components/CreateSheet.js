@@ -18,6 +18,7 @@ import {
 import {
 	TTable
 } from '../../../components'
+import numeral from 'numeral'
 import CreateCost from './CreateCost'
 import UpdateCost from './UpdateCost'
 import CreateReceived from './CreateReceived'
@@ -219,6 +220,10 @@ class CreateSheet extends Component {
 		}, false)
 		let costs = this.state.costs
 		let receiveds = this.state.receiveds
+		let cost = 0
+		for (let i = costs.length - 1; i >= 0; i--) {
+			cost += costs[i].Total
+		}
 		let modal
 		if (this.state[createCost]) {
 			modal = <CreateCost onCancel = {this.hideModal.bind(this,createCost)} costs={costTypes.List}/>
@@ -448,6 +453,7 @@ class CreateSheet extends Component {
 					</TabPane> 
 					<TabPane tab='结算明细' key='costInfo'>
 						<div style={{marginBottom:16,textAlign:'right'}}>
+							<span style={{float:'left',margin:'4px 0 0 2px'}}><b>成本总计：{numeral(cost).format('0,0.00')}</b></span>
 							<Button type='primary' icon='plus-circle-o' onClick={this.showModal.bind(this,createCost)}>新增明细</Button>
 							{modal}
 						</div>
