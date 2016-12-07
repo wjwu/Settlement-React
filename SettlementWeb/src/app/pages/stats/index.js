@@ -203,7 +203,7 @@ class Stats extends Component {
 	}
 }
 
-export default connect(state => state, {
+module.exports = connect(state => state, {
 	querySheets,
 	queryBases,
 	querySources,

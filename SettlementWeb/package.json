@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack --config ./webpack.config.prd.js --profile --progress --colors --display-error-details",
+    "build": "cross-env NODE_ENV=production webpack -p --config ./webpack.config.prd.js --profile --progress --colors --display-error-details",
     "dev": "cross-env NODE_ENV=development babel-node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

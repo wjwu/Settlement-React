@@ -27,10 +27,14 @@ module.exports = {
 	output: {
 		path: __dirname + '/dist',
 		filename: '[name].js',
-		publicPath: 'http://localhost:10010/'
+		publicPath: 'http://localhost:10010/',
+		chunkFilename: '[name].chunk.js'
 	},
 	resolve: {
 		extensions: ['', '.js'],
+		// alias: {
+		// 	numeral: 'numeral/min/numeral-with-locales.min.js'
+		// }
 	},
 	module: {
 		loaders: [{

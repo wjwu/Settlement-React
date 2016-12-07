@@ -211,7 +211,7 @@ class Group extends Component {
 	}
 }
 
-export default connect(state => state, {
+module.exports = connect(state => state, {
 	getGroup,
 	queryGroups,
 	createGroup,

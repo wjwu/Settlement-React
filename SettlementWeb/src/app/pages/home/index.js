@@ -184,6 +184,6 @@ class Home extends React.Component {
 	}
 }
 
-export default connect(state => state, {
+module.exports = connect(state => state, {
 	queryUserStats
 })(TMainContainer()(Home))

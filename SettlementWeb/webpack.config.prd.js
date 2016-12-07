@@ -25,12 +25,18 @@ module.exports = {
 		'print': [
 			'./src/print/index.js',
 			'whatwg-fetch'
-		]
+		],
+		'dictionary': './src/app/pages/dictionary',
+		'group': './src/app/pages/group',
+		'home': './src/app/pages/home',
+		'sheet': './src/app/pages/sheet',
+		'stats': './src/app/pages/stats'
 	},
 	output: {
 		path: __dirname + '/dist',
 		filename: '[name].[hash].js',
-		publicPath: '/'
+		publicPath: '/',
+		chunkFilename: '[name].chunk.[hash].js'
 	},
 	resolve: {
 		extensions: ['', '.js'],
@@ -84,7 +90,9 @@ module.exports = {
 			chunks: ['print', 'common']
 		}),
 		new webpack.optimize.UglifyJsPlugin({
-			compress: true,
+			compress: {
+				warnings: false
+			},
 			mangle: {
 				except: ['$', 'exports', 'require']
 			},
@@ -94,6 +102,11 @@ module.exports = {
 			name: 'common',
 			filename: '[name].[hash].js',
 			chunks: ['app', 'login', 'print']
+		}),
+		new webpack.optimize.CommonsChunkPlugin({
+			name: 'app_common',
+			filename: '[name].[hash].js',
+			chunks: ['dictionary', 'group', 'home', 'sheet', 'stats']
 		}),
 		new webpack.optimize.OccurenceOrderPlugin(),
 		new webpack.HotModuleReplacementPlugin(),

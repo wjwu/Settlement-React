@@ -204,7 +204,7 @@ class Sheet extends Component {
 	}
 }
 
-export default connect(state => state, {
+module.exports = connect(state => state, {
 	getSheet,
 	querySheets,
 	createSheet,

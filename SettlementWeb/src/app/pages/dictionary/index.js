@@ -38,6 +38,10 @@ const DICTIONARY_COST = 'cost'
 class Dictionary extends Component {
 	constructor(props) {
 		super(props)
+		this.onTabChange = this.onTabChange.bind(this)
+		this.onTTableLoad = this.onTTableLoad.bind(this)
+		this.hideModal = this.hideModal.bind(this)
+
 		this.selectedTab = DICTIONARY_BASE
 		this[DICTIONARY_BASE] = {
 			request: {
@@ -144,9 +148,9 @@ class Dictionary extends Component {
 
 		let modal
 		if (createDicVisible) {
-			modal = <CreateDictionary onCancel={this.hideModal.bind(this,'createDicVisible')} onSubmit={this.props.createDictionary} creating={creating}/>
+			modal = <CreateDictionary onCancel={()=>{this.hideModal('createDicVisible')}} onSubmit={this.props.createDictionary} creating={creating}/>
 		} else if (updateDicVisible) {
-			modal = <UpdateDictionary onCancel={this.hideModal.bind(this,'updateDicVisible')} onSubmit={this.props.updateDictionary} updating={updating} dictionary={this.selectedDic}/>
+			modal = <UpdateDictionary onCancel={()=>{this.hideModal('updateDicVisible')}} onSubmit={this.props.updateDictionary} updating={updating} dictionary={this.selectedDic}/>
 		}
 		return (
 			<div>
@@ -161,15 +165,15 @@ class Dictionary extends Component {
 				<Row>
 					<TCol>
 						<TCard>
-					        <Tabs tabPosition='left' onChange={this.onTabChange.bind(this)}>
+					        <Tabs tabPosition='left' onChange={this.onTabChange}>
 					          <TabPane tab='培训基地' key={DICTIONARY_BASE}>
-					          	<TTable columns={columns} loading={queryingBases} total={bases.TotalCount} dataSource={bases.List} onLoad={this.onTTableLoad.bind(this)}/>
+					          	<TTable columns={columns} loading={queryingBases} total={bases.TotalCount} dataSource={bases.List} onLoad={this.onTTableLoad}/>
 					          </TabPane>
 					          <TabPane tab='客户来源' key={DICTIONARY_SOURCE}>
-					          	<TTable columns={columns} loading={queryingSources} total={sources.TotalCount} dataSource={sources.List} onLoad={this.onTTableLoad.bind(this)}/>
+					          	<TTable columns={columns} loading={queryingSources} total={sources.TotalCount} dataSource={sources.List} onLoad={this.onTTableLoad}/>
 					          </TabPane>
 					          <TabPane tab='结算类型' key={DICTIONARY_COST}>
-					          	<TTable columns={columns} loading={queryingCosts} total={costs.TotalCount} dataSource={costs.List} onLoad={this.onTTableLoad.bind(this)}/>
+					          	<TTable columns={columns} loading={queryingCosts} total={costs.TotalCount} dataSource={costs.List} onLoad={this.onTTableLoad}/>
 					          </TabPane>
 					        </Tabs>
 						</TCard>
@@ -180,7 +184,7 @@ class Dictionary extends Component {
 	}
 }
 
-export default connect(state => state, {
+module.exports = connect(state => state, {
 	queryBases,
 	querySources,
 	queryCosts,
