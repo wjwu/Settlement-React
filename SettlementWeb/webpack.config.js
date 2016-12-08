@@ -22,7 +22,8 @@ module.exports = {
 			'webpack-hot-middleware/client?reload=true',
 			'./src/print/index.js',
 			'whatwg-fetch'
-		]
+		],
+		'vendor': ['babel-polyfill', 'react-redux', 'antd', 'numeral', 'echarts-for-react']
 	},
 	output: {
 		path: __dirname + '/dist',
@@ -65,11 +66,7 @@ module.exports = {
 			mangle: false,
 			comments: false
 		}),
-		new webpack.optimize.CommonsChunkPlugin({
-			name: 'common',
-			filename: '[name].js',
-			chunks: ['app', 'login', 'print']
-		}),
+		new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js', ['app']),
 		new webpack.optimize.OccurenceOrderPlugin(),
 		new webpack.HotModuleReplacementPlugin(),
 		new webpack.NoErrorsPlugin(),

@@ -26,11 +26,7 @@ module.exports = {
 			'./src/print/index.js',
 			'whatwg-fetch'
 		],
-		'dictionary': './src/app/pages/dictionary',
-		'group': './src/app/pages/group',
-		'home': './src/app/pages/home',
-		'sheet': './src/app/pages/sheet',
-		'stats': './src/app/pages/stats'
+		'vendor': ['babel-polyfill', 'react-redux', 'antd', 'numeral', 'echarts-for-react']
 	},
 	output: {
 		path: __dirname + '/dist',
@@ -71,7 +67,7 @@ module.exports = {
 			minify: false,
 			inject: 'body',
 			hash: false,
-			chunks: ['login', 'common']
+			chunks: ['login']
 		}),
 		new HtmlWebpackPlugin({
 			filename: __dirname + '/dist/index.html',
@@ -79,7 +75,7 @@ module.exports = {
 			minify: false,
 			inject: 'body',
 			hash: false,
-			chunks: ['app', 'common']
+			chunks: ['app', 'vendor']
 		}),
 		new HtmlWebpackPlugin({
 			filename: __dirname + '/dist/print.html',
@@ -87,7 +83,7 @@ module.exports = {
 			minify: false,
 			inject: 'body',
 			hash: false,
-			chunks: ['print', 'common']
+			chunks: ['print']
 		}),
 		new webpack.optimize.UglifyJsPlugin({
 			compress: {
@@ -98,16 +94,7 @@ module.exports = {
 			},
 			comments: false
 		}),
-		new webpack.optimize.CommonsChunkPlugin({
-			name: 'common',
-			filename: '[name].[hash].js',
-			chunks: ['app', 'login', 'print']
-		}),
-		new webpack.optimize.CommonsChunkPlugin({
-			name: 'app_common',
-			filename: '[name].[hash].js',
-			chunks: ['dictionary', 'group', 'home', 'sheet', 'stats']
-		}),
+		new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.[hash].js', ['app']),
 		new webpack.optimize.OccurenceOrderPlugin(),
 		new webpack.HotModuleReplacementPlugin(),
 		new webpack.NoErrorsPlugin(),
