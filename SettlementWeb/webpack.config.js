@@ -23,7 +23,7 @@ module.exports = {
 			'./src/print/index.js',
 			'whatwg-fetch'
 		],
-		'vendor': ['babel-polyfill', 'react-redux', 'antd', 'numeral', 'echarts-for-react']
+		'vendor': ['babel-polyfill', 'react-redux', 'numeral', 'echarts-for-react']
 	},
 	output: {
 		path: __dirname + '/dist',
