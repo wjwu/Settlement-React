@@ -95,9 +95,9 @@ class CreateGroup extends Component {
 								required:true
 							},{
 								range:true,
-								min:0.001,
-								type:'float',
-								message:'提成比例必须大于0！'
+								min:0,
+								type:'number',
+								message: '提成比例必须大于等于0！'
 							}]
 						})(<InputNumber min={0} step={0.01}/>)
 					}

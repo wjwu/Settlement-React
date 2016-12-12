@@ -1,20 +1,16 @@
 import React, {
-	Component,
 	PropTypes
 } from 'react'
 import {
 	Card
 } from 'antd'
 
-class TCard extends Component {
-	render() {
-
-		return (
-			<Card title={this.props.title} bodyStyle={{ padding: 15 }}>
-				{this.props.children}
-			</Card>
-		)
-	}
+const TCard = (props) => {
+	return (
+		<Card title={props.title} bodyStyle={{ padding: 15 }}>
+			{props.children}
+		</Card>
+	)
 }
 
 TCard.propTypes = {
