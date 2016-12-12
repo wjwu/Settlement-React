@@ -73,43 +73,43 @@
       <publishTime>08/20/2016 04:06:28</publishTime>
     </File>
     <File Include="bin/SettlementApi.Api.dll">
-      <publishTime>12/01/2016 17:48:13</publishTime>
+      <publishTime>12/12/2016 13:39:21</publishTime>
     </File>
     <File Include="bin/SettlementApi.CommandBus.dll">
-      <publishTime>11/24/2016 10:26:14</publishTime>
+      <publishTime>12/12/2016 13:39:15</publishTime>
     </File>
     <File Include="bin/SettlementApi.Common.dll">
-      <publishTime>11/24/2016 10:26:13</publishTime>
+      <publishTime>12/12/2016 13:39:14</publishTime>
     </File>
     <File Include="bin/SettlementApi.Context.dll">
-      <publishTime>11/24/2016 10:26:14</publishTime>
+      <publishTime>12/12/2016 13:39:15</publishTime>
     </File>
     <File Include="bin/SettlementApi.DataAccess.dll">
-      <publishTime>11/24/2016 10:26:13</publishTime>
+      <publishTime>12/12/2016 13:39:14</publishTime>
     </File>
     <File Include="bin/SettlementApi.EventBus.dll">
-      <publishTime>11/24/2016 10:26:14</publishTime>
+      <publishTime>12/12/2016 13:39:15</publishTime>
     </File>
     <File Include="bin/SettlementApi.Read.Model.dll">
-      <publishTime>11/30/2016 10:52:23</publishTime>
+      <publishTime>12/12/2016 13:39:15</publishTime>
     </File>
     <File Include="bin/SettlementApi.Read.QueryCommand.dll">
-      <publishTime>12/01/2016 17:48:08</publishTime>
+      <publishTime>12/12/2016 13:39:16</publishTime>
     </File>
     <File Include="bin/SettlementApi.Read.Respository.dll">
-      <publishTime>12/01/2016 17:48:09</publishTime>
+      <publishTime>12/12/2016 13:39:16</publishTime>
     </File>
     <File Include="bin/SettlementApi.Respository.dll">
-      <publishTime>11/24/2016 10:26:14</publishTime>
+      <publishTime>12/12/2016 13:39:15</publishTime>
     </File>
     <File Include="bin/SettlementApi.Write.BusCommand.dll">
-      <publishTime>11/24/2016 10:26:14</publishTime>
+      <publishTime>12/12/2016 13:39:16</publishTime>
     </File>
     <File Include="bin/SettlementApi.Write.BusinessLogic.dll">
-      <publishTime>11/30/2016 10:52:24</publishTime>
+      <publishTime>12/12/2016 13:39:16</publishTime>
     </File>
     <File Include="bin/SettlementApi.Write.Model.dll">
-      <publishTime>11/24/2016 10:26:13</publishTime>
+      <publishTime>12/12/2016 13:39:14</publishTime>
     </File>
     <File Include="bin/System.Net.Http.Formatting.dll">
       <publishTime>01/28/2015 04:02:42</publishTime>

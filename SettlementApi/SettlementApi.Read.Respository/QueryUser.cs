@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using SettlementApi.CommandBus;
 using SettlementApi.Read.Model;
 using SettlementApi.Read.QueryCommand;
@@ -14,7 +15,15 @@ namespace SettlementApi.Read.Respository
         {
             if (!string.IsNullOrEmpty(command.Groups))
                 command.Path = command.Groups.Split(',');
-            return QueryPaging<EQueryUser, RQueryUser, QueryUserCommand>("User.Query", command);
+            var result= QueryPaging<EQueryUser, RQueryUser, QueryUserCommand>("User.Query", command);
+            if (result?.List != null)
+            {
+                if (result.List.Any(p=>p.LoginID=="super"))
+                {
+                    result.List=result.List.Where(p => p.LoginID != "super").ToList();
+                }
+            }
+            return result;
         }
 
         public GetUserCommandResult Execute(GetByIDCommand command)
