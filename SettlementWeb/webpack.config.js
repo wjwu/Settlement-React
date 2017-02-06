@@ -31,47 +31,50 @@ module.exports = {
 		publicPath: 'http://localhost:10010/',
 		chunkFilename: '[name].chunk.js'
 	},
-	resolve: {
-		extensions: ['', '.js'],
-		// alias: {
-		// 	numeral: 'numeral/min/numeral-with-locales.min.js'
-		// }
-	},
 	module: {
-		loaders: [{
+		rules: [{
 			test: /\.js$/,
 			exclude: /node_modules/,
-			loader: 'babel'
+			use: 'babel-loader'
 		}, {
 			test: /\.scss$/,
-			loader: ExtractTextPlugin.extract('style!postcss', 'css?modules&localIdentName=[name]__[local]-[hash:base64:5]!sass')
+			use: ExtractTextPlugin.extract({
+				fallback: 'style-loader!postcss',
+				use: 'css-loader?modules&localIdentName=[name]__[local]-[hash:base64:5]!sass-loader'
+			})
 		}, {
 			test: /\.less$/,
-			loader: ExtractTextPlugin.extract('style!postcss', 'css!less')
-		}, {
-			test: /\.(jpg|gif)$/,
-			loader: 'url?limit=8192'
+			use: ExtractTextPlugin.extract({
+				fallback: 'style-loader!postcss',
+				use: 'css-loader!less-loader'
+			})
 		}, {
 			test: /\.css$/,
-			loader: 'file?name=[path][name].[ext]'
+			use: 'file-loader?name=[path][name].[ext]'
 		}, {
 			test: /\.html$/,
-			loader: 'html'
+			use: 'html-loader'
 		}]
 	},
-	devtool: 'eval-source-map',
 	plugins: [
 		new webpack.optimize.UglifyJsPlugin({
 			compress: false,
 			mangle: false,
-			comments: false
+			comments: false,
+			sourceMap: true
 		}),
-		new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js', ['app']),
-		new webpack.optimize.OccurenceOrderPlugin(),
+		new webpack.optimize.CommonsChunkPlugin({
+			name: 'vendor',
+			filename: 'vendor.js',
+			chunks: ['app']
+		}),
 		new webpack.HotModuleReplacementPlugin(),
-		new webpack.NoErrorsPlugin(),
-		new ExtractTextPlugin('[name].css', {
+		new webpack.NoEmitOnErrorsPlugin(),
+		new ExtractTextPlugin({
+			filename: '[name].css',
+			disable: false,
 			allChunks: true
 		})
-	]
+	],
+	devtool: 'source-map',
 };

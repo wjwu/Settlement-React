@@ -34,29 +34,32 @@ module.exports = {
 		publicPath: '/',
 		chunkFilename: '[name].chunk.[hash].js'
 	},
-	resolve: {
-		extensions: ['', '.js'],
-	},
 	module: {
-		loaders: [{
+		rules: [{
 			test: /\.js$/,
 			exclude: /node_modules/,
-			loader: 'babel'
+			use: 'babel-loader'
 		}, {
 			test: /\.scss$/,
-			loader: ExtractTextPlugin.extract('style!postcss', 'css?modules&localIdentName=[name]__[local]-[hash:base64:5]!sass')
+			use: ExtractTextPlugin.extract({
+				fallback: 'style-loader!postcss',
+				use: 'css-loader?modules&localIdentName=[name]__[local]-[hash:base64:5]!sass-loader'
+			})
 		}, {
 			test: /\.less$/,
-			loader: ExtractTextPlugin.extract('style!postcss', 'css!less')
+			use: ExtractTextPlugin.extract({
+				fallback: 'style-loader!postcss',
+				use: 'css-loader!less-loader'
+			})
 		}, {
 			test: /\.(jpg|gif)$/,
-			loader: 'url?limit=8192'
+			use: 'url-loader?limit=8192'
 		}, {
 			test: /\.css$/,
-			loader: 'file?name=[path][name].[ext]'
+			use: 'file-loader?name=[path][name].[ext]'
 		}, {
 			test: /\.html$/,
-			loader: 'html'
+			use: 'html-loader'
 		}]
 	},
 	devtool: false,
@@ -94,11 +97,16 @@ module.exports = {
 			},
 			comments: false
 		}),
-		new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.[hash].js', ['app']),
-		new webpack.optimize.OccurenceOrderPlugin(),
+		new webpack.optimize.CommonsChunkPlugin({
+			name: 'vendor',
+			filename: 'vendor.js',
+			chunks: ['app']
+		}),
 		new webpack.HotModuleReplacementPlugin(),
-		new webpack.NoErrorsPlugin(),
-		new ExtractTextPlugin('[name].[hash].css', {
+		new webpack.NoEmitOnErrorsPlugin(),
+		new ExtractTextPlugin({
+			filename: '[name].[hash].css',
+			disable: false,
 			allChunks: true
 		}),
 		new webpack.DefinePlugin({
