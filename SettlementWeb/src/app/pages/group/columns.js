@@ -1,5 +1,5 @@
-import React from 'react'
-import { Icon } from 'antd'
+import React from 'react';
+import { Icon } from 'antd';
 
 export default (editFuc) => {
 	return [{
@@ -8,7 +8,7 @@ export default (editFuc) => {
 		key: 'loginId',
 		width: '15%',
 		render: (text, raw) => {
-			return <a href='javascript:;' onClick={editFuc.bind(null, raw)}>{text}</a>
+			return <a href='javascript:;' onClick={editFuc.bind(null, raw)}>{text}</a>;
 		}
 	}, {
 		title: '手机',
@@ -27,9 +27,9 @@ export default (editFuc) => {
 		width: '15%',
 		render: text => {
 			if (text) {
-				return '启用'
+				return '启用';
 			} else {
-				return '禁用'
+				return '禁用';
 			}
 		}
 	}, {
@@ -39,13 +39,13 @@ export default (editFuc) => {
 		width: '15%',
 		render: text => {
 			if (text.toLowerCase() === 'admin') {
-				return '系统管理员'
+				return '系统管理员';
 			} else if (text.toLowerCase() === 'deptmanager') {
-				return '部门主管'
+				return '部门主管';
 			} else if (text.toLowerCase() === 'employee') {
-				return '普通员工'
+				return '普通员工';
 			} else if (text.toLowerCase() === 'financial') {
-				return '财务'
+				return '财务';
 			}
 		}
 	}, {
@@ -58,7 +58,7 @@ export default (editFuc) => {
 		key: 'operation',
 		width: '10%',
 		render: (text, raw) => {
-			return <a href='javascript:;' onClick={editFuc.bind(null, raw)}><Icon type='edit' /></a>
+			return <a href='javascript:;' onClick={editFuc.bind(null, raw)}><Icon type='edit' /></a>;
 		}
-	}]
-}
+	}];
+};

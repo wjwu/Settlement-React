@@ -1,41 +1,40 @@
-import { action } from '../utils/common';
+import { createActions } from 'redux-actions';
 
-export const GET_SHEET = Symbol();
-export const BEGIN_GET_SHEET = Symbol();
-export const END_GET_SHEET = Symbol();
-export const ERROR_GET_SHEET = Symbol();
+export const GET_SHEET = 'GET_SHEET';
+export const REQUEST_GET_SHEET = 'REQUEST_GET_SHEET';
+export const SUCCESS_GET_SHEET = 'SUCCESS_GET_SHEET';
+export const FAILURE_GET_SHEET = 'FAILURE_GET_SHEET';
 
-export const QUERY_SHEETS = Symbol();
-export const BEGIN_QUERY_SHEETS = Symbol();
-export const END_QUERY_SHEETS = Symbol();
-export const ERROR_QUERY_SHEETS = Symbol();
+export const QUERY_SHEETS = 'QUERY_SHEETS';
+export const REQUEST_QUERY_SHEETS = 'REQUEST_QUERY_SHEETS';
+export const SUCCESS_QUERY_SHEETS = 'SUCCESS_QUERY_SHEETS';
+export const FAILURE_QUERY_SHEETS = 'FAILURE_QUERY_SHEETS';
 
-export const CREATE_SHEET = Symbol();
-export const BEGIN_CREATE_SHEET = Symbol();
-export const END_CREATE_SHEET = Symbol();
-export const ERROR_CREATE_SHEET = Symbol();
+export const CREATE_SHEET = 'CREATE_SHEET';
+export const REQUEST_CREATE_SHEET = 'REQUEST_CREATE_SHEET';
+export const SUCCESS_CREATE_SHEET = 'SUCCESS_CREATE_SHEET';
+export const FAILURE_CREATE_SHEET = 'FAILURE_CREATE_SHEET';
 
-export const UPDATE_SHEET = Symbol();
-export const BEGIN_UPDATE_SHEET = Symbol();
-export const END_UPDATE_SHEET = Symbol();
-export const ERROR_UPDATE_SHEET = Symbol();
+export const UPDATE_SHEET = 'UPDATE_SHEET';
+export const REQUEST_UPDATE_SHEET = 'REQUEST_UPDATE_SHEET';
+export const SUCCESS_UPDATE_SHEET = 'SUCCESS_UPDATE_SHEET';
+export const FAILURE_UPDATE_SHEET = 'FAILURE_UPDATE_SHEET';
 
-export const getSheet = (id) => action(GET_SHEET, { id });
-export const beginGetSheet = () => action(BEGIN_GET_SHEET);
-export const endGetSheet = (result) => action(END_GET_SHEET, { result });
-export const errorGetSheet = () => action(ERROR_GET_SHEET);
-
-export const querySheets = (request) => action(QUERY_SHEETS, { request });
-export const beginQuerySheets = () => action(BEGIN_QUERY_SHEETS);
-export const endQuerySheets = (result) => action(END_QUERY_SHEETS, { result });
-export const errorQuerySheets = () => action(ERROR_QUERY_SHEETS);
-
-export const createSheets = (request) => action(CREATE_SHEET, { request });
-export const beginCreateSheets = () => action(BEGIN_CREATE_SHEET);
-export const endCreateSheets = () => action(END_CREATE_SHEET);
-export const errorCreateSheets = (result) => action(END_CREATE_SHEET, { result });
-
-export const updateSheets = (request) => action(UPDATE_SHEET, { request });
-export const beginUpdateSheets = () => action(BEGIN_UPDATE_SHEET);
-export const endUpdateSheets = () => action(END_UPDATE_SHEET);
-export const errorUpdateSheets = (result) => action(ERROR_UPDATE_SHEET, { result });
+export default createActions(
+	GET_SHEET,
+	REQUEST_GET_SHEET,
+	SUCCESS_GET_SHEET,
+	FAILURE_GET_SHEET,
+	QUERY_SHEETS,
+	REQUEST_QUERY_SHEETS,
+	SUCCESS_QUERY_SHEETS,
+	FAILURE_QUERY_SHEETS,
+	CREATE_SHEET,
+	REQUEST_CREATE_SHEET,
+	SUCCESS_CREATE_SHEET,
+	FAILURE_CREATE_SHEET,
+	UPDATE_SHEET,
+	REQUEST_UPDATE_SHEET,
+	SUCCESS_UPDATE_SHEET,
+	FAILURE_UPDATE_SHEET
+);

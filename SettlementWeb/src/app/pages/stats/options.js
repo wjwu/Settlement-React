@@ -1,12 +1,12 @@
 export const sourceOption = (data) => {
-	let legendData = []
-	let seriesData = []
+	let legendData = [];
+	let seriesData = [];
 	for (let name in data) {
-		legendData.push(name)
+		legendData.push(name);
 		seriesData.push({
 			name: name,
 			value: data[name]
-		})
+		});
 	}
 	return {
 		title: {
@@ -36,18 +36,18 @@ export const sourceOption = (data) => {
 				}
 			}
 		}]
-	}
-}
+	};
+};
 
 export const deptOption = (data) => {
-	let legendData = []
-	let seriesData = []
+	let legendData = [];
+	let seriesData = [];
 	for (let name in data) {
-		legendData.push(name)
+		legendData.push(name);
 		seriesData.push({
 			name: name,
 			value: data[name]
-		})
+		});
 	}
 	return {
 		title: {
@@ -77,5 +77,5 @@ export const deptOption = (data) => {
 				}
 			}
 		}]
-	}
-}
+	};
+};

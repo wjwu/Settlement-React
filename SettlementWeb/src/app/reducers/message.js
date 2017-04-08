@@ -1,9 +1,9 @@
-import { SHOW_GLOBAL_MESSAGE } from '../actions/message'
+import { SHOW_GLOBAL_MESSAGE } from '../actions/message';
 
 const message = (state = {}, action) => {
 	if (state.hasOwnProperty('type')) {
-		delete state.type
-		delete state.msg
+		delete state.type;
+		delete state.msg;
 	}
 	switch (action.type) {
 		case SHOW_GLOBAL_MESSAGE:
@@ -11,10 +11,10 @@ const message = (state = {}, action) => {
 				...state,
 				type: action.msgType,
 				msg: action.msg
-			}
+			};
 		default:
-			return state
+			return state;
 	}
-}
+};
 
-export default message
+export default message;

@@ -1,110 +1,110 @@
 import {
-	BEGIN_QUERY_BASES,
-	END_QUERY_BASES,
-	ERROR_QUERY_BASES,
-	BEGIN_QUERY_SOURCES,
-	END_QUERY_SOURCES,
-	ERROR_QUERY_SOURCES,
-	BEGIN_QUERY_COSTS,
-	END_QUERY_COSTS,
-	ERROR_QUERY_COSTS,
-	BEGIN_CREATE_DICTIONARY,
-	END_CREATE_DICTIONARY,
-	ERROR_CREATE_DICTIONARY,
-	BEGIN_UPDATE_DICTIONARY,
-	END_UPDATE_DICTIONARY,
-	ERROR_UPDATE_DICTIONARY
-} from '../actions/dictionary'
+	REQUEST_QUERY_BASES,
+	SUCCESS_QUERY_BASES,
+	FAILURE_QUERY_BASES,
+	REQUEST_QUERY_SOURCES,
+	SUCCESS_QUERY_SOURCES,
+	FAILURE_QUERY_SOURCES,
+	REQUEST_QUERY_COSTS,
+	SUCCESS_QUERY_COSTS,
+	FAILURE_QUERY_COSTS,
+	REQUEST_CREATE_DICTIONARY,
+	SUCCESS_CREATE_DICTIONARY,
+	FAILURE_CREATE_DICTIONARY,
+	REQUEST_UPDATE_DICTIONARY,
+	SUCCESS_UPDATE_DICTIONARY,
+	FAILURE_UPDATE_DICTIONARY
+} from '../actions/dictionary';
 
 export default (state = {}, action) => {
 	if (state.hasOwnProperty('created')) {
-		delete state.created
+		delete state.created;
 	}
 	if (state.hasOwnProperty('updated')) {
-		delete state.updated
+		delete state.updated;
 	}
 	switch (action.type) {
-		case BEGIN_QUERY_BASES:
+		case REQUEST_QUERY_BASES:
 			return {
 				...state,
 				queryingBases: true
-			}
-		case END_QUERY_BASES:
-			delete state.queryingBases
+			};
+		case SUCCESS_QUERY_BASES:
+			delete state.queryingBases;
 			return {
 				...state,
-				bases: action.result
-			}
-		case ERROR_QUERY_BASES:
-			delete state.queryingBases
+				bases: action.payload
+			};
+		case FAILURE_QUERY_BASES:
+			delete state.queryingBases;
 			return {
 				...state
-			}
-		case BEGIN_QUERY_SOURCES:
+			};
+		case REQUEST_QUERY_SOURCES:
 			return {
 				...state,
 				queryingSources: true
-			}
-		case END_QUERY_SOURCES:
-			delete state.queryingSources
+			};
+		case SUCCESS_QUERY_SOURCES:
+			delete state.queryingSources;
 			return {
 				...state,
-				sources: action.result
-			}
-		case ERROR_QUERY_SOURCES:
-			delete state.queryingSources
+				sources: action.payload
+			};
+		case FAILURE_QUERY_SOURCES:
+			delete state.queryingSources;
 			return {
 				...state
-			}
-		case BEGIN_QUERY_COSTS:
+			};
+		case REQUEST_QUERY_COSTS:
 			return {
 				...state,
 				queryingCosts: true
-			}
-		case END_QUERY_COSTS:
-			delete state.queryingCosts
+			};
+		case SUCCESS_QUERY_COSTS:
+			delete state.queryingCosts;
 			return {
 				...state,
-				costs: action.result
-			}
-		case ERROR_QUERY_COSTS:
-			delete state.queryingCosts
+				costs: action.payload
+			};
+		case FAILURE_QUERY_COSTS:
+			delete state.queryingCosts;
 			return {
 				...state
-			}
-		case BEGIN_CREATE_DICTIONARY:
+			};
+		case REQUEST_CREATE_DICTIONARY:
 			return {
 				...state,
 				creating: true
-			}
-		case END_CREATE_DICTIONARY:
-			delete state.creating
+			};
+		case SUCCESS_CREATE_DICTIONARY:
+			delete state.creating;
 			return {
 				...state,
 				created: true
-			}
-		case ERROR_CREATE_DICTIONARY:
-			delete state.creating
+			};
+		case FAILURE_CREATE_DICTIONARY:
+			delete state.creating;
 			return {
 				...state
-			}
-		case BEGIN_UPDATE_DICTIONARY:
+			};
+		case REQUEST_UPDATE_DICTIONARY:
 			return {
 				...state,
 				updating: true
-			}
-		case END_UPDATE_DICTIONARY:
-			delete state.updating
+			};
+		case SUCCESS_UPDATE_DICTIONARY:
+			delete state.updating;
 			return {
 				...state,
 				updated: true
-			}
-		case ERROR_UPDATE_DICTIONARY:
-			delete state.updating
+			};
+		case FAILURE_UPDATE_DICTIONARY:
+			delete state.updating;
 			return {
 				...state
-			}
+			};
 		default:
-			return state
+			return state;
 	}
-}
+};

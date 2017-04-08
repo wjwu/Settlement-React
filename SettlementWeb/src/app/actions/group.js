@@ -20,12 +20,10 @@ export const REQUEST_UPDATE_GROUP = 'REQUEST_UPDATE_GROUP';
 export const SUCCESS_UPDATE_GROUP = 'SUCCESS_UPDATE_GROUP';
 export const FAILURE_UPDATE_GROUP = 'FAILURE_UPDATE_GROUP';
 
-
-// export const deleteGroup = (id) => {
-// 	return () => {
-// 		return apiClient.del(`group/${id}`)
-// 	}
-// }
+export const DELETE_GROUP = 'DELETE_GROUP';
+export const REQUEST_DELETE_GROUP = 'REQUEST_DELETE_GROUP';
+export const SUCCESS_DELETE_GROUP = 'SUCCESS_DELETE_GROUP';
+export const FAILURE_DELETE_GROUP = 'FAILURE_DELETE_GROUP';
 
 export default createActions(
 	GET_GROUP,
@@ -43,5 +41,9 @@ export default createActions(
 	UPDATE_GROUP,
 	REQUEST_UPDATE_GROUP,
 	SUCCESS_UPDATE_GROUP,
-	FAILURE_UPDATE_GROUP
+	FAILURE_UPDATE_GROUP,
+	DELETE_GROUP,
+	REQUEST_DELETE_GROUP,
+	SUCCESS_DELETE_GROUP,
+	FAILURE_DELETE_GROUP
 );

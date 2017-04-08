@@ -1,30 +1,30 @@
-import React, { Component, PropTypes } from 'react'
-import { Modal, Form, Input, Button, Select, Radio, Row, Col, InputNumber, DatePicker, Tabs } from 'antd'
-import { TTable } from '../../../components'
-import numeral from 'numeral'
-import CreateCost from './CreateCost'
-import UpdateCost from './UpdateCost'
-import CreateReceived from './CreateReceived'
-import UpdateReceived from './UpdateReceived'
-import { genCostColumns, genReceivedColumns } from './columns'
-import { disabledTime, disabledDate } from '../../../utils/common'
+import React, { Component, PropTypes } from 'react';
+import { Modal, Form, Input, Button, Select, Radio, Row, Col, InputNumber, DatePicker, Tabs } from 'antd';
+import { TTable } from '../../../components';
+import numeral from 'numeral';
+import CreateCost from './CreateCost';
+import UpdateCost from './UpdateCost';
+import CreateReceived from './CreateReceived';
+import UpdateReceived from './UpdateReceived';
+import { genCostColumns, genReceivedColumns } from './columns';
+import { disabledTime, disabledDate } from '../../../utils/common';
 
-const FormItem = Form.Item
-const RangePicker = DatePicker.RangePicker
-const Option = Select.Option
-const TabPane = Tabs.TabPane
-const RadioGroup = Radio.Group
+const FormItem = Form.Item;
+const RangePicker = DatePicker.RangePicker;
+const Option = Select.Option;
+const TabPane = Tabs.TabPane;
+const RadioGroup = Radio.Group;
 
-const createCost = 'createCost'
-const updateCost = 'updateCost'
-const createReceived = 'createReceived'
-const updateReceived = 'updateReceived'
+const createCost = 'createCost';
+const updateCost = 'updateCost';
+const createReceived = 'createReceived';
+const updateReceived = 'updateReceived';
 
 class CreateSheet extends Component {
 	constructor(prop) {
-		super(prop)
-		this.calcUnit = this.calcUnit.bind(this)
-		this.calcTax = this.calcTax.bind(this)
+		super(prop);
+		this.calcUnit = this.calcUnit.bind(this);
+		this.calcTax = this.calcTax.bind(this);
 		this.state = {
 			[createCost]: false,
 			[updateCost]: false,
@@ -32,35 +32,35 @@ class CreateSheet extends Component {
 			[updateReceived]: false,
 			costs: [],
 			receiveds: []
-		}
+		};
 	}
 
 	submit(type) {
 		const {
 			validateFields,
 			getFieldValue
-		} = this.props.form
+		} = this.props.form;
 
 		validateFields((errors, values) => {
 			if (!errors) {
-				let customName = getFieldValue('customName')
-				let contacts = getFieldValue('contacts')
-				let phone = getFieldValue('phone')
-				let qq = getFieldValue('qq')
-				let weixin = getFieldValue('weixin')
-				let address = getFieldValue('address')
-				let source = getFieldValue('source')
-				let base = getFieldValue('base')
-				let times = getFieldValue('times')
-				let timeFrom = times[0].format('YYYY-MM-DD HH:mm:ss')
-				let timeTo = times[1].format('YYYY-MM-DD HH:mm:ss')
-				let people = getFieldValue('people')
-				let total = getFieldValue('total')
-				let taxRate = getFieldValue('taxRate')
-				let remark = getFieldValue('remark')
-				let costs = this.state.costs
-				let receiveds = this.state.receiveds
-				let submit = type === 'submit'
+				let customName = getFieldValue('customName');
+				let contacts = getFieldValue('contacts');
+				let phone = getFieldValue('phone');
+				let qq = getFieldValue('qq');
+				let weixin = getFieldValue('weixin');
+				let address = getFieldValue('address');
+				let source = getFieldValue('source');
+				let base = getFieldValue('base');
+				let times = getFieldValue('times');
+				let timeFrom = times[0].format('YYYY-MM-DD HH:mm:ss');
+				let timeTo = times[1].format('YYYY-MM-DD HH:mm:ss');
+				let people = getFieldValue('people');
+				let total = getFieldValue('total');
+				let taxRate = getFieldValue('taxRate');
+				let remark = getFieldValue('remark');
+				let costs = this.state.costs;
+				let receiveds = this.state.receiveds;
+				let submit = type === 'submit';
 				this.props.createSheet({
 					customName,
 					contacts,
@@ -79,84 +79,84 @@ class CreateSheet extends Component {
 					costs,
 					receiveds,
 					submit
-				})
+				});
 			}
-		})
+		});
 	}
 
 	calcUnit() {
 		const {
 			getFieldValue,
 			setFieldsValue
-		} = this.props.form
+		} = this.props.form;
 
-		let people = getFieldValue('people')
-		let total = getFieldValue('total')
+		let people = getFieldValue('people');
+		let total = getFieldValue('total');
 		if (people > 0 && total > 0) {
-			let unit = total / people
+			let unit = total / people;
 			setFieldsValue({
 				'unit': unit
-			})
+			});
 		}
-		this.calcTax()
+		this.calcTax();
 	}
 
 	calcTax() {
 		const {
 			getFieldValue,
 			setFieldsValue
-		} = this.props.form
+		} = this.props.form;
 
-		let taxRate = getFieldValue('taxRate')
-		let total = getFieldValue('total')
+		let taxRate = getFieldValue('taxRate');
+		let total = getFieldValue('total');
 		if (taxRate > 0 && total > 0) {
-			let tax = total * taxRate
+			let tax = total * taxRate;
 			setFieldsValue({
 				'tax': tax
-			})
+			});
 		}
 	}
 
 	showModal(type) {
 		this.setState({
 			[type]: true
-		})
+		});
 	}
 
 	hideModal(type, result, action) {
-		this.state[type] = false
+		this.state[type] = false;
 		if (result && (type === createCost || type === updateCost)) {
-			let costs = this.state.costs
+			let costs = this.state.costs;
 			if (action === 'create') {
-				costs.push(result)
+				costs.push(result);
 			} else if (action === 'update') {
-				let idx = costs.indexOf(this.selectedCost)
-				costs.splice(idx, 1, result)
+				let idx = costs.indexOf(this.selectedCost);
+				costs.splice(idx, 1, result);
 			}
-			this.state.costs = costs
+			this.state.costs = costs;
 		} else if (result && (type === createReceived || type === updateReceived)) {
-			let receiveds = this.state.receiveds
+			let receiveds = this.state.receiveds;
 			if (action === 'create') {
-				receiveds.push(result)
+				receiveds.push(result);
 			} else if (action === 'update') {
-				let idx = receiveds.indexOf(this.selectedReceived)
-				receiveds.splice(idx, 1, result)
+				let idx = receiveds.indexOf(this.selectedReceived);
+				receiveds.splice(idx, 1, result);
 			}
-			this.state.receiveds = receiveds
+			this.state.receiveds = receiveds;
 		}
 		this.setState({
 			...this.state
-		})
+		});
 	}
 
 	render() {
-		const getFieldDecorator = this.props.form.getFieldDecorator
-		const creating = this.props.sheet.creating
+		const getFieldDecorator = this.props.form.getFieldDecorator;
+		const creating = this.props.sheet.creating;
 		let {
 			bases,
 			sources,
 			costs: costTypes
-		} = this.props.dictionary
+		} = this.props.dictionary;
 
 		const formItemLayout = {
 			labelCol: {
@@ -165,51 +165,51 @@ class CreateSheet extends Component {
 			wrapperCol: {
 				span: 16
 			},
-		}
+		};
 
 		const costColumns = genCostColumns((raw, action) => {
-			this.selectedCost = raw
+			this.selectedCost = raw;
 			if (action === 'update') {
-				this.showModal(updateCost)
+				this.showModal(updateCost);
 			} else {
-				let costs = this.state.costs
-				let idx = costs.indexOf(raw)
-				costs.splice(idx, 1)
-				this.state.costs = costs
+				let costs = this.state.costs;
+				let idx = costs.indexOf(raw);
+				costs.splice(idx, 1);
+				this.state.costs = costs;
 				this.setState({
 					...this.state
-				})
+				});
 			}
-		}, false)
+		}, false);
 		const receivedColumns = genReceivedColumns((raw, action) => {
-			this.selectedReceived = raw
+			this.selectedReceived = raw;
 			if (action === 'update') {
-				this.showModal(updateReceived)
+				this.showModal(updateReceived);
 			} else {
-				let receiveds = this.state.receiveds
-				let idx = receiveds.indexOf(raw)
-				receiveds.splice(idx, 1)
-				this.state.receiveds = receiveds
+				let receiveds = this.state.receiveds;
+				let idx = receiveds.indexOf(raw);
+				receiveds.splice(idx, 1);
+				this.state.receiveds = receiveds;
 				this.setState({
 					...this.state
-				})
+				});
 			}
-		}, false)
-		let costs = this.state.costs
-		let receiveds = this.state.receiveds
-		let cost = 0
+		}, false);
+		let costs = this.state.costs;
+		let receiveds = this.state.receiveds;
+		let cost = 0;
 		for (let i = costs.length - 1; i >= 0; i--) {
-			cost += costs[i].Total
+			cost += costs[i].Total;
 		}
-		let modal
+		let modal;
 		if (this.state[createCost]) {
-			modal = <CreateCost onCancel = {this.hideModal.bind(this, createCost)} costs={costTypes.List}/>
+			modal = <CreateCost onCancel = {this.hideModal.bind(this, createCost)} costs={costTypes.List}/>;
 		} else if (this.state[updateCost]) {
-			modal = <UpdateCost onCancel = {this.hideModal.bind(this, updateCost)} costs={costTypes.List} cost={this.selectedCost}/>
+			modal = <UpdateCost onCancel = {this.hideModal.bind(this, updateCost)} costs={costTypes.List} cost={this.selectedCost}/>;
 		} else if (this.state[createReceived]) {
-			modal = <CreateReceived onCancel = {this.hideModal.bind(this, createReceived)}/>
+			modal = <CreateReceived onCancel = {this.hideModal.bind(this, createReceived)}/>;
 		} else if (this.state[updateReceived]) {
-			modal = <UpdateReceived onCancel = {this.hideModal.bind(this, updateReceived)} received={this.selectedReceived}/>
+			modal = <UpdateReceived onCancel = {this.hideModal.bind(this, updateReceived)} received={this.selectedReceived}/>;
 		}
 
 		let footer =
@@ -217,7 +217,7 @@ class CreateSheet extends Component {
 				<Button key='cancel' type='ghost' size='large' onClick={this.props.onCancel}>取消</Button>,
 				<Button key='save' type='primary' size='large' loading={creating} onClick={this.submit.bind(this, 'save')}>保存</Button>,
 				<Button key='submit' type='primary' size='large' loading={creating} onClick={this.submit.bind(this, 'submit')}>保存并提交</Button>
-			]
+			];
 
 		return (
 			<Modal title='新增结算表' visible={true} width={900} footer={footer} onCancel={this.props.onCancel}>
@@ -251,11 +251,11 @@ class CreateSheet extends Component {
 												message:'请选择培训基地！'
 											}]
 										})(
-											<Select placeholder='请选择培训基地'>
-								 			{
-								 				bases.List.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>)
-								 			}
-								 			</Select>
+										<Select placeholder='请选择培训基地'>
+											{
+												bases.List.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>)
+											}
+										</Select>
 										)
 									}
 									</FormItem>
@@ -337,9 +337,9 @@ class CreateSheet extends Component {
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='总成交额'>
 										{
-											getFieldDecorator('total',{
+											getFieldDecorator('total', {
 												initialValue:0,
-												rules:[{required:true},{
+												rules:[{required:true}, {
 														range:true,
 														min:1,
 														type:'number',
@@ -361,7 +361,7 @@ class CreateSheet extends Component {
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='均价'>
 										{
-											getFieldDecorator('unit',{initialValue:0})(<InputNumber disabled min={0}/>)
+											getFieldDecorator('unit', {initialValue:0})(<InputNumber disabled min={0}/>)
 										}
 									</FormItem>
 								</Col>
@@ -377,7 +377,7 @@ class CreateSheet extends Component {
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='税率'>
 										{
-											getFieldDecorator('taxRate',{
+											getFieldDecorator('taxRate', {
 												initialValue:0,
 												rules:[{
 													required:true
@@ -393,7 +393,7 @@ class CreateSheet extends Component {
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='税费'>
 										{
-											getFieldDecorator('tax',{initialValue:0})(<InputNumber disabled min={0}/>)
+											getFieldDecorator('tax', {initialValue:0})(<InputNumber disabled min={0}/>)
 										}
 									</FormItem>
 								</Col>
@@ -402,13 +402,12 @@ class CreateSheet extends Component {
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='客户来源'>
 										{
-											getFieldDecorator('source',{
+											getFieldDecorator('source', {
 												rules:[{
 													required:true,
 													message:'请选择客户来源！'
 												}]
-											})
-											(
+											})(
 												<RadioGroup>
 													{
 														sources.List.map(item=><Radio key={item.ID} value={item.ID}>{item.Name}</Radio>)	
@@ -429,28 +428,28 @@ class CreateSheet extends Component {
 						</Form>
 					</TabPane> 
 					<TabPane tab='结算明细' key='costInfo'>
-						<div style={{marginBottom:16,textAlign:'right'}}>
-							<span style={{float:'left',margin:'4px 0 0 2px'}}><b>成本总计：{numeral(cost).format('0,0.00')}</b></span>
-							<Button type='primary' icon='plus-circle-o' onClick={this.showModal.bind(this,createCost)}>新增明细</Button>
+						<div style={{marginBottom:16, textAlign:'right'}}>
+							<span style={{float:'left', margin:'4px 0 0 2px'}}><b>成本总计：{numeral(cost).format('0,0.00')}</b></span>
+							<Button type='primary' icon='plus-circle-o' onClick={this.showModal.bind(this, createCost)}>新增明细</Button>
 							{modal}
 						</div>
 						<TTable key='cost' scroll={{ y: 300 }} bordered columns={costColumns} dataSource={costs} pagination={false}/>
 					</TabPane> 
 					<TabPane tab='收款明细' key='receivedInfo'>
-						<div style={{marginBottom:16,textAlign:'right'}}>
-							<Button type='primary' icon='plus-circle-o' onClick={this.showModal.bind(this,createReceived)}>新增明细</Button>
+						<div style={{marginBottom:16, textAlign:'right'}}>
+							<Button type='primary' icon='plus-circle-o' onClick={this.showModal.bind(this, createReceived)}>新增明细</Button>
 							{modal}
 						</div>
 						<TTable key='received' bordered columns={receivedColumns} dataSource={receiveds} pagination={false}/>
 					</TabPane> 
 				</Tabs>
 			</Modal>
-		)
+		);
 	}
 }
 
 CreateSheet.propTypes = {
 	onCancel: PropTypes.func.isRequired
-}
+};
 
-export default Form.create()(CreateSheet)
+export default Form.create()(CreateSheet);

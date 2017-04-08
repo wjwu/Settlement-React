@@ -1,103 +1,98 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { Row, Tabs, Button } from 'antd'
-import { TMainContainer } from '../../containers'
-import { TCol, TCard, TTable } from '../../components'
-import CreateDictionary from './components/CreateDictionary'
-import UpdateDictionary from './components/UpdateDictionary'
-import genColumns from './columns'
-import {
-	queryBases,
-	querySources,
-	queryCosts,
-	createDictionary,
-	updateDictionary
-} from '../../actions/dictionary'
+import React, { Component } from 'react';
+import { bindActionCreators } from 'react';
+import { connect } from 'react-redux';
+import { Row, Tabs, Button } from 'antd';
+import { TMainContainer } from '../../containers';
+import { TCol, TCard, TTable } from '../../components';
+import CreateDictionary from './components/CreateDictionary';
+import UpdateDictionary from './components/UpdateDictionary';
+import genColumns from './columns';
+import dictionaryActions from '../../actions/dictionary';
 
-const TabPane = Tabs.TabPane
+const TabPane = Tabs.TabPane;
 
-const DICTIONARY_BASE = 'base'
-const DICTIONARY_SOURCE = 'source'
-const DICTIONARY_COST = 'cost'
+const DICTIONARY_BASE = 'base';
+const DICTIONARY_SOURCE = 'source';
+const DICTIONARY_COST = 'cost';
 
 class Dictionary extends Component {
 	constructor(props) {
-		super(props)
-		this.onTabChange = this.onTabChange.bind(this)
-		this.onTTableLoad = this.onTTableLoad.bind(this)
-		this.hideModal = this.hideModal.bind(this)
+		super(props);
+		this.onTabChange = this.onTabChange.bind(this);
+		this.onTTableLoad = this.onTTableLoad.bind(this);
+		this.hideModal = this.hideModal.bind(this);
 
-		this.selectedTab = DICTIONARY_BASE
+		this.selectedTab = DICTIONARY_BASE;
 		this[DICTIONARY_BASE] = {
 			request: {
 				pageIndex: 1
 			}
-		}
+		};
 		this[DICTIONARY_SOURCE] = {
 			request: {
 				pageIndex: 1
 			},
 			queryed: false,
-		}
+		};
 		this[DICTIONARY_COST] = {
 			request: {
 				pageIndex: 1
 			},
 			queryed: false,
-		}
+		};
 		this.state = {
 			'createDicVisible': false,
 			'updateDicVisible': false
-		}
+		};
 	}
 
 	componentDidMount() {
-		this.props.queryBases(this.base.request)
+		this.props.queryBases(this.base.request);
 	}
 
 	componentDidUpdate() {
 		if (this.props.dictionary.createdDic || this.props.dictionary.updatedDic) {
 			if (this.selectedTab === DICTIONARY_BASE) {
-				this.props.queryBases(this.base.request)
+				this.props.queryBases(this.base.request);
 			} else if (this.selectedTab === DICTIONARY_SOURCE) {
-				this.props.querySources(this.source.request)
+				this.props.querySources(this.source.request);
 			} else if (this.selectedTab === DICTIONARY_COST) {
-				this.props.queryCosts(this.cost.request)
+				this.props.queryCosts(this.cost.request);
 			}
 		}
 	}
 
 	onTTableLoad(pageIndex) {
-		this[this.selectedTab].request.pageIndex = pageIndex
+		this[this.selectedTab].request.pageIndex = pageIndex;
 		if (this.selectedTab === DICTIONARY_BASE) {
-			this.props.queryBases(this.base.request)
+			this.props.queryBases(this.base.request);
 		} else if (this.selectedTab === DICTIONARY_SOURCE) {
-			this.props.querySources(this.source.request)
+			this.props.querySources(this.source.request);
 		} else if (this.selectedTab === DICTIONARY_COST) {
-			this.props.queryCosts(this.cost.request)
+			this.props.queryCosts(this.cost.request);
 		}
 	}
 
 	onTabChange(activeKey) {
-		this.selectedTab = activeKey
+		this.selectedTab = activeKey;
 		if (this.selectedTab === DICTIONARY_SOURCE && !this.source.queryed) {
-			this.props.querySources(this.source.request)
+			this.props.querySources(this.source.request);
 		} else if (this.selectedTab === DICTIONARY_COST && !this.cost.queryed) {
-			this.props.queryCosts(this.cost.request)
+			this.props.queryCosts(this.cost.request);
 		}
-		this[this.selectedTab].queryed = true
+		this[this.selectedTab].queryed = true;
 	}
 
 	showModal(type) {
 		this.setState({
 			[type]: true
-		})
+		});
 	}
 
 	hideModal(type) {
 		this.setState({
 			[type]: false
-		})
+		});
 	}
 
 	render() {
@@ -110,32 +105,32 @@ class Dictionary extends Component {
 			bases,
 			sources,
 			costs
-		} = this.props.dictionary
+		} = this.props.dictionary;
 
 		let empty = {
 			List: [],
 			TotalCount: 0
-		}
-		bases = bases || empty
-		sources = sources || empty
-		costs = costs || empty
+		};
+		bases = bases || empty;
+		sources = sources || empty;
+		costs = costs || empty;
 
 		const {
 			createDicVisible,
 			updateDicVisible
-		} = this.state
+		} = this.state;
 
 		const columns = genColumns(raw => {
-			this.selectedDic = raw
-			this.showModal('updateDicVisible')
-		})
-		const selectedDic = this.selectedDic || {}
+			this.selectedDic = raw;
+			this.showModal('updateDicVisible');
+		});
+		const selectedDic = this.selectedDic || {};
 
-		let modal
+		let modal;
 		if (createDicVisible) {
-			modal = <CreateDictionary onCancel={()=>{this.hideModal('createDicVisible')}} onSubmit={this.props.createDictionary} creating={creating}/>
+			modal = <CreateDictionary onCancel={()=>{this.hideModal('createDicVisible');}} onSubmit={this.props.createDictionary} creating={creating}/>;
 		} else if (updateDicVisible) {
-			modal = <UpdateDictionary onCancel={()=>{this.hideModal('updateDicVisible')}} onSubmit={this.props.updateDictionary} updating={updating} dictionary={this.selectedDic}/>
+			modal = <UpdateDictionary onCancel={()=>{this.hideModal('updateDicVisible');}} onSubmit={this.props.updateDictionary} updating={updating} dictionary={this.selectedDic}/>;
 		}
 		return (
 			<div>
@@ -157,22 +152,18 @@ class Dictionary extends Component {
 								<TabPane tab='客户来源' key={DICTIONARY_SOURCE}>
 									<TTable columns={columns} loading={queryingSources} total={sources.TotalCount} dataSource={sources.List} onLoad={this.onTTableLoad}/>
 								</TabPane>
-							  <TabPane tab='结算类型' key={DICTIONARY_COST}>
-							  	<TTable columns={columns} loading={queryingCosts} total={costs.TotalCount} dataSource={costs.List} onLoad={this.onTTableLoad}/>
-							  </TabPane>
+								<TabPane tab='结算类型' key={DICTIONARY_COST}>
+									<TTable columns={columns} loading={queryingCosts} total={costs.TotalCount} dataSource={costs.List} onLoad={this.onTTableLoad}/>
+								</TabPane>
 							</Tabs>
 						</TCard>
 					</TCol>
 				</Row>
 			</div>
-		)
+		);
 	}
 }
 
-module.exports = connect(state => state, {
-	queryBases,
-	querySources,
-	queryCosts,
-	createDictionary,
-	updateDictionary
-})(TMainContainer()(Dictionary))
+const mapDispatchToProps = (disptch) => bindActionCreators(dictionaryActions, disptch);
+
+module.exports = connect(state => state, mapDispatchToProps)(TMainContainer()(Dictionary));

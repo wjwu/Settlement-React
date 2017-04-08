@@ -1,7 +1,7 @@
-import React from 'react'
-import { Icon, Tag } from 'antd'
-import numeral from 'numeral'
-import * as colors from '../../utils/colors'
+import React from 'react';
+import { Icon, Tag } from 'antd';
+import numeral from 'numeral';
+import * as colors from '../../utils/colors';
 
 export default (editFuc) => {
 	return [{
@@ -10,7 +10,7 @@ export default (editFuc) => {
 		key: 'customName',
 		width: '11%',
 		render: (text, raw) => {
-			return <a href='javascript:;' onClick={editFuc.bind(null, raw, 'update')}>{text}</a>
+			return <a href='javascript:;' onClick={editFuc.bind(null, raw, 'update')}>{text}</a>;
 		}
 	}, {
 		title: '培训时间',
@@ -28,7 +28,7 @@ export default (editFuc) => {
 		key: 'total',
 		width: '7%',
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
 	}, {
 		title: '总成本',
@@ -36,7 +36,7 @@ export default (editFuc) => {
 		key: 'cost',
 		width: '7%',
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
 	}, {
 		title: '税率',
@@ -44,7 +44,7 @@ export default (editFuc) => {
 		key: 'taxRate',
 		width: '7%',
 		render: (text) => {
-			return <b>{`${text*100}%`}</b>
+			return <b>{`${text*100}%`}</b>;
 		}
 	}, {
 		title: '税费',
@@ -52,7 +52,7 @@ export default (editFuc) => {
 		key: 'tax',
 		width: '7%',
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
 	}, {
 		title: '已付',
@@ -60,7 +60,7 @@ export default (editFuc) => {
 		key: 'received',
 		width: '7%',
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
 	}, {
 		title: '待付',
@@ -68,7 +68,7 @@ export default (editFuc) => {
 		key: 'remaining',
 		width: '7%',
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
 	}, {
 		title: '个人提成',
@@ -76,7 +76,7 @@ export default (editFuc) => {
 		key: 'commission',
 		width: '7%',
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
 	}, {
 		title: '业绩',
@@ -84,7 +84,7 @@ export default (editFuc) => {
 		key: 'achievement',
 		width: '7%',
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
 	}, {
 		title: '审核状态',
@@ -93,13 +93,13 @@ export default (editFuc) => {
 		width: '7%',
 		render: (text) => {
 			if (text === 'UnSubmit') {
-				return <Tag color={colors.blue}>未提交</Tag>
+				return <Tag color={colors.blue}>未提交</Tag>;
 			} else if (text === 'Auditing') {
-				return <Tag color={colors.yellow}>审核中</Tag>
+				return <Tag color={colors.yellow}>审核中</Tag>;
 			} else if (text === 'Pass') {
-				return <Tag color={colors.green}>通过</Tag>
+				return <Tag color={colors.green}>通过</Tag>;
 			} else if (text === 'Fail') {
-				return <Tag color={colors.red}>未通过</Tag>
+				return <Tag color={colors.red}>未通过</Tag>;
 			}
 		}
 	}, {
@@ -109,9 +109,9 @@ export default (editFuc) => {
 		width: '7%',
 		render: (text) => {
 			if (text === 'Paid') {
-				return <Tag color={colors.green}>已付清</Tag>
+				return <Tag color={colors.green}>已付清</Tag>;
 			} else if (text === 'Unpaid') {
-				return <Tag color={colors.red}>未付清</Tag>
+				return <Tag color={colors.red}>未付清</Tag>;
 			}
 		}
 	}, {
@@ -124,7 +124,7 @@ export default (editFuc) => {
 					<a href='javascript:;' onClick={editFuc.bind(null, raw, 'update')}><Icon type='edit' /></a>&nbsp;&nbsp;
 					<a href='javascript:;' onClick={editFuc.bind(null, raw, 'delete')}><Icon type='delete' /></a>
 				</span>
-			)
+			);
 		}
-	}]
-}
+	}];
+};

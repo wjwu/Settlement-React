@@ -1,7 +1,7 @@
-import React from 'react'
-import { Icon, Tag } from 'antd'
-import numeral from 'numeral'
-import * as colors from '../../utils/colors'
+import React from 'react';
+import { Icon, Tag } from 'antd';
+import numeral from 'numeral';
+import * as colors from '../../utils/colors';
 
 export const sheetColumns = () => {
 	return [{
@@ -25,7 +25,7 @@ export const sheetColumns = () => {
 		key: 'total',
 		width: '8%',
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
 	}, {
 		title: '总成本',
@@ -33,7 +33,7 @@ export const sheetColumns = () => {
 		key: 'cost',
 		width: '8%',
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
 	}, {
 		title: '已付',
@@ -41,7 +41,7 @@ export const sheetColumns = () => {
 		key: 'received',
 		width: '8%',
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
 	}, {
 		title: '待付',
@@ -49,7 +49,7 @@ export const sheetColumns = () => {
 		key: 'remaining',
 		width: '8%',
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
 	}, {
 		title: '税率',
@@ -57,7 +57,7 @@ export const sheetColumns = () => {
 		key: 'taxRate',
 		width: '8%',
 		render: (text) => {
-			return <b>{`${text*100}%`}</b>
+			return <b>{`${text*100}%`}</b>;
 		}
 	}, {
 		title: '税费',
@@ -65,7 +65,7 @@ export const sheetColumns = () => {
 		key: 'tax',
 		width: '8%',
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
 	}, {
 		title: '个人提成',
@@ -73,7 +73,7 @@ export const sheetColumns = () => {
 		key: 'commission',
 		width: '8%',
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
 	}, {
 		title: '业绩',
@@ -81,7 +81,7 @@ export const sheetColumns = () => {
 		key: 'achievement',
 		width: '8%',
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
 	}, {
 		title: '付款状态',
@@ -90,13 +90,13 @@ export const sheetColumns = () => {
 		width: '7%',
 		render: (text) => {
 			if (text === 'Paid') {
-				return <Tag color={colors.green}>已付清</Tag>
+				return <Tag color={colors.green}>已付清</Tag>;
 			} else if (text === 'Unpaid') {
-				return <Tag color={colors.red}>未付清</Tag>
+				return <Tag color={colors.red}>未付清</Tag>;
 			}
 		}
-	}]
-}
+	}];
+};
 
 
 export const selfColumns = () => {
@@ -116,7 +116,7 @@ export const selfColumns = () => {
 		key: 'percent',
 		width: '12.5%',
 		render: (text) => {
-			return <b>{`${text*100}%`}</b>
+			return <b>{`${text*100}%`}</b>;
 		}
 	}, {
 		title: '签单数量',
@@ -124,10 +124,10 @@ export const selfColumns = () => {
 		key: 'amount',
 		width: '12.5%',
 		sorter: (a, b) => {
-			return a.Amount - b.Amount
+			return a.Amount - b.Amount;
 		},
 		render: (text) => {
-			return <b>{text}</b>
+			return <b>{text}</b>;
 		}
 	}, {
 		title: '成交合计',
@@ -135,10 +135,10 @@ export const selfColumns = () => {
 		key: 'total',
 		width: '12.5%',
 		sorter: (a, b) => {
-			return a.Total - b.Total
+			return a.Total - b.Total;
 		},
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
 	}, {
 		title: '成本合计',
@@ -146,10 +146,10 @@ export const selfColumns = () => {
 		key: 'cost',
 		width: '12.5%',
 		sorter: (a, b) => {
-			return a.Cost - b.Cost
+			return a.Cost - b.Cost;
 		},
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
 	}, {
 		title: '个人提成',
@@ -157,10 +157,10 @@ export const selfColumns = () => {
 		key: 'commission',
 		width: '12.5%',
 		sorter: (a, b) => {
-			return a.Commission - b.Commission
+			return a.Commission - b.Commission;
 		},
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
 	}, {
 		title: '个人业绩',
@@ -168,13 +168,13 @@ export const selfColumns = () => {
 		key: 'achievement',
 		width: '12.5%',
 		sorter: (a, b) => {
-			return a.Achievement - b.Achievement
+			return a.Achievement - b.Achievement;
 		},
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
-	}]
-}
+	}];
+};
 
 export const deptColumns = () => {
 	return [{
@@ -188,7 +188,7 @@ export const deptColumns = () => {
 		key: 'percent',
 		width: '14.28%',
 		render: (text) => {
-			return <b>{`${text*100}%`}</b>
+			return <b>{`${text*100}%`}</b>;
 		}
 	}, {
 		title: '签单数量',
@@ -196,10 +196,10 @@ export const deptColumns = () => {
 		key: 'amount',
 		width: '14.28%',
 		sorter: (a, b) => {
-			return a.Amount - b.Amount
+			return a.Amount - b.Amount;
 		},
 		render: (text) => {
-			return <b>{`${text}`}</b>
+			return <b>{`${text}`}</b>;
 		}
 	}, {
 		title: '成交合计',
@@ -207,10 +207,10 @@ export const deptColumns = () => {
 		key: 'total',
 		width: '14.28%',
 		sorter: (a, b) => {
-			return a.Total - b.Total
+			return a.Total - b.Total;
 		},
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
 	}, {
 		title: '成本合计',
@@ -218,10 +218,10 @@ export const deptColumns = () => {
 		key: 'cost',
 		width: '14.28%',
 		sorter: (a, b) => {
-			return a.Cost - b.Cost
+			return a.Cost - b.Cost;
 		},
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
 	}, {
 		title: '部门提成',
@@ -229,10 +229,10 @@ export const deptColumns = () => {
 		key: 'commission',
 		width: '14.28%',
 		sorter: (a, b) => {
-			return a.Commission - b.Commission
+			return a.Commission - b.Commission;
 		},
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
 	}, {
 		title: '部门业绩',
@@ -240,10 +240,10 @@ export const deptColumns = () => {
 		key: 'achievement',
 		width: '14.28%',
 		sorter: (a, b) => {
-			return a.Achievement - b.Achievement
+			return a.Achievement - b.Achievement;
 		},
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
-	}]
-}
+	}];
+};

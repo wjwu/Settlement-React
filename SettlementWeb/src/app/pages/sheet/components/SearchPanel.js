@@ -1,42 +1,42 @@
-import React, { Component, PropTypes } from 'react'
-import moment from 'moment'
-import { Form, Input, Select, Row, Col, DatePicker, Button } from 'antd'
-import { TTreeSelect } from '../../../components'
-import { getGroup, disabledTime, disabledDate } from '../../../utils/common'
+import React, { Component, PropTypes } from 'react';
+import moment from 'moment';
+import { Form, Input, Select, Row, Col, DatePicker, Button } from 'antd';
+import { TTreeSelect } from '../../../components';
+import { getGroup, disabledTime, disabledDate } from '../../../utils/common';
 
-const Option = Select.Option
-const FormItem = Form.Item
-const RangePicker = DatePicker.RangePicker
+const Option = Select.Option;
+const FormItem = Form.Item;
+const RangePicker = DatePicker.RangePicker;
 
 class SearchPanel extends Component {
 	constructor(props) {
-		super(props)
-		this.query = this.query.bind(this)
+		super(props);
+		this.query = this.query.bind(this);
 	}
 
 	query() {
 		const {
 			validateFields,
 			getFieldValue
-		} = this.props.form
+		} = this.props.form;
 
 		validateFields((errors, values) => {
-			let group = getFieldValue('group')
-			let groups = getGroup(this.props.group.groups, group)
-			let base = getFieldValue('base') || ''
-			let times = getFieldValue('times')
-			let timeFrom = ''
-			let timeTo = ''
+			let group = getFieldValue('group');
+			let groups = getGroup(this.props.group.groups, group);
+			let base = getFieldValue('base') || '';
+			let times = getFieldValue('times');
+			let timeFrom = '';
+			let timeTo = '';
 			if (times && times.length === 2) {
-				timeFrom = times[0].format('YYYY-MM-DD')
-				timeTo = times[1].format('YYYY-MM-DD')
+				timeFrom = times[0].format('YYYY-MM-DD');
+				timeTo = times[1].format('YYYY-MM-DD');
 			}
-			let customName = getFieldValue('customName') || ''
-			let userName = getFieldValue('userName') || ''
-			let auditStatus = getFieldValue('auditStatus')
-			let payStatus = getFieldValue('payStatus')
-			let source = getFieldValue('source') || ''
-			let pageIndex = 1
+			let customName = getFieldValue('customName') || '';
+			let userName = getFieldValue('userName') || '';
+			let auditStatus = getFieldValue('auditStatus');
+			let payStatus = getFieldValue('payStatus');
+			let source = getFieldValue('source') || '';
+			let pageIndex = 1;
 			this.props.onSearch({
 				groups,
 				base,
@@ -48,12 +48,12 @@ class SearchPanel extends Component {
 				payStatus,
 				source,
 				pageIndex
-			})
-		})
+			});
+		});
 	}
 
 	render() {
-		const getFieldDecorator = this.props.form.getFieldDecorator
+		const getFieldDecorator = this.props.form.getFieldDecorator;
 
 		const formItemLayout = {
 			labelCol: {
@@ -62,30 +62,30 @@ class SearchPanel extends Component {
 			wrapperCol: {
 				span: 19
 			}
-		}
+		};
 
 		const colLayout = {
 			xs: 24,
 			sm: 12,
 			md: 12,
 			lg: 6
-		}
+		};
 
 		let {
 			bases,
 			sources
-		} = this.props.dictionary
+		} = this.props.dictionary;
+		console.log(this.props.dictionary);
+		let groups = this.props.group.groups;
 
-		let groups = this.props.group.groups
+		let basesOptions = bases ? bases.List.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>) : [];
+		basesOptions.unshift(<Option key='all' value=''>全部</Option>);
 
-		let basesOptions = bases ? bases.List.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>) : []
-		basesOptions.unshift(<Option key='all' value=''>全部</Option>)
+		let sourcesOptions = sources ? sources.List.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>) : [];
+		sourcesOptions.unshift(<Option key='all' value=''>全部</Option>);
 
-		let sourcesOptions = sources ? sources.List.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>) : []
-		sourcesOptions.unshift(<Option key='all' value=''>全部</Option>)
-
-		let parentGroup = this.props.sys_user.ParentGroup
-		let group = this.props.sys_user.Group
+		let parentGroup = this.props.sys_user.ParentGroup;
+		let group = this.props.sys_user.Group;
 
 		return (
 			<Form layout='horizontal'>
@@ -188,13 +188,13 @@ class SearchPanel extends Component {
 					</Col>
 				</Row>
 			</Form>
-		)
+		);
 	}
 }
 
 
 SearchPanel.propTypes = {
 	onSearch: PropTypes.func.isRequired
-}
+};
 
-export default Form.create()(SearchPanel)
+export default Form.create()(SearchPanel);

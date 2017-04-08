@@ -1,30 +1,30 @@
-import React, { Component, PropTypes } from 'react'
-import { Modal, Form, Input, Button, Select, Radio } from 'antd'
-import { TTreeSelect } from '../../../components'
+import React, { Component, PropTypes } from 'react';
+import { Modal, Form, Input, Button, Select, Radio } from 'antd';
+import { TTreeSelect } from '../../../components';
 
-const FormItem = Form.Item
-const RadioGroup = Radio.Group
-const Option = Select.Option
+const FormItem = Form.Item;
+const RadioGroup = Radio.Group;
+const Option = Select.Option;
 
 class UpdateUser extends Component {
 	constructor(prop) {
-		super(prop)
-		this.submit = this.submit.bind(this)
-		this.reset = this.reset.bind(this)
+		super(prop);
+		this.submit = this.submit.bind(this);
+		this.reset = this.reset.bind(this);
 	}
 
 	submit() {
 		const {
 			validateFields,
 			getFieldValue
-		} = this.props.form
+		} = this.props.form;
 		validateFields((errors, values) => {
 			if (!errors) {
-				let group = getFieldValue('group')
-				let role = getFieldValue('role')
-				let phone = getFieldValue('phone')
-				let name = getFieldValue('name')
-				let enabled = getFieldValue('enabled')
+				let group = getFieldValue('group');
+				let role = getFieldValue('role');
+				let phone = getFieldValue('phone');
+				let name = getFieldValue('name');
+				let enabled = getFieldValue('enabled');
 				this.props.updateUser({
 					id: this.props.data.ID,
 					phone,
@@ -32,24 +32,24 @@ class UpdateUser extends Component {
 					enabled,
 					group,
 					role
-				})
+				});
 			}
-		})
+		});
 	}
 
 	reset() {
-		this.props.form.resetFields()
+		this.props.form.resetFields();
 	}
 
 	render() {
-		const getFieldDecorator = this.props.form.getFieldDecorator
-		const groups = this.props.group.groups
-		const updating = this.props.user.updating
-		const user = this.props.data
+		const getFieldDecorator = this.props.form.getFieldDecorator;
+		const groups = this.props.group.groups;
+		const updating = this.props.user.updating;
+		const user = this.props.data;
 
-		let reset = <Button key='reset' type='ghost' size='large' onClick={this.reset}>重置</Button>
-		let cancel = <Button key='cancel' type='ghost' size='large' onClick={this.props.onCancel}>取消</Button>
-		let ok = <Button key='submit' type='primary' size='large' loading={updating} onClick={this.submit}>确定</Button>
+		let reset = <Button key='reset' type='ghost' size='large' onClick={this.reset}>重置</Button>;
+		let cancel = <Button key='cancel' type='ghost' size='large' onClick={this.props.onCancel}>取消</Button>;
+		let ok = <Button key='submit' type='primary' size='large' loading={updating} onClick={this.submit}>确定</Button>;
 
 		const formItemLayout = {
 			labelCol: {
@@ -58,7 +58,7 @@ class UpdateUser extends Component {
 			wrapperCol: {
 				span: 15
 			},
-		}
+		};
 
 		return (
 			<Modal title='修改用户' visible={true} width={500} footer={[cancel, reset, ok]} onCancel={this.props.onCancel}>
@@ -138,13 +138,13 @@ class UpdateUser extends Component {
 					</FormItem>
 				</Form>
 			</Modal>
-		)
+		);
 	}
 }
 
 UpdateUser.propTypes = {
 	data: PropTypes.object.isRequired,
 	onCancel: PropTypes.func.isRequired
-}
+};
 
-export default Form.create()(UpdateUser)
+export default Form.create()(UpdateUser);

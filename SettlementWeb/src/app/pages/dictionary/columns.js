@@ -1,5 +1,5 @@
-import React from 'react'
-import { Icon } from 'antd'
+import React from 'react';
+import { Icon } from 'antd';
 
 export default (editFuc) => {
 	return [{
@@ -8,7 +8,7 @@ export default (editFuc) => {
 		key: 'name',
 		width: '15%',
 		render: (text, raw) => {
-			return <a href='javascript:;' onClick={editFuc.bind(null, raw)}>{text}</a>
+			return <a href='javascript:;' onClick={editFuc.bind(null, raw)}>{text}</a>;
 		}
 	}, {
 		title: '顺序',
@@ -27,9 +27,9 @@ export default (editFuc) => {
 		width: '15%',
 		render: text => {
 			if (text) {
-				return '启用'
+				return '启用';
 			} else {
-				return '禁用'
+				return '禁用';
 			}
 		}
 	}, {
@@ -42,7 +42,7 @@ export default (editFuc) => {
 		key: 'operation',
 		width: '10%',
 		render: (text, raw) => {
-			return <a href='javascript:;' onClick={editFuc.bind(null, raw)}><Icon type='edit' /></a>
+			return <a href='javascript:;' onClick={editFuc.bind(null, raw)}><Icon type='edit' /></a>;
 		}
-	}]
-}
+	}];
+};

@@ -1,11 +1,22 @@
-import { action } from '../utils/common'
+import { createActions } from 'redux-actions';
 
-export const QUERY_STATISTICS = Symbol()
-export const BEGIN_QUERY_STATISTICS = Symbol()
-export const END_QUERY_STATISTICS = Symbol()
-export const ERROR_QUERY_STATISTICS = Symbol()
+export const QUERY_STATISTICS = 'QUERY_STATISTICS';
+export const REQUEST_QUERY_STATISTICS = 'REQUEST_QUERY_STATISTICS';
+export const SUCCESS_QUERY_STATISTICS = 'SUCCESS_QUERY_STATISTICS';
+export const FAILURE_QUERY_STATISTICS = 'FAILURE_QUERY_STATISTICS';
 
-export const queryStats = (request) => action(QUERY_STATISTICS, { request })
-export const beginQueryStatistics = () => action(BEGIN_QUERY_STATISTICS)
-export const endQueryStatistics = (result) => action(END_QUERY_STATISTICS, { result })
-export const errorQueryStatistics = () => action(ERROR_QUERY_STATISTICS)
+export const QUERY_USER_STATISTICS = 'QUERY_USER_STATISTICS';
+export const REQUEST_QUERY_USER_STATISTICS = 'REQUEST_QUERY_USER_STATISTICS';
+export const SUCCESS_QUERY_USER_STATISTICS = 'SUCCESS_QUERY_USER_STATISTICS';
+export const FAILURE_QUERY_USER_STATISTICS = 'FAILURE_QUERY_USER_STATISTICS';
+
+export default createActions(
+	QUERY_STATISTICS,
+	REQUEST_QUERY_STATISTICS,
+	SUCCESS_QUERY_STATISTICS,
+	FAILURE_QUERY_STATISTICS,
+	QUERY_USER_STATISTICS,
+	REQUEST_QUERY_USER_STATISTICS,
+	SUCCESS_QUERY_USER_STATISTICS,
+	FAILURE_QUERY_USER_STATISTICS
+);

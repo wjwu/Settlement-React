@@ -1,7 +1,7 @@
-import React from 'react'
-import { Icon, Tag } from 'antd'
-import numeral from 'numeral'
-import * as colors from '../../../utils/colors'
+import React from 'react';
+import { Icon, Tag } from 'antd';
+import numeral from 'numeral';
+import * as colors from '../../../utils/colors';
 
 export const genCostColumns = (editFuc, disabled) => {
 	return [{
@@ -25,7 +25,7 @@ export const genCostColumns = (editFuc, disabled) => {
 		key: 'total',
 		width: '15%',
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
 	}, {
 		title: '付款状态',
@@ -34,9 +34,9 @@ export const genCostColumns = (editFuc, disabled) => {
 		width: '15%',
 		render: (text) => {
 			if (text === 'Paid') {
-				return <Tag color={colors.green}>已付款</Tag>
+				return <Tag color={colors.green}>已付款</Tag>;
 			} else if (text === 'Unpaid') {
-				return <Tag color={colors.red}>未付款</Tag>
+				return <Tag color={colors.red}>未付款</Tag>;
 			}
 		}
 	}, {
@@ -54,10 +54,10 @@ export const genCostColumns = (editFuc, disabled) => {
 					<a href='javascript:;' onClick={editFuc.bind(null, raw, 'update')} disabled={disabled}><Icon type='edit' /></a>&nbsp;&nbsp;
 					<a href='javascript:;' onClick={editFuc.bind(null, raw, 'delete')} disabled={disabled}><Icon type='delete' /></a>
 				</span>
-			)
+			);
 		}
-	}]
-}
+	}];
+};
 
 export const genReceivedColumns = (editFuc, disabled) => {
 	return [{
@@ -66,7 +66,7 @@ export const genReceivedColumns = (editFuc, disabled) => {
 		key: 'money',
 		width: '25%',
 		render: (text) => {
-			return <b>{numeral(text).format('0,0.00')}</b>
+			return <b>{numeral(text).format('0,0.00')}</b>;
 		}
 	}, {
 		title: '收款时间',
@@ -88,10 +88,10 @@ export const genReceivedColumns = (editFuc, disabled) => {
 					<a href='javascript:;' onClick={editFuc.bind(null, raw, 'update')} disabled={disabled}><Icon type='edit' /></a>&nbsp;&nbsp;
 					<a href='javascript:;' onClick={editFuc.bind(null, raw, 'delete')} disabled={disabled}><Icon type='delete' /></a>
 				</span>
-			)
+			);
 		}
-	}]
-}
+	}];
+};
 
 export const genLogColumns = () => {
 	return [{
@@ -109,5 +109,5 @@ export const genLogColumns = () => {
 		dataIndex: 'Text',
 		key: 'text',
 		width: '60%'
-	}]
-}
+	}];
+};

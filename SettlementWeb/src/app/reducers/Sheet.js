@@ -1,91 +1,91 @@
 import {
-	BEGIN_QUERY_SHEETS,
-	END_QUERY_SHEETS,
-	ERROR_QUERY_SHEETS,
-	BEGIN_GET_SHEET,
-	END_GET_SHEET,
-	ERROR_GET_SHEET,
-	BEGIN_CREATE_SHEET,
-	END_CREATE_SHEET,
-	ERROR_CREATE_SHEET,
-	BEGIN_UPDATE_SHEET,
-	END_UPDATE_SHEET,
-	ERROR_UPDATE_SHEET
-} from '../actions/sheet'
+	REQUEST_GET_SHEET,
+	SUCCESS_GET_SHEET,
+	FAILURE_GET_SHEET,
+	REQUEST_QUERY_SHEETS,
+	SUCCESS_QUERY_SHEETS,
+	FAILURE_QUERY_SHEETS,
+	REQUEST_CREATE_SHEET,
+	SUCCESS_CREATE_SHEET,
+	FAILURE_CREATE_SHEET,
+	REQUEST_UPDATE_SHEET,
+	SUCCESS_UPDATE_SHEET,
+	FAILURE_UPDATE_SHEET
+} from '../actions/sheet';
 
 export default (state = {}, action) => {
 	if (state.hasOwnProperty('created')) {
-		delete state.created
+		delete state.created;
 	}
 	if (state.hasOwnProperty('updated')) {
-		delete state.updated
+		delete state.updated;
 	}
 	switch (action.type) {
-		case BEGIN_QUERY_SHEETS:
+		case REQUEST_QUERY_SHEETS:
 			return {
 				...state,
 				querying: true
-			}
-		case END_QUERY_SHEETS:
-			delete state.querying
+			};
+		case SUCCESS_QUERY_SHEETS:
+			delete state.querying;
 			return {
 				...state,
 				sheets: action.result
-			}
-		case ERROR_QUERY_SHEETS:
-			delete state.querying
+			};
+		case FAILURE_QUERY_SHEETS:
+			delete state.querying;
 			return {
 				...state
-			}
-		case BEGIN_GET_SHEET:
+			};
+		case REQUEST_GET_SHEET:
 			return {
 				...state,
 				getting: true
-			}
-		case END_GET_SHEET:
-			delete state.getting
+			};
+		case SUCCESS_GET_SHEET:
+			delete state.getting;
 			return {
 				...state,
 				sheet: action.result
-			}
-		case ERROR_GET_SHEET:
-			delete state.getting
+			};
+		case FAILURE_GET_SHEET:
+			delete state.getting;
 			return {
 				...state
-			}
-		case BEGIN_CREATE_SHEET:
+			};
+		case REQUEST_CREATE_SHEET:
 			return {
 				...state,
 				creating: true
-			}
-		case END_CREATE_SHEET:
-			delete state.creating
+			};
+		case SUCCESS_CREATE_SHEET:
+			delete state.creating;
 			return {
 				...state,
 				created: true
-			}
-		case ERROR_CREATE_SHEET:
-			delete state.creating
+			};
+		case FAILURE_CREATE_SHEET:
+			delete state.creating;
 			return {
 				...state
-			}
-		case BEGIN_UPDATE_SHEET:
+			};
+		case REQUEST_UPDATE_SHEET:
 			return {
 				...state,
 				updating: true
-			}
-		case END_UPDATE_SHEET:
-			delete state.updating
+			};
+		case SUCCESS_UPDATE_SHEET:
+			delete state.updating;
 			return {
 				...state,
 				updated: true
-			}
-		case ERROR_UPDATE_SHEET:
-			delete state.updating
+			};
+		case FAILURE_UPDATE_SHEET:
+			delete state.updating;
 			return {
 				...state
-			}
+			};
 		default:
-			return state
+			return state;
 	}
-}
+};

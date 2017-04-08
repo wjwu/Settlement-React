@@ -1,16 +1,16 @@
-import React, { Component, PropTypes } from 'react'
-import { Modal, Form, Input, InputNumber, Spin } from 'antd'
+import React, { Component, PropTypes } from 'react';
+import { Modal, Form, Input, InputNumber, Spin } from 'antd';
 
-const FormItem = Form.Item
+const FormItem = Form.Item;
 
 class UpdateGroup extends Component {
 	constructor(prop) {
-		super(prop)
-		this.submit = this.submit.bind(this)
+		super(prop);
+		this.submit = this.submit.bind(this);
 	}
 
 	componentDidMount() {
-		this.props.getGroup(this.props.id)
+		this.props.getGroup(this.props.id);
 	}
 
 
@@ -18,34 +18,34 @@ class UpdateGroup extends Component {
 		const {
 			validateFields,
 			getFieldValue
-		} = this.props.form
+		} = this.props.form;
 
 		validateFields((errors, values) => {
 			if (!errors) {
-				let name = getFieldValue('name')
-				let percent = getFieldValue('percent')
+				let name = getFieldValue('name');
+				let percent = getFieldValue('percent');
 				this.props.updateGroup({
 					id: this.props.group.group.ID,
 					name,
 					percent
-				})
+				});
 			}
-		})
+		});
 	}
 
 	render() {
-		const getFieldDecorator = this.props.form.getFieldDecorator
+		const getFieldDecorator = this.props.form.getFieldDecorator;
 		const {
 			updating,
 			group
-		} = this.props.group
+		} = this.props.group;
 
 		if (!group) {
 			return (
 				<Modal title='修改部门' visible={true} width={500} onCancel={this.props.onCancel}>
 					<Spin tip='Loading...'/>
 				</Modal>
-			)
+			);
 		}
 
 		const formItemLayout = {
@@ -55,7 +55,7 @@ class UpdateGroup extends Component {
 			wrapperCol: {
 				span: 15
 			},
-		}
+		};
 
 		return (
 			<Modal title='修改部门' visible={true} width={500} confirmLoading={updating} onOk={this.submit} onCancel={this.props.onCancel}>
@@ -95,7 +95,7 @@ class UpdateGroup extends Component {
 					</FormItem>
 				</Form>
 			</Modal>
-		)
+		);
 	}
 }
 
@@ -103,6 +103,6 @@ class UpdateGroup extends Component {
 UpdateGroup.propTypes = {
 	id: PropTypes.string.isRequired,
 	onCancel: PropTypes.func.isRequired
-}
+};
 
-export default Form.create()(UpdateGroup)
+export default Form.create()(UpdateGroup);

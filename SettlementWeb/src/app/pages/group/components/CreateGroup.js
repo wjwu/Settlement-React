@@ -1,41 +1,41 @@
-import React, { Component, PropTypes } from 'react'
-import { Modal, Form, Input, InputNumber } from 'antd'
-import { TTreeSelect } from '../../../components'
+import React, { Component, PropTypes } from 'react';
+import { Modal, Form, Input, InputNumber } from 'antd';
+import { TTreeSelect } from '../../../components';
 
-const FormItem = Form.Item
+const FormItem = Form.Item;
 
 class CreateGroup extends Component {
 	constructor(prop) {
-		super(prop)
-		this.submit = this.submit.bind(this)
+		super(prop);
+		this.submit = this.submit.bind(this);
 	}
 
 	submit() {
 		const {
 			validateFields,
 			getFieldValue
-		} = this.props.form
+		} = this.props.form;
 
 		validateFields((errors, values) => {
 			if (!errors) {
-				let parentId = getFieldValue('parent')
-				let name = getFieldValue('name')
-				let percent = getFieldValue('percent')
+				let parentId = getFieldValue('parent');
+				let name = getFieldValue('name');
+				let percent = getFieldValue('percent');
 				this.props.createGroup({
 					parentId,
 					name,
 					percent
-				})
+				});
 			}
-		})
+		});
 	}
 
 	render() {
-		const getFieldDecorator = this.props.form.getFieldDecorator
+		const getFieldDecorator = this.props.form.getFieldDecorator;
 		const {
 			groups,
 			creating
-		} = this.props.group
+		} = this.props.group;
 
 		const formItemLayout = {
 			labelCol: {
@@ -44,7 +44,7 @@ class CreateGroup extends Component {
 			wrapperCol: {
 				span: 15
 			},
-		}
+		};
 
 		return (
 			<Modal title='新增部门' visible={true} width={500} confirmLoading={creating} onOk={this.submit} onCancel={this.props.onCancel}>
@@ -94,13 +94,13 @@ class CreateGroup extends Component {
 					</FormItem>
 				</Form>
 			</Modal>
-		)
+		);
 	}
 }
 
 
 CreateGroup.propTypes = {
 	onCancel: PropTypes.func.isRequired
-}
+};
 
-export default Form.create()(CreateGroup)
+export default Form.create()(CreateGroup);

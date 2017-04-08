@@ -1,77 +1,78 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import moment from 'moment'
-import { Row, Button, Tabs } from 'antd'
-import { TMainContainer } from '../../containers'
-import { TCol, TCard, TTable } from '../../components'
-import ReactEcharts from 'echarts-for-react'
-import SearchPanel from './components/SearchPanel'
-import { querySheets } from '../../actions/sheet'
-import { queryBases, querySources, queryCosts, } from '../../actions/dictionary'
-import { queryGroups } from '../../actions/group'
-import { queryStats } from '../../actions/statistics'
-import styles from './index.scss'
-import { sheetColumns, selfColumns, deptColumns } from './columns'
-import { sourceOption, deptOption } from './options'
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Row, Button, Tabs } from 'antd';
+import { TMainContainer } from '../../containers';
+import { TCol, TCard, TTable } from '../../components';
+import ReactEcharts from 'echarts-for-react';
+import moment from 'moment';
+import SearchPanel from './components/SearchPanel';
+import sheetActions from '../../actions/sheet';
+import dictionaryActions from '../../actions/dictionary';
+import groupActions from '../../actions/group';
+import statsActions from '../../actions/statistics';
+import styles from './index.scss';
+import { sheetColumns, selfColumns, deptColumns } from './columns';
+import { sourceOption, deptOption } from './options';
 
 
-const TabPane = Tabs.TabPane
+const TabPane = Tabs.TabPane;
 
 class Stats extends Component {
 	constructor(prop) {
-		super(prop)
-		this.query = this.query.bind(this)
-		this.onTTableLoad = this.onTTableLoad.bind(this)
+		super(prop);
+		this.query = this.query.bind(this);
+		this.onTTableLoad = this.onTTableLoad.bind(this);
 		this.request = {
 			pageIndex: 1,
 			groups: this.props.sys_user.Path,
 			auditStatus: 'pass',
 			timeFrom: moment().set('date', 1).format('YYYY-MM-DD')
-		}
+		};
 	}
 
 	componentDidMount() {
-		this.query()
+		this.query();
 		let request = {
 			pageIndex: 1,
 			pageSize: 999,
 			enabled: true
-		}
-		this.props.queryBases(request)
-		this.props.querySources(request)
-		this.props.queryCosts(request)
+		};
+		this.props.queryBases(request);
+		this.props.querySources(request);
+		this.props.queryCosts(request);
 		this.props.queryGroups({
 			ID: this.props.sys_user.Group,
 			ParentID: this.props.sys_user.ParentGroup
-		})
+		});
 	}
 
 	onTTableLoad(pageIndex) {
-		this.request.pageIndex = pageIndex
-		this.query()
+		this.request.pageIndex = pageIndex;
+		this.query();
 	}
 
 	query(request) {
 		if (request) {
-			this.request = Object.assign(this.request, request)
+			this.request = Object.assign(this.request, request);
 		}
-		this.props.querySheets(this.request)
-		this.props.queryStats(this.request)
+		this.props.querySheets(this.request);
+		this.props.queryStats(this.request);
 	}
 
 	render() {
 		let {
 			querying,
 			sheets
-		} = this.props.sheet
-		let stats = this.props.stats.stats || {}
-		let userProfit = stats.UserProfit || []
-		let deptProfit = stats.DepartmentProfit || []
+		} = this.props.sheet;
+		let stats = this.props.stats.stats || {};
+		let userProfit = stats.UserProfit || [];
+		let deptProfit = stats.DepartmentProfit || [];
 		let empty = {
 			List: [],
 			TotalCount: 0
-		}
-		sheets = sheets || empty
+		};
+		sheets = sheets || empty;
 
 		let expandedRowRender = record => {
 			return (
@@ -80,8 +81,8 @@ class Stats extends Component {
 					<span style={{marginRight:20}}>{`客户来源：${record.Source}`}</span>
 					<span>{`培训地点：${record.Base}`}</span>
 				</p>
-			)
-		}
+			);
+		};
 
 		return (
 			<div>
@@ -166,15 +167,15 @@ class Stats extends Component {
 					</TCol>
 				</Row>
 			</div>
-		)
+		);
 	}
 }
 
-module.exports = connect(state => state, {
-	querySheets,
-	queryBases,
-	querySources,
-	queryCosts,
-	queryGroups,
-	queryStats
-})(TMainContainer()(Stats))
+module.exports = connect(state => state, dispatch => bindActionCreators({
+	'querySheets': sheetActions.querySheets,
+	'queryBases': dictionaryActions.queryBases,
+	'querySources': dictionaryActions.querySources,
+	'queryCosts': dictionaryActions.queryCosts,
+	'queryGroups': groupActions.queryGroups,
+	'queryStats': statsActions.queryStats
+}, dispatch))(TMainContainer()(Stats));

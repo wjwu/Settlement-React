@@ -1,33 +1,33 @@
-import React, { Component, PropTypes } from 'react'
-import { Modal, Form, Input, Select, Button, Radio } from 'antd'
-import { TTreeSelect } from '../../../components'
+import React, { Component, PropTypes } from 'react';
+import { Modal, Form, Input, Select, Button, Radio } from 'antd';
+import { TTreeSelect } from '../../../components';
 
-const FormItem = Form.Item
-const RadioGroup = Radio.Group
-const Option = Select.Option
+const FormItem = Form.Item;
+const RadioGroup = Radio.Group;
+const Option = Select.Option;
 
 class CreateUser extends Component {
 	constructor(prop) {
-		super(prop)
-		this.submit = this.submit.bind(this)
-		this.reset = this.reset.bind(this)
+		super(prop);
+		this.submit = this.submit.bind(this);
+		this.reset = this.reset.bind(this);
 	}
 
 	submit() {
 		const {
 			validateFields,
 			getFieldValue
-		} = this.props.form
+		} = this.props.form;
 
 		validateFields((errors, values) => {
 			if (!errors) {
-				let group = getFieldValue('group')
-				let role = getFieldValue('role')
-				let loginId = getFieldValue('loginId')
-				let password = getFieldValue('password')
-				let phone = getFieldValue('phone')
-				let name = getFieldValue('name')
-				let enabled = getFieldValue('enabled')
+				let group = getFieldValue('group');
+				let role = getFieldValue('role');
+				let loginId = getFieldValue('loginId');
+				let password = getFieldValue('password');
+				let phone = getFieldValue('phone');
+				let name = getFieldValue('name');
+				let enabled = getFieldValue('enabled');
 				this.props.createUser({
 					loginId,
 					password,
@@ -36,23 +36,23 @@ class CreateUser extends Component {
 					enabled,
 					group,
 					role
-				})
+				});
 			}
-		})
+		});
 	}
 
 	reset() {
-		this.props.form.resetFields()
+		this.props.form.resetFields();
 	}
 
 	render() {
-		const getFieldDecorator = this.props.form.getFieldDecorator
-		const groups = this.props.group.groups
-		const creating = this.props.user.creating
+		const getFieldDecorator = this.props.form.getFieldDecorator;
+		const groups = this.props.group.groups;
+		const creating = this.props.user.creating;
 
-		let reset = <Button key='reset' type='ghost' size='large' onClick={this.reset}>重置</Button>
-		let cancel = <Button key='cancel' type='ghost' size='large' onClick={this.props.onCancel}>取消</Button>
-		let ok = <Button key='submit' type='primary' size='large' loading={creating} onClick={this.submit}>确定</Button>
+		let reset = <Button key='reset' type='ghost' size='large' onClick={this.reset}>重置</Button>;
+		let cancel = <Button key='cancel' type='ghost' size='large' onClick={this.props.onCancel}>取消</Button>;
+		let ok = <Button key='submit' type='primary' size='large' loading={creating} onClick={this.submit}>确定</Button>;
 
 		const formItemLayout = {
 			labelCol: {
@@ -61,7 +61,7 @@ class CreateUser extends Component {
 			wrapperCol: {
 				span: 15
 			},
-		}
+		};
 		return (
 			<Modal title='新增用户' visible={true} width={500} footer={[cancel, reset, ok]} onCancel={this.props.onCancel}>
 				<Form>
@@ -73,7 +73,7 @@ class CreateUser extends Component {
 								message:'所属部门不能为空！'
 							}]
 						})(
-							<TTreeSelect data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择所属部门' treeDefaultExpandAll/>
+							<TTreeSelect data={groups} dropdownStyle={{maxHeight:400, overflow:'auto'}} placeholder='请选择所属部门' treeDefaultExpandAll/>
 						)
 					}
 					</FormItem>
@@ -84,8 +84,7 @@ class CreateUser extends Component {
 								required:true,
 								message:'角色不能为空！'
 							}]
-						})
-						(
+						})(
 							<Select placeholder='请选择角色'>
 								<Option key='admin' value='admin'>系统管理员</Option>
 								<Option key='deptmanager' value='deptmanager'>部门主管</Option>
@@ -180,12 +179,12 @@ class CreateUser extends Component {
 					</FormItem>
 				</Form>
 			</Modal>
-		)
+		);
 	}
 }
 
 CreateUser.propTypes = {
 	onCancel: PropTypes.func.isRequired
-}
+};
 
-export default Form.create()(CreateUser)
+export default Form.create()(CreateUser);

@@ -1,91 +1,91 @@
 import {
-	BEGIN_GET_GROUP,
-	END_GET_GROUP,
-	ERROR_GET_GROUP,
-	BEGIN_QUERY_GROUPS,
-	END_QUERY_GROUPS,
-	ERROR_QUERY_GROUPS,
-	BEGIN_CREATE_GROUP,
-	END_CREATE_GROUP,
-	ERROR_CREATE_GROUP,
-	BEGIN_UPDATE_GROUP,
-	END_UPDATE_GROUP,
-	ERROR_UPDATE_GROUP
-} from '../actions/group'
+	REQUEST_GET_GROUP,
+	SUCCESS_GET_GROUP,
+	FAILURE_GET_GROUP,
+	REQUEST_QUERY_GROUPS,
+	SUCCESS_QUERY_GROUPS,
+	FAILURE_QUERY_GROUPS,
+	REQUEST_CREATE_GROUP,
+	SUCCESS_CREATE_GROUP,
+	FAILURE_CREATE_GROUP,
+	REQUEST_UPDATE_GROUP,
+	SUCCESS_UPDATE_GROUP,
+	FAILURE_UPDATE_GROUP
+} from '../actions/group';
 
 export default (state = {}, action) => {
 	if (state.hasOwnProperty('created')) {
-		delete state.created
+		delete state.created;
 	}
 	if (state.hasOwnProperty('updated')) {
-		delete state.updated
+		delete state.updated;
 	}
 	switch (action.type) {
-		case BEGIN_GET_GROUP:
+		case REQUEST_GET_GROUP:
 			return {
 				...state,
 				getting: true
-			}
-		case END_GET_GROUP:
-			delete state.getting
+			};
+		case SUCCESS_GET_GROUP:
+			delete state.getting;
 			return {
 				...state,
 				group: action.payload
-			}
-		case ERROR_GET_GROUP:
-			delete state.getting
+			};
+		case FAILURE_GET_GROUP:
+			delete state.getting;
 			return {
 				...state
-			}
-		case BEGIN_QUERY_GROUPS:
+			};
+		case REQUEST_QUERY_GROUPS:
 			return {
 				...state,
 				querying: true
-			}
-		case END_QUERY_GROUPS:
-			delete state.querying
+			};
+		case SUCCESS_QUERY_GROUPS:
+			delete state.querying;
 			return {
 				...state,
 				groups: action.payload
-			}
-		case ERROR_QUERY_GROUPS:
-			delete state.querying
+			};
+		case FAILURE_QUERY_GROUPS:
+			delete state.querying;
 			return {
 				...state
-			}
-		case BEGIN_CREATE_GROUP:
+			};
+		case REQUEST_CREATE_GROUP:
 			return {
 				...state,
 				creating: true
-			}
-		case END_CREATE_GROUP:
-			delete state.creating
+			};
+		case SUCCESS_CREATE_GROUP:
+			delete state.creating;
 			return {
 				...state,
 				created: true
-			}
-		case ERROR_CREATE_GROUP:
-			delete state.creating
+			};
+		case FAILURE_CREATE_GROUP:
+			delete state.creating;
 			return {
 				...state
-			}
-		case BEGIN_UPDATE_GROUP:
+			};
+		case REQUEST_UPDATE_GROUP:
 			return {
 				...state,
 				updating: true
-			}
-		case END_UPDATE_GROUP:
-			delete state.updating
+			};
+		case SUCCESS_UPDATE_GROUP:
+			delete state.updating;
 			return {
 				...state,
 				updated: true
-			}
-		case ERROR_UPDATE_GROUP:
-			delete state.updating
+			};
+		case FAILURE_UPDATE_GROUP:
+			delete state.updating;
 			return {
 				...state
-			}
+			};
 		default:
-			return state
+			return state;
 	}
-}
+};

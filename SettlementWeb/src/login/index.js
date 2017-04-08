@@ -1,44 +1,44 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { Form, Input, Button, Row, Col, Alert } from 'antd'
-import config from './config'
-import Captcha from './Captcha'
-import login from './action'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Form, Input, Button, Row, Col, Alert } from 'antd';
+import config from './config';
+import Captcha from './Captcha';
+import login from './action';
 
-const FormItem = Form.Item
+const FormItem = Form.Item;
 
 const createTimeSpan = () => {
-	let strRand = Math.random() + ''
-	return strRand.substr(2, strRand.length - 2)
-}
+	let strRand = Math.random() + '';
+	return strRand.substr(2, strRand.length - 2);
+};
 
 class LoginForm extends React.Component {
 	constructor(props) {
-		super(props)
+		super(props);
 		this.state = {
 			timeSpan: createTimeSpan()
-		}
+		};
 	}
 
 	submit(e) {
-		e.preventDefault()
+		e.preventDefault();
 		const {
 			validateFields,
 			getFieldValue,
 			setFields
-		} = this.props.form
+		} = this.props.form;
 		validateFields((errors, values) => {
 			if (!errors) {
-				let account = getFieldValue('account')
-				let password = getFieldValue('password')
-				let captcha = getFieldValue('captcha')
-				let timeSpan = this.state.timeSpan
+				let account = getFieldValue('account');
+				let password = getFieldValue('password');
+				let captcha = getFieldValue('captcha');
+				let timeSpan = this.state.timeSpan;
 				login(account, password, captcha, timeSpan).then(result => {
-					sessionStorage.setItem('token', result.Token)
-					sessionStorage.setItem('user', JSON.stringify(result.User))
-					window.location.href = '/home'
+					sessionStorage.setItem('token', result.Token);
+					sessionStorage.setItem('user', JSON.stringify(result.User));
+					window.location.href = '/home';
 				}, error => {
-					this.refreshCaptcha()
+					this.refreshCaptcha();
 					setFields({
 						account: {
 							value: account,
@@ -51,26 +51,26 @@ class LoginForm extends React.Component {
 								message: '请重新输入验证码！'
 							}]
 						}
-					})
-				})
+					});
+				});
 			}
-		})
+		});
 	}
 
 	refreshCaptcha() {
 		this.setState({
 			timeSpan: createTimeSpan()
-		})
+		});
 	}
 
 	render() {
 		const {
 			getFieldDecorator
-		} = this.props.form
+		} = this.props.form;
 
-		const timeSpan = this.state.timeSpan
+		const timeSpan = this.state.timeSpan;
 
-		const url = `${config.apiHost}captcha?t=${timeSpan}`
+		const url = `${config.apiHost}captcha?t=${timeSpan}`;
 
 		return (
 			<Form onSubmit={this.submit.bind(this)} style={{margin:'0 auto', marginTop:100, padding:'40px 50px'}}>
@@ -134,13 +134,13 @@ class LoginForm extends React.Component {
 				</Row>
 				<Alert message='请使用谷歌、火狐浏览器，或极速模式的浏览器' type='info'/>
 			</Form>
-		)
+		);
 	}
 }
 
-const EleLoginForm = Form.create()(LoginForm)
+const EleLoginForm = Form.create()(LoginForm);
 
 ReactDOM.render(
 	<EleLoginForm />,
 	document.getElementById('root')
-)
+);

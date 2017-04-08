@@ -37,5 +37,5 @@ export default (days = [], amount = []) => {
 			},
 			data: amount
 		}]
-	}
-}
+	};
+};

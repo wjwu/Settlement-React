@@ -90,15 +90,15 @@ class Group extends Component {
 				title: '删除部门',
 				content: '确定要删除选中部门？',
 				onOk() {
-					return deleteGroup(group).then(result => {
-						showGlobleMsg('success', '删除成功！');
-						that.queryUserRequset.groups = [];
-						queryGroups(that.queryGroupRequest);
-						queryUsers(that.queryUserRequset);
-					}, error => {
-						showGlobleMsg('error', error.Message);
-					});
-				},
+					deleteGroup(group);
+					// return deleteGroup(group).then(result => {
+					// 	that.queryUserRequset.groups = [];
+					// 	queryGroups(that.queryGroupRequest);
+					// 	queryUsers(that.queryUserRequset);
+					// }, error => {
+					// 	showGlobleMsg('error', error.Message);
+					// });
+				}
 			});
 		}
 	}
@@ -183,6 +183,5 @@ class Group extends Component {
 		);
 	}
 }
-const mapDispatchToProps = (dispatch) => bindActionCreators(Object.assign({}, groupActions, userActions, ), dispatch);
 
-module.exports = connect(state => state, mapDispatchToProps)(TMainContainer()(Group));
+module.exports = connect(state => state, dispatch => bindActionCreators(Object.assign({}, groupActions, userActions, ), dispatch))(TMainContainer()(Group));
