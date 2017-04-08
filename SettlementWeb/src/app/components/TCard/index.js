@@ -1,9 +1,5 @@
-import React, {
-	PropTypes
-} from 'react'
-import {
-	Card
-} from 'antd'
+import React, { PropTypes } from 'react'
+import { Card } from 'antd'
 
 const TCard = (props) => {
 	return (

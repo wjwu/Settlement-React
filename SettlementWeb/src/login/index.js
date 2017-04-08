@@ -1,17 +1,9 @@
-import 'babel-polyfill'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-	Form,
-	Input,
-	Button,
-	Row,
-	Col,
-	Alert
-} from 'antd'
+import { Form, Input, Button, Row, Col, Alert } from 'antd'
 import config from './config'
 import Captcha from './Captcha'
-import * as actions from './action'
+import login from './action'
 
 const FormItem = Form.Item
 
@@ -41,7 +33,7 @@ class LoginForm extends React.Component {
 				let password = getFieldValue('password')
 				let captcha = getFieldValue('captcha')
 				let timeSpan = this.state.timeSpan
-				actions.login(account, password, captcha, timeSpan).then(result => {
+				login(account, password, captcha, timeSpan).then(result => {
 					sessionStorage.setItem('token', result.Token)
 					sessionStorage.setItem('user', JSON.stringify(result.User))
 					window.location.href = '/home'
@@ -81,13 +73,13 @@ class LoginForm extends React.Component {
 		const url = `${config.apiHost}captcha?t=${timeSpan}`
 
 		return (
-			<Form onSubmit={this.submit.bind(this)} style={{margin:'0 auto',marginTop:100,padding:'40px 50px'}}>
+			<Form onSubmit={this.submit.bind(this)} style={{margin:'0 auto', marginTop:100, padding:'40px 50px'}}>
 				<FormItem>
 					<h1>树虎团建结算系统</h1>
 				</FormItem>
 				<FormItem hasFeedback>
 				{
-					getFieldDecorator('account',{
+					getFieldDecorator('account', {
 						rules:[{
 							required:true,
 							whitespace:true,
@@ -100,7 +92,7 @@ class LoginForm extends React.Component {
 				</FormItem>
 				<FormItem hasFeedback>
 				{
-					getFieldDecorator('password',{
+					getFieldDecorator('password', {
 						rules:[{
 							required:true,
 							whitespace:true,
@@ -115,12 +107,12 @@ class LoginForm extends React.Component {
 					<Col span='15'>
 						<FormItem>
 						{
-							getFieldDecorator('captcha',{
+							getFieldDecorator('captcha', {
 								rules:[{
 									required:true,
 									whitespace:true,
 									message:'验证码不能为空！'
-								},{
+								}, {
 									length:true,
 									max:4,
 									message:'验证码长度不超过4位！'

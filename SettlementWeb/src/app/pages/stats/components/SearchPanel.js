@@ -1,27 +1,8 @@
-import React, {
-	Component,
-	PropTypes
-} from 'react'
-import {
-	Form,
-	Input,
-	Select,
-	Row,
-	Col,
-	DatePicker,
-	Button
-} from 'antd'
+import React, { Component, PropTypes } from 'react'
 import moment from 'moment'
-import {
-	TTreeSelect
-} from '../../../components'
-
-import {
-	getGroup,
-	EMPTY_GUID,
-	disabledTime,
-	disabledDate
-} from '../../../common'
+import { Form, Input, Select, Row, Col, DatePicker, Button } from 'antd'
+import { TTreeSelect } from '../../../components'
+import { getGroup, EMPTY_GUID, disabledTime, disabledDate } from '../../../utils/common'
 
 const Option = Select.Option
 const FormItem = Form.Item
@@ -107,8 +88,8 @@ class SearchPanel extends Component {
 					<Col {...colLayout}>
 						<FormItem {...formItemLayout} label='部门'>
 						{
-							getFieldDecorator('group',{initialValue:group})(
-								<TTreeSelect root={parentGroup} data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} treeDefaultExpandAll/>
+							getFieldDecorator('group', {initialValue:group})(
+								<TTreeSelect root={parentGroup} data={groups} dropdownStyle={{maxHeight:400, overflow:'auto'}} treeDefaultExpandAll/>
 							)
 						}
 						</FormItem>
@@ -116,7 +97,7 @@ class SearchPanel extends Component {
 					<Col {...colLayout}>
 						<FormItem {...formItemLayout}  label='培训时间'>
 						{
-							getFieldDecorator('times',{
+							getFieldDecorator('times', {
 								initialValue:[
 									moment().set('date', 1),
 									moment()
@@ -128,8 +109,7 @@ class SearchPanel extends Component {
 					<Col {...colLayout}>
 						<FormItem {...formItemLayout} label='培训基地'>
 						{
-							getFieldDecorator('base',{initialValue:''})
-							(
+							getFieldDecorator('base', {initialValue:''})(
 								<Select>
 									{
 										basesOptions
@@ -142,8 +122,7 @@ class SearchPanel extends Component {
 					<Col {...colLayout}>
 						<FormItem {...formItemLayout} label='客户来源'>
 						{
-							getFieldDecorator('source',{initialValue:''})
-							(
+							getFieldDecorator('source', {initialValue:''})(
 								<Select>
 									{
 										sourcesOptions
@@ -158,8 +137,7 @@ class SearchPanel extends Component {
 					<Col {...colLayout}>
 						<FormItem {...formItemLayout} label='付款状态'>
 							{
-								getFieldDecorator('payStatus',{initialValue:''})
-								(
+								getFieldDecorator('payStatus', {initialValue:''})(
 									<Select>
 										<Option value=''>全部</Option>
 										<Option value='Paid'>已付清</Option>

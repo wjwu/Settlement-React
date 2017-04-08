@@ -1,22 +1,14 @@
-import React, {
-	Component
-} from 'react'
-import classNames from 'classnames'
-import {
-	Link
-} from 'react-router'
-import {
-	message,
-	Menu,
-	Breadcrumb,
-	Icon,
-	Modal
-} from 'antd'
-import {
-	signOut
-} from '../../auth'
-import styles from './index.scss'
+import React, { Component } from 'react'
+import { Link } from 'react-router'
+import { message, Menu, Breadcrumb, Icon, Modal } from 'antd'
 import UserPanel from './UserPanel'
+import classNames from 'classnames'
+import { signOut } from '../../utils/auth'
+import styles from './index.scss'
+
+const SubMenu = Menu.SubMenu
+const MenuItemGroup = Menu.ItemGroup
+const confirm = Modal.confirm
 
 const showGlobleMsg = (type, msg) => {
 	if (type === 'success') {
@@ -31,11 +23,6 @@ const showGlobleMsg = (type, msg) => {
 		message.warn(msg, 5)
 	}
 }
-
-
-const SubMenu = Menu.SubMenu
-const MenuItemGroup = Menu.ItemGroup
-const confirm = Modal.confirm
 
 const TMainContainer = () => {
 	return Comp => {
@@ -90,7 +77,7 @@ const TMainContainer = () => {
 								window.location.href = '/'
 							}, 1500)
 						}, error => {
-							showGlobleMsg('error', result.Message)
+							showGlobleMsg('error', error.Message)
 						})
 					},
 				})
@@ -119,12 +106,12 @@ const TMainContainer = () => {
 				if (user.Role === 'Admin') {
 					sys = (
 						<SubMenu key='sys' title={<span><Icon type='desktop'/>系统管理</span>}>
-						 	<Menu.Item key='group'>
-						 		<Link to='/group'>部门与用户</Link>
-						 	</Menu.Item>
-						 	<Menu.Item key='dic'>
-						 		<Link to='/dic'>数据字典</Link>
-						 	</Menu.Item>
+							<Menu.Item key='group'>
+								<Link to='/group'>部门与用户</Link>
+							</Menu.Item>
+							<Menu.Item key='dic'>
+								<Link to='/dic'>数据字典</Link>
+							</Menu.Item>
 						</SubMenu>
 					)
 				}
@@ -159,38 +146,38 @@ const TMainContainer = () => {
 				return (
 					<div className={styles.layout}>
 						<div className={styles.main}>
-							<div className={classNames({[styles.sider]:true,[styles.hide]:hideMenu})}>
-							    <div className={styles.logo}><h2>树虎团建结算系统</h2></div>
-				 				<Menu mode='inline' theme='dark' defaultOpenKeys={openKeys} selectedKeys={selectedKeys}>
-				 					<SubMenu key='my' title={<span><Icon type='file'/>我的结算表</span>}>
-							        	{my}
-				 					</SubMenu>
-				 					{sys}
-							    </Menu>
+							<div className={classNames({[styles.sider]:true, [styles.hide]:hideMenu})}>
+								<div className={styles.logo}><h2>树虎团建结算系统</h2></div>
+								<Menu mode='inline' theme='dark' defaultOpenKeys={openKeys} selectedKeys={selectedKeys}>
+									<SubMenu key='my' title={<span><Icon type='file'/>我的结算表</span>}>
+										{my}
+									</SubMenu>
+									{sys}
+								</Menu>
 							</div>
-							<div className={classNames({[styles.header]:true,[styles.expandHF]:hideMenu})}>
+							<div className={classNames({[styles.header]:true, [styles.expandHF]:hideMenu})}>
 								<a className={styles.showMenuIcon} href='javascript:;' onClick={this.showHideMenu.bind(this)}><Icon type={hideMenu?'menu-unfold':'menu-fold'}/></a>
 								<span>{user.RoleName}</span>
 								<span><a href='javascript:;' onClick={this.show.bind(this)}>{user.LoginID}</a></span>
 								{userPanel}
 								<span><a className={styles.normal} href='javascript:;' onClick={this.doSignOut.bind(this)}><Icon type='logout'/>&nbsp;退出</a></span>
 							</div>
-							<div className={classNames({[styles.breadcrumb]:true,[styles.expandBC]:hideMenu})}>
-							  	<Breadcrumb>
-							    	<Breadcrumb.Item><Link to='/home'>首页</Link></Breadcrumb.Item>
-							    	{breadcrumbItem}
-							  	</Breadcrumb>
+							<div className={classNames({[styles.breadcrumb]:true, [styles.expandBC]:hideMenu})}>
+								<Breadcrumb>
+									<Breadcrumb.Item><Link to='/home'>首页</Link></Breadcrumb.Item>
+									{breadcrumbItem}
+								</Breadcrumb>
 							</div>
-						    <div className={classNames({[styles.container]:true,[styles.expandBC]:hideMenu})}>
-						      	<div className={styles.content}>
-						        	<div>
-						          		<Comp {...this.props} sys_user={user} showGlobleMsg={showGlobleMsg}/>
-						        	</div>
-						      	</div>
-						    </div>
-						    <div className={classNames({[styles.footer]:true,[styles.expandHF]:hideMenu})}>
-						    	<span>树虎团建 版权所有 © 2016 </span>
-						    </div>
+							<div className={classNames({[styles.container]:true, [styles.expandBC]:hideMenu})}>
+								<div className={styles.content}>
+									<div>
+										<Comp {...this.props} sys_user={user} showGlobleMsg={showGlobleMsg}/>
+									</div>
+								</div>
+							</div>
+							<div className={classNames({[styles.footer]:true, [styles.expandHF]:hideMenu})}>
+								<span>树虎团建 版权所有 © 2016 </span>
+							</div>
 						</div>
 					</div>
 				)

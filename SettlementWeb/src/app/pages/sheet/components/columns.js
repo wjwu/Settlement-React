@@ -1,12 +1,9 @@
 import React from 'react'
-import {
-	Icon,
-	Tag
-} from 'antd'
+import { Icon, Tag } from 'antd'
 import numeral from 'numeral'
-import * as colors from '../../../colors'
+import * as colors from '../../../utils/colors'
 
-const genCostColumns = (editFuc, disabled) => {
+export const genCostColumns = (editFuc, disabled) => {
 	return [{
 		title: '名目',
 		dataIndex: 'TypeName',
@@ -54,15 +51,15 @@ const genCostColumns = (editFuc, disabled) => {
 		render: (text, raw) => {
 			return (
 				<span>
-					<a href='javascript:;' onClick={editFuc.bind(null,raw,'update')} disabled={disabled}><Icon type='edit' /></a>&nbsp;&nbsp;
-					<a href='javascript:;' onClick={editFuc.bind(null,raw,'delete')} disabled={disabled}><Icon type='delete' /></a>
+					<a href='javascript:;' onClick={editFuc.bind(null, raw, 'update')} disabled={disabled}><Icon type='edit' /></a>&nbsp;&nbsp;
+					<a href='javascript:;' onClick={editFuc.bind(null, raw, 'delete')} disabled={disabled}><Icon type='delete' /></a>
 				</span>
 			)
 		}
 	}]
 }
 
-const genReceivedColumns = (editFuc, disabled) => {
+export const genReceivedColumns = (editFuc, disabled) => {
 	return [{
 		title: '收款金额',
 		dataIndex: 'Money',
@@ -88,15 +85,15 @@ const genReceivedColumns = (editFuc, disabled) => {
 		render: (text, raw) => {
 			return (
 				<span>
-					<a href='javascript:;' onClick={editFuc.bind(null,raw,'update')} disabled={disabled}><Icon type='edit' /></a>&nbsp;&nbsp;
-					<a href='javascript:;' onClick={editFuc.bind(null,raw,'delete')} disabled={disabled}><Icon type='delete' /></a>
+					<a href='javascript:;' onClick={editFuc.bind(null, raw, 'update')} disabled={disabled}><Icon type='edit' /></a>&nbsp;&nbsp;
+					<a href='javascript:;' onClick={editFuc.bind(null, raw, 'delete')} disabled={disabled}><Icon type='delete' /></a>
 				</span>
 			)
 		}
 	}]
 }
 
-const genLogColumns = () => {
+export const genLogColumns = () => {
 	return [{
 		title: '时间',
 		dataIndex: 'CreateTime',
@@ -113,10 +110,4 @@ const genLogColumns = () => {
 		key: 'text',
 		width: '60%'
 	}]
-}
-
-export {
-	genCostColumns,
-	genReceivedColumns,
-	genLogColumns
 }

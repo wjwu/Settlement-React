@@ -1,7 +1,4 @@
-import React, {
-	PropTypes
-} from 'react'
-
+import React, { PropTypes } from 'react'
 
 const Captcha = (props) => {
 	const handleClick = (e) => {

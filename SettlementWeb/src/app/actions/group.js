@@ -1,127 +1,47 @@
-import * as apiClient from '../apiClient'
-import {
-	SHOW_MESSAGE
-} from '../constants/message'
-import {
-	BEGIN_GET_GROUP,
-	END_GET_GROUP,
-	ERROR_GET_GROUP,
-	BEGIN_QUERY_GROUPS,
-	END_QUERY_GROUPS,
-	ERROR_QUERY_GROUPS,
-	BEGIN_CREATE_GROUP,
-	END_CREATE_GROUP,
-	ERROR_CREATE_GROUP,
-	BEGIN_UPDATE_GROUP,
-	END_UPDATE_GROUP,
-	ERROR_UPDATE_GROUP
-} from '../constants/group'
+import { createActions } from 'redux-actions';
 
-export const getGroup = id => {
-	return dispatch => {
-		dispatch({
-			type: BEGIN_GET_GROUP
-		})
-		apiClient.get(`group/${id}`).then(result => {
-			dispatch({
-				type: END_GET_GROUP,
-				result: result
-			})
-		}, error => {
-			dispatch({
-				type: ERROR_GET_GROUP
-			})
-			dispatch({
-				type: SHOW_MESSAGE,
-				msgType: 'error',
-				msg: error
-			})
-		})
-	}
-}
+export const GET_GROUP = 'GET_GROUP';
+export const REQUEST_GET_GROUP = 'REQUEST_GET_GROUP';
+export const SUCCESS_GET_GROUP = 'SUCCESS_GET_GROUP';
+export const FAILURE_GET_GROUP = 'FAILURE_GET_GROUP';
+
+export const QUERY_GROUPS = 'QUERY_GROUPS';
+export const REQUEST_QUERY_GROUPS = 'REQUEST_QUERY_GROUPS';
+export const SUCCESS_QUERY_GROUPS = 'SUCCESS_QUERY_GROUPS';
+export const FAILURE_QUERY_GROUPS = 'FAILURE_QUERY_GROUPS';
+
+export const CREATE_GROUP = 'CREATE_GROUP';
+export const REQUEST_CREATE_GROUP = 'REQUEST_CREATE_GROUP';
+export const SUCCESS_CREATE_GROUP = 'SUCCESS_CREATE_GROUP';
+export const FAILURE_CREATE_GROUP = 'FAILURE_CREATE_GROUP';
+
+export const UPDATE_GROUP = 'UPDATE_GROUP';
+export const REQUEST_UPDATE_GROUP = 'REQUEST_UPDATE_GROUP';
+export const SUCCESS_UPDATE_GROUP = 'SUCCESS_UPDATE_GROUP';
+export const FAILURE_UPDATE_GROUP = 'FAILURE_UPDATE_GROUP';
 
 
-export const queryGroups = (request) => {
-	return dispatch => {
-		dispatch({
-			type: BEGIN_QUERY_GROUPS
-		})
-		apiClient.get('group', request).then(result => {
-			dispatch({
-				type: END_QUERY_GROUPS,
-				result: result
-			})
-		}, error => {
-			dispatch({
-				type: ERROR_QUERY_GROUPS
-			})
-			dispatch({
-				type: SHOW_MESSAGE,
-				msgType: 'error',
-				msg: error
-			})
-		})
-	}
-}
+// export const deleteGroup = (id) => {
+// 	return () => {
+// 		return apiClient.del(`group/${id}`)
+// 	}
+// }
 
-export const createGroup = (request) => {
-	return dispatch => {
-		dispatch({
-			type: BEGIN_CREATE_GROUP,
-		})
-		apiClient.post('group', request).then(result => {
-			dispatch({
-				type: END_CREATE_GROUP,
-				result: result
-			})
-			dispatch({
-				type: SHOW_MESSAGE,
-				msgType: 'success',
-				msg: '添加成功！'
-			})
-		}, error => {
-			dispatch({
-				type: ERROR_CREATE_GROUP
-			})
-			dispatch({
-				type: SHOW_MESSAGE,
-				msgType: 'error',
-				msg: error
-			})
-		})
-	}
-}
-
-export const updateGroup = (request) => {
-	return dispatch => {
-		dispatch({
-			type: BEGIN_UPDATE_GROUP,
-		})
-		apiClient.put('group', request).then(result => {
-			dispatch({
-				type: END_UPDATE_GROUP,
-				result: result
-			})
-			dispatch({
-				type: SHOW_MESSAGE,
-				msgType: 'success',
-				msg: '修改成功！'
-			})
-		}, error => {
-			dispatch({
-				type: ERROR_UPDATE_GROUP
-			})
-			dispatch({
-				type: SHOW_MESSAGE,
-				msgType: 'error',
-				msg: error
-			})
-		})
-	}
-}
-
-export const deleteGroup = (id) => {
-	return () => {
-		return apiClient.del(`group/${id}`)
-	}
-}
+export default createActions(
+	GET_GROUP,
+	REQUEST_GET_GROUP,
+	SUCCESS_GET_GROUP,
+	FAILURE_GET_GROUP,
+	QUERY_GROUPS,
+	REQUEST_QUERY_GROUPS,
+	SUCCESS_QUERY_GROUPS,
+	FAILURE_QUERY_GROUPS,
+	CREATE_GROUP,
+	REQUEST_CREATE_GROUP,
+	SUCCESS_CREATE_GROUP,
+	FAILURE_CREATE_GROUP,
+	UPDATE_GROUP,
+	REQUEST_UPDATE_GROUP,
+	SUCCESS_UPDATE_GROUP,
+	FAILURE_UPDATE_GROUP
+);

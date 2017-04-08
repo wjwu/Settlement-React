@@ -1,10 +1,5 @@
-import React, {
-	Component,
-	PropTypes
-} from 'react'
-import {
-	Table
-} from 'antd'
+import React, { Component, PropTypes } from 'react'
+import { Table } from 'antd'
 import TCard from '../TCard'
 
 let pagination = {

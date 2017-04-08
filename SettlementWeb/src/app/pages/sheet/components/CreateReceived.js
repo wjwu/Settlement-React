@@ -1,17 +1,6 @@
-import React, {
-	Component,
-	PropTypes
-} from 'react'
-import {
-	Modal,
-	Form,
-	Input,
-	InputNumber,
-	DatePicker
-} from 'antd'
-import {
-	random
-} from '../../../common'
+import React, { Component, PropTypes } from 'react'
+import { Modal, Form, Input, InputNumber, DatePicker } from 'antd'
+import { random } from '../../../utils/common'
 
 const FormItem = Form.Item
 
@@ -59,11 +48,11 @@ class CreateReceived extends Component {
 				<Form>
 					<FormItem {...formItemLayout} label='收款金额'>
 					{
-						getFieldDecorator('money',{
+						getFieldDecorator('money', {
 							initialValue:0,
 							rules:[{
 								required:true
-							},{
+							}, {
 								range:true,
 								min:1,
 								type:'integer',
@@ -74,14 +63,14 @@ class CreateReceived extends Component {
 					</FormItem>
 					<FormItem {...formItemLayout} label='收款时间'>
 					{
-						getFieldDecorator('time',{
+						getFieldDecorator('time', {
 							rules:[{
 								required:true,
 								type:'object',
 								message:'请选择收款时间！'
 							}]
 						})(
-							 <DatePicker format='YYYY-MM-DD' />
+							<DatePicker format='YYYY-MM-DD' />
 						)
 					}
 					</FormItem>

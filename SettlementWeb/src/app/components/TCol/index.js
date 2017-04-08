@@ -1,9 +1,5 @@
-import React, {
-	Component
-} from 'react'
-import {
-	Col
-} from 'antd'
+import React, { Component } from 'react'
+import { Col } from 'antd'
 import styles from './index.scss'
 
 class TCol extends Component {

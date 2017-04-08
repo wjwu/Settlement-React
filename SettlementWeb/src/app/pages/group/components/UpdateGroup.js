@@ -1,14 +1,5 @@
-import React, {
-	Component,
-	PropTypes
-} from 'react'
-import {
-	Modal,
-	Form,
-	Input,
-	InputNumber,
-	Spin
-} from 'antd'
+import React, { Component, PropTypes } from 'react'
+import { Modal, Form, Input, InputNumber, Spin } from 'antd'
 
 const FormItem = Form.Item
 
@@ -71,13 +62,13 @@ class UpdateGroup extends Component {
 				<Form>
 					<FormItem hasFeedback {...formItemLayout} label='部门名称'>
 					{
-						getFieldDecorator('name',{
+						getFieldDecorator('name', {
 							initialValue:group.Name,
 							rules:[{
 								required:true,
 								whitespace:true,
 								message:'部门名称不能为空！'
-							},{
+							}, {
 								length:true,
 								max:50,
 								message:'部门名称最多50个字符！'
@@ -89,11 +80,11 @@ class UpdateGroup extends Component {
 					</FormItem>
 					<FormItem {...formItemLayout} label='提成比例'>
 					{
-						getFieldDecorator('percent',{
+						getFieldDecorator('percent', {
 							initialValue:group.Percent,
 							rules:[{
 								required:true
-							},{
+							}, {
 								range:true,
 								min:0,
 								type:'number',

@@ -1,155 +1,45 @@
-import * as apiClient from '../apiClient'
-import {
-	SHOW_MESSAGE
-} from '../constants/message'
-import {
-	BEGIN_QUERY_BASES,
-	END_QUERY_BASES,
-	ERROR_QUERY_BASES,
-	BEGIN_QUERY_SOURCES,
-	END_QUERY_SOURCES,
-	ERROR_QUERY_SOURCES,
-	BEGIN_QUERY_COSTS,
-	END_QUERY_COSTS,
-	ERROR_QUERY_COSTS,
-	BEGIN_CREATE_DICTIONARY,
-	END_CREATE_DICTIONARY,
-	ERROR_CREATE_DICTIONARY,
-	BEGIN_UPDATE_DICTIONARY,
-	END_UPDATE_DICTIONARY,
-	ERROR_UPDATE_DICTIONARY
-} from '../constants/dictionary'
+import { createActions } from 'redux-actions';
 
-export const queryBases = request => {
-	return dispatch => {
-		dispatch({
-			type: BEGIN_QUERY_BASES
-		})
-		if (request) {
-			request.type = 'base'
-		}
-		apiClient.get('dictionary', request).then(result => {
-			dispatch({
-				type: END_QUERY_BASES,
-				result: result
-			})
-		}, error => {
-			dispatch({
-				type: ERROR_QUERY_BASES
-			})
-			dispatch({
-				type: SHOW_MESSAGE,
-				msgType: 'error',
-				msg: error
-			})
-		})
-	}
-}
+export const QUERY_BASES = 'QUERY_BASES';
+export const REQUEST_QUERY_BASES = 'REQUEST_QUERY_BASES';
+export const SUCCESS_QUERY_BASES = 'SUCCESS_QUERY_BASES';
+export const FAILURE_QUERY_BASES = 'FAILURE_QUERY_BASES';
 
-export const querySources = request => {
-	return dispatch => {
-		dispatch({
-			type: BEGIN_QUERY_SOURCES
-		})
-		if (request) {
-			request.type = 'source'
-		}
-		apiClient.get('dictionary', request).then(result => {
-			dispatch({
-				type: END_QUERY_SOURCES,
-				result: result
-			})
-		}, error => {
-			dispatch({
-				type: ERROR_QUERY_SOURCES
-			})
-			dispatch({
-				type: SHOW_MESSAGE,
-				msgType: 'error',
-				msg: error
-			})
-		})
-	}
-}
+export const QUERY_SOURCES = 'QUERY_SOURCES';
+export const REQUEST_QUERY_SOURCES = 'REQUEST_QUERY_SOURCES';
+export const SUCCESS_QUERY_SOURCES = 'SUCCESS_QUERY_SOURCES';
+export const FAILURE_QUERY_SOURCES = 'FAILURE_QUERY_SOURCES';
 
-export const queryCosts = request => {
-	return dispatch => {
-		dispatch({
-			type: BEGIN_QUERY_COSTS
-		})
-		if (request) {
-			request.type = 'cost'
-		}
-		apiClient.get('dictionary', request).then(result => {
-			dispatch({
-				type: END_QUERY_COSTS,
-				result: result
-			})
-		}, error => {
-			dispatch({
-				type: ERROR_QUERY_COSTS
-			})
-			dispatch({
-				type: SHOW_MESSAGE,
-				msgType: 'error',
-				msg: error
-			})
-		})
-	}
-}
+export const QUERY_COSTS = 'QUERY_COSTS';
+export const REQUEST_QUERY_COSTS = 'REQUEST_QUERY_COSTS';
+export const SUCCESS_QUERY_COSTS = 'SUCCESS_QUERY_COSTS';
+export const FAILURE_QUERY_COSTS = 'FAILURE_QUERY_COSTS';
 
-export const createDictionary = (request) => {
-	return dispatch => {
-		dispatch({
-			type: BEGIN_CREATE_DICTIONARY,
-		})
-		apiClient.post('dictionary', request).then(result => {
-			dispatch({
-				type: END_CREATE_DICTIONARY,
-				result: result
-			})
-			dispatch({
-				type: SHOW_MESSAGE,
-				msgType: 'success',
-				msg: '添加成功！'
-			})
-		}, error => {
-			dispatch({
-				type: ERROR_CREATE_DICTIONARY
-			})
-			dispatch({
-				type: SHOW_MESSAGE,
-				msgType: 'error',
-				msg: error
-			})
-		})
-	}
-}
+export const CREATE_DICTIONARY = 'CREATE_DICTIONARY';
+export const REQUEST_CREATE_DICTIONARY = 'REQUEST_CREATE_DICTIONARY';
+export const SUCCESS_CREATE_DICTIONARY = 'SUCCESS_CREATE_DICTIONARY';
+export const FAILURE_CREATE_DICTIONARY = 'FAILURE_CREATE_DICTIONARY';
 
-export const updateDictionary = (request) => {
-	return dispatch => {
-		dispatch({
-			type: BEGIN_UPDATE_DICTIONARY,
-		})
-		apiClient.put('dictionary', request).then(result => {
-			dispatch({
-				type: END_UPDATE_DICTIONARY,
-				result: result
-			})
-			dispatch({
-				type: SHOW_MESSAGE,
-				msgType: 'success',
-				msg: '修改成功！'
-			})
-		}, error => {
-			dispatch({
-				type: ERROR_UPDATE_DICTIONARY
-			})
-			dispatch({
-				type: SHOW_MESSAGE,
-				msgType: 'error',
-				msg: error
-			})
-		})
-	}
-}
+export const UPDATE_DICTIONARY = 'UPDATE_DICTIONARY';
+export const REQUEST_UPDATE_DICTIONARY = 'REQUEST_UPDATE_DICTIONARY';
+export const SUCCESS_UPDATE_DICTIONARY = 'SUCCESS_UPDATE_DICTIONARY';
+export const FAILURE_UPDATE_DICTIONARY = 'FAILURE_UPDATE_DICTIONARY';
+
+export default createActions(
+	QUERY_BASES,
+	REQUEST_QUERY_BASES,
+	SUCCESS_QUERY_BASES,
+	FAILURE_QUERY_BASES,
+	QUERY_COSTS,
+	REQUEST_QUERY_COSTS,
+	SUCCESS_QUERY_COSTS,
+	FAILURE_QUERY_COSTS,
+	CREATE_DICTIONARY,
+	REQUEST_CREATE_DICTIONARY,
+	SUCCESS_CREATE_DICTIONARY,
+	FAILURE_CREATE_DICTIONARY,
+	UPDATE_DICTIONARY,
+	REQUEST_UPDATE_DICTIONARY,
+	SUCCESS_UPDATE_DICTIONARY,
+	FAILURE_UPDATE_DICTIONARY
+);

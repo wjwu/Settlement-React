@@ -1,24 +1,11 @@
-import React, {
-	Component
-} from 'react'
-import {
-	connect
-} from 'react-redux'
-import {
-	Row,
-	Tabs,
-	Button
-} from 'antd'
-import {
-	TMainContainer
-} from '../../containers'
-import {
-	TCol,
-	TCard,
-	TTable
-} from '../../components'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { Row, Tabs, Button } from 'antd'
+import { TMainContainer } from '../../containers'
+import { TCol, TCard, TTable } from '../../components'
 import CreateDictionary from './components/CreateDictionary'
 import UpdateDictionary from './components/UpdateDictionary'
+import genColumns from './columns'
 import {
 	queryBases,
 	querySources,
@@ -26,8 +13,6 @@ import {
 	createDictionary,
 	updateDictionary
 } from '../../actions/dictionary'
-
-import genColumns from './columns'
 
 const TabPane = Tabs.TabPane
 
@@ -157,7 +142,7 @@ class Dictionary extends Component {
 				<Row>
 					<TCol>
 						<TCard>
-							<Button type='primary' onClick={this.showModal.bind(this,'createDicVisible')}>新增字典</Button>
+							<Button type='primary' onClick={this.showModal.bind(this, 'createDicVisible')}>新增字典</Button>
 							{modal}
 						</TCard>
 					</TCol>
@@ -165,17 +150,17 @@ class Dictionary extends Component {
 				<Row>
 					<TCol>
 						<TCard>
-					        <Tabs tabPosition='left' onChange={this.onTabChange}>
-					          <TabPane tab='培训基地' key={DICTIONARY_BASE}>
-					          	<TTable columns={columns} loading={queryingBases} total={bases.TotalCount} dataSource={bases.List} onLoad={this.onTTableLoad}/>
-					          </TabPane>
-					          <TabPane tab='客户来源' key={DICTIONARY_SOURCE}>
-					          	<TTable columns={columns} loading={queryingSources} total={sources.TotalCount} dataSource={sources.List} onLoad={this.onTTableLoad}/>
-					          </TabPane>
-					          <TabPane tab='结算类型' key={DICTIONARY_COST}>
-					          	<TTable columns={columns} loading={queryingCosts} total={costs.TotalCount} dataSource={costs.List} onLoad={this.onTTableLoad}/>
-					          </TabPane>
-					        </Tabs>
+							<Tabs tabPosition='left' onChange={this.onTabChange}>
+								<TabPane tab='培训基地' key={DICTIONARY_BASE}>
+									<TTable columns={columns} loading={queryingBases} total={bases.TotalCount} dataSource={bases.List} onLoad={this.onTTableLoad}/>
+								</TabPane>
+								<TabPane tab='客户来源' key={DICTIONARY_SOURCE}>
+									<TTable columns={columns} loading={queryingSources} total={sources.TotalCount} dataSource={sources.List} onLoad={this.onTTableLoad}/>
+								</TabPane>
+							  <TabPane tab='结算类型' key={DICTIONARY_COST}>
+							  	<TTable columns={columns} loading={queryingCosts} total={costs.TotalCount} dataSource={costs.List} onLoad={this.onTTableLoad}/>
+							  </TabPane>
+							</Tabs>
 						</TCard>
 					</TCol>
 				</Row>

@@ -1,19 +1,16 @@
 import React from 'react'
-import {
-	Icon,
-	Tag
-} from 'antd'
+import { Icon, Tag } from 'antd'
 import numeral from 'numeral'
-import * as colors from '../../colors'
+import * as colors from '../../utils/colors'
 
-const columns = (editFuc) => {
+export default (editFuc) => {
 	return [{
 		title: '客户名称',
 		dataIndex: 'CustomName',
 		key: 'customName',
 		width: '11%',
 		render: (text, raw) => {
-			return <a href='javascript:;' onClick={editFuc.bind(null,raw,'update')}>{text}</a>
+			return <a href='javascript:;' onClick={editFuc.bind(null, raw, 'update')}>{text}</a>
 		}
 	}, {
 		title: '培训时间',
@@ -124,12 +121,10 @@ const columns = (editFuc) => {
 		render: (text, raw) => {
 			return (
 				<span>
-					<a href='javascript:;' onClick={editFuc.bind(null,raw,'update')}><Icon type='edit' /></a>&nbsp;&nbsp;
-					<a href='javascript:;' onClick={editFuc.bind(null,raw,'delete')}><Icon type='delete' /></a>
+					<a href='javascript:;' onClick={editFuc.bind(null, raw, 'update')}><Icon type='edit' /></a>&nbsp;&nbsp;
+					<a href='javascript:;' onClick={editFuc.bind(null, raw, 'delete')}><Icon type='delete' /></a>
 				</span>
 			)
 		}
 	}]
 }
-
-export default columns

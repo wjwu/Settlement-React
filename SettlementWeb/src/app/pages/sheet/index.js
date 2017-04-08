@@ -1,44 +1,15 @@
-import React, {
-	Component
-} from 'react'
-import {
-	connect
-} from 'react-redux'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import moment from 'moment'
-import {
-	Row,
-	Col,
-	Button,
-	Modal
-} from 'antd'
-import {
-	TMainContainer
-} from '../../containers'
-import {
-	TCol,
-	TCard,
-	TTable
-} from '../../components'
+import { Row, Col, Button, Modal } from 'antd'
+import { TMainContainer } from '../../containers'
+import { TCol, TCard, TTable } from '../../components'
 import UpdateSheet from './components/UpdateSheet'
 import CreateSheet from './components/CreateSheet'
 import SearchPanel from './components/SearchPanel'
-import {
-	getSheet,
-	querySheets,
-	createSheet,
-	updateSheet,
-	deleteSheet,
-	updateSheetAuditStatus
-} from '../../actions/sheet'
-import {
-	queryBases,
-	querySources,
-	queryCosts,
-} from '../../actions/dictionary'
-import {
-	queryGroups
-} from '../../actions/group'
-
+import { getSheet, querySheets, createSheet, updateSheet, deleteSheet, updateSheetAuditStatus } from '../../actions/sheet'
+import { queryBases, querySources, queryCosts } from '../../actions/dictionary'
+import { queryGroups } from '../../actions/group'
 import genColumns from './columns'
 
 const confirm = Modal.confirm
@@ -159,9 +130,9 @@ class Sheet extends Component {
 
 		let modal
 		if (createSheetVisble) {
-			modal = <CreateSheet onCancel={this.hideModal.bind(this,'createSheetVisble')} {...this.props}/>
+			modal = <CreateSheet onCancel={this.hideModal.bind(this, 'createSheetVisble')} {...this.props}/>
 		} else if (updateSheetVisble) {
-			modal = <UpdateSheet id={this.selectedSheet.ID} onCancel={this.hideModal.bind(this,'updateSheetVisble')} {...this.props}/>
+			modal = <UpdateSheet id={this.selectedSheet.ID} onCancel={this.hideModal.bind(this, 'updateSheetVisble')} {...this.props}/>
 		}
 
 		let role = this.props.sys_user.Role
@@ -170,8 +141,8 @@ class Sheet extends Component {
 			title = () => {
 				return (
 					<div style={{textAlign:'right'}}>
-					<Button type='primary' icon='plus-circle-o' onClick={this.showModal.bind(this,'createSheetVisble')}>新增结算表</Button>
-				</div>
+						<Button type='primary' icon='plus-circle-o' onClick={this.showModal.bind(this, 'createSheetVisble')}>新增结算表</Button>
+					</div>
 				)
 			}
 		}

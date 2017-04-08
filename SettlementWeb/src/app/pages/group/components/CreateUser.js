@@ -1,18 +1,6 @@
-import React, {
-	Component,
-	PropTypes
-} from 'react'
-import {
-	Modal,
-	Form,
-	Input,
-	Select,
-	Button,
-	Radio
-} from 'antd'
-import {
-	TTreeSelect
-} from '../../../components'
+import React, { Component, PropTypes } from 'react'
+import { Modal, Form, Input, Select, Button, Radio } from 'antd'
+import { TTreeSelect } from '../../../components'
 
 const FormItem = Form.Item
 const RadioGroup = Radio.Group
@@ -75,11 +63,11 @@ class CreateUser extends Component {
 			},
 		}
 		return (
-			<Modal title='新增用户' visible={true} width={500} footer={[cancel,reset,ok]} onCancel={this.props.onCancel}>
+			<Modal title='新增用户' visible={true} width={500} footer={[cancel, reset, ok]} onCancel={this.props.onCancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='所属部门'>
 					{
-						getFieldDecorator('group',{
+						getFieldDecorator('group', {
 							rules:[{
 								required:true,
 								message:'所属部门不能为空！'
@@ -91,7 +79,7 @@ class CreateUser extends Component {
 					</FormItem>
 					<FormItem {...formItemLayout} label='角色'>
 					{
-						getFieldDecorator('role',{
+						getFieldDecorator('role', {
 							rules:[{
 								required:true,
 								message:'角色不能为空！'
@@ -109,12 +97,12 @@ class CreateUser extends Component {
 					</FormItem>
 					<FormItem hasFeedback {...formItemLayout} label='账号'>
 					{
-						getFieldDecorator('loginId',{
+						getFieldDecorator('loginId', {
 							rules:[{
 								required:true,
 								whitespace:true,
 								message:'账号不能为空！'
-							},{
+							}, {
 								length:true,
 								max:50,
 								message:'账号最多50个字符！'
@@ -126,16 +114,16 @@ class CreateUser extends Component {
 					</FormItem>
 					<FormItem hasFeedback {...formItemLayout} label='初始密码'>
 					{
-						getFieldDecorator('password',{
+						getFieldDecorator('password', {
 							rules:[{
 								required:true,
 								whitespace:true,
 								message:'初始密码不能为空！'
-							},{
+							}, {
 								length:true,
 								max:20,
 								message:'密码长度不能超过20个字符！'
-							},{
+							}, {
 								length:true,
 								min:8,
 								message:'密码长度最少8个字符！'
@@ -147,12 +135,12 @@ class CreateUser extends Component {
 					</FormItem>
 					<FormItem hasFeedback {...formItemLayout} label='手机号码'>
 					{
-						getFieldDecorator('phone',{
+						getFieldDecorator('phone', {
 							rules:[{
 								required:true,
 								whitespace:true,
 								message:'手机号码不能为空！'
-							},{
+							}, {
 								pattern:/^1[34578]\d{9}$/,
 								message:'手机号码格式不正确！'
 							}]
@@ -163,12 +151,12 @@ class CreateUser extends Component {
 					</FormItem>
 					<FormItem hasFeedback {...formItemLayout} label='姓名'>
 					{
-						getFieldDecorator('name',{
+						getFieldDecorator('name', {
 							rules:[{
 								required:true,
 								whitespace:true,
 								message:'姓名不能为空！'
-							},{
+							}, {
 								length:true,
 								max:10,
 								message:'姓名最多10个字符！'
@@ -180,13 +168,13 @@ class CreateUser extends Component {
 					</FormItem>
 					<FormItem {...formItemLayout} label='状态'>
 					{
-						getFieldDecorator('enabled',{
+						getFieldDecorator('enabled', {
 							initialValue: 'true'
 						})(
-				            <RadioGroup>
-				              <Radio value='true'>启用</Radio>
-				              <Radio value='false'>禁用</Radio>
-				            </RadioGroup>
+							<RadioGroup>
+								<Radio value='true'>启用</Radio>
+								<Radio value='false'>禁用</Radio>
+							</RadioGroup>
 						)
 					}
 					</FormItem>

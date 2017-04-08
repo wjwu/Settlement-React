@@ -1,27 +1,11 @@
 import React from 'react'
-import {
-	connect
-} from 'react-redux'
-import {
-	Row,
-	Tabs,
-	Icon,
-	Spin
-} from 'antd'
+import { connect } from 'react-redux'
+import { Row, Tabs, Icon, Spin } from 'antd'
 import ReactEcharts from 'echarts-for-react'
-import {
-	TMainContainer
-} from '../../containers'
-import {
-	TCol,
-	TCard
-} from '../../components'
-import {
-	queryUserStats
-} from '../../actions/statistics'
-import {
-	option
-} from './options'
+import { TMainContainer } from '../../containers'
+import { TCol, TCard } from '../../components'
+import { queryUserStats } from '../../actions/statistics'
+import { option } from './options'
 import styles from './index.scss'
 
 const TabPane = Tabs.TabPane
@@ -35,7 +19,7 @@ class Home extends React.Component {
 		const stats = this.props.stats.stats || {}
 		let chart
 		if (stats.Date) {
-			chart = <ReactEcharts option={option(stats.Date,stats.ChartTotal)}  style={{height: '350px', width: '100%'}}  />
+			chart = <ReactEcharts option={option(stats.Date, stats.ChartTotal)}  style={{height: '350px', width: '100%'}}  />
 		} else {
 			chart = <Spin tip='Loading...'/>
 		}
@@ -135,7 +119,7 @@ class Home extends React.Component {
 				<Row>
 					<TCol>
 						<TCard>
-		                    {chart}
+							{chart}
 						</TCard>
 					</TCol>
 				</Row>

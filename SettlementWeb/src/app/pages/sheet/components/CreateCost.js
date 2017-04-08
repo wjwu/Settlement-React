@@ -1,18 +1,6 @@
-import React, {
-	Component,
-	PropTypes
-} from 'react'
-import {
-	Modal,
-	Form,
-	Input,
-	Select,
-	Radio,
-	InputNumber
-} from 'antd'
-import {
-	random
-} from '../../../common'
+import React, { Component, PropTypes } from 'react'
+import { Modal, Form, Input, Select, Radio, InputNumber } from 'antd'
+import { random } from '../../../utils/common'
 
 const FormItem = Form.Item
 const RadioGroup = Radio.Group
@@ -78,7 +66,7 @@ class CreateCost extends Component {
 				<Form>
 					<FormItem {...formItemLayout} label='明细类型'>
 					{
-						getFieldDecorator('type',{
+						getFieldDecorator('type', {
 							rules:[{
 								required:true,
 								message:'明细类型不能为空！'
@@ -94,11 +82,11 @@ class CreateCost extends Component {
 					</FormItem>
 					<FormItem {...formItemLayout} label='单价'>
 					{
-						getFieldDecorator('unit',{
+						getFieldDecorator('unit', {
 							initialValue:0,
 							rules:[{
 								required:true
-							},{
+							}, {
 								range:true,
 								min:1,
 								type:'number',
@@ -109,11 +97,11 @@ class CreateCost extends Component {
 					</FormItem>
 					<FormItem {...formItemLayout} label='数量'>
 					{
-						getFieldDecorator('amount',{
+						getFieldDecorator('amount', {
 							initialValue:0,
 							rules:[{
 								required:true
-							},{
+							}, {
 								range:true,
 								min:1,
 								type:'integer',
@@ -124,15 +112,15 @@ class CreateCost extends Component {
 					</FormItem>
 					<FormItem {...formItemLayout} label='付款状态'>
 					{
-						getFieldDecorator('status',{
+						getFieldDecorator('status', {
 							rules:[{
 								required:true,
 								message:'请选择付款状态！'
 							}]
 						})(
 							<RadioGroup>
-					            <Radio value='Paid'>已付款</Radio>
-					            <Radio value='Unpaid'>未付款</Radio>
+								<Radio value='Paid'>已付款</Radio>
+								<Radio value='Unpaid'>未付款</Radio>
 							</RadioGroup>
 						)
 					}

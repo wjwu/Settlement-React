@@ -2,7 +2,7 @@ import {
 	BEGIN_QUERY_STATISTICS,
 	END_QUERY_STATISTICS,
 	ERROR_QUERY_STATISTICS
-} from '../constants/statistics'
+} from '../actions/statistics'
 
 export default (state = {}, action) => {
 	switch (action.type) {

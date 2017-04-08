@@ -1,22 +1,7 @@
-import React, {
-	Component,
-	PropTypes
-} from 'react'
-import {
-	connect
-} from 'react-redux'
-import {
-	Tabs,
-	Button,
-	Modal,
-	Row,
-	Col,
-	Form,
-	Input
-} from 'antd'
-import {
-	updateUserPwd
-} from '../../actions/user'
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { updateUserPwd } from '../../actions/user'
+import { Tabs, Button, Modal, Row, Col, Form, Input } from 'antd'
 
 const TabPane = Tabs.TabPane
 const FormItem = Form.Item
@@ -116,12 +101,12 @@ class UserPanel extends Component {
 				    	<Form>
 				    		<FormItem hasFeedback {...formItemLayout} label='原始密码'>
 				    		{
-				    			getFieldDecorator('oldPwd',{
+				    			getFieldDecorator('oldPwd', {
 									rules:[{
 										required:true,
 										whitespace:true,
 										message:'原始密码不能为空！'
-									},{
+									}, {
 										length:true,
 										min:8,
 										message:'原始密码最少8个字符！'
@@ -133,12 +118,12 @@ class UserPanel extends Component {
 				    		</FormItem>
 				    		<FormItem hasFeedback {...formItemLayout} label='新密码'>
 				    		{
-				    			getFieldDecorator('newPwd',{
+				    			getFieldDecorator('newPwd', {
 									rules:[{
 										required:true,
 										whitespace:true,
 										message:'新密码不能为空！'
-									},{
+									}, {
 										length:true,
 										min:8,
 										message:'新密码最少8个字符！'
@@ -150,12 +135,12 @@ class UserPanel extends Component {
 				    		</FormItem>
 				    		<FormItem hasFeedback {...formItemLayout} label='重复密码'>
 				    		{
-				    			getFieldDecorator('rePwd',{
+				    			getFieldDecorator('rePwd', {
 									rules:[{
 										required:true,
 										whitespace:true,
 										message:'重复密码不能为空！'
-									},{
+									}, {
 										validator:this.checkRePwd.bind(this)
 									}]
 								})(

@@ -14,7 +14,7 @@ import {
 	BEGIN_UPDATE_DICTIONARY,
 	END_UPDATE_DICTIONARY,
 	ERROR_UPDATE_DICTIONARY
-} from '../constants/dictionary'
+} from '../actions/dictionary'
 
 export default (state = {}, action) => {
 	if (state.hasOwnProperty('created')) {

@@ -1,10 +1,7 @@
 import React from 'react'
-import {
-	Icon,
-	Tag
-} from 'antd'
+import { Icon, Tag } from 'antd'
 import numeral from 'numeral'
-import * as colors from '../../colors'
+import * as colors from '../../utils/colors'
 
 export const sheetColumns = () => {
 	return [{

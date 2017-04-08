@@ -11,7 +11,7 @@ import {
 	BEGIN_UPDATE_SHEET,
 	END_UPDATE_SHEET,
 	ERROR_UPDATE_SHEET
-} from '../constants/sheet'
+} from '../actions/sheet'
 
 export default (state = {}, action) => {
 	if (state.hasOwnProperty('created')) {

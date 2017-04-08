@@ -12,7 +12,7 @@ const processResult = (reject, resolve, result) => result.IsError ? reject(resul
 
 const processError = (reject, error) => reject(error)
 
-const post = (url, request) => {
+export const post = (url, request) => {
 	return new Promise((resolve, reject) => {
 		fetch(`${config.apiHost}${url}`, {
 				method: 'POST',
@@ -22,8 +22,4 @@ const post = (url, request) => {
 			.then(processResult.bind(null, reject, resolve))
 			.catch(processError.bind(null, reject))
 	})
-}
-
-export {
-	post
 }

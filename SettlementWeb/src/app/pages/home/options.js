@@ -1,4 +1,4 @@
-export const option = (days = [], amount = []) => {
+export default (days = [], amount = []) => {
 	return {
 		title: {
 			text: '成交额统计'

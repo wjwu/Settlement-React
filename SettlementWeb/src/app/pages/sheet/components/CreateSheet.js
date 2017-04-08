@@ -1,36 +1,13 @@
-import React, {
-	Component,
-	PropTypes
-} from 'react'
-import {
-	Modal,
-	Form,
-	Input,
-	Button,
-	Select,
-	Radio,
-	Row,
-	Col,
-	InputNumber,
-	DatePicker,
-	Tabs
-} from 'antd'
-import {
-	TTable
-} from '../../../components'
+import React, { Component, PropTypes } from 'react'
+import { Modal, Form, Input, Button, Select, Radio, Row, Col, InputNumber, DatePicker, Tabs } from 'antd'
+import { TTable } from '../../../components'
 import numeral from 'numeral'
 import CreateCost from './CreateCost'
 import UpdateCost from './UpdateCost'
 import CreateReceived from './CreateReceived'
 import UpdateReceived from './UpdateReceived'
-import {
-	genCostColumns,
-	genReceivedColumns
-} from './columns'
-import {
-	disabledTime,
-	disabledDate
-} from '../../../common'
+import { genCostColumns, genReceivedColumns } from './columns'
+import { disabledTime, disabledDate } from '../../../utils/common'
 
 const FormItem = Form.Item
 const RangePicker = DatePicker.RangePicker
@@ -226,20 +203,20 @@ class CreateSheet extends Component {
 		}
 		let modal
 		if (this.state[createCost]) {
-			modal = <CreateCost onCancel = {this.hideModal.bind(this,createCost)} costs={costTypes.List}/>
+			modal = <CreateCost onCancel = {this.hideModal.bind(this, createCost)} costs={costTypes.List}/>
 		} else if (this.state[updateCost]) {
-			modal = <UpdateCost onCancel = {this.hideModal.bind(this,updateCost)} costs={costTypes.List} cost={this.selectedCost}/>
+			modal = <UpdateCost onCancel = {this.hideModal.bind(this, updateCost)} costs={costTypes.List} cost={this.selectedCost}/>
 		} else if (this.state[createReceived]) {
-			modal = <CreateReceived onCancel = {this.hideModal.bind(this,createReceived)}/>
+			modal = <CreateReceived onCancel = {this.hideModal.bind(this, createReceived)}/>
 		} else if (this.state[updateReceived]) {
-			modal = <UpdateReceived onCancel = {this.hideModal.bind(this,updateReceived)} received={this.selectedReceived}/>
+			modal = <UpdateReceived onCancel = {this.hideModal.bind(this, updateReceived)} received={this.selectedReceived}/>
 		}
 
 		let footer =
 			[
 				<Button key='cancel' type='ghost' size='large' onClick={this.props.onCancel}>取消</Button>,
-				<Button key='save' type='primary' size='large' loading={creating} onClick={this.submit.bind(this,'save')}>保存</Button>,
-				<Button key='submit' type='primary' size='large' loading={creating} onClick={this.submit.bind(this,'submit')}>保存并提交</Button>
+				<Button key='save' type='primary' size='large' loading={creating} onClick={this.submit.bind(this, 'save')}>保存</Button>,
+				<Button key='submit' type='primary' size='large' loading={creating} onClick={this.submit.bind(this, 'submit')}>保存并提交</Button>
 			]
 
 		return (
@@ -251,12 +228,12 @@ class CreateSheet extends Component {
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='客户名称'>
 										{
-											getFieldDecorator('customName',{
+											getFieldDecorator('customName', {
 												rules:[{
 														required:true,
 														whitespace:true,
 														message:'客户名称不能为空！'
-													},{
+													}, {
 														length:true,
 														max:100,
 														message:'客户名称最多100个字符！'
@@ -268,32 +245,32 @@ class CreateSheet extends Component {
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='培训基地'>
 									{
-										getFieldDecorator('base',{
+										getFieldDecorator('base', {
 											rules:[{
 												required:true,
 												message:'请选择培训基地！'
 											}]
 										})(
-								 			<Select placeholder='请选择培训基地'>
+											<Select placeholder='请选择培训基地'>
 								 			{
 								 				bases.List.map(item => <Option key={item.ID} value={item.ID}>{item.Name}</Option>)
 								 			}
 								 			</Select>
-							          	)
-							        }
-						          	</FormItem>
+										)
+									}
+									</FormItem>
 								</Col>
 							</Row>
 							<Row>
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='联系人'>
 										{
-											getFieldDecorator('contacts',{
+											getFieldDecorator('contacts', {
 												rules:[{
 														required:true,
 														whitespace:true,
 														message:'联系人不能为空！'
-													},{
+													}, {
 														length:true,
 														max:20,
 														message:'联系人最多20个字符！'
@@ -305,7 +282,7 @@ class CreateSheet extends Component {
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='培训时间'>
 									{
-										getFieldDecorator('times',{
+										getFieldDecorator('times', {
 											rules:[{
 												required:true,
 												type:'array',
@@ -320,12 +297,12 @@ class CreateSheet extends Component {
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='手机号码'>
 										{
-											getFieldDecorator('phone',{
+											getFieldDecorator('phone', {
 												rules:[{
 														required:true,
 														whitespace:true,
 														message:'手机号码不能为空！'
-													},{
+													}, {
 														pattern:/^1[34578]\d{9}$/,
 														message:'手机号码格式不正确！'
 													}]
@@ -336,9 +313,9 @@ class CreateSheet extends Component {
 								<Col xs={12}>
 									<FormItem {...formItemLayout} label='培训人数'>
 										{
-											getFieldDecorator('people',{
+											getFieldDecorator('people', {
 												initialValue:0,
-												rules:[{required:true},{
+												rules:[{required:true}, {
 														range:true,
 														min:1,
 														type:'integer',

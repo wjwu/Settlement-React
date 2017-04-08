@@ -1,11 +1,5 @@
-import React, {
-	Component,
-	PropTypes
-} from 'react'
-import {
-	TreeSelect,
-	Tree
-} from 'antd'
+import React, { Component, PropTypes } from 'react'
+import { TreeSelect, Tree } from 'antd'
 
 const TreeNode = Tree.TreeNode
 

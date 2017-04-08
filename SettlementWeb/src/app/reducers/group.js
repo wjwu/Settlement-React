@@ -11,7 +11,7 @@ import {
 	BEGIN_UPDATE_GROUP,
 	END_UPDATE_GROUP,
 	ERROR_UPDATE_GROUP
-} from '../constants/group'
+} from '../actions/group'
 
 export default (state = {}, action) => {
 	if (state.hasOwnProperty('created')) {
@@ -30,7 +30,7 @@ export default (state = {}, action) => {
 			delete state.getting
 			return {
 				...state,
-				group: action.result
+				group: action.payload
 			}
 		case ERROR_GET_GROUP:
 			delete state.getting
@@ -46,7 +46,7 @@ export default (state = {}, action) => {
 			delete state.querying
 			return {
 				...state,
-				groups: action.result
+				groups: action.payload
 			}
 		case ERROR_QUERY_GROUPS:
 			delete state.querying

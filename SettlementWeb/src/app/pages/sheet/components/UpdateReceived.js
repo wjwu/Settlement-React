@@ -1,16 +1,6 @@
-import React, {
-	Component,
-	PropTypes
-} from 'react'
+import React, { Component, PropTypes } from 'react'
 import moment from 'moment'
-import {
-	Modal,
-	Form,
-	Input,
-	Button,
-	InputNumber,
-	DatePicker
-} from 'antd'
+import { Modal, Form, Input, Button, InputNumber, DatePicker } from 'antd'
 
 const FormItem = Form.Item
 
@@ -62,11 +52,11 @@ class UpdateReceived extends Component {
 				<Form>
 					<FormItem {...formItemLayout} label='收款金额'>
 					{
-						getFieldDecorator('money',{
+						getFieldDecorator('money', {
 							initialValue:received.Money,
 							rules:[{
 								required:true
-							},{
+							}, {
 								range:true,
 								min:1,
 								type:'integer',
@@ -77,7 +67,7 @@ class UpdateReceived extends Component {
 					</FormItem>
 					<FormItem {...formItemLayout} label='收款时间'>
 					{
-						getFieldDecorator('time',{
+						getFieldDecorator('time', {
 							initialValue:moment(received.Time, 'YYYY-MM-DD'),
 							rules:[{
 								required:true,
@@ -85,13 +75,13 @@ class UpdateReceived extends Component {
 								message:'请选择收款时间！'
 							}]
 						})(
-							 <DatePicker format='YYYY-MM-DD' />
+							<DatePicker format='YYYY-MM-DD' />
 						)
 					}
 					</FormItem>
 					<FormItem {...formItemLayout} label='备注'>
 					{
-						getFieldDecorator('remark',{
+						getFieldDecorator('remark', {
 							initialValue:received.Remark
 						})(
 							<Input type='textarea' rows={4}/>

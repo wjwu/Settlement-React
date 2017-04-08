@@ -1,16 +1,14 @@
 import React from 'react'
-import {
-	Icon
-} from 'antd'
+import { Icon } from 'antd'
 
-const genColumns = (editFuc) => {
+export default (editFuc) => {
 	return [{
 		title: '账号',
 		dataIndex: 'LoginID',
 		key: 'loginId',
 		width: '15%',
 		render: (text, raw) => {
-			return <a href='javascript:;' onClick={editFuc.bind(null,raw)}>{text}</a>
+			return <a href='javascript:;' onClick={editFuc.bind(null, raw)}>{text}</a>
 		}
 	}, {
 		title: '手机',
@@ -60,10 +58,7 @@ const genColumns = (editFuc) => {
 		key: 'operation',
 		width: '10%',
 		render: (text, raw) => {
-			return <a href='javascript:;' onClick={editFuc.bind(null,raw)}><Icon type='edit' /></a>
+			return <a href='javascript:;' onClick={editFuc.bind(null, raw)}><Icon type='edit' /></a>
 		}
 	}]
 }
-
-
-export default genColumns

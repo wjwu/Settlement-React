@@ -1,18 +1,6 @@
-import React, {
-	Component,
-	PropTypes
-} from 'react'
-import {
-	Modal,
-	Form,
-	Input,
-	Button,
-	Select,
-	Radio
-} from 'antd'
-import {
-	TTreeSelect
-} from '../../../components'
+import React, { Component, PropTypes } from 'react'
+import { Modal, Form, Input, Button, Select, Radio } from 'antd'
+import { TTreeSelect } from '../../../components'
 
 const FormItem = Form.Item
 const RadioGroup = Radio.Group
@@ -73,24 +61,22 @@ class UpdateUser extends Component {
 		}
 
 		return (
-			<Modal title='修改用户' visible={true} width={500} footer={[cancel,reset,ok]} onCancel={this.props.onCancel}>
+			<Modal title='修改用户' visible={true} width={500} footer={[cancel, reset, ok]} onCancel={this.props.onCancel}>
 				<Form>
 					<FormItem {...formItemLayout} label='所属部门'>
 					{
-						getFieldDecorator('group',{
+						getFieldDecorator('group', {
 							initialValue:user.Group
-						})
-						(
-							<TTreeSelect data={groups} dropdownStyle={{maxHeight:400,overflow:'auto'}} placeholder='请选择所属部门' treeDefaultExpandAll/>
+						})(
+							<TTreeSelect data={groups} dropdownStyle={{maxHeight:400, overflow:'auto'}} placeholder='请选择所属部门' treeDefaultExpandAll/>
 						)
 					}
 					</FormItem>
 					<FormItem {...formItemLayout} label='角色'>
 					{
-						getFieldDecorator('role',{
+						getFieldDecorator('role', {
 							initialValue:user.Role.toLowerCase()
-						})
-						(
+						})(
 							<Select>
 								<Option key='admin' value='admin'>系统管理员</Option>
 								<Option key='deptmanager' value='deptmanager'>部门主管</Option>
@@ -105,13 +91,13 @@ class UpdateUser extends Component {
 					</FormItem>
 					<FormItem hasFeedback {...formItemLayout} label='手机号码'>
 					{
-						getFieldDecorator('phone',{
+						getFieldDecorator('phone', {
 							initialValue:user.Phone,
 							rules:[{
 								required:true,
 								whitespace:true,
 								message:'手机号码不能为空！'
-							},{
+							}, {
 								pattern:/^1[34578]\d{9}$/,
 								message:'手机号码格式不正确！'
 							}]
@@ -122,13 +108,13 @@ class UpdateUser extends Component {
 					</FormItem>
 					<FormItem hasFeedback {...formItemLayout} label='姓名'>
 					{
-						getFieldDecorator('name',{
+						getFieldDecorator('name', {
 							initialValue:user.Name,
 							rules:[{
 								required:true,
 								whitespace:true,
 								message:'姓名不能为空！'
-							},{
+							}, {
 								length:true,
 								max:10,
 								message:'姓名最多10个字符！'
@@ -140,13 +126,13 @@ class UpdateUser extends Component {
 					</FormItem>
 					<FormItem {...formItemLayout} label='状态'>
 					{
-						getFieldDecorator('enabled',{
+						getFieldDecorator('enabled', {
 							initialValue: user.hasOwnProperty('Enabled')?user.Enabled.toString():user.Enabled
 						})(
-				            <RadioGroup>
-				              <Radio value='true'>启用</Radio>
-				              <Radio value='false'>禁用</Radio>
-				            </RadioGroup>
+							<RadioGroup>
+								<Radio value='true'>启用</Radio>
+								<Radio value='false'>禁用</Radio>
+							</RadioGroup>
 						)
 					}
 					</FormItem>

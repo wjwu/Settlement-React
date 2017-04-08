@@ -1,154 +1,41 @@
-import * as apiClient from '../apiClient'
-import {
-	SHOW_MESSAGE
-} from '../constants/message'
-import {
-	BEGIN_QUERY_SHEETS,
-	END_QUERY_SHEETS,
-	ERROR_QUERY_SHEETS,
-	BEGIN_GET_SHEET,
-	END_GET_SHEET,
-	ERROR_GET_SHEET,
-	BEGIN_CREATE_SHEET,
-	END_CREATE_SHEET,
-	ERROR_CREATE_SHEET,
-	BEGIN_UPDATE_SHEET,
-	END_UPDATE_SHEET,
-	ERROR_UPDATE_SHEET
-} from '../constants/sheet'
+import { action } from '../utils/common';
 
-export const getSheet = id => {
-	return dispatch => {
-		dispatch({
-			type: BEGIN_GET_SHEET
-		})
-		apiClient.get(`sheet/${id}`).then(result => {
-			dispatch({
-				type: END_GET_SHEET,
-				result: result
-			})
-		}, error => {
-			dispatch({
-				type: ERROR_GET_SHEET
-			})
-			dispatch({
-				type: SHOW_MESSAGE,
-				msgType: 'error',
-				msg: error
-			})
-		})
-	}
-}
+export const GET_SHEET = Symbol();
+export const BEGIN_GET_SHEET = Symbol();
+export const END_GET_SHEET = Symbol();
+export const ERROR_GET_SHEET = Symbol();
 
-export const querySheets = request => {
-	return dispatch => {
-		dispatch({
-			type: BEGIN_QUERY_SHEETS
-		})
-		apiClient.get('sheet', request).then(result => {
-			dispatch({
-				type: END_QUERY_SHEETS,
-				result: result
-			})
-		}, error => {
-			dispatch({
-				type: ERROR_QUERY_SHEETS
-			})
-			dispatch({
-				type: SHOW_MESSAGE,
-				msgType: 'error',
-				msg: error
-			})
-		})
-	}
-}
+export const QUERY_SHEETS = Symbol();
+export const BEGIN_QUERY_SHEETS = Symbol();
+export const END_QUERY_SHEETS = Symbol();
+export const ERROR_QUERY_SHEETS = Symbol();
 
-export const createSheet = request => {
-	return dispatch => {
-		dispatch({
-			type: BEGIN_CREATE_SHEET,
-		})
-		apiClient.post('sheet', request).then(result => {
-			dispatch({
-				type: END_CREATE_SHEET,
-				result: result
-			})
-			dispatch({
-				type: SHOW_MESSAGE,
-				msgType: 'success',
-				msg: '添加成功！'
-			})
-		}, error => {
-			dispatch({
-				type: ERROR_CREATE_SHEET
-			})
-			dispatch({
-				type: SHOW_MESSAGE,
-				msgType: 'error',
-				msg: error
-			})
-		})
-	}
-}
+export const CREATE_SHEET = Symbol();
+export const BEGIN_CREATE_SHEET = Symbol();
+export const END_CREATE_SHEET = Symbol();
+export const ERROR_CREATE_SHEET = Symbol();
 
-export const updateSheet = request => {
-	return dispatch => {
-		dispatch({
-			type: BEGIN_UPDATE_SHEET,
-		})
-		apiClient.put('sheet', request).then(result => {
-			dispatch({
-				type: END_UPDATE_SHEET,
-				result: result
-			})
-			dispatch({
-				type: SHOW_MESSAGE,
-				msgType: 'success',
-				msg: '修改成功！'
-			})
-		}, error => {
-			dispatch({
-				type: ERROR_UPDATE_SHEET
-			})
-			dispatch({
-				type: SHOW_MESSAGE,
-				msgType: 'error',
-				msg: error
-			})
-		})
-	}
-}
+export const UPDATE_SHEET = Symbol();
+export const BEGIN_UPDATE_SHEET = Symbol();
+export const END_UPDATE_SHEET = Symbol();
+export const ERROR_UPDATE_SHEET = Symbol();
 
-export const deleteSheet = (id) => {
-	return () => {
-		return apiClient.del(`sheet/${id}`)
-	}
-}
+export const getSheet = (id) => action(GET_SHEET, { id });
+export const beginGetSheet = () => action(BEGIN_GET_SHEET);
+export const endGetSheet = (result) => action(END_GET_SHEET, { result });
+export const errorGetSheet = () => action(ERROR_GET_SHEET);
 
-export const updateSheetAuditStatus = request => {
-	return dispatch => {
-		dispatch({
-			type: BEGIN_UPDATE_SHEET,
-		})
-		apiClient.patch('sheet', request).then(result => {
-			dispatch({
-				type: END_UPDATE_SHEET,
-				result: result
-			})
-			dispatch({
-				type: SHOW_MESSAGE,
-				msgType: 'success',
-				msg: '修改成功！'
-			})
-		}, error => {
-			dispatch({
-				type: ERROR_UPDATE_SHEET
-			})
-			dispatch({
-				type: SHOW_MESSAGE,
-				msgType: 'error',
-				msg: error
-			})
-		})
-	}
-}
+export const querySheets = (request) => action(QUERY_SHEETS, { request });
+export const beginQuerySheets = () => action(BEGIN_QUERY_SHEETS);
+export const endQuerySheets = (result) => action(END_QUERY_SHEETS, { result });
+export const errorQuerySheets = () => action(ERROR_QUERY_SHEETS);
+
+export const createSheets = (request) => action(CREATE_SHEET, { request });
+export const beginCreateSheets = () => action(BEGIN_CREATE_SHEET);
+export const endCreateSheets = () => action(END_CREATE_SHEET);
+export const errorCreateSheets = (result) => action(END_CREATE_SHEET, { result });
+
+export const updateSheets = (request) => action(UPDATE_SHEET, { request });
+export const beginUpdateSheets = () => action(BEGIN_UPDATE_SHEET);
+export const endUpdateSheets = () => action(END_UPDATE_SHEET);
+export const errorUpdateSheets = (result) => action(ERROR_UPDATE_SHEET, { result });

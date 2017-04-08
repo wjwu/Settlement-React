@@ -1,11 +1,5 @@
-import React, {
-	Component,
-	PropTypes
-} from 'react'
-import {
-	Tree,
-	Spin
-} from 'antd'
+import React, { Component, PropTypes } from 'react'
+import { Tree, Spin } from 'antd'
 import TCard from '../TCard'
 
 const TreeNode = Tree.TreeNode

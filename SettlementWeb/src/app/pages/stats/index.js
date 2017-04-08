@@ -1,51 +1,18 @@
-import React, {
-	Component
-} from 'react'
-import {
-	connect
-} from 'react-redux'
-import {
-	Row,
-	Button,
-	Tabs
-} from 'antd'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import moment from 'moment'
-import {
-	TMainContainer
-} from '../../containers'
-import {
-	TCol,
-	TCard,
-	TTable
-} from '../../components'
+import { Row, Button, Tabs } from 'antd'
+import { TMainContainer } from '../../containers'
+import { TCol, TCard, TTable } from '../../components'
 import ReactEcharts from 'echarts-for-react'
 import SearchPanel from './components/SearchPanel'
-import {
-	querySheets
-} from '../../actions/sheet'
-import {
-	queryBases,
-	querySources,
-	queryCosts,
-} from '../../actions/dictionary'
-import {
-	queryGroups
-} from '../../actions/group'
-import {
-	queryStats
-} from '../../actions/statistics'
-
+import { querySheets } from '../../actions/sheet'
+import { queryBases, querySources, queryCosts, } from '../../actions/dictionary'
+import { queryGroups } from '../../actions/group'
+import { queryStats } from '../../actions/statistics'
 import styles from './index.scss'
-
-import {
-	sheetColumns,
-	selfColumns,
-	deptColumns
-} from './columns'
-import {
-	sourceOption,
-	deptOption
-} from './options'
+import { sheetColumns, selfColumns, deptColumns } from './columns'
+import { sourceOption, deptOption } from './options'
 
 
 const TabPane = Tabs.TabPane
@@ -174,7 +141,7 @@ class Stats extends Component {
 				<Row gutter={24}>
 					<TCol xs={24} sm={24} md={12} lg={12}>
 						<TCard>
-		                    <ReactEcharts option={sourceOption(stats.Source)} style={{height: 300}}/>
+							<ReactEcharts option={sourceOption(stats.Source)} style={{height: 300}}/>
 						</TCard>
 					</TCol>
 					<TCol xs={24} sm={24} md={12} lg={12}>

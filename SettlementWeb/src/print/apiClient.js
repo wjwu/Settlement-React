@@ -19,7 +19,7 @@ const processError = (reject, error) => {
 	}
 }
 
-const get = (url, request) => {
+export default (url, request) => {
 	let requestUrl
 	if (request) {
 		let query = Object.keys(request)
@@ -38,8 +38,4 @@ const get = (url, request) => {
 			.then(processResult.bind(null, reject, resolve))
 			.catch(processError.bind(null, reject))
 	})
-}
-
-export {
-	get
 }

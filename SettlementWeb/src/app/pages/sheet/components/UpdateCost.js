@@ -1,16 +1,5 @@
-import React, {
-	Component,
-	PropTypes
-} from 'react'
-import {
-	Modal,
-	Form,
-	Input,
-	Select,
-	Radio,
-	Button,
-	InputNumber
-} from 'antd'
+import React, { Component, PropTypes } from 'react'
+import { Modal, Form, Input, Select, Radio, Button, InputNumber } from 'antd'
 
 const FormItem = Form.Item
 const Option = Select.Option
@@ -77,7 +66,7 @@ class UpdateCost extends Component {
 				<Form>
 					<FormItem {...formItemLayout} label='明细类型'>
 					{
-						getFieldDecorator('type',{
+						getFieldDecorator('type', {
 							initialValue:cost.Type,
 							rules:[{
 								required:true,
@@ -94,11 +83,11 @@ class UpdateCost extends Component {
 					</FormItem>
 					<FormItem {...formItemLayout} label='单价'>
 					{
-						getFieldDecorator('unit',{
+						getFieldDecorator('unit', {
 							initialValue:cost.Unit,
 							rules:[{
 								required:true
-							},{
+							}, {
 								range:true,
 								min:1,
 								type:'number',
@@ -109,11 +98,11 @@ class UpdateCost extends Component {
 					</FormItem>
 					<FormItem {...formItemLayout} label='数量'>
 					{
-						getFieldDecorator('amount',{
+						getFieldDecorator('amount', {
 							initialValue:cost.Amount,
 							rules:[{
 								required:true
-							},{
+							}, {
 								range:true,
 								min:1,
 								type:'integer',
@@ -124,7 +113,7 @@ class UpdateCost extends Component {
 					</FormItem>
 					<FormItem {...formItemLayout} label='付款状态'>
 					{
-						getFieldDecorator('status',{
+						getFieldDecorator('status', {
 							initialValue:cost.Status,
 							rules:[{
 								required:true,
@@ -132,15 +121,15 @@ class UpdateCost extends Component {
 							}]
 						})(
 							<RadioGroup>
-					            <Radio value='Paid'>已付款</Radio>
-					            <Radio value='Unpaid'>未付款</Radio>
+								<Radio value='Paid'>已付款</Radio>
+								<Radio value='Unpaid'>未付款</Radio>
 							</RadioGroup>
 						)
 					}
 					</FormItem>
 					<FormItem {...formItemLayout} label='备注'>
 					{
-						getFieldDecorator('remark',{
+						getFieldDecorator('remark', {
 							initialValue:cost.Remark
 						})(
 							<Input type='textarea' rows={4}/>
