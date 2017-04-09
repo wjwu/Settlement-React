@@ -15,7 +15,7 @@ sagaMiddleware.run(sagas);
 
 ReactDOM.render(
 	<Provider store={store}>
-		<Router history={browserHistory} routes={routers}/>
+		<Router history={browserHistory} routes={routers} />
 	</Provider>,
 	document.getElementById('root')
 );

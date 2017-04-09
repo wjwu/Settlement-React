@@ -1,5 +1,5 @@
-import { post } from './apiClient'
-const md5 = require('md5')
+import { post } from './apiClient';
+const md5 = require('md5');
 
 export default (loginID, password, captcha, timeSpan) => {
 	return post('sign/in', {
@@ -7,5 +7,5 @@ export default (loginID, password, captcha, timeSpan) => {
 		password: md5(password),
 		captcha: captcha,
 		timeSpan: timeSpan
-	})
-}
+	});
+};

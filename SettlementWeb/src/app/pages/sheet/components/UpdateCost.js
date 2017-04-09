@@ -1,31 +1,31 @@
-import React, { Component, PropTypes } from 'react'
-import { Modal, Form, Input, Select, Radio, Button, InputNumber } from 'antd'
+import React, { Component, PropTypes } from 'react';
+import { Modal, Form, Input, Select, Radio, Button, InputNumber } from 'antd';
 
-const FormItem = Form.Item
-const Option = Select.Option
-const RadioGroup = Radio.Group
+const FormItem = Form.Item;
+const Option = Select.Option;
+const RadioGroup = Radio.Group;
 
 class UpdateCost extends Component {
 	constructor(props) {
-		super(props)
-		this.submit = this.submit.bind(this)
-		this.select = this.select.bind(this)
+		super(props);
+		this.submit = this.submit.bind(this);
+		this.select = this.select.bind(this);
 	}
 
 	submit() {
 		const {
 			validateFields,
 			getFieldValue
-		} = this.props.form
+		} = this.props.form;
 
 		validateFields((errors, values) => {
 			if (!errors) {
-				const type = getFieldValue('type')
-				const name = this.selectName || this.props.cost.TypeName
-				const unit = getFieldValue('unit')
-				const amount = getFieldValue('amount')
-				const status = getFieldValue('status')
-				const remark = getFieldValue('remark')
+				const type = getFieldValue('type');
+				const name = this.selectName || this.props.cost.TypeName;
+				const unit = getFieldValue('unit');
+				const amount = getFieldValue('amount');
+				const status = getFieldValue('status');
+				const remark = getFieldValue('remark');
 				this.props.onCancel({
 					ID: this.props.cost.ID,
 					Type: type,
@@ -35,13 +35,13 @@ class UpdateCost extends Component {
 					Status: status,
 					Remark: remark,
 					Total: unit * amount
-				}, 'update')
+				}, 'update');
 			}
-		})
+		});
 	}
 
 	select(value, option) {
-		this.selectName = option.props.children
+		this.selectName = option.props.children;
 	}
 
 	render() {
@@ -52,14 +52,14 @@ class UpdateCost extends Component {
 			wrapperCol: {
 				span: 16
 			},
-		}
+		};
 
-		const getFieldDecorator = this.props.form.getFieldDecorator
+		const getFieldDecorator = this.props.form.getFieldDecorator;
 		let {
 			cost,
 			costs,
 			onCancel
-		} = this.props
+		} = this.props;
 
 		return (
 			<Modal title='新增结算明细' visible={true} width={460} onOk={this.submit} onCancel={onCancel}>
@@ -138,7 +138,7 @@ class UpdateCost extends Component {
 					</FormItem>
 				</Form>
 			</Modal>
-		)
+		);
 	}
 }
 
@@ -146,6 +146,6 @@ UpdateCost.propTypes = {
 	cost: PropTypes.object.isRequired,
 	costs: PropTypes.array.isRequired,
 	onCancel: PropTypes.func.isRequired
-}
+};
 
-export default Form.create()(UpdateCost)
+export default Form.create()(UpdateCost);

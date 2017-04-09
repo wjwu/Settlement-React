@@ -1,34 +1,34 @@
-import React, { Component, PropTypes } from 'react'
-import { Modal, Form, Input, InputNumber, DatePicker } from 'antd'
-import { random } from '../../../utils/common'
+import React, { Component, PropTypes } from 'react';
+import { Modal, Form, Input, InputNumber, DatePicker } from 'antd';
+import { random } from '../../../utils/common';
 
-const FormItem = Form.Item
+const FormItem = Form.Item;
 
 class CreateReceived extends Component {
 	constructor(props) {
-		super(props)
-		this.submit = this.submit.bind(this)
+		super(props);
+		this.submit = this.submit.bind(this);
 	}
 
 	submit() {
 		const {
 			validateFields,
 			getFieldValue
-		} = this.props.form
+		} = this.props.form;
 
 		validateFields((errors, values) => {
 			if (!errors) {
-				const money = getFieldValue('money')
-				const time = getFieldValue('time').format('YYYY-MM-DD')
-				const remark = getFieldValue('remark')
+				const money = getFieldValue('money');
+				const time = getFieldValue('time').format('YYYY-MM-DD');
+				const remark = getFieldValue('remark');
 				this.props.onCancel({
 					ID: random(),
 					Money: money,
 					Time: time,
 					Remark: remark
-				}, 'create')
+				}, 'create');
 			}
-		})
+		});
 	}
 
 	render() {
@@ -39,9 +39,9 @@ class CreateReceived extends Component {
 			wrapperCol: {
 				span: 16
 			},
-		}
+		};
 
-		const getFieldDecorator = this.props.form.getFieldDecorator
+		const getFieldDecorator = this.props.form.getFieldDecorator;
 
 		return (
 			<Modal title='新增收款明细' visible={true} width={460} onOk={this.submit} onCancel={this.props.onCancel}>
@@ -83,12 +83,12 @@ class CreateReceived extends Component {
 					</FormItem>
 				</Form>
 			</Modal>
-		)
+		);
 	}
 }
 
 CreateReceived.propTypes = {
 	onCancel: PropTypes.func.isRequired
-}
+};
 
-export default Form.create()(CreateReceived)
+export default Form.create()(CreateReceived);

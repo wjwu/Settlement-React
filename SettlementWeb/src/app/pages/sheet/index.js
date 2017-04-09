@@ -39,7 +39,6 @@ class Sheet extends Component {
 			pageSize: 999,
 			enabled: true
 		};
-		console.log(this.props);
 
 		this.props.queryBases(request);
 		this.props.querySources(request);
