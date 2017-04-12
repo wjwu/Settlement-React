@@ -22,7 +22,7 @@ function* getSheet(action) {
 function* querySheets(action) {
 	try {
 		yield put(actions.requestQuerySheets());
-		const result = yield call(apiClient.get, 'sheet', action.request);
+		const result = yield call(apiClient.get, 'sheet', action.payload);
 		yield put(actions.successQuerySheets(result));
 	} catch (e) {
 		yield put(actions.failureQuerySheets());
@@ -33,7 +33,7 @@ function* querySheets(action) {
 function* createSheet(action) {
 	try {
 		yield put(actions.requestCreateSheet());
-		yield call(apiClient.post, 'sheet', action.request);
+		yield call(apiClient.post, 'sheet', action.payload);
 		yield put(actions.successCreateSheet());
 		yield put(success());
 	} catch (e) {
@@ -45,7 +45,7 @@ function* createSheet(action) {
 function* updateSheet(action) {
 	try {
 		yield put(actions.requestUpdateSheet());
-		yield call(apiClient.put, 'sheet', action.request);
+		yield call(apiClient.put, 'sheet', action.payload);
 		yield put(actions.successUpdateSheet());
 		yield put(success());
 	} catch (e) {
@@ -63,7 +63,7 @@ function* updateSheet(action) {
 function* updateSheetAuditStatus(action) {
 	try {
 		yield put(actions.requestUpdateSheet());
-		yield call(apiClient.patch, 'sheet', action.request);
+		yield call(apiClient.patch, 'sheet', action.payload);
 		yield put(actions.successUpdateSheet());
 		yield put(actions.success());
 	} catch (e) {
